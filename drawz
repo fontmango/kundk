@@ -1,291 +1,300 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Drawing Pad</title>
-  <!-- Inter font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    body { font-family: 'Inter', sans-serif; }
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+  }
 
-    @media (max-width: 640px) {
-      #canvas-container { display: none; }
-      #mobile-warning { display: block; }
-    }
+  #stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
 
-    #stage { position: relative; width: 100%; height: 60vh; border-radius: 1rem; overflow: hidden; }
-    #bg-canvas, #draw-canvas {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      touch-action: none;
-      border-radius: 1rem;
-    }
+  #bg-canvas,
+  #draw-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    border-radius: 1rem;
+  }
 
-    /* Icon stroke color management */
-    .icon-stroke svg {
-      transition: stroke 0.3s ease;
-      stroke: black; /* default for light background */
-    }
-    .dark-mode .icon-stroke svg {
-      stroke: white; /* for dark background */
-    }
-  </style>
-</head>
-<body class="bg-blue-50">
-  <div class="flex flex-col items-start justify-start min-h-screen p-4">
-    <!-- Mobile warning -->
-    <div id="mobile-warning" class="hidden text-center max-w-sm mx-auto p-6 bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-lg shadow-md">
-      <h2 class="text-xl font-bold mb-2">Notice</h2>
-      <p>This drawing application is best on a desktop or tablet.</p>
-    </div>
+  /* Icon stroke color management */
+  .icon-stroke {
+    stroke: black;
+    transition: stroke 0.3s ease;
+  }
 
-    <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-xl space-y-6">
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-2">Mal-mal-kurz</h1>
+  .icon-stroke svg {
+    stroke: currentColor;
+  }
 
-      <!-- Canvas container -->
-      <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden ">
-        <!-- Controls -->
-        <div class="absolute top-4 left-4 z-10">
-          <div class="flex flex-wrap items-center gap-2 rounded-lg shadow px-2 py-2 bg-transparent">
+  .dark-mode .icon-stroke {
+    stroke: white;
+  }
+</style>
 
-            <!-- Tools -->
-            <div class="flex items-center gap-1">
-              <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
-                <i data-lucide="pen-line" class="w-5 h-5"></i>
-              </button>
-              <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser">
-                <i data-lucide="eraser" class="w-5 h-5"></i>
-              </button>
-            </div>
+<div class="flex flex-col items-center justify-between h-screen p-4">
+  <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
+  
 
-            <!-- Undo -->
-            <button id="undo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Undo">
-              <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
-            </button>
-
-            <!-- Background toggle -->
-            <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">
-              <span id="icon-sun" ><i data-lucide="sun" class="w-5 h-5"></i></span>
-              <span id="icon-moon" class="hidden "><i data-lucide="moon" class="w-5 h-5"></i></span>
-            </button>
-
-            <!-- Clear & Save -->
-            <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
-              <i data-lucide="file-plus" class="w-5 h-5"></i>
-            </button>
-            <button id="save-btn" class="p-2 rounded-lg icon-stroke" title="Save PNG">
-              <i data-lucide="save" class="w-5 h-5"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Stage: two-layer canvas -->
-        <div id="stage">
-          <canvas id="bg-canvas"></canvas>
-          <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
-        </div>
+    <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
+      <div id="stage" style="height: 100%;">
+        <canvas id="bg-canvas"></canvas>
+        <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
       </div>
     </div>
+
+    <div class="flex-shrink-0 w-full flex justify-center pt-4">
+      <div class="flex flex-nowrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
+
+        <div class="flex items-center gap-1">
+          <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
+            <i data-lucide="pen-line" class="w-4 h-4"></i>
+          </button>
+          <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser">
+            <i data-lucide="eraser" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <button id="undo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Undo">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        </button>
+
+        <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">
+          <span id="icon-sun"><i data-lucide="sun" class="w-4 h-4"></i></span>
+          <span id="icon-moon" class="hidden"><i data-lucide="moon" class="w-4 h-4"></i></span>
+        </button>
+
+        <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
+          <i data-lucide="file-plus" class="w-4 h-4"></i>
+        </button>
+        <button id="save-btn" class="p-2 rounded-lg icon-stroke" title="Save PNG">
+          <i data-lucide="save" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
   </div>
+</div>
 
-  <script>
-    const bgCanvas = document.getElementById('bg-canvas');
-    const drawCanvas = document.getElementById('draw-canvas');
-    const bgCtx = bgCanvas.getContext('2d');
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  const bgCanvas = document.getElementById('bg-canvas');
+  const drawCanvas = document.getElementById('draw-canvas');
+  const bgCtx = bgCanvas.getContext('2d');
 
-    const penToolBtn = document.getElementById('tool-pen');
-    const eraserToolBtn = document.getElementById('tool-eraser');
-    const undoBtn = document.getElementById('undo-btn');
-    const clearBtn = document.getElementById('clear-canvas');
-    const saveBtn = document.getElementById('save-btn');
-    const toggleBgBtn = document.getElementById('toggle-background');
-    const iconSun = document.getElementById('icon-sun');
-    const iconMoon = document.getElementById('icon-moon');
-    const appContainer = document.getElementById('drawing-app-container');
+  const penToolBtn = document.getElementById('tool-pen');
+  const eraserToolBtn = document.getElementById('tool-eraser');
+  const undoBtn = document.getElementById('undo-btn');
+  const clearBtn = document.getElementById('clear-canvas');
+  const saveBtn = document.getElementById('save-btn');
+  const toggleBgBtn = document.getElementById('toggle-background');
+  const iconSun = document.getElementById('icon-sun');
+  const iconMoon = document.getElementById('icon-moon');
+  const appContainer = document.getElementById('drawing-app-container');
 
-    let drawCtx = drawCanvas.getContext('2d');
+  let drawCtx = drawCanvas.getContext('2d');
 
-    let isDrawing = false, lastX = 0, lastY = 0;
-    let isWhiteBackground = true;
-    let currentTool = 'pen';
-    let penWidth = 5, eraserWidth = 20;
-    let penColor = 'black';
+  let isDrawing = false,
+    lastX = 0,
+    lastY = 0;
+  let isWhiteBackground = true;
+  let currentTool = 'pen';
+  let penWidth = 5,
+    eraserWidth = 20;
+  let penColor = 'black';
 
-    let history = [], historyIndex = -1;
+  let history = [],
+    historyIndex = -1;
 
-    function sizeCanvases() {
-      const stage = document.getElementById('stage');
-      const rect = stage.getBoundingClientRect();
+  function sizeCanvases() {
+    const stage = document.getElementById('stage');
+    const rect = stage.getBoundingClientRect();
 
-      const tmp = document.createElement('canvas');
-      tmp.width = drawCanvas.width; tmp.height = drawCanvas.height;
-      tmp.getContext('2d').drawImage(drawCanvas, 0, 0);
+    const tmp = document.createElement('canvas');
+    tmp.width = drawCanvas.width;
+    tmp.height = drawCanvas.height;
+    tmp.getContext('2d').drawImage(drawCanvas, 0, 0);
 
-      const dpr = window.devicePixelRatio || 1;
-      bgCanvas.width = drawCanvas.width = Math.floor(rect.width * dpr);
-      bgCanvas.height = drawCanvas.height = Math.floor(rect.height * dpr);
+    const dpr = window.devicePixelRatio || 1;
+    bgCanvas.width = drawCanvas.width = Math.floor(rect.width * dpr);
+    bgCanvas.height = drawCanvas.height = Math.floor(rect.height * dpr);
 
-      bgCanvas.style.width = drawCanvas.style.width = rect.width + 'px';
-      bgCanvas.style.height = drawCanvas.style.height = rect.height + 'px';
+    bgCanvas.style.width = drawCanvas.style.width = rect.width + 'px';
+    bgCanvas.style.height = drawCanvas.style.height = rect.height + 'px';
 
-      bgCtx.setTransform(dpr,0,0,dpr,0,0);
-      drawCtx.setTransform(dpr,0,0,dpr,0,0);
+    bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    drawCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      paintBackground();
-      drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
-      drawCtx.drawImage(tmp,0,0,tmp.width,tmp.height,0,0,drawCanvas.width,drawCanvas.height);
+    paintBackground();
+    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    drawCtx.drawImage(tmp, 0, 0, tmp.width, tmp.height, 0, 0, drawCanvas.width, drawCanvas.height);
+  }
+
+  function paintBackground() {
+    bgCtx.save();
+    bgCtx.setTransform(1, 0, 0, 1, 0, 0);
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    bgCtx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
+    bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+    bgCtx.restore();
+    // Icon stroke handled by CSS via dark-mode class
+  }
+
+  function setActiveTool(tool) {
+    currentTool = tool;
+    if (tool === 'pen') {
+      penToolBtn.classList.add('ring-2', 'ring-blue-500');
+      eraserToolBtn.classList.remove('ring-2', 'ring-blue-500');
+    } else {
+      eraserToolBtn.classList.add('ring-2', 'ring-blue-500');
+      penToolBtn.classList.remove('ring-2', 'ring-blue-500');
     }
+  }
 
-    function paintBackground() {
-      bgCtx.save();
-      bgCtx.setTransform(1,0,0,1,0,0);
-      bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
-      bgCtx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-      bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
-      bgCtx.restore();
-      // Icon stroke handled by CSS via dark-mode class
+  function updatePenColorForBackground() {
+    penColor = isWhiteBackground ? 'black' : 'white';
+  }
+
+  function pushHistory() {
+    const url = drawCanvas.toDataURL('image/png');
+    if (historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
+    history.push(url);
+    historyIndex = history.length - 1;
+    undoBtn.disabled = historyIndex <= 0;
+  }
+
+  function loadHistory(index) {
+    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    if (index >= 0) {
+      const img = new Image();
+      img.onload = () => drawCtx.drawImage(img, 0, 0);
+      img.src = history[index];
     }
+    undoBtn.disabled = index <= 0;
+  }
 
-    function setActiveTool(tool) {
-      currentTool = tool;
-      if(tool==='pen') {
-        penToolBtn.classList.add('ring-2','ring-blue-500');
-        eraserToolBtn.classList.remove('ring-2','ring-blue-500');
-      } else {
-        eraserToolBtn.classList.add('ring-2','ring-blue-500');
-        penToolBtn.classList.remove('ring-2','ring-blue-500');
-      }
+  function startDraw(x, y) {
+    isDrawing = true;
+    lastX = x;
+    lastY = y;
+    drawCtx.lineCap = 'round';
+    drawCtx.lineJoin = 'round';
+  }
+
+  function drawTo(x, y) {
+    if (!isDrawing) return;
+    if (currentTool === 'pen') {
+      drawCtx.globalCompositeOperation = 'source-over';
+      drawCtx.strokeStyle = penColor;
+      drawCtx.lineWidth = penWidth;
+    } else {
+      drawCtx.globalCompositeOperation = 'destination-out';
+      drawCtx.strokeStyle = 'rgba(0,0,0,1)';
+      drawCtx.lineWidth = eraserWidth;
     }
+    drawCtx.beginPath();
+    drawCtx.moveTo(lastX, lastY);
+    drawCtx.lineTo(x, y);
+    drawCtx.stroke();
+    lastX = x;
+    lastY = y;
+  }
 
-    function updatePenColorForBackground() {
-      penColor = isWhiteBackground ? 'black' : 'white';
+  function endDraw() {
+    if (!isDrawing) return;
+    isDrawing = false;
+    drawCtx.globalCompositeOperation = 'source-over';
+    pushHistory();
+  }
+
+  // Mouse & touch events
+  drawCanvas.addEventListener('mousedown', e => {
+    const rect = drawCanvas.getBoundingClientRect();
+    startDraw(e.clientX - rect.left, e.clientY - rect.top);
+  });
+  drawCanvas.addEventListener('mousemove', e => {
+    const rect = drawCanvas.getBoundingClientRect();
+    drawTo(e.clientX - rect.left, e.clientY - rect.top);
+  });
+  window.addEventListener('mouseup', endDraw);
+
+  drawCanvas.addEventListener('touchstart', e => {
+    const rect = drawCanvas.getBoundingClientRect();
+    const t = e.touches[0];
+    startDraw(t.clientX - rect.left, t.clientY - rect.top);
+    e.preventDefault();
+  }, {
+    passive: false
+  });
+  drawCanvas.addEventListener('touchmove', e => {
+    if (!isDrawing) return;
+    const rect = drawCanvas.getBoundingClientRect();
+    const t = e.touches[0];
+    drawTo(t.clientX - rect.left, t.clientY - rect.top);
+    e.preventDefault();
+  }, {
+    passive: false
+  });
+  drawCanvas.addEventListener('touchend', e => {
+    endDraw();
+    e.preventDefault();
+  }, {
+    passive: false
+  });
+
+  // Button events
+  penToolBtn.addEventListener('click', () => setActiveTool('pen'));
+  eraserToolBtn.addEventListener('click', () => setActiveTool('eraser'));
+
+  undoBtn.addEventListener('click', () => {
+    if (historyIndex > 0) {
+      historyIndex--;
+      loadHistory(historyIndex);
     }
+  });
 
-    function pushHistory() {
-      const url = drawCanvas.toDataURL('image/png');
-      if(historyIndex < history.length-1) history = history.slice(0, historyIndex+1);
-      history.push(url);
-      historyIndex = history.length-1;
-      undoBtn.disabled = historyIndex <= 0;
-    }
+  clearBtn.addEventListener('click', () => {
+    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    pushHistory();
+  });
 
-    function loadHistory(index) {
-      drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
-      if(index>=0){
-        const img = new Image();
-        img.onload = ()=>drawCtx.drawImage(img,0,0);
-        img.src = history[index];
-      }
-      undoBtn.disabled = index<=0;
-    }
+  toggleBgBtn.addEventListener('click', () => {
+    isWhiteBackground = !isWhiteBackground;
+    iconSun.classList.toggle('hidden', !isWhiteBackground);
+    iconMoon.classList.toggle('hidden', isWhiteBackground);
+    paintBackground();
+    updatePenColorForBackground();
+    if (isWhiteBackground) appContainer.classList.remove('dark-mode');
+    else appContainer.classList.add('dark-mode');
+  });
 
-    function startDraw(x,y){
-      isDrawing=true; lastX=x; lastY=y;
-      drawCtx.lineCap='round';
-      drawCtx.lineJoin='round';
-    }
+  saveBtn.addEventListener('click', () => {
+    const out = document.createElement('canvas');
+    out.width = drawCanvas.width;
+    out.height = drawCanvas.height;
+    const octx = out.getContext('2d');
+    octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
+    octx.fillRect(0, 0, out.width, out.height);
+    octx.drawImage(drawCanvas, 0, 0);
+    const link = document.createElement('a');
+    link.download = 'my-drawing.png';
+    link.href = out.toDataURL('image/png');
+    link.click();
+  });
 
-    function drawTo(x,y){
-      if(!isDrawing) return;
-      if(currentTool==='pen'){
-        drawCtx.globalCompositeOperation='source-over';
-        drawCtx.strokeStyle=penColor;
-        drawCtx.lineWidth=penWidth;
-      } else {
-        drawCtx.globalCompositeOperation='destination-out';
-        drawCtx.strokeStyle='rgba(0,0,0,1)';
-        drawCtx.lineWidth=eraserWidth;
-      }
-      drawCtx.beginPath();
-      drawCtx.moveTo(lastX,lastY);
-      drawCtx.lineTo(x,y);
-      drawCtx.stroke();
-      lastX=x; lastY=y;
-    }
-
-    function endDraw(){ 
-      if(!isDrawing) return;
-      isDrawing=false; 
-      drawCtx.globalCompositeOperation='source-over';
-      pushHistory();
-    }
-
-    // Mouse & touch events
-    drawCanvas.addEventListener('mousedown', e=>{
-      const rect = drawCanvas.getBoundingClientRect();
-      startDraw(e.clientX-rect.left,e.clientY-rect.top);
-    });
-    drawCanvas.addEventListener('mousemove', e=>{
-      const rect = drawCanvas.getBoundingClientRect();
-      drawTo(e.clientX-rect.left,e.clientY-rect.top);
-    });
-    window.addEventListener('mouseup', endDraw);
-
-    drawCanvas.addEventListener('touchstart', e=>{
-      const rect = drawCanvas.getBoundingClientRect();
-      const t=e.touches[0];
-      startDraw(t.clientX-rect.left,t.clientY-rect.top);
-      e.preventDefault();
-    }, {passive:false});
-    drawCanvas.addEventListener('touchmove', e=>{
-      if(!isDrawing) return;
-      const rect = drawCanvas.getBoundingClientRect();
-      const t=e.touches[0];
-      drawTo(t.clientX-rect.left,t.clientY-rect.top);
-      e.preventDefault();
-    }, {passive:false});
-    drawCanvas.addEventListener('touchend', e=>{endDraw(); e.preventDefault();}, {passive:false});
-
-    // Button events
-    penToolBtn.addEventListener('click', ()=>setActiveTool('pen'));
-    eraserToolBtn.addEventListener('click', ()=>setActiveTool('eraser'));
-
-    undoBtn.addEventListener('click', ()=>{
-      if(historyIndex>0){ historyIndex--; loadHistory(historyIndex); }
-    });
-
-    clearBtn.addEventListener('click', ()=>{
-      drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
-      pushHistory();
-    });
-
-    toggleBgBtn.addEventListener('click', ()=>{
-      isWhiteBackground = !isWhiteBackground;
-      iconSun.classList.toggle('hidden', !isWhiteBackground);
-      iconMoon.classList.toggle('hidden', isWhiteBackground);
-      paintBackground();
-      updatePenColorForBackground();
-      if(isWhiteBackground) appContainer.classList.remove('dark-mode');
-      else appContainer.classList.add('dark-mode');
-    });
-
-    saveBtn.addEventListener('click', ()=>{
-      const out=document.createElement('canvas');
-      out.width=drawCanvas.width; out.height=drawCanvas.height;
-      const octx=out.getContext('2d');
-      octx.fillStyle=isWhiteBackground?'#ffffff':'#000000';
-      octx.fillRect(0,0,out.width,out.height);
-      octx.drawImage(drawCanvas,0,0);
-      const link=document.createElement('a');
-      link.download='my-drawing.png';
-      link.href=out.toDataURL('image/png');
-      link.click();
-    });
-
-    // Init
-    window.addEventListener('load', ()=>{
-      sizeCanvases();
-      setActiveTool('pen');
-      updatePenColorForBackground();
-      paintBackground();
-      pushHistory();
-      if(window.lucide) window.lucide.createIcons();
-    });
-    window.addEventListener('resize', sizeCanvases);
-  </script>
-</body>
-</html>
+  // Init
+  window.addEventListener('load', () => {
+    sizeCanvases();
+    setActiveTool('pen');
+    updatePenColorForBackground();
+    paintBackground();
+    pushHistory();
+    if (window.lucide) window.lucide.createIcons();
+  });
+  window.addEventListener('resize', sizeCanvases);
+</script>
