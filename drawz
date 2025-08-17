@@ -44,10 +44,10 @@
     </div>
 
     <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-xl space-y-6">
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-2">Simple Drawing Pad</h1>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-2">Mal-mal-kurz</h1>
 
       <!-- Canvas container -->
-      <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden shadow-inner border-4 border-dashed border-gray-400 p-2">
+      <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden ">
         <!-- Controls -->
         <div class="absolute top-4 left-4 z-10">
           <div class="flex flex-wrap items-center gap-2 rounded-lg shadow px-2 py-2 bg-transparent">
@@ -69,8 +69,8 @@
 
             <!-- Background toggle -->
             <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">
-              <span id="icon-sun" class="inline-flex"><i data-lucide="sun" class="w-5 h-5"></i></span>
-              <span id="icon-moon" class="hidden inline-flex"><i data-lucide="moon" class="w-5 h-5"></i></span>
+              <span id="icon-sun" ><i data-lucide="sun" class="w-5 h-5"></i></span>
+              <span id="icon-moon" class="hidden "><i data-lucide="moon" class="w-5 h-5"></i></span>
             </button>
 
             <!-- Clear & Save -->
