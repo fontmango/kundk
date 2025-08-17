@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drawings Alive</title>
-    <!-- Use the Inter font from Google Fonts -->
+    <title>kiwiundknoedel - Geschenke mit Kinderzeichnungen</title>
+    <!-- Use "Permanent Marker" for logo and "Caveat" for the headline -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -22,20 +22,30 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Custom styles for the image slider */
+        .logo-font {
+            font-family: 'Permanent Marker', cursive;
+        }
+        
+        .headline-font {
+            font-family: 'Caveat', cursive;
+        }
+
+        /* Benutzerdefinierte Stile für den Bild-Slider */
         .slider-container {
             position: relative;
             width: 100%;
             height: auto;
             overflow: hidden;
             user-select: none;
+            cursor: ew-resize; /* Zeiger, der auf das Verschieben hinweist */
+            border-radius: 1.5rem; /* Abgerundete Ecken */
         }
 
         .slider-image {
             width: 100%;
             height: auto;
             display: block;
-            pointer-events: none;
+            pointer-events: none; /* Ignoriert Maus-Events auf den Bildern */
         }
 
         .slider-image.after {
@@ -47,31 +57,13 @@
 
         .slider-handle {
             position: absolute;
-            top: 50%;
+            top: 0;
             left: 50%;
             width: 4px;
             height: 100%;
             background-color: white;
-            transform: translate(-50%, -50%);
-            cursor: ew-resize;
-            touch-action: none;
+            transform: translateX(-50%);
             z-index: 10;
-        }
-
-        .slider-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 50px;
-            height: 50px;
-            background-color: white;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            pointer-events: none;
         }
 
         .label {
@@ -101,91 +93,176 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* Gradient for the "Get it now" button */
+        /* Farbverlauf für den Button "Jetzt ansehen" */
         .gradient-button {
             background: linear-gradient(90deg, var(--primary-purple) 0%, var(--primary-pink) 100%);
         }
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-100 text-gray-800">
 
-    <!-- Main Container -->
+    <!-- Haupt-Container -->
     <div class="min-h-screen flex flex-col">
 
-        <!-- Header -->
+        <!-- Kopfzeile -->
         <header class="p-6 flex items-center justify-between">
             <div class="flex items-center space-x-2">
-                <span class="text-xl font-bold">Drawings Alive</span>
+                <span class="text-2xl font-bold text-gray-900 logo-font">kiwiundknoedel</span>
             </div>
             <div class="flex items-center space-x-4">
-                <a href="#" class="text-sm font-medium hover:text-gray-900 transition">Login</a>
-                <a href="#" class="px-4 py-2 text-sm font-semibold rounded-full bg-blue-600 text-white hover:bg-blue-700 transition">Get it now</a>
+                <a href="#" class="px-4 py-2 text-sm font-semibold rounded-full text-blue-600 hover:text-blue-700 transition">Gallerie</a>
+                <a href="#" class="px-4 py-2 text-sm font-semibold rounded-full bg-blue-600 text-white hover:bg-blue-700 transition">Shop</a>
             </div>
         </header>
 
-        <!-- Main Content Section -->
+        <!-- Hauptinhaltsbereich -->
         <main class="flex-grow flex items-center justify-center p-6 md:p-12">
             <div class="flex flex-col lg:flex-row items-center justify-center w-full max-w-7xl space-y-12 lg:space-y-0 lg:space-x-12">
 
-                <!-- Left Column (Text & Buttons) -->
+                <!-- Linke Spalte (Text & Buttons) -->
                 <div class="flex-1 text-center lg:text-left space-y-6">
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight">
-                        Bring Your Kid's <br class="hidden sm:inline"> Drawings to Life
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight text-gray-900 headline-font">
+                        Emotionen verschenken war noch nie so einfach
                     </h1>
                     <p class="text-base sm:text-lg text-gray-600 max-w-xl mx-auto lg:mx-0">
-                        Watch your child's drawings leap off the page! Drawings Alive transforms simple sketches into vibrant artworks with AI. Get ready for your kid's creativity to sparkle with fun and magic!
+                        Mütter schicken mir die Zeichnungen ihrer Kinder, ich bearbeite sie und bedrucke T-Shirts damit. So entstehen einzigartige Geschenke für Geburtstage, Vatertag, Weihnachten und viele andere Anlässe. Einfach und mit tollen Ergebnissen!
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
-                        <!-- Upload Button -->
+                        <!-- Upload-Button -->
                         <button id="uploadBtn" class="w-full sm:w-auto px-8 py-3 font-semibold text-white rounded-full gradient-button hover:shadow-lg transition">
-                            Upload your image
+                            Eigenes Bild hochladen
                         </button>
-                        <!-- Draw Button -->
+                        <!-- Zeichen-Button -->
                         <button id="drawBtn" class="w-full sm:w-auto px-8 py-3 font-semibold text-gray-800 bg-gray-200 rounded-full hover:bg-gray-300 transition">
-                            Draw your own
+                            Selbst zeichnen
                         </button>
                     </div>
                     <div class="mt-8 pt-4 space-y-2 text-sm text-gray-600 font-medium">
-                        <p>🏆 #1 AI App for Kids' Drawings</p>
-                        <p>✨ Loved by 10,000+ parents and kids!</p>
+                        <p>🎁 Emotionen verschenken war noch nie so einfach</p>
+                        <p>✨ über 1.000 Kinderzeichnungen verarbeitet</p>
                     </div>
                 </div>
 
-                <!-- Right Column (Image Slider) -->
+                <!-- Rechte Spalte (Bild-Slider) -->
                 <div class="flex-1 w-full max-w-xl lg:max-w-none">
-                    <div class="bg-white rounded-xl shadow-2xl p-4 md:p-6 lg:p-8">
-                        <div class="slider-container rounded-lg relative overflow-hidden">
-                            <!-- Canvas for drawing -->
-                            <div id="drawingContainer" class="drawing-canvas-container">
-                                <canvas id="drawingCanvas" class="drawing-canvas"></canvas>
+                    <div class="bg-white rounded-3xl shadow-2xl p-4 md:p-6 lg:p-8">
+                        <div id="sliderContainer" class="slider-container relative overflow-hidden">
+                            <!-- Zeichenfläche für das Zeichnen -->
+                            <div id="drawingContainer" class="drawing-canvas-container absolute top-0 left-0 w-full h-full">
+                                <canvas id="drawingCanvas" class="drawing-canvas w-full h-full"></canvas>
                                 <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex space-x-2">
-                                    <button id="clearCanvasBtn" class="px-4 py-2 text-sm font-medium bg-red-500 text-white rounded-full hover:bg-red-600 transition">Clear</button>
-                                    <button id="saveCanvasBtn" class="px-4 py-2 text-sm font-medium bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">Save Drawing</button>
+                                    <button id="clearCanvasBtn" class="px-4 py-2 text-sm font-medium bg-red-500 text-white rounded-full hover:bg-red-600 transition">Löschen</button>
+                                    <button id="saveCanvasBtn" class="px-4 py-2 text-sm font-medium bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">Zeichnung speichern</button>
                                 </div>
                             </div>
-                            <!-- Before/After Images -->
+                            <!-- Vorher/Nachher-Bilder -->
                             <div id="imageSlider" class="relative">
-                                <img src="https://placehold.co/800x600/ffffff/000000?text=Before" alt="Before image" class="slider-image before rounded-lg">
-                                <img src="https://placehold.co/800x600/7f00ff/ffffff?text=After" alt="After image" class="slider-image after rounded-lg">
-                                <span class="label">Before</span>
-                                <span class="label after-label">After</span>
-                                <div id="sliderHandle" class="slider-handle">
-                                    <div class="slider-button">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-11.293a1 1 0 00-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414-1.414L8.414 11H14a1 1 0 100-2H8.414l2.293-2.293z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </div>
+                                <img src="https://placehold.co/800x600/ffffff/000000?text=Original" alt="Vorher-Bild" class="slider-image before rounded-3xl">
+                                <img src="https://placehold.co/800x600/7f00ff/ffffff?text=Magisch" alt="Nachher-Bild" class="slider-image after rounded-3xl">
+                                <span class="label">Original</span>
+                                <span class="label after-label">Magisch</span>
+                                <div id="sliderHandle" class="slider-handle"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
+        
+        <!-- Wie es funktioniert Sektion -->
+        <section class="py-16 md:py-24 bg-white text-gray-800">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center space-y-12">
+                <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-gray-900 headline-font">
+                    So funktioniert's
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Schritt 1 -->
+                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4">
+                        <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold logo-font">1</div>
+                        <h3 class="text-2xl font-bold headline-font">Bild hochladen</h3>
+                        <p class="text-gray-600">Lade die Kinderzeichnung hoch oder nutze die Zeichenfunktion, um deine Idee direkt auf der Seite festzuhalten.</p>
+                    </div>
+                    <!-- Schritt 2 -->
+                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4">
+                        <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold logo-font">2</div>
+                        <h3 class="text-2xl font-bold headline-font">Wir zaubern ein Beispiel</h3>
+                        <p class="text-gray-600">Innerhalb von 24 Stunden melden wir uns bei dir mit einem digitalen Beispiel, wie das fertige Produkt aussehen könnte.</p>
+                    </div>
+                    <!-- Schritt 3 -->
+                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4">
+                        <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold logo-font">3</div>
+                        <h3 class="text-2xl font-bold headline-font">Bestellung abschicken</h3>
+                        <p class="text-gray-600">Wenn dir das Ergebnis gefällt, schickst du deine Bestellung ab und das einzigartige Geschenk macht sich auf den Weg zu dir!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Sektion -->
+        <section class="py-16 md:py-24 bg-gray-50 text-gray-800">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-12">
+                <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-center text-gray-900 headline-font">
+                    Häufig gestellte Fragen (FAQ)
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- FAQ Frage 1 -->
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
+                        <h4 class="text-lg font-bold text-gray-900">Wie lange dauert es, bis ich mein Beispiel sehe?</h4>
+                        <p class="text-gray-600">Nachdem du die Zeichnung hochgeladen hast, erhältst du in der Regel innerhalb von 24 Stunden einen Entwurf von uns.</p>
+                    </div>
+                    <!-- FAQ Frage 2 -->
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
+                        <h4 class="text-lg font-bold text-gray-900">Welche Art von Zeichnungen kann ich hochladen?</h4>
+                        <p class="text-gray-600">Am besten eignen sich einfache Strichzeichnungen auf weißem Papier. Aber wir können auch mit farbigen Bildern arbeiten!</p>
+                    </div>
+                    <!-- FAQ Frage 3 -->
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
+                        <h4 class="text-lg font-bold text-gray-900">Welche Produkte kann ich bedrucken lassen?</h4>
+                        <p class="text-gray-600">Im Moment bieten wir T-Shirts an, aber wir planen, unser Sortiment bald um Hoodies und Tassen zu erweitern.</p>
+                    </div>
+                    <!-- FAQ Frage 4 -->
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
+                        <h4 class="text-lg font-bold text-gray-900">Kann ich die Farben anpassen?</h4>
+                        <p class="text-gray-600">Ja, absolut! Wir passen die Farben an, um sicherzustellen, dass das Design perfekt auf dem gewählten Produkt aussieht. Alle Details klären wir vor dem Druck.</p>
+                    </div>
+                    <!-- FAQ Frage 5 -->
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
+                        <h4 class="text-lg font-bold text-gray-900">Gibt es eine Mindestbestellmenge?</h4>
+                        <p class="text-gray-600">Nein, es gibt keine Mindestbestellmenge. Du kannst schon ab einem Stück bestellen.</p>
+                    </div>
+                    <!-- FAQ Frage 6 -->
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
+                        <h4 class="text-lg font-bold text-gray-900">Wie sind die Versandkosten?</h4>
+                        <p class="text-gray-600">Die Versandkosten sind pauschal und werden im Warenkorb angezeigt, bevor du die Bestellung abschickst.</p>
+                    </div>
+                    <!-- FAQ Frage 7 -->
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
+                        <h4 class="text-lg font-bold text-gray-900">Kann ich die Bestellung stornieren?</h4>
+                        <p class="text-gray-600">Eine Stornierung ist möglich, solange das Produkt noch nicht gedruckt wurde. Bitte kontaktiere uns so schnell wie möglich.</p>
+                    </div>
+                    <!-- FAQ Frage 8 -->
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
+                        <h4 class="text-lg font-bold text-gray-900">Wie pflege ich die bedruckten Textilien?</h4>
+                        <p class="text-gray-600">Für eine lange Haltbarkeit empfehlen wir, die Textilien auf links zu waschen und sie nicht in den Trockner zu geben.</p>
+                    </div>
+                    <!-- FAQ Frage 9 -->
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
+                        <h4 class="text-lg font-bold text-gray-900">Kann ich mein eigenes T-Shirt bedrucken lassen?</h4>
+                        <p class="text-gray-600">Aktuell bedrucken wir nur T-Shirts aus unserem eigenen Sortiment, um eine optimale Druckqualität zu garantieren.</p>
+                    </div>
+                    <!-- FAQ Frage 10 -->
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
+                        <h4 class="text-lg font-bold text-gray-900">Wie kontaktiere ich euch?</h4>
+                        <p class="text-gray-600">Du kannst uns jederzeit über unser Kontaktformular oder per E-Mail erreichen. Wir antworten dir so schnell wie möglich.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
 
-    <!-- Hidden file input for upload -->
+    <!-- Verstecktes Dateieingabefeld zum Hochladen -->
     <input type="file" id="fileInput" class="hidden" accept="image/*">
 
     <script>
@@ -196,6 +273,7 @@
             const clearCanvasBtn = document.getElementById('clearCanvasBtn');
             const saveCanvasBtn = document.getElementById('saveCanvasBtn');
 
+            const sliderContainer = document.getElementById('sliderContainer');
             const imageSlider = document.getElementById('imageSlider');
             const sliderHandle = document.getElementById('sliderHandle');
             const beforeImage = document.querySelector('.slider-image.before');
@@ -208,7 +286,7 @@
             let lastX = 0;
             let lastY = 0;
 
-            // Function to resize canvas to match the image dimensions
+            // Funktion zur Größenanpassung des Canvas an die Bildabmessungen
             const resizeCanvas = () => {
                 drawingCanvas.width = beforeImage.offsetWidth;
                 drawingCanvas.height = beforeImage.offsetHeight;
@@ -217,12 +295,12 @@
                 ctx.strokeStyle = '#000000';
             };
 
-            // Initial resize on page load
+            // Anfängliche Größenanpassung beim Laden der Seite
             window.addEventListener('load', resizeCanvas);
-            // Resize canvas if window changes size
+            // Größenanpassung des Canvas, wenn sich die Fenstergröße ändert
             window.addEventListener('resize', resizeCanvas);
 
-            // Function to handle image upload
+            // Funktion zum Hochladen von Bildern
             uploadBtn.addEventListener('click', () => {
                 fileInput.click();
             });
@@ -234,12 +312,12 @@
                     reader.onload = (event) => {
                         const img = new Image();
                         img.onload = () => {
-                            // Update the before image with the uploaded image
+                            // Aktualisiere das Vorher-Bild mit dem hochgeladenen Bild
                             beforeImage.src = event.target.result;
-                            // Make sure the slider is visible
+                            // Stelle sicher, dass der Slider sichtbar ist
                             imageSlider.style.display = 'block';
                             drawingContainer.style.display = 'none';
-                            resizeCanvas(); // Resize canvas to match the new image dimensions
+                            resizeCanvas(); // Passe die Größe des Canvas an die neuen Bildabmessungen an
                         };
                         img.src = event.target.result;
                     };
@@ -247,7 +325,7 @@
                 }
             });
 
-            // Function to toggle between image slider and drawing canvas
+            // Funktion zum Umschalten zwischen Bild-Slider und Zeichenfläche
             drawBtn.addEventListener('click', () => {
                 const isCanvasVisible = drawingContainer.style.display === 'block';
                 if (!isCanvasVisible) {
@@ -260,23 +338,23 @@
                 }
             });
 
-            // Clear the drawing canvas
+            // Zeichenfläche löschen
             clearCanvasBtn.addEventListener('click', () => {
                 ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
             });
             
-            // Save the drawing as an image
+            // Zeichnung als Bild speichern
             saveCanvasBtn.addEventListener('click', () => {
                 const dataURL = drawingCanvas.toDataURL('image/png');
                 const link = document.createElement('a');
                 link.href = dataURL;
-                link.download = 'my-drawing.png';
+                link.download = 'meine-zeichnung.png';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
             });
 
-            // Drawing logic
+            // Zeichen-Logik
             function draw(e) {
                 if (!isDrawing) return;
                 ctx.beginPath();
@@ -294,7 +372,7 @@
             drawingCanvas.addEventListener('mouseout', () => isDrawing = false);
             drawingCanvas.addEventListener('mousemove', draw);
             
-            // Touch event listeners for drawing
+            // Touch-Event-Listener für das Zeichnen
             drawingCanvas.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 const touch = e.touches[0];
@@ -316,14 +394,12 @@
                 [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
             });
 
-            // Before/After Image Slider Logic
-            let isDragging = false;
-
-            const handleDrag = (clientX) => {
-                const rect = imageSlider.getBoundingClientRect();
+            // Vorher/Nachher-Bild-Slider-Logik
+            const handleMouseOver = (clientX) => {
+                const rect = sliderContainer.getBoundingClientRect();
                 let x = clientX - rect.left;
 
-                // Clamp the value to be within the image bounds
+                // Beschränke den Wert auf die Bildgrenzen
                 if (x < 0) x = 0;
                 if (x > rect.width) x = rect.width;
 
@@ -334,40 +410,32 @@
                 sliderHandle.style.left = `${percentage}%`;
             };
 
-            // Mouse events for slider
-            sliderHandle.addEventListener('mousedown', (e) => {
+            const resetSlider = () => {
+                const rect = sliderContainer.getBoundingClientRect();
+                const defaultPercentage = 50;
+                const clipPathValue = `inset(0 ${100 - defaultPercentage}% 0 0)`;
+                
+                afterImage.style.clipPath = clipPathValue;
+                sliderHandle.style.left = `${defaultPercentage}%`;
+            };
+
+            // Maus-Events für den Slider
+            sliderContainer.addEventListener('mousemove', (e) => {
+                handleMouseOver(e.clientX);
+            });
+
+            sliderContainer.addEventListener('mouseleave', () => {
+                resetSlider();
+            });
+
+            // Touch-Events für den Slider
+            sliderContainer.addEventListener('touchmove', (e) => {
                 e.preventDefault();
-                isDragging = true;
+                handleMouseOver(e.touches[0].clientX);
             });
 
-            document.addEventListener('mouseup', () => {
-                isDragging = false;
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (isDragging) {
-                    handleDrag(e.clientX);
-                }
-            });
-
-            // Touch events for slider
-            sliderHandle.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                isDragging = true;
-            });
-
-            document.addEventListener('touchend', () => {
-                isDragging = false;
-            });
-
-            document.addEventListener('touchmove', (e) => {
-                if (isDragging) {
-                    handleDrag(e.touches[0].clientX);
-                }
-            });
-
-            // Initial position of the slider
-            handleDrag(imageSlider.getBoundingClientRect().width / 2 + imageSlider.getBoundingClientRect().left);
+            // Anfängliche Position des Sliders
+            resetSlider();
         });
     </script>
 </body>
