@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawings Alive</title>
+    <!-- Use the Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-purple: #7f00ff;
+            --primary-pink: #f06292;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Custom styles for the image slider */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .slider-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            pointer-events: none;
+        }
+
+        .slider-image.after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            clip-path: inset(0 0 0 50%);
+        }
+
+        .slider-handle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background-color: white;
+            transform: translate(-50%, -50%);
+            cursor: ew-resize;
+            touch-action: none;
+            z-index: 10;
+        }
+
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+
+        .label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+
+        .after-label {
+            left: auto;
+            right: 20px;
+        }
+
+        .drawing-canvas-container {
+            display: none;
+        }
+        
+        .drawing-canvas {
+            background-color: #fff;
+            cursor: crosshair;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* Gradient for the "Get it now" button */
+        .gradient-button {
+            background: linear-gradient(90deg, var(--primary-purple) 0%, var(--primary-pink) 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Main Container -->
+    <div class="min-h-screen flex flex-col">
+
+        <!-- Header -->
+        <header class="p-6 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <span class="text-xl font-bold">Drawings Alive</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="#" class="text-sm font-medium hover:text-gray-900 transition">Login</a>
+                <a href="#" class="px-4 py-2 text-sm font-semibold rounded-full bg-blue-600 text-white hover:bg-blue-700 transition">Get it now</a>
+            </div>
+        </header>
+
+        <!-- Main Content Section -->
+        <main class="flex-grow flex items-center justify-center p-6 md:p-12">
+            <div class="flex flex-col lg:flex-row items-center justify-center w-full max-w-7xl space-y-12 lg:space-y-0 lg:space-x-12">
+
+                <!-- Left Column (Text & Buttons) -->
+                <div class="flex-1 text-center lg:text-left space-y-6">
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight">
+                        Bring Your Kid's <br class="hidden sm:inline"> Drawings to Life
+                    </h1>
+                    <p class="text-base sm:text-lg text-gray-600 max-w-xl mx-auto lg:mx-0">
+                        Watch your child's drawings leap off the page! Drawings Alive transforms simple sketches into vibrant artworks with AI. Get ready for your kid's creativity to sparkle with fun and magic!
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
+                        <!-- Upload Button -->
+                        <button id="uploadBtn" class="w-full sm:w-auto px-8 py-3 font-semibold text-white rounded-full gradient-button hover:shadow-lg transition">
+                            Upload your image
+                        </button>
+                        <!-- Draw Button -->
+                        <button id="drawBtn" class="w-full sm:w-auto px-8 py-3 font-semibold text-gray-800 bg-gray-200 rounded-full hover:bg-gray-300 transition">
+                            Draw your own
+                        </button>
+                    </div>
+                    <div class="mt-8 pt-4 space-y-2 text-sm text-gray-600 font-medium">
+                        <p>🏆 #1 AI App for Kids' Drawings</p>
+                        <p>✨ Loved by 10,000+ parents and kids!</p>
+                    </div>
+                </div>
+
+                <!-- Right Column (Image Slider) -->
+                <div class="flex-1 w-full max-w-xl lg:max-w-none">
+                    <div class="bg-white rounded-xl shadow-2xl p-4 md:p-6 lg:p-8">
+                        <div class="slider-container rounded-lg relative overflow-hidden">
+                            <!-- Canvas for drawing -->
+                            <div id="drawingContainer" class="drawing-canvas-container">
+                                <canvas id="drawingCanvas" class="drawing-canvas"></canvas>
+                                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex space-x-2">
+                                    <button id="clearCanvasBtn" class="px-4 py-2 text-sm font-medium bg-red-500 text-white rounded-full hover:bg-red-600 transition">Clear</button>
+                                    <button id="saveCanvasBtn" class="px-4 py-2 text-sm font-medium bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">Save Drawing</button>
+                                </div>
+                            </div>
+                            <!-- Before/After Images -->
+                            <div id="imageSlider" class="relative">
+                                <img src="https://placehold.co/800x600/ffffff/000000?text=Before" alt="Before image" class="slider-image before rounded-lg">
+                                <img src="https://placehold.co/800x600/7f00ff/ffffff?text=After" alt="After image" class="slider-image after rounded-lg">
+                                <span class="label">Before</span>
+                                <span class="label after-label">After</span>
+                                <div id="sliderHandle" class="slider-handle">
+                                    <div class="slider-button">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-11.293a1 1 0 00-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414-1.414L8.414 11H14a1 1 0 100-2H8.414l2.293-2.293z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden file input for upload -->
+    <input type="file" id="fileInput" class="hidden" accept="image/*">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('fileInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const drawBtn = document.getElementById('drawBtn');
+            const clearCanvasBtn = document.getElementById('clearCanvasBtn');
+            const saveCanvasBtn = document.getElementById('saveCanvasBtn');
+
+            const imageSlider = document.getElementById('imageSlider');
+            const sliderHandle = document.getElementById('sliderHandle');
+            const beforeImage = document.querySelector('.slider-image.before');
+            const afterImage = document.querySelector('.slider-image.after');
+            const drawingContainer = document.getElementById('drawingContainer');
+            const drawingCanvas = document.getElementById('drawingCanvas');
+
+            const ctx = drawingCanvas.getContext('2d');
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+
+            // Function to resize canvas to match the image dimensions
+            const resizeCanvas = () => {
+                drawingCanvas.width = beforeImage.offsetWidth;
+                drawingCanvas.height = beforeImage.offsetHeight;
+                ctx.lineWidth = 4;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = '#000000';
+            };
+
+            // Initial resize on page load
+            window.addEventListener('load', resizeCanvas);
+            // Resize canvas if window changes size
+            window.addEventListener('resize', resizeCanvas);
+
+            // Function to handle image upload
+            uploadBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            // Update the before image with the uploaded image
+                            beforeImage.src = event.target.result;
+                            // Make sure the slider is visible
+                            imageSlider.style.display = 'block';
+                            drawingContainer.style.display = 'none';
+                            resizeCanvas(); // Resize canvas to match the new image dimensions
+                        };
+                        img.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Function to toggle between image slider and drawing canvas
+            drawBtn.addEventListener('click', () => {
+                const isCanvasVisible = drawingContainer.style.display === 'block';
+                if (!isCanvasVisible) {
+                    imageSlider.style.display = 'none';
+                    drawingContainer.style.display = 'block';
+                    resizeCanvas();
+                } else {
+                    imageSlider.style.display = 'block';
+                    drawingContainer.style.display = 'none';
+                }
+            });
+
+            // Clear the drawing canvas
+            clearCanvasBtn.addEventListener('click', () => {
+                ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+            });
+            
+            // Save the drawing as an image
+            saveCanvasBtn.addEventListener('click', () => {
+                const dataURL = drawingCanvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = dataURL;
+                link.download = 'my-drawing.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // Drawing logic
+            function draw(e) {
+                if (!isDrawing) return;
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+                [lastX, lastY] = [e.offsetX, e.offsetY];
+            }
+
+            drawingCanvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                [lastX, lastY] = [e.offsetX, e.offsetY];
+            });
+            drawingCanvas.addEventListener('mouseup', () => isDrawing = false);
+            drawingCanvas.addEventListener('mouseout', () => isDrawing = false);
+            drawingCanvas.addEventListener('mousemove', draw);
+            
+            // Touch event listeners for drawing
+            drawingCanvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = drawingCanvas.getBoundingClientRect();
+                isDrawing = true;
+                [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
+            });
+            drawingCanvas.addEventListener('touchend', () => isDrawing = false);
+            drawingCanvas.addEventListener('touchcancel', () => isDrawing = false);
+            drawingCanvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = drawingCanvas.getBoundingClientRect();
+                if (!isDrawing) return;
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                ctx.stroke();
+                [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
+            });
+
+            // Before/After Image Slider Logic
+            let isDragging = false;
+
+            const handleDrag = (clientX) => {
+                const rect = imageSlider.getBoundingClientRect();
+                let x = clientX - rect.left;
+
+                // Clamp the value to be within the image bounds
+                if (x < 0) x = 0;
+                if (x > rect.width) x = rect.width;
+
+                const percentage = (x / rect.width) * 100;
+                const clipPathValue = `inset(0 ${100 - percentage}% 0 0)`;
+                
+                afterImage.style.clipPath = clipPathValue;
+                sliderHandle.style.left = `${percentage}%`;
+            };
+
+            // Mouse events for slider
+            sliderHandle.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                isDragging = true;
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    handleDrag(e.clientX);
+                }
+            });
+
+            // Touch events for slider
+            sliderHandle.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                isDragging = true;
+            });
+
+            document.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                if (isDragging) {
+                    handleDrag(e.touches[0].clientX);
+                }
+            });
+
+            // Initial position of the slider
+            handleDrag(imageSlider.getBoundingClientRect().width / 2 + imageSlider.getBoundingClientRect().left);
+        });
+    </script>
+</body>
+</html>
