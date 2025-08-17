@@ -3,7 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kiwiundknoedel - Geschenke mit Kinderzeichnungen</title>
+    <title>kiwiundknoedel - Persönliche Geschenke mit Kinderzeichnungen</title>
+    <meta name="description" content="Verwandeln Sie Kinderzeichnungen in einzigartige, personalisierte Geschenke wie T-Shirts. Einfach Bild hochladen, Entwurf erhalten und bestellen.">
+    <meta name="keywords" content="kiwiundknoedel, Kinderzeichnungen, Geschenke, T-Shirt, personalisiert, Kunstwerke, Vatertag, Muttertag, Geburtstag, Weihnachten">
+    <meta name="author" content="kiwiundknoedel">
+    
+    <!-- Open Graph Tags for Social Media -->
+    <meta property="og:title" content="kiwiundknoedel - Persönliche Geschenke mit Kinderzeichnungen">
+    <meta property="og:description" content="Verwandeln Sie Kinderzeichnungen in einzigartige, personalisierte Geschenke wie T-Shirts. Einfach Bild hochladen, Entwurf erhalten und bestellen.">
+    <meta property="og:image" content="https://placehold.co/1200x630/dbe4d5/3a3a3a?text=kiwi+%26+kn%C3%B6del">
+    <meta property="og:url" content="https://www.kiwiundknoedel.de">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="kiwiundknoedel - Persönliche Geschenke mit Kinderzeichnungen">
+    <meta name="twitter:description" content="Verwandeln Sie Kinderzeichnungen in einzigartige, personalisierte Geschenke wie T-Shirts. Einfach Bild hochladen, Entwurf erhalten und bestellen.">
+    <meta name="twitter:image" content="https://placehold.co/1200x630/dbe4d5/3a3a3a?text=kiwi+%26+kn%C3%B6del">
+    
+    <!-- SEO: JSON-LD Markup für Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "kiwiundknoedel",
+      "url": "https://www.kiwiundknoedel.de",
+      "description": "Verwandeln Sie Kinderzeichnungen in einzigartige, personalisierte Geschenke wie T-Shirts. Einfach Bild hochladen, Entwurf erhalten und bestellen.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://www.kiwiundknoedel.de/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
     <!-- Use "Permanent Marker" for logo and "Caveat" for the headline -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,14 +48,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --primary-purple: #7f00ff;
-            --primary-pink: #f06292;
+            --primary-light-green: #dbe4d5; /* Lighter green from logo */
+            --secondary-dark: #3a3a3a; /* Darker text color */
+            --button-dark: #4f6b3e; /* Darker green for contrast */
         }
 
         body {
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            background-color: var(--primary-light-green);
         }
 
         .logo-font {
@@ -84,19 +122,19 @@
         
         /* Farbverlauf für den Button "Jetzt ansehen" */
         .gradient-button {
-            background: linear-gradient(90deg, var(--primary-purple) 0%, var(--primary-pink) 100%);
+            background: linear-gradient(90deg, #6c8a5a 0%, #4f6b3e 100%);
         }
         
         /* Animation für den Puls-Effekt */
         @keyframes pulse-glow {
             0% {
-                box-shadow: 0 0 0 0 rgba(127, 0, 255, 0.5);
+                box-shadow: 0 0 0 0 rgba(219, 228, 213, 0.5); /* New light green color */
             }
             70% {
-                box-shadow: 0 0 0 10px rgba(127, 0, 255, 0);
+                box-shadow: 0 0 0 10px rgba(219, 228, 213, 0);
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(127, 0, 255, 0);
+                box-shadow: 0 0 0 0 rgba(219, 228, 213, 0);
             }
         }
         
@@ -112,14 +150,19 @@
     <div class="min-h-screen flex flex-col">
 
         <!-- Kopfzeile -->
-        <header class="p-6 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <span class="text-2xl font-bold text-gray-900 logo-font">kiwiundknoedel</span>
-            </div>
-            <div class="flex items-center space-x-4">
-                <a href="#" class="px-4 py-2 text-sm font-semibold rounded-full text-blue-600 hover:text-blue-700 transition">Gallerie</a>
-                <a href="#" class="px-4 py-2 text-sm font-semibold rounded-full bg-blue-600 text-white hover:bg-blue-700 transition">Shop</a>
-            </div>
+        <header class="p-6 bg-white shadow-sm">
+            <nav class="flex items-center justify-between max-w-7xl mx-auto">
+                <div class="flex items-center space-x-2">
+                    <a href="https://www.kiwiundknoedel.de" class="flex items-center space-x-2">
+                        <img src="https://placehold.co/150x150/dbe4d5/3a3a3a?text=kiwi+%26+kn%C3%B6del" alt="kiwiundknoedel Logo" class="h-12 w-auto">
+                        <span class="text-3xl font-bold text-secondary-dark logo-font hidden sm:block">kiwiundknoedel</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/gallerie" class="px-4 py-2 text-sm font-semibold rounded-full text-secondary-dark hover:text-gray-900 transition">Gallerie</a>
+                    <a href="/shop" class="px-4 py-2 text-sm font-semibold rounded-full bg-secondary-dark text-white hover:bg-gray-700 transition">Shop</a>
+                </div>
+            </nav>
         </header>
 
         <!-- Hauptinhaltsbereich -->
@@ -128,10 +171,10 @@
 
                 <!-- Linke Spalte (Text & Buttons) -->
                 <div class="flex-1 text-center lg:text-left space-y-6">
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight text-gray-900 headline-font">
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight text-secondary-dark headline-font">
                         Emotionen verschenken war noch nie so einfach
                     </h1>
-                    <p class="text-base sm:text-lg text-gray-600 max-w-xl mx-auto lg:mx-0">
+                    <p class="text-base sm:text-lg text-secondary-dark max-w-xl mx-auto lg:mx-0">
                         Mütter schicken mir die Zeichnungen ihrer Kinder, ich bearbeite sie und bedrucke T-Shirts damit. So entstehen einzigartige Geschenke für Geburtstage, Vatertag, Weihnachten und viele andere Anlässe. Einfach und mit tollen Ergebnissen!
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
@@ -144,14 +187,14 @@
                             </svg>
                         </button>
                         <!-- Zeichen-Button mit Hover-Effekt und Stift-Symbol -->
-                        <button id="drawBtn" title="Selbst zeichnen" class="flex items-center justify-center w-16 h-16 sm:w-auto sm:px-8 sm:py-3 font-semibold text-gray-800 bg-gray-200 rounded-full hover:bg-gray-300 transition transform hover:scale-105 hover:shadow-lg">
+                        <button id="drawBtn" title="Selbst zeichnen" class="flex items-center justify-center w-16 h-16 sm:w-auto sm:px-8 sm:py-3 font-semibold text-secondary-dark bg-transparent border-2 border-secondary-dark rounded-full hover:bg-secondary-dark hover:text-white transition transform hover:scale-105 hover:shadow-lg">
                             <span class="hidden sm:inline">Selbst zeichnen</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
                             </svg>
                         </button>
                     </div>
-                    <div class="mt-8 pt-4 space-y-2 text-sm text-gray-600 font-medium">
+                    <div class="mt-8 pt-4 space-y-2 text-sm text-secondary-dark font-medium">
                         <p>🎁 Emotionen verschenken war noch nie so einfach</p>
                         <p>✨ über 1.000 Kinderzeichnungen verarbeitet</p>
                     </div>
@@ -172,7 +215,7 @@
                             <!-- Vorher/Nachher-Bilder -->
                             <div id="imageSlider" class="relative">
                                 <img src="https://placehold.co/800x600/ffffff/000000?text=Original" alt="Vorher-Bild" class="slider-image before rounded-3xl">
-                                <img src="https://placehold.co/800x600/7f00ff/ffffff?text=Magisch" alt="Nachher-Bild" class="slider-image after rounded-3xl">
+                                <img src="https://placehold.co/800x600/dbe4d5/3a3a3a?text=Magisch" alt="Nachher-Bild" class="slider-image after rounded-3xl">
                                 <span class="label">Original</span>
                                 <span class="label after-label">Magisch</span>
                             </div>
@@ -185,27 +228,27 @@
         <!-- Wie es funktioniert Sektion -->
         <section class="py-16 md:py-24 bg-white text-gray-800">
             <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center space-y-12">
-                <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-gray-900 headline-font">
+                <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-secondary-dark headline-font">
                     So funktioniert's
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Schritt 1 -->
-                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4">
-                        <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold logo-font">1</div>
+                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <div class="w-16 h-16 bg-button-dark text-white rounded-full flex items-center justify-center text-2xl font-bold logo-font">1</div>
                         <h3 class="text-2xl font-bold headline-font">Bild hochladen</h3>
-                        <p class="text-gray-600">Lade die Kinderzeichnung hoch oder nutze die Zeichenfunktion, um deine Idee direkt auf der Seite festzuhalten.</p>
+                        <p class="text-secondary-dark">Lade die Kinderzeichnung hoch oder nutze die Zeichenfunktion, um deine Idee direkt auf der Seite festzuhalten.</p>
                     </div>
                     <!-- Schritt 2 -->
-                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4">
-                        <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold logo-font">2</div>
+                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <div class="w-16 h-16 bg-button-dark text-white rounded-full flex items-center justify-center text-2xl font-bold logo-font">2</div>
                         <h3 class="text-2xl font-bold headline-font">Wir zaubern ein Beispiel</h3>
-                        <p class="text-gray-600">Innerhalb von 24 Stunden melden wir uns bei dir mit einem digitalen Beispiel, wie das fertige Produkt aussehen könnte.</p>
+                        <p class="text-secondary-dark">Innerhalb von 24 Stunden melden wir uns bei dir mit einem digitalen Beispiel, wie das fertige Produkt aussehen könnte.</p>
                     </div>
                     <!-- Schritt 3 -->
-                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4">
-                        <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold logo-font">3</div>
+                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <div class="w-16 h-16 bg-button-dark text-white rounded-full flex items-center justify-center text-2xl font-bold logo-font">3</div>
                         <h3 class="text-2xl font-bold headline-font">Bestellung abschicken</h3>
-                        <p class="text-gray-600">Wenn dir das Ergebnis gefällt, schickst du deine Bestellung ab und das einzigartige Geschenk macht sich auf den Weg zu dir!</p>
+                        <p class="text-secondary-dark">Wenn dir das Ergebnis gefällt, schickst du deine Bestellung ab und das einzigartige Geschenk macht sich auf den Weg zu dir!</p>
                     </div>
                 </div>
             </div>
@@ -214,58 +257,58 @@
         <!-- FAQ Sektion -->
         <section class="py-16 md:py-24 bg-gray-50 text-gray-800">
             <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-12">
-                <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-center text-gray-900 headline-font">
+                <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-center text-secondary-dark headline-font">
                     Häufig gestellte Fragen (FAQ)
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- FAQ Frage 1 -->
-                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
-                        <h4 class="text-lg font-bold text-gray-900">Wie lange dauert es, bis ich mein Beispiel sehe?</h4>
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Wie lange dauert es, bis ich mein Beispiel sehe?</h4>
                         <p class="text-gray-600">Nachdem du die Zeichnung hochgeladen hast, erhältst du in der Regel innerhalb von 24 Stunden einen Entwurf von uns.</p>
                     </div>
                     <!-- FAQ Frage 2 -->
-                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
-                        <h4 class="text-lg font-bold text-gray-900">Welche Art von Zeichnungen kann ich hochladen?</h4>
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Welche Art von Zeichnungen kann ich hochladen?</h4>
                         <p class="text-gray-600">Am besten eignen sich einfache Strichzeichnungen auf weißem Papier. Aber wir können auch mit farbigen Bildern arbeiten!</p>
                     </div>
                     <!-- FAQ Frage 3 -->
-                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
-                        <h4 class="text-lg font-bold text-gray-900">Welche Produkte kann ich bedrucken lassen?</h4>
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Welche Produkte kann ich bedrucken lassen?</h4>
                         <p class="text-gray-600">Im Moment bieten wir T-Shirts an, aber wir planen, unser Sortiment bald um Hoodies und Tassen zu erweitern.</p>
                     </div>
                     <!-- FAQ Frage 4 -->
-                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
-                        <h4 class="text-lg font-bold text-gray-900">Kann ich die Farben anpassen?</h4>
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Kann ich die Farben anpassen?</h4>
                         <p class="text-gray-600">Ja, absolut! Wir passen die Farben an, um sicherzustellen, dass das Design perfekt auf dem gewählten Produkt aussieht. Alle Details klären wir vor dem Druck.</p>
                     </div>
                     <!-- FAQ Frage 5 -->
-                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
-                        <h4 class="text-lg font-bold text-gray-900">Gibt es eine Mindestbestellmenge?</h4>
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Gibt es eine Mindestbestellmenge?</h4>
                         <p class="text-gray-600">Nein, es gibt keine Mindestbestellmenge. Du kannst schon ab einem Stück bestellen.</p>
                     </div>
                     <!-- FAQ Frage 6 -->
-                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
-                        <h4 class="text-lg font-bold text-gray-900">Wie sind die Versandkosten?</h4>
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Wie sind die Versandkosten?</h4>
                         <p class="text-gray-600">Die Versandkosten sind pauschal und werden im Warenkorb angezeigt, bevor du die Bestellung abschickst.</p>
                     </div>
                     <!-- FAQ Frage 7 -->
-                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
-                        <h4 class="text-lg font-bold text-gray-900">Kann ich die Bestellung stornieren?</h4>
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Kann ich die Bestellung stornieren?</h4>
                         <p class="text-gray-600">Eine Stornierung ist möglich, solange das Produkt noch nicht gedruckt wurde. Bitte kontaktiere uns so schnell wie möglich.</p>
                     </div>
                     <!-- FAQ Frage 8 -->
-                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
-                        <h4 class="text-lg font-bold text-gray-900">Wie pflege ich die bedruckten Textilien?</h4>
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Wie pflege ich die bedruckten Textilien?</h4>
                         <p class="text-gray-600">Für eine lange Haltbarkeit empfehlen wir, die Textilien auf links zu waschen und sie nicht in den Trockner zu geben.</p>
                     </div>
                     <!-- FAQ Frage 9 -->
-                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
-                        <h4 class="text-lg font-bold text-gray-900">Kann ich mein eigenes T-Shirt bedrucken lassen?</h4>
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Kann ich mein eigenes T-Shirt bedrucken lassen?</h4>
                         <p class="text-gray-600">Aktuell bedrucken wir nur T-Shirts aus unserem eigenen Sortiment, um eine optimale Druckqualität zu garantieren.</p>
                     </div>
                     <!-- FAQ Frage 10 -->
-                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2">
-                        <h4 class="text-lg font-bold text-gray-900">Wie kontaktiere ich euch?</h4>
+                    <div class="p-6 bg-white rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Wie kontaktiere ich euch?</h4>
                         <p class="text-gray-600">Du kannst uns jederzeit über unser Kontaktformular oder per E-Mail erreichen. Wir antworten dir so schnell wie möglich.</p>
                     </div>
                 </div>
@@ -286,7 +329,6 @@
             const saveCanvasBtn = document.getElementById('saveCanvasBtn');
 
             const sliderContainer = document.getElementById('sliderContainer');
-            const imageSlider = document.getElementById('imageSlider');
             const afterImage = document.querySelector('.slider-image.after');
             const beforeImage = document.querySelector('.slider-image.before');
             const drawingContainer = document.getElementById('drawingContainer');
@@ -323,12 +365,9 @@
                     reader.onload = (event) => {
                         const img = new Image();
                         img.onload = () => {
-                            // Aktualisiere das Vorher-Bild mit dem hochgeladenen Bild
                             beforeImage.src = event.target.result;
-                            // Stelle sicher, dass der Slider sichtbar ist
-                            imageSlider.style.display = 'block';
                             drawingContainer.style.display = 'none';
-                            resizeCanvas(); // Passe die Größe des Canvas an die neuen Bildabmessungen an
+                            resizeCanvas();
                         };
                         img.src = event.target.result;
                     };
