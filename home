@@ -52,18 +52,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            clip-path: inset(0 0 0 50%);
-        }
-
-        .slider-handle {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 4px;
-            height: 100%;
-            background-color: white;
-            transform: translateX(-50%);
-            z-index: 10;
+            clip-path: inset(0 100% 0 0); /* Startet mit 100% Clip, d.h. es ist unsichtbar */
         }
 
         .label {
@@ -97,6 +86,23 @@
         .gradient-button {
             background: linear-gradient(90deg, var(--primary-purple) 0%, var(--primary-pink) 100%);
         }
+        
+        /* Animation für den Puls-Effekt */
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(127, 0, 255, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(127, 0, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(127, 0, 255, 0);
+            }
+        }
+        
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
     </style>
 </head>
 
@@ -129,13 +135,20 @@
                         Mütter schicken mir die Zeichnungen ihrer Kinder, ich bearbeite sie und bedrucke T-Shirts damit. So entstehen einzigartige Geschenke für Geburtstage, Vatertag, Weihnachten und viele andere Anlässe. Einfach und mit tollen Ergebnissen!
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
-                        <!-- Upload-Button -->
-                        <button id="uploadBtn" class="w-full sm:w-auto px-8 py-3 font-semibold text-white rounded-full gradient-button hover:shadow-lg transition">
-                            Eigenes Bild hochladen
+                        <!-- Upload-Button mit Puls-Animation und Kamera-Symbol -->
+                        <button id="uploadBtn" title="Eigenes Bild hochladen" class="flex items-center justify-center w-16 h-16 sm:w-auto sm:px-8 sm:py-3 font-semibold text-white rounded-full gradient-button hover:shadow-lg transition transform hover:scale-105 animate-pulse-glow">
+                            <span class="hidden sm:inline">Eigenes Bild hochladen</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/>
+                                <circle cx="12" cy="13" r="3"/>
+                            </svg>
                         </button>
-                        <!-- Zeichen-Button -->
-                        <button id="drawBtn" class="w-full sm:w-auto px-8 py-3 font-semibold text-gray-800 bg-gray-200 rounded-full hover:bg-gray-300 transition">
-                            Selbst zeichnen
+                        <!-- Zeichen-Button mit Hover-Effekt und Stift-Symbol -->
+                        <button id="drawBtn" title="Selbst zeichnen" class="flex items-center justify-center w-16 h-16 sm:w-auto sm:px-8 sm:py-3 font-semibold text-gray-800 bg-gray-200 rounded-full hover:bg-gray-300 transition transform hover:scale-105 hover:shadow-lg">
+                            <span class="hidden sm:inline">Selbst zeichnen</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                            </svg>
                         </button>
                     </div>
                     <div class="mt-8 pt-4 space-y-2 text-sm text-gray-600 font-medium">
@@ -162,7 +175,6 @@
                                 <img src="https://placehold.co/800x600/7f00ff/ffffff?text=Magisch" alt="Nachher-Bild" class="slider-image after rounded-3xl">
                                 <span class="label">Original</span>
                                 <span class="label after-label">Magisch</span>
-                                <div id="sliderHandle" class="slider-handle"></div>
                             </div>
                         </div>
                     </div>
@@ -275,9 +287,8 @@
 
             const sliderContainer = document.getElementById('sliderContainer');
             const imageSlider = document.getElementById('imageSlider');
-            const sliderHandle = document.getElementById('sliderHandle');
-            const beforeImage = document.querySelector('.slider-image.before');
             const afterImage = document.querySelector('.slider-image.after');
+            const beforeImage = document.querySelector('.slider-image.before');
             const drawingContainer = document.getElementById('drawingContainer');
             const drawingCanvas = document.getElementById('drawingCanvas');
 
@@ -394,48 +405,25 @@
                 [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
             });
 
-            // Vorher/Nachher-Bild-Slider-Logik
+            // Vorher/Nachher-Bild-Slider-Logik (Hover-only)
             const handleMouseOver = (clientX) => {
                 const rect = sliderContainer.getBoundingClientRect();
-                let x = clientX - rect.left;
-
-                // Beschränke den Wert auf die Bildgrenzen
-                if (x < 0) x = 0;
-                if (x > rect.width) x = rect.width;
-
+                const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
                 const percentage = (x / rect.width) * 100;
-                const clipPathValue = `inset(0 ${100 - percentage}% 0 0)`;
                 
-                afterImage.style.clipPath = clipPathValue;
-                sliderHandle.style.left = `${percentage}%`;
-            };
-
-            const resetSlider = () => {
-                const rect = sliderContainer.getBoundingClientRect();
-                const defaultPercentage = 50;
-                const clipPathValue = `inset(0 ${100 - defaultPercentage}% 0 0)`;
-                
-                afterImage.style.clipPath = clipPathValue;
-                sliderHandle.style.left = `${defaultPercentage}%`;
+                afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
             };
 
             // Maus-Events für den Slider
             sliderContainer.addEventListener('mousemove', (e) => {
                 handleMouseOver(e.clientX);
             });
-
-            sliderContainer.addEventListener('mouseleave', () => {
-                resetSlider();
-            });
-
-            // Touch-Events für den Slider
+            
+            // Touch-Events für den Slider (simuliert Hover)
             sliderContainer.addEventListener('touchmove', (e) => {
                 e.preventDefault();
                 handleMouseOver(e.touches[0].clientX);
             });
-
-            // Anfängliche Position des Sliders
-            resetSlider();
         });
     </script>
 </body>
