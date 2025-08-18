@@ -99,10 +99,13 @@
                 <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
                     <i data-lucide="file-plus" class="w-4 h-4"></i>
                 </button>
-                <button id="save-btn" class="p-2 rounded-lg icon-stroke" title="Save PNG">
+                <button id="save-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Save PNG">
                     <i data-lucide="save" class="w-4 h-4"></i>
                 </button>
-                <button id="save-dropbox-btn" class="p-2 rounded-lg icon-stroke" title="Copy Link">
+                <button id="upload-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Upload">
+                    <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                </button>
+                <button id="copy-link-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Copy Link">
                     <i data-lucide="link-2" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -110,7 +113,7 @@
     </div>
 </div>
 
-<div id="link-copied-popup" class="popup"></div>
+<div id="message-popup" class="popup"></div>
 
 <script>
 const bgCanvas = document.getElementById('bg-canvas');
@@ -123,12 +126,13 @@ const eraserToolBtn = document.getElementById('tool-eraser');
 const undoBtn = document.getElementById('undo-btn');
 const clearBtn = document.getElementById('clear-canvas');
 const saveBtn = document.getElementById('save-btn');
+const uploadBtn = document.getElementById('upload-btn');
+const copyLinkBtn = document.getElementById('copy-link-btn');
 const toggleBgBtn = document.getElementById('toggle-background');
 const iconSun = document.getElementById('icon-sun');
 const iconMoon = document.getElementById('icon-moon');
 const appContainer = document.getElementById('drawing-app-container');
-const saveDropboxBtn = document.getElementById('save-dropbox-btn');
-const linkCopiedPopup = document.getElementById('link-copied-popup');
+const messagePopup = document.getElementById('message-popup');
 
 let isDrawing = false, lastX = 0, lastY = 0;
 let isWhiteBackground = true;
@@ -136,6 +140,22 @@ let currentTool = 'pen';
 let penWidth = 5, eraserWidth = 20;
 let penColor = 'black';
 let history = [], historyIndex = -1;
+let currentUrl = null;
+
+function showPopup(message) {
+    messagePopup.textContent = message;
+    messagePopup.classList.add('show');
+    setTimeout(() => {
+        messagePopup.classList.remove('show');
+    }, 2000);
+}
+
+function updateButtonStates() {
+    const isCanvasEmpty = historyIndex <= 0;
+    saveBtn.disabled = isCanvasEmpty;
+    uploadBtn.disabled = isCanvasEmpty;
+    copyLinkBtn.disabled = currentUrl === null;
+}
 
 function sizeCanvases() {
     const stage = document.getElementById('stage');
@@ -189,6 +209,7 @@ function pushHistory() {
     history.push(url);
     historyIndex = history.length - 1;
     undoBtn.disabled = historyIndex <= 0;
+    updateButtonStates();
 }
 
 function loadHistory(index) {
@@ -199,6 +220,7 @@ function loadHistory(index) {
         img.src = history[index];
     }
     undoBtn.disabled = index <= 0;
+    updateButtonStates();
 }
 
 function startDraw(x, y) {
@@ -265,7 +287,14 @@ drawCanvas.addEventListener('touchend', e => { endDraw(); e.preventDefault(); },
 penToolBtn.addEventListener('click', () => setActiveTool('pen'));
 eraserToolBtn.addEventListener('click', () => setActiveTool('eraser'));
 undoBtn.addEventListener('click', () => { if(historyIndex>0){historyIndex--;loadHistory(historyIndex);} });
-clearBtn.addEventListener('click', () => { drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); pushHistory(); });
+clearBtn.addEventListener('click', () => { 
+    drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); 
+    history = [];
+    historyIndex = -1;
+    pushHistory();
+    currentUrl = null;
+    updateButtonStates();
+});
 
 toggleBgBtn.addEventListener('click', () => {
     isWhiteBackground = !isWhiteBackground;
@@ -295,8 +324,8 @@ saveBtn.addEventListener('click', () => {
     document.body.removeChild(link);
 });
 
-// Save to Dropbox / Wix
-saveDropboxBtn.addEventListener('click', () => {
+// Upload to Dropbox / Wix
+uploadBtn.addEventListener('click', () => {
     const out = document.createElement('canvas');
     out.width = drawCanvas.width;
     out.height = drawCanvas.height;
@@ -310,53 +339,36 @@ saveDropboxBtn.addEventListener('click', () => {
     window.parent.postMessage({ type:'UPLOAD_REQUEST', image: base64Data }, '*');
 
     // Show uploading popup
-    linkCopiedPopup.innerHTML = 'Uploading...';
-    linkCopiedPopup.style.pointerEvents = 'auto';
-    linkCopiedPopup.classList.add('show');
+    showPopup('Uploading...');
+});
+
+// New button to copy the link
+copyLinkBtn.addEventListener('click', () => {
+    if (currentUrl) {
+        // Use a temporary input to copy the URL
+        const tempInput = document.createElement('input');
+        document.body.appendChild(tempInput);
+        tempInput.value = currentUrl;
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        
+        showPopup('Link copied!');
+    }
 });
 
 // Listen for parent response
 window.addEventListener('message', (event) => {
     if (event.data.type === 'UPLOAD_SUCCESS') {
-        const url = event.data.url;
-
-        // Update popup with visible text and button
-        linkCopiedPopup.innerHTML = `
-            <span style="color:white;">Link ready:</span>
-            <input id="popup-url" value="${url}" readonly 
-                   style="width:200px; margin-left:5px; color:black; background:white; border:none; border-radius:4px; padding:2px;">
-            <button id="copy-link-btn" style="margin-left:5px; padding:2px 4px; border-radius:4px;">Copy</button>
-        `;
-        linkCopiedPopup.classList.add('show');
-
-        const copyBtn = document.getElementById('copy-link-btn');
-        const popupInput = document.getElementById('popup-url');
-
-        copyBtn.addEventListener('click', () => {
-            try {
-                // Use the document.execCommand for better browser support in iframes
-                popupInput.select();
-                popupInput.setSelectionRange(0, 99999); // For mobile
-                const successful = document.execCommand('copy');
-
-                if (successful) {
-                    linkCopiedPopup.textContent = 'Link copied!';
-                } else {
-                    linkCopiedPopup.textContent = 'Copy failed';
-                }
-                setTimeout(() => linkCopiedPopup.classList.remove('show'), 2000);
-            } catch (err) {
-                console.error('Copy error:', err);
-                linkCopiedPopup.textContent = 'Copy failed';
-                setTimeout(() => linkCopiedPopup.classList.remove('show'), 2000);
-            }
-        });
+        currentUrl = event.data.url;
+        updateButtonStates();
+        showPopup('Upload successful!');
     } else if (event.data.type === 'UPLOAD_ERROR') {
-        linkCopiedPopup.textContent = 'Upload failed';
-        setTimeout(() => linkCopiedPopup.classList.remove('show'), 2000);
+        showPopup('Upload failed.');
+        currentUrl = null;
+        updateButtonStates();
     }
 });
-
 
 // Init
 window.addEventListener('load', () => {
@@ -366,6 +378,7 @@ window.addEventListener('load', () => {
     paintBackground();
     pushHistory();
     if(window.lucide) window.lucide.createIcons();
+    updateButtonStates();
 });
 window.addEventListener('resize', sizeCanvases);
 </script>
