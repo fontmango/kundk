@@ -94,10 +94,16 @@
     height: auto;
     border-radius: 0.25rem;
 }
+#download-video {
+    width: 400px; /* Adjust size as needed */
+    height: auto;
+    border-radius: 0.25rem;
+}
 #controls-bar.disabled {
     pointer-events: none;
     opacity: 0.5;
 }
+
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -113,9 +119,15 @@
 
         <div id="video-popup-container" class="video-popup-container hidden">
     <div class="video-popup">
-        <video id="upload-video" src="https://video.wixstatic.com/video/990059_86d68094210b45778ba9254605c59c53/720p/mp4/file.mp4" playsinline muted loop></video>
+        <video id="upload-video" src="https://video.wixstatic.com/video/990059_627d0fb1d7324ea4aafee0e5e0b889bc/720p/mp4/file.mp4" playsinline muted loop></video>
     </div>
 </div>
+
+ <div id="download-video-container" class="video-popup-container hidden">
+        <div class="video-popup">
+            <video id="download-video" src="https://video.wixstatic.com/video/990059_7f44f4a052a947ccad90086ac702a9b3/720p/mp4/file.mp4" playsinline muted></video>
+        </div>
+    </div>
 
             <div id="stage" style="height: 100%;">
                 <canvas id="bg-canvas"></canvas>
@@ -162,6 +174,10 @@
 <script>
 const videoPopupContainer = document.getElementById('video-popup-container');
 const uploadVideo = document.getElementById('upload-video');
+
+const downloadVideoContainer = document.getElementById('download-video-container');
+const downloadVideo = document.getElementById('download-video');
+
 const bgCanvas = document.getElementById('bg-canvas');
 const drawCanvas = document.getElementById('draw-canvas');
 const bgCtx = bgCanvas.getContext('2d');
@@ -194,12 +210,52 @@ function showVideoPopup() {
     uploadVideo.play();
 }
 
-function hideVideoPopup() {
-    videoPopupContainer.classList.add('hidden');
-    uploadVideo.pause();
-    uploadVideo.currentTime = 0; // Rewind the video
+// New function to show the download video popup
+function showDownloadVideoPopup() {
+    // Disable controls while the video plays
+    controlsBar.classList.add('disabled');
+    downloadVideoContainer.classList.remove('hidden');
+    downloadVideo.play();
+    
+    // Set a timeout to hide the video and re-enable controls
+    setTimeout(() => {
+        downloadVideoContainer.classList.add('hidden');
+        downloadVideo.pause();
+        downloadVideo.currentTime = 0;
+
+        // Start the download after the video finishes playing
+        startDownload();
+
+        // Re-enable the controls bar
+        controlsBar.classList.remove('disabled');
+
+    }, 5000); // Adjust duration to match video length
 }
 
+function startDownload() {
+    const out = document.createElement('canvas');
+    out.width = drawCanvas.width;
+    out.height = drawCanvas.height;
+    const octx = out.getContext('2d');
+    octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
+    octx.fillRect(0,0,out.width,out.height);
+    octx.drawImage(drawCanvas,0,0);
+    const imageURL = out.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = imageURL;
+    link.download = `my-drawing-${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function hideVideoPopup() {
+    setTimeout(() => {
+        videoPopupContainer.classList.add('hidden');
+        uploadVideo.pause();
+        uploadVideo.currentTime = 0; // Rewind the video
+    }, 5000); // Changed to 5000 milliseconds
+}
 function showPopup(message) {
     messagePopup.textContent = message;
     messagePopup.classList.add('show');
@@ -368,24 +424,9 @@ toggleBgBtn.addEventListener('click', () => {
 
 // Save PNG locally
 saveBtn.addEventListener('click', () => {
-      controlsBar.classList.add('disabled');
+   
 
-    const out = document.createElement('canvas');
-    out.width = drawCanvas.width;
-    out.height = drawCanvas.height;
-    const octx = out.getContext('2d');
-    octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-    octx.fillRect(0,0,out.width,out.height);
-    octx.drawImage(drawCanvas,0,0);
-    const imageURL = out.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = imageURL;
-    link.download = `my-drawing-${Date.now()}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    showPopup('Erfolgreich heruntergeladen.');
+    showDownloadVideoPopup();
 });
 
 // Upload to Dropbox / Wix
