@@ -94,6 +94,19 @@
     height: auto;
     border-radius: 0.25rem;
 }
+
+#upload-complete-video {
+    width: 400px; /* Adjust size as needed */
+    height: auto;
+    border-radius: 0.25rem;
+}
+
+#download-complete-video {
+    width: 400px; /* Adjust size as needed */
+    height: auto;
+    border-radius: 0.25rem;
+}
+
 #download-video {
     width: 400px; /* Adjust size as needed */
     height: auto;
@@ -128,6 +141,17 @@
             <video id="download-video" src="https://video.wixstatic.com/video/990059_7f44f4a052a947ccad90086ac702a9b3/720p/mp4/file.mp4" playsinline muted></video>
         </div>
     </div>
+
+    <div id="video-upload-complete-container" class="video-popup-container hidden">
+                <div class="video-popup">
+                    <video id="upload-complete-video" src="https://video.wixstatic.com/video/990059_c4f70616661f47e18f4d7d51fbcac535/720p/mp4/file.mp4" playsinline muted></video>
+                </div>
+            </div>
+            <div id="video-download-complete-container" class="video-popup-container hidden">
+                <div class="video-popup">
+                    <video id="download-complete-video" src="https://video.wixstatic.com/video/990059_c4f70616661f47e18f4d7d51fbcac535/720p/mp4/file.mp4" playsinline muted></video>
+                </div>
+            </div>
 
             <div id="stage" style="height: 100%;">
                 <canvas id="bg-canvas"></canvas>
@@ -174,9 +198,12 @@
 <script>
 const videoPopupContainer = document.getElementById('video-popup-container');
 const uploadVideo = document.getElementById('upload-video');
-
 const downloadVideoContainer = document.getElementById('download-video-container');
 const downloadVideo = document.getElementById('download-video');
+const videoUploadCompleteContainer = document.getElementById('video-upload-complete-container');
+const uploadCompleteVideo = document.getElementById('upload-complete-video');
+const videoDownloadCompleteContainer = document.getElementById('video-download-complete-container');
+const downloadCompleteVideo = document.getElementById('download-complete-video');
 
 const bgCanvas = document.getElementById('bg-canvas');
 const drawCanvas = document.getElementById('draw-canvas');
@@ -211,25 +238,18 @@ function showVideoPopup() {
 }
 
 // New function to show the download video popup
-function showDownloadVideoPopup() {
-    // Disable controls while the video plays
+function showDownloadVideo() {
     controlsBar.classList.add('disabled');
     downloadVideoContainer.classList.remove('hidden');
     downloadVideo.play();
-    
-    // Set a timeout to hide the video and re-enable controls
+
+    // After 5 seconds, hide this video and show the completion video
     setTimeout(() => {
         downloadVideoContainer.classList.add('hidden');
         downloadVideo.pause();
         downloadVideo.currentTime = 0;
-
-        // Start the download after the video finishes playing
-        startDownload();
-
-        // Re-enable the controls bar
-        controlsBar.classList.remove('disabled');
-
-    }, 5000); // Adjust duration to match video length
+        showDownloadCompleteVideo();
+    }, 5000);
 }
 
 function startDownload() {
@@ -264,6 +284,36 @@ function showPopup(message) {
                 controlsBar.classList.remove('disabled');
 
     }, 2000);
+}
+
+function showUploadCompleteVideo() {
+    // The controls are already disabled by the upload function, so no need to disable again
+    videoUploadCompleteContainer.classList.remove('hidden');
+    uploadCompleteVideo.play();
+
+    setTimeout(() => {
+        videoUploadCompleteContainer.classList.add('hidden');
+        uploadCompleteVideo.pause();
+        uploadCompleteVideo.currentTime = 0;
+        // Re-enable the controls bar after the success video finishes
+        controlsBar.classList.remove('disabled');
+    }, 2000); // 2 seconds duration
+}
+
+function showDownloadCompleteVideo() {
+    // Controls are already disabled
+    videoDownloadCompleteContainer.classList.remove('hidden');
+    downloadCompleteVideo.play();
+    
+    setTimeout(() => {
+        videoDownloadCompleteContainer.classList.add('hidden');
+        downloadCompleteVideo.pause();
+        downloadCompleteVideo.currentTime = 0;
+        
+        // After the completion video finishes, start the download and re-enable controls
+        startDownload();
+        controlsBar.classList.remove('disabled');
+    }, 2000); // Assuming this video is 2 seconds long
 }
 
 function updateButtonStates() {
@@ -424,9 +474,8 @@ toggleBgBtn.addEventListener('click', () => {
 
 // Save PNG locally
 saveBtn.addEventListener('click', () => {
-   
+ showDownloadVideo(); 
 
-    showDownloadVideoPopup();
 });
 
 // Upload to Dropbox / Wix
@@ -457,20 +506,28 @@ window.addEventListener('message', (event) => {
     if (event.data.type === 'UPLOAD_SUCCESS') {
         currentUrl = event.data.url;
         updateButtonStates();
-        hideVideoPopup(); // Hide video on success
-        showPopup('Upload successful! 🎉');
-                controlsBar.classList.remove('disabled'); // Re-enable controls
+        // 1. Hide the "in-progress" video
+        hideUploadVideo(); 
+        // 2. Show the "complete" video
+        showUploadCompleteVideo();
 
     } else if (event.data.type === 'UPLOAD_ERROR') {
-        hideVideoPopup(); // Hide video on error
+        // Hide upload video, show text popup, and re-enable controls
+        hideUploadVideo();
         showPopup('Upload failed.');
         currentUrl = null;
         updateButtonStates();
-                controlsBar.classList.remove('disabled'); // Re-enable controls
-
+        controlsBar.classList.remove('disabled');
     }
 });
 
+function hideUploadVideo() {
+    setTimeout(() => {
+        videoPopupContainer.classList.add('hidden');
+        uploadVideo.pause();
+        uploadVideo.currentTime = 0; // Rewind the video
+    }, 5000); // Wait 5 seconds for the video to play
+}
 
 // New button to copy the link
 copyLinkBtn.addEventListener('click', () => {
