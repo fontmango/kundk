@@ -64,22 +64,61 @@
         .popup.show {
             opacity: 1;
         }
+.video-popup-container {
+    position: absolute; /* Changed from fixed */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.video-popup-container.hidden {
+    display: none;
+}
+.video-popup {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+#upload-video {
+    width: 400px; /* Adjust size as needed */
+    height: auto;
+    border-radius: 0.25rem;
+}
+#controls-bar.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
+
+
 <div class="flex flex-col items-center justify-between h-screen p-4">
     <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
         <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
+        <div id="video-popup-container" class="video-popup-container hidden">
+    <div class="video-popup">
+        <video id="upload-video" src="https://video.wixstatic.com/video/990059_86d68094210b45778ba9254605c59c53/720p/mp4/file.mp4" playsinline muted loop></video>
+    </div>
+</div>
+
             <div id="stage" style="height: 100%;">
                 <canvas id="bg-canvas"></canvas>
                 <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
             </div>
         </div>
 
-        <div class="flex-shrink-0 w-full flex justify-center pt-4">
+        
+        <div class="flex-shrink-0 w-full flex justify-center pt-4" id="controls-bar">
             <div class="flex flex-nowrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
                 <div class="flex items-center gap-1">
                     <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
@@ -116,11 +155,13 @@
 <div id="message-popup" class="popup"></div>
 
 <script>
+const videoPopupContainer = document.getElementById('video-popup-container');
+const uploadVideo = document.getElementById('upload-video');
 const bgCanvas = document.getElementById('bg-canvas');
 const drawCanvas = document.getElementById('draw-canvas');
 const bgCtx = bgCanvas.getContext('2d');
 const drawCtx = drawCanvas.getContext('2d');
-
+const controlsBar = document.getElementById('controls-bar');
 const penToolBtn = document.getElementById('tool-pen');
 const eraserToolBtn = document.getElementById('tool-eraser');
 const undoBtn = document.getElementById('undo-btn');
@@ -141,6 +182,18 @@ let penWidth = 5, eraserWidth = 20;
 let penColor = 'black';
 let history = [], historyIndex = -1;
 let currentUrl = null;
+
+// New functions to control the video popup
+function showVideoPopup() {
+    videoPopupContainer.classList.remove('hidden');
+    uploadVideo.play();
+}
+
+function hideVideoPopup() {
+    videoPopupContainer.classList.add('hidden');
+    uploadVideo.pause();
+    uploadVideo.currentTime = 0; // Rewind the video
+}
 
 function showPopup(message) {
     messagePopup.textContent = message;
@@ -338,361 +391,34 @@ uploadBtn.addEventListener('click', () => {
     // Send to parent
     window.parent.postMessage({ type:'UPLOAD_REQUEST', image: base64Data }, '*');
 
-    // Show uploading popup
-    showPopup('Uploading...');
+   // Disable the controls bar
+    controlsBar.classList.add('disabled');
+
+    // Show the video popup
+    showVideoPopup();
+
+    
 });
 
-// New button to copy the link
-copyLinkBtn.addEventListener('click', () => {
-    if (currentUrl) {
-        // Use a temporary input to copy the URL
-        const tempInput = document.createElement('input');
-        document.body.appendChild(tempInput);
-        tempInput.value = currentUrl;
-        tempInput.select();
-        document.execCommand('copy');a<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drawing App</title>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: transparent;
-        }
+// Update the message listener to hide the video popup
+window.addEventListener('message', (event) => {
+    if (event.data.type === 'UPLOAD_SUCCESS') {
+        currentUrl = event.data.url;
+        updateButtonStates();
+        hideVideoPopup(); // Hide video on success
+        showPopup('Upload successful! 🎉');
+                controlsBar.classList.remove('disabled'); // Re-enable controls
 
-        #stage {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 1rem;
-            overflow: hidden;
-        }
+    } else if (event.data.type === 'UPLOAD_ERROR') {
+        hideVideoPopup(); // Hide video on error
+        showPopup('Upload failed.');
+        currentUrl = null;
+        updateButtonStates();
+                controlsBar.classList.remove('disabled'); // Re-enable controls
 
-        #bg-canvas,
-        #draw-canvas {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            touch-action: none;
-            border-radius: 1rem;
-        }
-
-        /* Icon stroke color management */
-        .icon-stroke {
-            stroke: black;
-            transition: stroke 0.3s ease;
-        }
-
-        .icon-stroke svg {
-            stroke: currentColor;
-        }
-
-        .dark-mode .icon-stroke {
-            stroke: white;
-        }
-
-        /* Popup Styles */
-        .popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            pointer-events: none;
-            z-index: 1000;
-        }
-        .popup.show {
-            opacity: 1;
-        }
-    </style>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body>
-
-<div class="flex flex-col items-center justify-between h-screen p-4">
-    <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
-        <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
-            <div id="stage" style="height: 100%;">
-                <canvas id="bg-canvas"></canvas>
-                <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
-            </div>
-        </div>
-
-        <div class="flex-shrink-0 w-full flex justify-center pt-4">
-            <div class="flex flex-nowrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
-                <div class="flex items-center gap-1">
-                    <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
-                        <i data-lucide="pen-line" class="w-4 h-4"></i>
-                    </button>
-                    <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser">
-                        <i data-lucide="eraser" class="w-4 h-4"></i>
-                    </button>
-                </div>
-                <button id="undo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Undo">
-                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-                </button>
-                <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">
-                    <span id="icon-sun"><i data-lucide="sun" class="w-4 h-4"></i></span>
-                    <span id="icon-moon" class="hidden"><i data-lucide="moon" class="w-4 h-4"></i></span>
-                </button>
-                <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
-                    <i data-lucide="file-plus" class="w-4 h-4"></i>
-                </button>
-                <button id="save-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Save PNG">
-                    <i data-lucide="save" class="w-4 h-4"></i>
-                </button>
-                <button id="upload-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Upload">
-                    <i data-lucide="upload-cloud" class="w-4 h-4"></i>
-                </button>
-                <button id="copy-link-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Copy Link">
-                    <i data-lucide="link-2" class="w-4 h-4"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="message-popup" class="popup"></div>
-
-<script>
-const bgCanvas = document.getElementById('bg-canvas');
-const drawCanvas = document.getElementById('draw-canvas');
-const bgCtx = bgCanvas.getContext('2d');
-const drawCtx = drawCanvas.getContext('2d');
-
-const penToolBtn = document.getElementById('tool-pen');
-const eraserToolBtn = document.getElementById('tool-eraser');
-const undoBtn = document.getElementById('undo-btn');
-const clearBtn = document.getElementById('clear-canvas');
-const saveBtn = document.getElementById('save-btn');
-const uploadBtn = document.getElementById('upload-btn');
-const copyLinkBtn = document.getElementById('copy-link-btn');
-const toggleBgBtn = document.getElementById('toggle-background');
-const iconSun = document.getElementById('icon-sun');
-const iconMoon = document.getElementById('icon-moon');
-const appContainer = document.getElementById('drawing-app-container');
-const messagePopup = document.getElementById('message-popup');
-
-let isDrawing = false, lastX = 0, lastY = 0;
-let isWhiteBackground = true;
-let currentTool = 'pen';
-let penWidth = 5, eraserWidth = 20;
-let penColor = 'black';
-let history = [], historyIndex = -1;
-let currentUrl = null;
-
-function showPopup(message) {
-    messagePopup.textContent = message;
-    messagePopup.classList.add('show');
-    setTimeout(() => {
-        messagePopup.classList.remove('show');
-    }, 2000);
-}
-
-function updateButtonStates() {
-    const isCanvasEmpty = historyIndex <= 0;
-    saveBtn.disabled = isCanvasEmpty;
-    uploadBtn.disabled = isCanvasEmpty;
-    copyLinkBtn.disabled = currentUrl === null;
-}
-
-function sizeCanvases() {
-    const stage = document.getElementById('stage');
-    const rect = stage.getBoundingClientRect();
-    const tmp = document.createElement('canvas');
-    tmp.width = drawCanvas.width;
-    tmp.height = drawCanvas.height;
-    tmp.getContext('2d').drawImage(drawCanvas, 0, 0);
-
-    const dpr = window.devicePixelRatio || 1;
-    bgCanvas.width = drawCanvas.width = Math.floor(rect.width * dpr);
-    bgCanvas.height = drawCanvas.height = Math.floor(rect.height * dpr);
-    bgCanvas.style.width = drawCanvas.style.width = rect.width + 'px';
-    bgCanvas.style.height = drawCanvas.style.height = rect.height + 'px';
-
-    bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    drawCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    paintBackground();
-    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    drawCtx.drawImage(tmp, 0, 0, tmp.width, tmp.height, 0, 0, drawCanvas.width, drawCanvas.height);
-}
-
-function paintBackground() {
-    bgCtx.save();
-    bgCtx.setTransform(1, 0, 0, 1, 0, 0);
-    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-    bgCtx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-    bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-    bgCtx.restore();
-}
-
-function setActiveTool(tool) {
-    currentTool = tool;
-    if (tool === 'pen') {
-        penToolBtn.classList.add('ring-2', 'ring-blue-500');
-        eraserToolBtn.classList.remove('ring-2', 'ring-blue-500');
-    } else {
-        eraserToolBtn.classList.add('ring-2', 'ring-blue-500');
-        penToolBtn.classList.remove('ring-2', 'ring-blue-500');
     }
-}
-
-function updatePenColorForBackground() {
-    penColor = isWhiteBackground ? 'black' : 'white';
-}
-
-function pushHistory() {
-    const url = drawCanvas.toDataURL('image/png');
-    if (historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
-    history.push(url);
-    historyIndex = history.length - 1;
-    undoBtn.disabled = historyIndex <= 0;
-    updateButtonStates();
-}
-
-function loadHistory(index) {
-    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    if (index >= 0) {
-        const img = new Image();
-        img.onload = () => drawCtx.drawImage(img, 0, 0);
-        img.src = history[index];
-    }
-    undoBtn.disabled = index <= 0;
-    updateButtonStates();
-}
-
-function startDraw(x, y) {
-    isDrawing = true;
-    lastX = x;
-    lastY = y;
-    drawCtx.lineCap = 'round';
-    drawCtx.lineJoin = 'round';
-}
-
-function drawTo(x, y) {
-    if (!isDrawing) return;
-    if (currentTool === 'pen') {
-        drawCtx.globalCompositeOperation = 'source-over';
-        drawCtx.strokeStyle = penColor;
-        drawCtx.lineWidth = penWidth;
-    } else {
-        drawCtx.globalCompositeOperation = 'destination-out';
-        drawCtx.strokeStyle = 'rgba(0,0,0,1)';
-        drawCtx.lineWidth = eraserWidth;
-    }
-    drawCtx.beginPath();
-    drawCtx.moveTo(lastX, lastY);
-    drawCtx.lineTo(x, y);
-    drawCtx.stroke();
-    lastX = x;
-    lastY = y;
-}
-
-function endDraw() {
-    if (!isDrawing) return;
-    isDrawing = false;
-    drawCtx.globalCompositeOperation = 'source-over';
-    pushHistory();
-}
-
-// Mouse & touch events
-drawCanvas.addEventListener('mousedown', e => {
-    const rect = drawCanvas.getBoundingClientRect();
-    startDraw(e.clientX - rect.left, e.clientY - rect.top);
-});
-drawCanvas.addEventListener('mousemove', e => {
-    const rect = drawCanvas.getBoundingClientRect();
-    drawTo(e.clientX - rect.left, e.clientY - rect.top);
-});
-window.addEventListener('mouseup', endDraw);
-
-drawCanvas.addEventListener('touchstart', e => {
-    const rect = drawCanvas.getBoundingClientRect();
-    const t = e.touches[0];
-    startDraw(t.clientX - rect.left, t.clientY - rect.top);
-    e.preventDefault();
-}, {passive:false});
-drawCanvas.addEventListener('touchmove', e => {
-    if (!isDrawing) return;
-    const rect = drawCanvas.getBoundingClientRect();
-    const t = e.touches[0];
-    drawTo(t.clientX - rect.left, t.clientY - rect.top);
-    e.preventDefault();
-}, {passive:false});
-drawCanvas.addEventListener('touchend', e => { endDraw(); e.preventDefault(); }, {passive:false});
-
-// Tool buttons
-penToolBtn.addEventListener('click', () => setActiveTool('pen'));
-eraserToolBtn.addEventListener('click', () => setActiveTool('eraser'));
-undoBtn.addEventListener('click', () => { if(historyIndex>0){historyIndex--;loadHistory(historyIndex);} });
-clearBtn.addEventListener('click', () => { 
-    drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); 
-    history = [];
-    historyIndex = -1;
-    pushHistory();
-    currentUrl = null;
-    updateButtonStates();
 });
 
-toggleBgBtn.addEventListener('click', () => {
-    isWhiteBackground = !isWhiteBackground;
-    iconSun.classList.toggle('hidden', !isWhiteBackground);
-    iconMoon.classList.toggle('hidden', isWhiteBackground);
-    paintBackground();
-    updatePenColorForBackground();
-    if (isWhiteBackground) appContainer.classList.remove('dark-mode');
-    else appContainer.classList.add('dark-mode');
-});
-
-// Save PNG locally
-saveBtn.addEventListener('click', () => {
-    const out = document.createElement('canvas');
-    out.width = drawCanvas.width;
-    out.height = drawCanvas.height;
-    const octx = out.getContext('2d');
-    octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-    octx.fillRect(0,0,out.width,out.height);
-    octx.drawImage(drawCanvas,0,0);
-    const imageURL = out.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = imageURL;
-    link.download = `my-drawing-${Date.now()}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-});
-
-// Upload to Dropbox / Wix
-uploadBtn.addEventListener('click', () => {
-    const out = document.createElement('canvas');
-    out.width = drawCanvas.width;
-    out.height = drawCanvas.height;
-    const octx = out.getContext('2d');
-    octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-    octx.fillRect(0,0,out.width,out.height);
-    octx.drawImage(drawCanvas,0,0);
-    const base64Data = out.toDataURL('image/png');
-
-    // Send to parent
-    window.parent.postMessage({ type:'UPLOAD_REQUEST', image: base64Data }, '*');
-
-    // Show uploading popup
-    showPopup('Uploading...');
-});
 
 // New button to copy the link
 copyLinkBtn.addEventListener('click', () => {
@@ -709,53 +435,6 @@ copyLinkBtn.addEventListener('click', () => {
     }
 });
 
-// Listen for parent response
-window.addEventListener('message', (event) => {
-    if (event.data.type === 'UPLOAD_SUCCESS') {
-        currentUrl = event.data.url;
-        updateButtonStates();
-        showPopup('Upload successful!');
-    } else if (event.data.type === 'UPLOAD_ERROR') {
-        showPopup('Upload failed.');
-        currentUrl = null;
-        updateButtonStates();
-    }
-});
-
-// Init
-window.addEventListener('load', () => {
-    sizeCanvases();
-    setActiveTool('pen');
-    updatePenColorForBackground();
-    paintBackground();
-    pushHistory();
-    if(window.lucide) window.lucide.createIcons();
-    updateButtonStates();
-});
-window.addEventListener('resize', sizeCanvases);
-</script>
-
-</body>
-</html>
-
-        document.body.removeChild(tempInput);
-        
-        showPopup('Link copied!');
-    }
-});
-
-// Listen for parent response
-window.addEventListener('message', (event) => {
-    if (event.data.type === 'UPLOAD_SUCCESS') {
-        currentUrl = event.data.url;
-        updateButtonStates();
-        showPopup('Upload successful!');
-    } else if (event.data.type === 'UPLOAD_ERROR') {
-        showPopup('Upload failed.');
-        currentUrl = null;
-        updateButtonStates();
-    }
-});
 
 // Init
 window.addEventListener('load', () => {
