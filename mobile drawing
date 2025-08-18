@@ -123,6 +123,7 @@
     let penWidth = 5, eraserWidth = 20;
     let penColor = 'black';
     let history = [], historyIndex = -1;
+    let saveCounter = 1;
 
     function checkCanvasForContent() {
       const pixels = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height).data;
@@ -259,7 +260,8 @@
       octx.fillRect(0,0,out.width,out.height);
       octx.drawImage(drawCanvas,0,0);
       const link=document.createElement('a');
-      link.download='my-drawing.png';
+       link.download = `kiwi_${saveCounter}.png`; // unique filename
+      saveCounter++; // increment for next save
       link.href=out.toDataURL('image/png');
       link.click();
     }
