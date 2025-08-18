@@ -1,0 +1,21 @@
+import { saveCanvasToMedia } from 'backend/saveImage.jsw';
+
+$w.onReady(() => {
+    const htmlComp = $w("#html1");
+
+    htmlComp.onMessage(async (event) => {
+        if (event.data.type === "UPLOAD_REQUEST") {
+            try {
+                const url = await saveCanvasToMedia(event.data.image);
+                
+                // Store URL in the hidden field
+                $w("#hiddenUrlField").value = url;
+
+                htmlComp.postMessage({ type: "UPLOAD_SUCCESS", url });
+            } catch (err) {
+                console.error(err);
+                htmlComp.postMessage({ type: "UPLOAD_ERROR", message: err.message });
+            }
+        }
+    });
+});
