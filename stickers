@@ -29,6 +29,7 @@
       border-radius: 8px;
     }
 
+    /* NEW: This styles the parent div container for positioning */
     .sticker {
       position: absolute;
       width: 100px;
@@ -36,11 +37,57 @@
       cursor: grab;
       user-select: none;
       transition: transform 0.1s ease-in-out;
+      border: 1px dashed transparent;
+      box-sizing: border-box;
     }
 
+    /* NEW: This styles the image inside the sticker container */
+    .sticker img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .sticker:hover, .sticker:focus {
+      border: 1px dashed #007bff;
+      outline: none;
+    }
+    
     .sticker:active {
       cursor: grabbing;
       z-index: 100;
+    }
+    
+    /* New styles for the delete button */
+    .delete-btn {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #ff4d4f; /* Red background */
+      color: white;
+      text-align: center;
+      line-height: 20px;
+      cursor: pointer;
+      display: none; /* Hide by default */
+      z-index: 101;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      padding: 4px;
+    }
+    
+    .sticker:hover > .delete-btn {
+      display: flex; /* Show on sticker hover */
+      align-items: center;
+      justify-content: center;
+    }
+
+    .delete-btn-icon {
+        width: 12px;
+        height: 12px;
+        fill: white;
+        stroke: white;
     }
 
     .controls {
@@ -49,7 +96,7 @@
       gap: 10px;
     }
 
-    /* NEW: Icon button styles */
+    /* Icon button styles */
     button {
       width: 40px;
       height: 40px;
@@ -57,7 +104,7 @@
       align-items: center;
       justify-content: center;
       border: none;
-      border-radius: 50%; /* New: Make buttons round */
+      border-radius: 50%;
       background-color: #007bff;
       color: white;
       cursor: pointer;
@@ -72,7 +119,7 @@
     .icon {
       width: 1.2em;
       height: 1.2em;
-      fill: none; /* NEW: Remove icon fill */
+      fill: none;
       stroke: currentColor;
     }
 
@@ -115,14 +162,17 @@
       display: none;
       z-index: 200;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      flex-wrap: wrap;
+      
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
       gap: 5px;
       width: 250px;
     }
 
     .overlay-sticker {
-      width: 40px;
-      height: 40px;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1/1;
       object-fit: contain;
       cursor: grab;
       border: 1px solid transparent;
@@ -148,6 +198,11 @@
       <path d="M12 8v8"></path>
       <path d="M8 12h8"></path>
     </symbol>
+    <symbol id="icon-x-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="15" y1="9" x2="9" y2="15"></line>
+      <line x1="9" y1="9" x2="15" y2="15"></line>
+    </symbol>
   </svg>
 
   <div class="controls">
@@ -170,41 +225,39 @@
   <div id="overlay-container"></div>
 
   <script>
-     const stickerGroups = [
+    const stickerGroups = [
       {
         name: "Alpaca",
         urls: [
           "https://static.wixstatic.com/media/990059_b8e966fff23243baaeffda0903b26ae5~mv2.png",
           "https://static.wixstatic.com/media/990059_de180b020be54f9197ee9da700034b23~mv2.png",
-		  "https://static.wixstatic.com/media/990059_4a8de8e19a9c45439f68e5ffdcc115d2~mv2.png",
-		  "https://static.wixstatic.com/media/990059_43ecc7762e064417811a87e307b7907f~mv2.png",
-		  "https://static.wixstatic.com/media/990059_41dc4f48b83446c0b73a62e0956da286~mv2.png",
-		  "https://static.wixstatic.com/media/990059_3738e3eb9e9545e09b320de9cf2f3ac6~mv2.png",
-		  "https://static.wixstatic.com/media/990059_bd8a968f55534bfa89713e93a9dfc806~mv2.png",
-		  "https://static.wixstatic.com/media/990059_ffbd6892bad64ea6ac268f8fe539e1fe~mv2.png",
-		  "https://static.wixstatic.com/media/990059_2ee1b55de8434492bfe9e2603bbdfae4~mv2.png",
-		  "https://static.wixstatic.com/media/990059_11df952adf7649be8fc5cf072305e867~mv2.png",
-		  "https://static.wixstatic.com/media/990059_80d8ebf3215f4306900b0c9555ad019f~mv2.png",
-		  "https://static.wixstatic.com/media/990059_037002d97a114b2c8eeddd6606ee5c39~mv2.png",
-		  "https://static.wixstatic.com/media/990059_04d0262ad52b4c7c8a44c136a362b7d5~mv2.png",
-		  "https://static.wixstatic.com/media/990059_2c4f2b959e474833b61b6f5218b73967~mv2.png",
-		  "https://static.wixstatic.com/media/990059_448fbb1d78584097907eb1b312f330c3~mv2.png",
-		  "https://static.wixstatic.com/media/990059_e3133404efe44eaf9f33ef1c0e2ccde9~mv2.png",
-		  "https://static.wixstatic.com/media/990059_fef1e3bea9814e1b93118cbb3abb066c~mv2.png",
-		  "https://static.wixstatic.com/media/990059_b1ed01d0d9b54f5ca211e2975213fd5f~mv2.png",
-		  "https://static.wixstatic.com/media/990059_a5715995827641ffba7291c75bf8f9d3~mv2.png",
-		  "https://static.wixstatic.com/media/990059_a0b03b03435c4da38095c71bda978915~mv2.png",
-		  "https://static.wixstatic.com/media/990059_eaf18884725f4652bb2b16c25a424673~mv2.png",
-		  "https://static.wixstatic.com/media/990059_16d71393320b45249789d860719c902c~mv2.png"
-	
-
+          "https://static.wixstatic.com/media/990059_4a8de8e19a9c45439f68e5ffdcc115d2~mv2.png",
+          "https://static.wixstatic.com/media/990059_43ecc7762e064417811a87e307b7907f~mv2.png",
+          "https://static.wixstatic.com/media/990059_41dc4f48b83446c0b73a62e0956da286~mv2.png",
+          "https://static.wixstatic.com/media/990059_3738e3eb9e9545e09b320de9cf2f3ac6~mv2.png",
+          "https://static.wixstatic.com/media/990059_bd8a968f55534bfa89713e93a9dfc806~mv2.png",
+          "https://static.wixstatic.com/media/990059_ffbd6892bad64ea6ac268f8fe539e1fe~mv2.png",
+          "https://static.wixstatic.com/media/990059_2ee1b55de8434492bfe9e2603bbdfae4~mv2.png",
+          "https://static.wixstatic.com/media/990059_11df952adf7649be8fc5cf072305e867~mv2.png",
+          "https://static.wixstatic.com/media/990059_80d8ebf3215f4306900b0c9555ad019f~mv2.png",
+          "https://static.wixstatic.com/media/990059_037002d97a114b2c8eeddd6606ee5c39~mv2.png",
+          "https://static.wixstatic.com/media/990059_04d0262ad52b4c7c8a44c136a362b7d5~mv2.png",
+          "https://static.wixstatic.com/media/990059_2c4f2b959e474833b61b6f5218b73967~mv2.png",
+          "https://static.wixstatic.com/media/990059_448fbb1d78584097907eb1b312f330c3~mv2.png",
+          "https://static.wixstatic.com/media/990059_e3133404efe44eaf9f33ef1c0e2ccde9~mv2.png",
+          "https://static.wixstatic.com/media/990059_fef1e3bea9814e1b93118cbb3abb066c~mv2.png",
+          "https://static.wixstatic.com/media/990059_b1ed01d0d9b54f5ca211e2975213fd5f~mv2.png",
+          "https://static.wixstatic.com/media/990059_a5715995827641ffba7291c75bf8f9d3~mv2.png",
+          "https://static.wixstatic.com/media/990059_a0b03b03435c4da38095c71bda978915~mv2.png",
+          "https://static.wixstatic.com/media/990059_eaf18884725f4652bb2b16c25a424673~mv2.png",
+          "https://static.wixstatic.com/media/990059_16d71393320b45249789d860719c902c~mv2.png"
         ]
       },
       {
         name: "80s Wrestler",
         urls: [
-          "",
-          "",
+          "https://static.wixstatic.com/media/990059_27a6123890a3477c9db4a13419cb533d~mv2.png",
+          "https://static.wixstatic.com/media/990059_27a6123890a3477c9db4a13419cb533d~mv2.png",
         ]
       }
     ];
@@ -249,9 +302,28 @@
 
     // --- Function to create and add a sticker to the canvas ---
     function addSticker(url, x, y) {
-      const sticker = document.createElement('img');
-      sticker.src = url;
+      const sticker = document.createElement('div');
       sticker.classList.add('sticker');
+      
+      const stickerImg = document.createElement('img');
+      stickerImg.src = url;
+      sticker.appendChild(stickerImg);
+      
+      // NEW: Create and append the delete button with an SVG icon
+      const deleteBtn = document.createElement('div');
+      deleteBtn.classList.add('delete-btn');
+      deleteBtn.innerHTML = `
+        <svg class="delete-btn-icon" viewBox="0 0 24 24">
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+      `;
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sticker.remove();
+        saveState();
+      });
+      sticker.appendChild(deleteBtn);
       
       let finalX, finalY;
       
@@ -266,12 +338,12 @@
       sticker.style.left = `${finalX}px`;
       sticker.style.top = `${finalY}px`;
       
-      sticker.addEventListener('mousedown', startDrag);
+      // NEW: Attach dragging listener to the image, not the parent div
+      stickerImg.addEventListener('mousedown', startDrag);
       addResizeListener(sticker);
       
       canvas.appendChild(sticker);
       saveState();
-      // hideOverlay(); // This line was removed in the previous fix to allow for multiple clicks
     }
     
     // --- Function to populate the sticker palette with main groups ---
@@ -324,9 +396,11 @@
         
         overlaySticker.draggable = true;
         overlaySticker.addEventListener('dragstart', (e) => {
+          e.stopPropagation();
           e.dataTransfer.setData('text/plain', url);
         });
-        overlaySticker.addEventListener('click', () => {
+        overlaySticker.addEventListener('click', (e) => {
+          e.stopPropagation();
           addSticker(url);
         });
         
@@ -348,10 +422,9 @@
         overlayContainer.style.top = `${rect.top - paletteRect.top - overlayContainer.offsetHeight}px`;
       }
       
-      overlayContainer.style.display = 'flex';
+      overlayContainer.style.display = 'grid';
     }
     
-    // Add a general click listener to the document to hide the overlay
     document.addEventListener('click', (e) => {
       if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target)) {
         hideOverlay();
@@ -395,8 +468,8 @@
       activeSticker = e.target;
       initialX = e.clientX;
       initialY = e.clientY;
-      offsetX = activeSticker.offsetLeft;
-      offsetY = activeSticker.offsetTop;
+      offsetX = activeSticker.parentElement.offsetLeft;
+      offsetY = activeSticker.parentElement.offsetTop;
       
       document.addEventListener('mousemove', dragSticker);
       document.addEventListener('mouseup', stopDrag);
@@ -406,10 +479,10 @@
       if (!activeSticker) return;
       const newX = offsetX + (e.clientX - initialX);
       const newY = offsetY + (e.clientY - initialY);
-      const maxX = canvas.offsetWidth - activeSticker.offsetWidth;
-      const maxY = canvas.offsetHeight - activeSticker.offsetHeight;
-      activeSticker.style.left = `${Math.min(Math.max(0, newX), maxX)}px`;
-      activeSticker.style.top = `${Math.min(Math.max(0, newY), maxY)}px`;
+      const maxX = canvas.offsetWidth - activeSticker.parentElement.offsetWidth;
+      const maxY = canvas.offsetHeight - activeSticker.parentElement.offsetHeight;
+      activeSticker.parentElement.style.left = `${Math.min(Math.max(0, newX), maxX)}px`;
+      activeSticker.parentElement.style.top = `${Math.min(Math.max(0, newY), maxY)}px`;
     }
 
     function stopDrag() {
