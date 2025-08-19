@@ -2,7 +2,7 @@
 <html>
 <head>
   <style>
-    /* CSS for styling the canvas, stickers, and the new sticker grid */
+    /* New simplified styling */
     body {
       margin: 0;
       padding: 0;
@@ -11,18 +11,22 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
 
+    /* Simple, clean canvas styles */
     #canvas-container {
       width: 90%;
       max-width: 800px;
       height: 500px;
-      border: 2px dashed #ccc;
-      background-color: white;
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
       position: relative;
       margin-top: 20px;
       overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
     }
 
     .sticker {
@@ -33,7 +37,7 @@
       user-select: none;
       transition: transform 0.1s ease-in-out;
     }
-    
+
     .sticker:active {
       cursor: grabbing;
       z-index: 100;
@@ -45,59 +49,70 @@
       gap: 10px;
     }
 
+    /* NEW: Icon button styles */
     button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border: none;
-      border-radius: 5px;
+      border-radius: 50%; /* New: Make buttons round */
       background-color: #007bff;
       color: white;
-      transition: background-color 0.3s;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
     }
-    
+
     button:hover {
       background-color: #0056b3;
+      transform: scale(1.05);
     }
     
-    /* CSS for the sticker palette grid */
+    .icon {
+      width: 1.2em;
+      height: 1.2em;
+      fill: none; /* NEW: Remove icon fill */
+      stroke: currentColor;
+    }
+
     #sticker-palette-container {
       width: 90%;
       max-width: 800px;
       margin-top: 20px;
       padding: 10px;
-      background-color: #eee;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      background-color: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-start;
       gap: 10px;
+      position: relative;
     }
 
     .palette-sticker {
       width: 60px;
       height: 60px;
       object-fit: contain;
-      cursor: grab;
+      cursor: pointer;
       border: 2px solid transparent;
       transition: border-color 0.2s, transform 0.2s;
     }
-    
+
     .palette-sticker:hover {
       border-color: #007bff;
       transform: scale(1.1);
     }
-    
-    /* NEW: Styles for the overlay */
+
     #overlay-container {
       position: absolute;
       background-color: rgba(255, 255, 255, 0.95);
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 8px;
       padding: 10px;
-      display: none; /* Hidden by default */
+      display: none;
       z-index: 200;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       flex-wrap: wrap;
@@ -115,8 +130,36 @@
   </style>
 </head>
 <body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="icon-dice" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+      <path d="M12 12h.01"></path>
+      <path d="M16 8h.01"></path>
+      <path d="M8 8h.01"></path>
+      <path d="M8 16h.01"></path>
+      <path d="M16 16h.01"></path>
+    </symbol>
+    <symbol id="icon-rotate-ccw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 4v6h6"></path>
+      <path d="M3.51 15a9 9 0 1 0 2.13-9.98c.5-.42 1.25-.33 1.63.2.39.52.28 1.34-.23 1.68A6.36 6.36 0 1 1 3 17.5"></path>
+    </symbol>
+    <symbol id="icon-plus-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M12 8v8"></path>
+      <path d="M8 12h8"></path>
+    </symbol>
+  </svg>
+
   <div class="controls">
-    <button id="add-sticker-btn">Add Random Sticker</button>
+    <button id="add-sticker-btn">
+      <svg class="icon"><use href="#icon-dice"></use></svg>
+    </button>
+    <button id="undo-btn">
+      <svg class="icon"><use href="#icon-rotate-ccw"></use></svg>
+    </button>
+    <button id="new-btn">
+      <svg class="icon"><use href="#icon-plus-circle"></use></svg>
+    </button>
   </div>
   <div id="canvas-container"></div>
   
@@ -127,35 +170,83 @@
   <div id="overlay-container"></div>
 
   <script>
-    // NEW: Updated data structure to group stickers
-    // REPLACE THIS with your actual data from Playbook!
-    const stickerGroups = [
+     const stickerGroups = [
       {
-        name: "Bananas",
+        name: "Alpaca",
         urls: [
-          "https://static.wixstatic.com/media/990059_27a6123890a3477c9db4a13419cb533d~mv2.png",
-          "https://images.unsplash.com/photo-1549495973-1f1988899538"
-         
+          "https://static.wixstatic.com/media/990059_b8e966fff23243baaeffda0903b26ae5~mv2.png",
+          "https://static.wixstatic.com/media/990059_de180b020be54f9197ee9da700034b23~mv2.png",
+		  "https://static.wixstatic.com/media/990059_4a8de8e19a9c45439f68e5ffdcc115d2~mv2.png",
+		  "https://static.wixstatic.com/media/990059_43ecc7762e064417811a87e307b7907f~mv2.png",
+		  "https://static.wixstatic.com/media/990059_41dc4f48b83446c0b73a62e0956da286~mv2.png",
+		  "https://static.wixstatic.com/media/990059_3738e3eb9e9545e09b320de9cf2f3ac6~mv2.png",
+		  "https://static.wixstatic.com/media/990059_bd8a968f55534bfa89713e93a9dfc806~mv2.png",
+		  "https://static.wixstatic.com/media/990059_ffbd6892bad64ea6ac268f8fe539e1fe~mv2.png",
+		  "https://static.wixstatic.com/media/990059_2ee1b55de8434492bfe9e2603bbdfae4~mv2.png",
+		  "https://static.wixstatic.com/media/990059_11df952adf7649be8fc5cf072305e867~mv2.png",
+		  "https://static.wixstatic.com/media/990059_80d8ebf3215f4306900b0c9555ad019f~mv2.png",
+		  "https://static.wixstatic.com/media/990059_037002d97a114b2c8eeddd6606ee5c39~mv2.png",
+		  "https://static.wixstatic.com/media/990059_04d0262ad52b4c7c8a44c136a362b7d5~mv2.png",
+		  "https://static.wixstatic.com/media/990059_2c4f2b959e474833b61b6f5218b73967~mv2.png",
+		  "https://static.wixstatic.com/media/990059_448fbb1d78584097907eb1b312f330c3~mv2.png",
+		  "https://static.wixstatic.com/media/990059_e3133404efe44eaf9f33ef1c0e2ccde9~mv2.png",
+		  "https://static.wixstatic.com/media/990059_fef1e3bea9814e1b93118cbb3abb066c~mv2.png",
+		  "https://static.wixstatic.com/media/990059_b1ed01d0d9b54f5ca211e2975213fd5f~mv2.png",
+		  "https://static.wixstatic.com/media/990059_a5715995827641ffba7291c75bf8f9d3~mv2.png",
+		  "https://static.wixstatic.com/media/990059_a0b03b03435c4da38095c71bda978915~mv2.png",
+		  "https://static.wixstatic.com/media/990059_eaf18884725f4652bb2b16c25a424673~mv2.png",
+		  "https://static.wixstatic.com/media/990059_16d71393320b45249789d860719c902c~mv2.png"
+	
+
         ]
       },
       {
-        name: "Lions",
+        name: "80s Wrestler",
         urls: [
-          "https://images.unsplash.com/photo-1549495973-1f1988899538",
-          "https://images.unsplash.com/photo-1549488421-39c4a883a45c"
-          
+          "",
+          "",
         ]
       }
     ];
 
     const canvas = document.getElementById('canvas-container');
     const addStickerBtn = document.getElementById('add-sticker-btn');
+    const undoBtn = document.getElementById('undo-btn');
+    const newBtn = document.getElementById('new-btn');
     const paletteContainer = document.getElementById('sticker-palette-container');
     const overlayContainer = document.getElementById('overlay-container');
 
     let activeSticker = null;
     let initialX, initialY, offsetX, offsetY;
-    
+    const history = [];
+
+    let activePaletteSticker = null;
+
+    // --- Function to save the current canvas state to the history ---
+    function saveState() {
+      const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+      const currentState = [];
+      stickersOnCanvas.forEach(sticker => {
+        currentState.push({
+          url: sticker.src,
+          x: sticker.offsetLeft,
+          y: sticker.offsetTop,
+          width: sticker.offsetWidth,
+          height: sticker.offsetHeight
+        });
+      });
+      history.push(currentState);
+      updateUndoButton();
+    }
+
+    // --- Function to re-render the canvas from a saved state ---
+    function loadState(state) {
+      canvas.innerHTML = '';
+      state.forEach(data => {
+        addSticker(data.url, data.x, data.y);
+      });
+    }
+
     // --- Function to create and add a sticker to the canvas ---
     function addSticker(url, x, y) {
       const sticker = document.createElement('img');
@@ -179,44 +270,58 @@
       addResizeListener(sticker);
       
       canvas.appendChild(sticker);
+      saveState();
+      // hideOverlay(); // This line was removed in the previous fix to allow for multiple clicks
     }
     
-    // --- NEW: Function to populate the sticker palette with main groups ---
+    // --- Function to populate the sticker palette with main groups ---
     function populatePalette() {
       stickerGroups.forEach(group => {
-        // Display only the first image from each group
         const paletteSticker = document.createElement('img');
         paletteSticker.src = group.urls[0];
         paletteSticker.classList.add('palette-sticker');
         
-        // Use a data attribute to link the element to its group
         paletteSticker.dataset.group = group.name;
 
-        // Add mouse events for the overlay
-        paletteSticker.addEventListener('mouseenter', (e) => showOverlay(e, group.urls));
-        paletteSticker.addEventListener('mouseleave', hideOverlay);
+        paletteSticker.addEventListener('click', (e) => {
+          if (activePaletteSticker === paletteSticker) {
+            hideOverlay();
+          } else {
+            hideOverlay();
+            showOverlay(e, group.urls);
+            activePaletteSticker = paletteSticker;
+          }
+        });
         
         // Add drag/drop functionality for the main image
         paletteSticker.draggable = true;
         paletteSticker.addEventListener('dragstart', (e) => {
           e.dataTransfer.setData('text/plain', group.urls[0]);
+          hideOverlay();
         });
         paletteContainer.appendChild(paletteSticker);
       });
     }
+    
+    // --- Hide overlay function ---
+    function hideOverlay() {
+      overlayContainer.style.display = 'none';
+      activePaletteSticker = null;
+    }
 
-    // --- NEW: Overlay functions ---
+    // --- Overlay functions ---
+    let activeGroupURLs = [];
+    
     function showOverlay(e, urls) {
-      // Clear previous overlay content
+      activeGroupURLs = urls;
+
       overlayContainer.innerHTML = '';
       
-      // Populate the overlay with all images from the group
       urls.forEach(url => {
         const overlaySticker = document.createElement('img');
         overlaySticker.src = url;
         overlaySticker.classList.add('overlay-sticker');
         
-        // Make overlay stickers draggable and clickable
         overlaySticker.draggable = true;
         overlaySticker.addEventListener('dragstart', (e) => {
           e.dataTransfer.setData('text/plain', url);
@@ -228,29 +333,30 @@
         overlayContainer.appendChild(overlaySticker);
       });
 
-      // Position the overlay next to the hovered sticker
       const rect = e.target.getBoundingClientRect();
       const paletteRect = paletteContainer.getBoundingClientRect();
-      overlayContainer.style.top = `${rect.top - paletteRect.top + 60}px`; // position below sticker
-      overlayContainer.style.left = `${rect.left - paletteRect.left}px`;
 
-      // Show the overlay
+      if (paletteRect.right + 260 < window.innerWidth) {
+        overlayContainer.style.left = `${paletteRect.width + 10}px`;
+      } else {
+        overlayContainer.style.left = `${-overlayContainer.offsetWidth - 10}px`;
+      }
+
+      if (rect.bottom + overlayContainer.offsetHeight < window.innerHeight) {
+        overlayContainer.style.top = `${rect.top - paletteRect.top}px`;
+      } else {
+        overlayContainer.style.top = `${rect.top - paletteRect.top - overlayContainer.offsetHeight}px`;
+      }
+      
       overlayContainer.style.display = 'flex';
-      overlayContainer.style.position = 'absolute';
-    }
-
-    function hideOverlay() {
-      // This uses a small delay to prevent the overlay from disappearing
-      // if the mouse moves from the button to the overlay itself
-      setTimeout(() => {
-        if (!overlayContainer.matches(':hover') && !paletteContainer.matches(':hover')) {
-          overlayContainer.style.display = 'none';
-        }
-      }, 100);
     }
     
-    // Attach mouseleave to the overlay itself to keep it from disappearing
-    overlayContainer.addEventListener('mouseleave', hideOverlay);
+    // Add a general click listener to the document to hide the overlay
+    document.addEventListener('click', (e) => {
+      if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target)) {
+        hideOverlay();
+      }
+    });
 
     // --- Drag-and-Drop event listeners for the canvas ---
     canvas.addEventListener('dragover', (e) => {
@@ -260,7 +366,6 @@
     canvas.addEventListener('drop', (e) => {
       e.preventDefault();
       const url = e.dataTransfer.getData('text/plain');
-      
       if (url) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -269,7 +374,7 @@
       }
     });
 
-    // --- Resizing function (no changes) ---
+    // --- Resizing function ---
     function addResizeListener(sticker) {
       sticker.addEventListener('wheel', (e) => {
         e.preventDefault();
@@ -284,7 +389,7 @@
       });
     }
 
-    // --- Dragging functions for stickers on the canvas (no changes) ---
+    // --- Dragging functions for stickers on the canvas ---
     function startDrag(e) {
       e.preventDefault();
       activeSticker = e.target;
@@ -312,6 +417,25 @@
       document.removeEventListener('mouseup', stopDrag);
       activeSticker = null;
     }
+
+    // --- New: Undo and New button event listeners ---
+    function updateUndoButton() {
+      undoBtn.disabled = history.length <= 1;
+    }
+
+    undoBtn.addEventListener('click', () => {
+      if (history.length > 1) {
+        history.pop();
+        const prevState = history[history.length - 1];
+        loadState(prevState);
+      }
+    });
+
+    newBtn.addEventListener('click', () => {
+      canvas.innerHTML = '';
+      history.splice(1);
+      updateUndoButton();
+    });
     
     // --- Initial function calls ---
     addStickerBtn.addEventListener('click', () => {
@@ -319,9 +443,9 @@
       const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
       addSticker(randomUrl);
     });
-
+    
     populatePalette();
-
+    saveState();
   </script>
 </body>
 </html>
