@@ -242,7 +242,7 @@
       }
 
       document.body.removeChild(tempInput);
-      linkPrompt.style.display = "none";
+      linkPrompt.classList.add("hidden"); 
     });
 
     function checkCanvasForContent() {
@@ -435,7 +435,6 @@
         if (hiddenUrlField) hiddenUrlField.value = uploadedUrl;
 
         const uploadedUrlEl = document.getElementById("uploaded-url");
-        const linkPrompt = document.getElementById("link-prompt");
         
         if (uploadedUrlEl) uploadedUrlEl.textContent = uploadedUrl;
         hideUploadingVideo(); // ⬅️ Hide the video overlay here
