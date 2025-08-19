@@ -1,209 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drawing App</title>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: transparent;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drawing App</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: transparent;
+    }
 
-        #stage {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 1rem;
-            overflow: hidden;
-        }
+    #stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
 
-        #bg-canvas,
-        #draw-canvas {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            touch-action: none;
-            border-radius: 1rem;
-        }
+    #bg-canvas,
+    #draw-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      border-radius: 1rem;
+    }
 
-        /* Icon stroke color management */
-        .icon-stroke {
-            stroke: black;
-            transition: stroke 0.3s ease;
-        }
+    .icon-stroke {
+      stroke: black;
+      transition: stroke 0.3s ease;
+    }
+    .icon-stroke svg {
+      stroke: currentColor;
+    }
+    .dark-mode .icon-stroke {
+      stroke: white;
+    }
 
-        .icon-stroke svg {
-            stroke: currentColor;
-        }
+    .popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      color: #1f2937;
+      padding: 1rem 2rem;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      pointer-events: none;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e7eb;
+    }
+    .popup.show {
+      opacity: 1;
+    }
 
-        .dark-mode .icon-stroke {
-            stroke: white;
-        }
+    .video-popup-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .video-popup-container.hidden {
+      display: none;
+    }
+    .video-popup {
+      background: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    #upload-video,
+    #download-video {
+      width: 400px;
+      height: auto;
+      border-radius: 0.25rem;
+    }
 
-/* Update Popup Styles */
-.popup {
-    position: absolute; /* Changed from fixed */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    color: #1f2937;
-    padding: 1rem 2rem;
-    border-radius: 9999px;
-    font-size: 1rem;
-    font-weight: 500;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-    pointer-events: none;
-    z-index: 1000;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e5e7eb;
-}
-.popup.show {
-    opacity: 1;
-}
-
-.video-popup-container {
-    position: absolute; /* Changed from fixed */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-.video-popup-container.hidden {
-    display: none;
-}
-.video-popup {
-    background: white;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-}
-#upload-video {
-    width: 400px; /* Adjust size as needed */
-    height: auto;
-    border-radius: 0.25rem;
-}
-
-#upload-complete-video {
-    width: 400px; /* Adjust size as needed */
-    height: auto;
-    border-radius: 0.25rem;
-}
-
-#download-complete-video {
-    width: 400px; /* Adjust size as needed */
-    height: auto;
-    border-radius: 0.25rem;
-}
-
-#download-video {
-    width: 400px; /* Adjust size as needed */
-    height: auto;
-    border-radius: 0.25rem;
-}
-#controls-bar.disabled {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-    </style>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    #controls-bar.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-
-
-
 <div class="flex flex-col items-center justify-between h-screen p-4">
-    <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
-        <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
-        <div id="message-popup" class="popup"></div>
+  <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
+    <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
+      <div id="message-popup" class="popup"></div>
 
-        <div id="video-popup-container" class="video-popup-container hidden">
-    <div class="video-popup">
-        <video id="upload-video" src="https://video.wixstatic.com/video/990059_627d0fb1d7324ea4aafee0e5e0b889bc/720p/mp4/file.mp4" playsinline muted loop></video>
-    </div>
-</div>
-
- <div id="download-video-container" class="video-popup-container hidden">
+      <!-- Upload progress video -->
+      <div id="video-popup-container" class="video-popup-container hidden">
         <div class="video-popup">
-            <video id="download-video" src="https://video.wixstatic.com/video/990059_7f44f4a052a947ccad90086ac702a9b3/720p/mp4/file.mp4" playsinline muted></video>
+          <video id="upload-video" src="https://video.wixstatic.com/video/990059_627d0fb1d7324ea4aafee0e5e0b889bc/720p/mp4/file.mp4" playsinline muted loop></video>
         </div>
+      </div>
+
+      <!-- Download progress video -->
+      <div id="download-video-container" class="video-popup-container hidden">
+        <div class="video-popup">
+          <video id="download-video" src="https://video.wixstatic.com/video/990059_7f44f4a052a947ccad90086ac702a9b3/720p/mp4/file.mp4" playsinline muted></video>
+        </div>
+      </div>
+
+      <div id="stage" style="height: 100%;">
+        <canvas id="bg-canvas"></canvas>
+        <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
+      </div>
     </div>
 
-    <div id="video-upload-complete-container" class="video-popup-container hidden">
-                <div class="video-popup">
-                    <video id="upload-complete-video" src="https://video.wixstatic.com/video/990059_c4f70616661f47e18f4d7d51fbcac535/720p/mp4/file.mp4" playsinline muted></video>
-                </div>
-            </div>
-            <div id="video-download-complete-container" class="video-popup-container hidden">
-                <div class="video-popup">
-                    <video id="download-complete-video" src="https://video.wixstatic.com/video/990059_c4f70616661f47e18f4d7d51fbcac535/720p/mp4/file.mp4" playsinline muted></video>
-                </div>
-            </div>
-
-            <div id="stage" style="height: 100%;">
-                <canvas id="bg-canvas"></canvas>
-                <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
-            </div>
+    <!-- Controls -->
+    <div class="flex-shrink-0 w-full flex justify-center pt-4" id="controls-bar">
+      <div class="flex flex-nowrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
+        <div class="flex items-center gap-1">
+          <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
+            <i data-lucide="pen-line" class="w-4 h-4"></i>
+          </button>
+          <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser">
+            <i data-lucide="eraser" class="w-4 h-4"></i>
+          </button>
         </div>
-
-        
-        <div class="flex-shrink-0 w-full flex justify-center pt-4" id="controls-bar">
-            <div class="flex flex-nowrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
-                <div class="flex items-center gap-1">
-                    <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
-                        <i data-lucide="pen-line" class="w-4 h-4"></i>
-                    </button>
-                    <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser">
-                        <i data-lucide="eraser" class="w-4 h-4"></i>
-                    </button>
-                </div>
-                <button id="undo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Undo">
-                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-                </button>
-                <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">
-                    <span id="icon-sun"><i data-lucide="sun" class="w-4 h-4"></i></span>
-                    <span id="icon-moon" class="hidden"><i data-lucide="moon" class="w-4 h-4"></i></span>
-                </button>
-                <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
-                    <i data-lucide="file-plus" class="w-4 h-4"></i>
-                </button>
-                <button id="save-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Save PNG">
-                    <i data-lucide="save" class="w-4 h-4"></i>
-                </button>
-                <button id="upload-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Upload">
-                    <i data-lucide="upload-cloud" class="w-4 h-4"></i>
-                </button>
-                <button id="copy-link-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Copy Link">
-                    <i data-lucide="link-2" class="w-4 h-4"></i>
-                </button>
-            </div>
-        </div>
+        <button id="undo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Undo">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        </button>
+        <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">
+          <span id="icon-sun"><i data-lucide="sun" class="w-4 h-4"></i></span>
+          <span id="icon-moon" class="hidden"><i data-lucide="moon" class="w-4 h-4"></i></span>
+        </button>
+        <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
+          <i data-lucide="file-plus" class="w-4 h-4"></i>
+        </button>
+        <button id="save-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Save PNG">
+          <i data-lucide="save" class="w-4 h-4"></i>
+        </button>
+        <button id="upload-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Upload">
+          <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+        </button>
+        <button id="copy-link-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Copy Link">
+          <i data-lucide="link-2" class="w-4 h-4"></i>
+        </button>
+      </div>
     </div>
+  </div>
 </div>
-
 
 <script>
 const videoPopupContainer = document.getElementById('video-popup-container');
 const uploadVideo = document.getElementById('upload-video');
 const downloadVideoContainer = document.getElementById('download-video-container');
 const downloadVideo = document.getElementById('download-video');
-const videoUploadCompleteContainer = document.getElementById('video-upload-complete-container');
-const uploadCompleteVideo = document.getElementById('upload-complete-video');
-const videoDownloadCompleteContainer = document.getElementById('video-download-complete-container');
-const downloadCompleteVideo = document.getElementById('download-complete-video');
 
 const bgCanvas = document.getElementById('bg-canvas');
 const drawCanvas = document.getElementById('draw-canvas');
@@ -231,59 +193,59 @@ let penColor = 'black';
 let history = [], historyIndex = -1;
 let currentUrl = null;
 
-// New functions to control the video popup
+// Upload popup
 function showVideoPopup() {
-    videoPopupContainer.classList.remove('hidden');
-    uploadVideo.play();
+  videoPopupContainer.classList.remove('hidden');
+  uploadVideo.play();
+}
+function hideUploadVideo() {
+  setTimeout(() => {
+    videoPopupContainer.classList.add('hidden');
+    uploadVideo.pause();
+    uploadVideo.currentTime = 0;
+  }, 5000);
 }
 
-// New function to show the download video popup
+// Download popup
 function showDownloadVideo() {
-    controlsBar.classList.add('disabled');
-    downloadVideoContainer.classList.remove('hidden');
-    downloadVideo.play();
+  controlsBar.classList.add('disabled');
+  downloadVideoContainer.classList.remove('hidden');
+  downloadVideo.play();
 
-    // After 5 seconds, hide this video and show the completion video
-    setTimeout(() => {
-        downloadVideoContainer.classList.add('hidden');
-        downloadVideo.pause();
-        downloadVideo.currentTime = 0;
-        showDownloadCompleteVideo();
-    }, 5000);
+  // Hide and download after 5s
+  setTimeout(() => {
+    downloadVideoContainer.classList.add('hidden');
+    downloadVideo.pause();
+    downloadVideo.currentTime = 0;
+    startDownload();
+    controlsBar.classList.remove('disabled');
+  }, 3000);
 }
 
 function startDownload() {
-    const out = document.createElement('canvas');
-    out.width = drawCanvas.width;
-    out.height = drawCanvas.height;
-    const octx = out.getContext('2d');
-    octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-    octx.fillRect(0,0,out.width,out.height);
-    octx.drawImage(drawCanvas,0,0);
-    const imageURL = out.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = imageURL;
-    link.download = `my-drawing-${Date.now()}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const out = document.createElement('canvas');
+  out.width = drawCanvas.width;
+  out.height = drawCanvas.height;
+  const octx = out.getContext('2d');
+  octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
+  octx.fillRect(0,0,out.width,out.height);
+  octx.drawImage(drawCanvas,0,0);
+  const imageURL = out.toDataURL('image/png');
+  const link = document.createElement('a');
+  link.href = imageURL;
+  link.download = `my-drawing-${Date.now()}.png`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
-function hideVideoPopup() {
-    setTimeout(() => {
-        videoPopupContainer.classList.add('hidden');
-        uploadVideo.pause();
-        uploadVideo.currentTime = 0; // Rewind the video
-    }, 5000); // Changed to 5000 milliseconds
-}
 function showPopup(message) {
-    messagePopup.textContent = message;
-    messagePopup.classList.add('show');
-    setTimeout(() => {
-        messagePopup.classList.remove('show');
-                controlsBar.classList.remove('disabled');
-
-    }, 2000);
+  messagePopup.textContent = message;
+  messagePopup.classList.add('show');
+  setTimeout(() => {
+    messagePopup.classList.remove('show');
+    controlsBar.classList.remove('disabled');
+  }, 2000);
 }
 
 function showUploadCompleteVideo() {
@@ -501,32 +463,26 @@ uploadBtn.addEventListener('click', () => {
     
 });
 
-// Update the message listener to hide the video popup
 window.addEventListener('message', (event) => {
-    if (event.data.type === 'UPLOAD_SUCCESS') {
-        currentUrl = event.data.url;
-        updateButtonStates();
-        // 1. Hide the "in-progress" video
-        hideUploadVideo(); 
-        // 2. Show the "complete" video
-        showUploadCompleteVideo();
-
-    } else if (event.data.type === 'UPLOAD_ERROR') {
-        // Hide upload video, show text popup, and re-enable controls
-        hideUploadVideo();
-        showPopup('Upload failed.');
-        currentUrl = null;
-        updateButtonStates();
-        controlsBar.classList.remove('disabled');
-    }
+  if (event.data.type === 'UPLOAD_SUCCESS') {
+    currentUrl = event.data.url;
+    updateButtonStates();    // enables copy-link
+    hideUploadVideo();       // this will hide video + re-enable controls
+    showPopup('Upload successful!');
+  } else if (event.data.type === 'UPLOAD_ERROR') {
+    currentUrl = null;
+    updateButtonStates();
+    hideUploadVideo();       // re-enable only when video is gone
+    showPopup('Upload failed.');
+  }
 });
 
+// Hide progress video AND re-enable controls
 function hideUploadVideo() {
-    setTimeout(() => {
-        videoPopupContainer.classList.add('hidden');
-        uploadVideo.pause();
-        uploadVideo.currentTime = 0; // Rewind the video
-    }, 5000); // Wait 5 seconds for the video to play
+  videoPopupContainer.classList.add('hidden');
+  uploadVideo.pause();
+  uploadVideo.currentTime = 0;
+  controlsBar.classList.remove('disabled'); // only re-enable here
 }
 
 // New button to copy the link
