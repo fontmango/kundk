@@ -9,14 +9,12 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     body { font-family: 'Inter', sans-serif; }
-
     #stage { position: relative; width: 100%; height: 100%; border-radius: 1rem; overflow: hidden; }
     #bg-canvas, #draw-canvas {
       position: absolute; inset: 0; width: 100%; height: 100%;
       touch-action: none;
       border-radius: 1rem;
     }
-
     .icon-stroke { stroke: black; transition: stroke 0.3s ease; }
     .icon-stroke svg { stroke: currentColor; }
     .dark-mode .icon-stroke { stroke: white; }
@@ -46,8 +44,6 @@
 <body class="bg-white">
   <div class="flex flex-col items-center justify-between h-screen p-4">
     <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
-    
-
       <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
         <div id="stage" style="height: 100%;">
           <canvas id="bg-canvas"></canvas>
@@ -75,7 +71,7 @@
           <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
             <i data-lucide="file-plus" class="w-4 h-4"></i>
           </button>
-          <button id="save-btn" class="p-2 rounded-lg icon-stroke disabled:opacity-50" title="Save PNG">
+          <button id="save-btn" class="p-2 rounded-lg icon-stroke disabled:opacity-50" title="Save">
             <i data-lucide="save" class="w-4 h-4"></i>
           </button>
         </div>
@@ -83,15 +79,22 @@
     </div>
   </div>
 
+  <!-- Save popup -->
   <div id="save-prompt">
     <div id="save-prompt-content">
       <h2 class="text-2xl font-bold mb-4">Dein Meisterwerk wurde gespeichert!</h2>
-      <p class="text-gray-600 mb-4">Du findest es in deinem Downloads-Ordner.</p>
+      <p class="text-gray-600 mb-4">Wähle eine Option:</p>
       <div class="button-group">
-        <button id="upload-btn" class="prompt-btn prompt-btn-primary">
-          <i data-lucide="mail-open" class="w-6 h-6"></i>
+        <!-- Upload -->
+        <button id="copy-url-btn" class="prompt-btn prompt-btn-primary" title="Upload & Get Link">
+  <i data-lucide="upload" class="w-6 h-6"></i>
+</button>
+        <!-- Download -->
+        <button id="download-btn" class="prompt-btn prompt-btn-primary" title="Download">
+          <i data-lucide="download" class="w-6 h-6"></i>
         </button>
-        <button id="close-prompt" class="prompt-btn prompt-btn-secondary">
+        <!-- Abort -->
+        <button id="abort-btn" class="prompt-btn prompt-btn-secondary" title="Abort">
           <i data-lucide="x" class="w-6 h-6"></i>
         </button>
       </div>
@@ -113,8 +116,10 @@
     const iconMoon = document.getElementById('icon-moon');
     const appContainer = document.getElementById('drawing-app-container');
     const savePrompt = document.getElementById('save-prompt');
-    const uploadBtn = document.getElementById('upload-btn');
-    const closePromptBtn = document.getElementById('close-prompt');
+
+    const uploadBtn  = document.getElementById("copy-url-btn");
+    const downloadBtn = document.getElementById("download-btn");
+    const abortBtn = document.getElementById("abort-btn");
 
     let drawCtx = drawCanvas.getContext('2d');
     let isDrawing = false, lastX = 0, lastY = 0;
@@ -138,7 +143,6 @@
       undoBtn.disabled = historyIndex <= 0;
     }
 
-    // Helper to redraw images properly at device-pixel size
     function drawImageToDrawCanvas(img) {
       const prevTransform = drawCtx.getTransform();
       drawCtx.setTransform(1, 0, 0, 1, 0, 0);
@@ -260,22 +264,21 @@
       octx.fillRect(0,0,out.width,out.height);
       octx.drawImage(drawCanvas,0,0);
       const link=document.createElement('a');
-       link.download = `kiwi_${saveCounter}.png`; // unique filename
-      saveCounter++; // increment for next save
+      link.download = `kiwi_${saveCounter}.png`;
+      saveCounter++;
       link.href=out.toDataURL('image/png');
       link.click();
     }
-    function openEmailWithImage() {
-      const out=document.createElement('canvas');
-      out.width=drawCanvas.width; out.height=drawCanvas.height;
-      const octx=out.getContext('2d');
-      octx.fillStyle=isWhiteBackground?'#ffffff':'#000000';
-      octx.fillRect(0,0,out.width,out.height);
-      octx.drawImage(drawCanvas,0,0);
-      const imageData = out.toDataURL('image/png');
-      const subject = encodeURIComponent("Deine Anfrage bei kiwiundknoedel.");
-      const body = encodeURIComponent("Hier ist meine Zeichnung:\n\n" + imageData);
-      window.location.href = `mailto:fragen@kiwiundknoedel.de?subject=${subject}&body=${body}`;
+
+    function getCanvasDataUrl() {
+      const out = document.createElement('canvas');
+      out.width = drawCanvas.width;
+      out.height = drawCanvas.height;
+      const octx = out.getContext('2d');
+      octx.fillStyle = isWhiteBackground ? "#ffffff" : "#000000";
+      octx.fillRect(0, 0, out.width, out.height);
+      octx.drawImage(drawCanvas, 0, 0);
+      return out.toDataURL("image/png");
     }
 
     // Events
@@ -323,10 +326,33 @@
     });
     saveBtn.addEventListener('click', ()=>{
       if (saveBtn.disabled) return;
-      saveImage(); savePrompt.style.display = 'flex';
+      savePrompt.style.display = 'flex';
     });
-    uploadBtn.addEventListener('click', ()=>{ savePrompt.style.display = 'none'; openEmailWithImage(); });
-    closePromptBtn.addEventListener('click', ()=>{ savePrompt.style.display = 'none'; });
+
+ uploadBtn.addEventListener('click', () => {
+  const combinedCanvas = document.createElement('canvas');
+  combinedCanvas.width = drawCanvas.width;
+  combinedCanvas.height = drawCanvas.height;
+  const ctx = combinedCanvas.getContext('2d');
+  ctx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
+  ctx.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
+  ctx.drawImage(drawCanvas, 0, 0);
+
+  // Convert to Base64
+  const base64Image = combinedCanvas.toDataURL("image/png");
+
+  // ✅ Send message back to Wix frontend
+  window.parent.postMessage({ type: "UPLOAD_REQUEST", image: base64Image }, "*");
+});
+
+    downloadBtn.addEventListener("click", () => {
+      saveImage();
+      savePrompt.style.display = "none";
+    });
+
+    abortBtn.addEventListener("click", () => {
+      savePrompt.style.display = "none";
+    });
 
     window.addEventListener('load', ()=>{
       sizeCanvases(); setActiveTool('pen'); updatePenColorForBackground();
@@ -334,6 +360,18 @@
       if(window.lucide) window.lucide.createIcons();
     });
     window.addEventListener('resize', sizeCanvases);
+
+    // Handle responses from Wix frontend
+    window.addEventListener("message", async (event) => {
+      if (event.data.type === "UPLOAD_SUCCESS") {
+        await navigator.clipboard.writeText(event.data.url);
+        alert("URL copied:\n" + event.data.url);
+        savePrompt.style.display = "none";
+      }
+      if (event.data.type === "UPLOAD_ERROR") {
+        alert("Error uploading: " + event.data.message);
+      }
+    });
   </script>
 </body>
 </html>
