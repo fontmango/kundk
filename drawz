@@ -31,6 +31,16 @@
       border-radius: 1rem;
     }
 
+@keyframes pulse-3x {
+  0%   { transform: scale(1); box-shadow: 0 0 0 rgba(59,130,246,0.7); }
+  50%  { transform: scale(1.1); box-shadow: 0 0 10px rgba(59,130,246,0.9); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(59,130,246,0); }
+}
+
+.pulse-3x {
+  animation: pulse-3x 1s ease;
+  animation-iteration-count: 3; /* 👈 3 times */
+}
     .icon-stroke {
       stroke: black;
       transition: stroke 0.3s ease;
@@ -42,28 +52,28 @@
       stroke: white;
     }
 
-    .popup {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #fff;
-      color: #1f2937;
-      padding: 1rem 2rem;
-      border-radius: 9999px;
-      font-size: 1rem;
-      font-weight: 500;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-      pointer-events: none;
-      z-index: 1000;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      border: 1px solid #e5e7eb;
-    }
-    .popup.show {
-      opacity: 1;
-    }
+  .popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -40%) scale(0.95);
+  background-color: #fff;
+  color: #1f2937;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000;
+  border: 1px solid #e5e7eb;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
 
+.popup.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
     .video-popup-container {
       position: absolute;
       top: 0;
@@ -468,7 +478,8 @@ window.addEventListener('message', (event) => {
     currentUrl = event.data.url;
     updateButtonStates();    // enables copy-link
     hideUploadVideo();       // this will hide video + re-enable controls
-    showPopup('Upload successful!');
+   copyLinkBtn.classList.add('pulse-3x');
+setTimeout(() => copyLinkBtn.classList.remove('pulse-3x'), 3000); // 3s total
   } else if (event.data.type === 'UPLOAD_ERROR') {
     currentUrl = null;
     updateButtonStates();
@@ -496,7 +507,7 @@ copyLinkBtn.addEventListener('click', () => {
         document.execCommand('copy');
         document.body.removeChild(tempInput);
         
-        showPopup('Link copied!');
+        showPopup('In Zwischenablage kopiert.');
     }
 });
 
