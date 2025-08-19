@@ -30,6 +30,9 @@
       background: white; padding: 2.5rem; border-radius: 1.5rem;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
+
+
+
     .button-group { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; }
     .prompt-btn {
       padding: 0.75rem; font-weight: 600; border-radius: 0.75rem;
@@ -82,6 +85,7 @@
   <!-- Save popup -->
   <div id="save-prompt">
     <div id="save-prompt-content">
+
       <h2 class="text-2xl font-bold mb-4">Dein Meisterwerk wurde gespeichert!</h2>
       <p class="text-gray-600 mb-4">Wähle eine Option:</p>
       <div class="button-group">
@@ -101,277 +105,300 @@
     </div>
   </div>
 
+ <!-- Link popup -->
+<div id="link-prompt" style="display: none; 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.5); 
+    backdrop-filter: blur(5px); 
+    z-index: 50; 
+    justify-content: center; 
+    align-items: center;
+    ">
+  <div id="link-prompt-content" style="background: white; padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center;">
+    <h2 class="text-2xl font-bold mb-4">Dein Link ist bereit!</h2>
+    <p class="text-gray-600 mb-4" id="uploaded-url">URL wird hier angezeigt</p>
+    <div class="button-group">
+      <button id="copy-link-btn" class="prompt-btn prompt-btn-primary" title="Copy Link">
+        <i data-lucide="link" class="w-6 h-6"></i>
+      </button>
+      <button id="open-link-btn" class="prompt-btn prompt-btn-primary" title="Open Link">
+        <i data-lucide="external-link" class="w-6 h-6"></i>
+      </button>
+      <button id="close-link-btn" class="prompt-btn prompt-btn-secondary" title="Close">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Loading popup -->
+<div id="loading-prompt" style="display: none; 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.5); 
+    backdrop-filter: blur(5px); 
+    z-index: 50; 
+    justify-content: center; 
+    align-items: center; 
+    color: white; 
+    font-size: 1.25rem;
+    font-weight: bold;
+    ">
+  <div class="flex flex-col items-center space-y-4">
+    <div class="animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent"></div>
+    <p>Uploading...</p>
+  </div>
+</div>
+
   <script>
-    const bgCanvas = document.getElementById('bg-canvas');
-    const drawCanvas = document.getElementById('draw-canvas');
-    const bgCtx = bgCanvas.getContext('2d');
+const bgCanvas = document.getElementById('bg-canvas');
+const drawCanvas = document.getElementById('draw-canvas');
+const bgCtx = bgCanvas.getContext('2d');
+let drawCtx = drawCanvas.getContext('2d');
 
-    const penToolBtn = document.getElementById('tool-pen');
-    const eraserToolBtn = document.getElementById('tool-eraser');
-    const undoBtn = document.getElementById('undo-btn');
-    const clearBtn = document.getElementById('clear-canvas');
-    const saveBtn = document.getElementById('save-btn');
-    const toggleBgBtn = document.getElementById('toggle-background');
-    const iconSun = document.getElementById('icon-sun');
-    const iconMoon = document.getElementById('icon-moon');
-    const appContainer = document.getElementById('drawing-app-container');
-    const savePrompt = document.getElementById('save-prompt');
+const penToolBtn = document.getElementById('tool-pen');
+const eraserToolBtn = document.getElementById('tool-eraser');
+const undoBtn = document.getElementById('undo-btn');
+const clearBtn = document.getElementById('clear-canvas');
+const saveBtn = document.getElementById('save-btn');
+const toggleBgBtn = document.getElementById('toggle-background');
+const iconSun = document.getElementById('icon-sun');
+const iconMoon = document.getElementById('icon-moon');
+const appContainer = document.getElementById('drawing-app-container');
+const savePrompt = document.getElementById('save-prompt');
 
-    const uploadBtn  = document.getElementById("copy-url-btn");
-    const downloadBtn = document.getElementById("download-btn");
-    const abortBtn = document.getElementById("abort-btn");
+const uploadBtn = document.getElementById("copy-url-btn");
+const downloadBtn = document.getElementById("download-btn");
+const abortBtn = document.getElementById("abort-btn");
 
-    let drawCtx = drawCanvas.getContext('2d');
-    let isDrawing = false, lastX = 0, lastY = 0;
-    let isWhiteBackground = true;
-    let currentTool = 'pen';
-    let penWidth = 5, eraserWidth = 20;
-    let penColor = 'black';
-    let history = [], historyIndex = -1;
-    let saveCounter = 1;
+let isDrawing = false, lastX = 0, lastY = 0;
+let isWhiteBackground = true;
+let currentTool = 'pen';
+let penWidth = 5, eraserWidth = 20;
+let penColor = 'black';
+let history = [], historyIndex = -1;
+let saveCounter = 1;
 
-    function checkCanvasForContent() {
-      const pixels = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height).data;
-      let hasContent = false;
-      for (let i = 3; i < pixels.length; i += 4) {
-        if (pixels[i] > 0) { hasContent = true; break; }
-      }
-      saveBtn.disabled = !hasContent;
-    }
+function checkCanvasForContent() {
+    const pixels = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height).data;
+    const hasContent = Array.from(pixels).some((v, i) => i % 4 === 3 && v > 0);
+    saveBtn.disabled = !hasContent;
+}
 
-    function updateHistoryButtons() {
-      undoBtn.disabled = historyIndex <= 0;
-    }
+function updateHistoryButtons() {
+    undoBtn.disabled = historyIndex <= 0;
+}
 
-    function drawImageToDrawCanvas(img) {
-      const prevTransform = drawCtx.getTransform();
-      drawCtx.setTransform(1, 0, 0, 1, 0, 0);
-      drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-      drawCtx.drawImage(img, 0, 0, drawCanvas.width, drawCanvas.height);
-      drawCtx.setTransform(prevTransform);
-    }
+function drawImageToCanvas(img) {
+    const prevTransform = drawCtx.getTransform();
+    drawCtx.setTransform(1, 0, 0, 1, 0, 0);
+    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    drawCtx.drawImage(img, 0, 0, drawCanvas.width, drawCanvas.height);
+    drawCtx.setTransform(prevTransform);
+}
 
-    function sizeCanvases() {
-      const stage = document.getElementById('stage');
-      const rect = stage.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
+function sizeCanvases() {
+    const stage = document.getElementById('stage');
+    const rect = stage.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
 
-      let previousDataUrl = null;
-      if (historyIndex >= 0 && history[historyIndex]) previousDataUrl = history[historyIndex];
+    const previousDataUrl = historyIndex >= 0 ? history[historyIndex] : null;
 
-      const newWidth = Math.floor(rect.width * dpr);
-      const newHeight = Math.floor(rect.height * dpr);
+    drawCanvas.width = bgCanvas.width = Math.floor(rect.width * dpr);
+    drawCanvas.height = bgCanvas.height = Math.floor(rect.height * dpr);
+    drawCanvas.style.width = bgCanvas.style.width = rect.width + 'px';
+    drawCanvas.style.height = bgCanvas.style.height = rect.height + 'px';
+    drawCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      drawCanvas.width = newWidth; drawCanvas.height = newHeight;
-      drawCanvas.style.width = rect.width + 'px'; drawCanvas.style.height = rect.height + 'px';
-      drawCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    paintBackground();
 
-      bgCanvas.width = newWidth; bgCanvas.height = newHeight;
-      bgCanvas.style.width = rect.width + 'px'; bgCanvas.style.height = rect.height + 'px';
-      bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      paintBackground();
-
-      if (previousDataUrl) {
+    if (previousDataUrl) {
         const img = new Image();
-        img.onload = () => { drawImageToDrawCanvas(img); checkCanvasForContent(); };
+        img.onload = () => { drawImageToCanvas(img); checkCanvasForContent(); };
         img.src = previousDataUrl;
-      } else {
+    } else {
         drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
         checkCanvasForContent();
-      }
     }
+}
 
-    function paintBackground() {
-      bgCtx.save();
-      bgCtx.setTransform(1,0,0,1,0,0);
-      bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
-      bgCtx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-      bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
-      bgCtx.restore();
-    }
+function paintBackground() {
+    bgCtx.save();
+    bgCtx.setTransform(1,0,0,1,0,0);
+    bgCtx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
+    bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
+    bgCtx.restore();
+}
 
-    function setActiveTool(tool) {
-      currentTool = tool;
-      if(tool==='pen') {
-        penToolBtn.classList.add('ring-2','ring-blue-500');
-        eraserToolBtn.classList.remove('ring-2','ring-blue-500');
-      } else {
-        eraserToolBtn.classList.add('ring-2','ring-blue-500');
-        penToolBtn.classList.remove('ring-2','ring-blue-500');
-      }
-    }
+function setActiveTool(tool) {
+    currentTool = tool;
+    penToolBtn.classList.toggle('ring-2', tool === 'pen');
+    penToolBtn.classList.toggle('ring-blue-500', tool === 'pen');
+    eraserToolBtn.classList.toggle('ring-2', tool === 'eraser');
+    eraserToolBtn.classList.toggle('ring-blue-500', tool === 'eraser');
+}
 
-    function updatePenColorForBackground() {
-      penColor = isWhiteBackground ? 'black' : 'white';
-    }
+function updatePenColorForBackground() {
+    penColor = isWhiteBackground ? 'black' : 'white';
+}
 
-    function pushHistory() {
-      if(historyIndex < history.length - 1) {
-        history = history.slice(0, historyIndex + 1);
-      }
-      const url = drawCanvas.toDataURL('image/png');
-      history.push(url);
-      historyIndex = history.length - 1;
-      updateHistoryButtons();
-      checkCanvasForContent();
-    }
+function pushHistory() {
+    if(historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
+    history.push(drawCanvas.toDataURL('image/png'));
+    historyIndex = history.length - 1;
+    updateHistoryButtons();
+    checkCanvasForContent();
+}
 
-    function loadHistory(index) {
-      drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-      if(index >= 0 && history[index]) {
+function loadHistory(index) {
+    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    if(index >= 0 && history[index]) {
         const img = new Image();
-        img.onload = () => { drawImageToDrawCanvas(img); updateHistoryButtons(); checkCanvasForContent(); };
+        img.onload = () => { drawImageToCanvas(img); updateHistoryButtons(); checkCanvasForContent(); };
         img.src = history[index];
-      } else {
-        updateHistoryButtons(); checkCanvasForContent();
-      }
-    }
+    } else updateHistoryButtons(), checkCanvasForContent();
+}
 
-    function startDraw(x,y){
-      isDrawing=true; lastX=x; lastY=y;
-      drawCtx.lineCap='round'; drawCtx.lineJoin='round';
-    }
-    function drawTo(x,y){
-      if(!isDrawing) return;
-      if(currentTool==='pen'){
-        drawCtx.globalCompositeOperation='source-over';
-        drawCtx.strokeStyle=penColor;
-        drawCtx.lineWidth=penWidth;
-      } else {
-        drawCtx.globalCompositeOperation='destination-out';
-        drawCtx.strokeStyle='rgba(0,0,0,1)';
-        drawCtx.lineWidth=eraserWidth;
-      }
-      drawCtx.beginPath();
-      drawCtx.moveTo(lastX,lastY);
-      drawCtx.lineTo(x,y);
-      drawCtx.stroke();
-      lastX=x; lastY=y;
-    }
-    function endDraw(){ 
-      if(!isDrawing) return;
-      isDrawing=false; 
-      drawCtx.globalCompositeOperation='source-over';
-      pushHistory();
-    }
+function startDraw(x,y){
+    isDrawing=true; lastX=x; lastY=y;
+    drawCtx.lineCap='round'; drawCtx.lineJoin='round';
+}
 
-    function saveImage() {
-      const out=document.createElement('canvas');
-      out.width=drawCanvas.width; out.height=drawCanvas.height;
-      const octx=out.getContext('2d');
-      octx.fillStyle=isWhiteBackground?'#ffffff':'#000000';
-      octx.fillRect(0,0,out.width,out.height);
-      octx.drawImage(drawCanvas,0,0);
-      const link=document.createElement('a');
-      link.download = `kiwi_${saveCounter}.png`;
-      saveCounter++;
-      link.href=out.toDataURL('image/png');
-      link.click();
-    }
+function drawTo(x,y){
+    if(!isDrawing) return;
+    drawCtx.globalCompositeOperation = currentTool === 'pen' ? 'source-over' : 'destination-out';
+    drawCtx.strokeStyle = currentTool === 'pen' ? penColor : 'rgba(0,0,0,1)';
+    drawCtx.lineWidth = currentTool === 'pen' ? penWidth : eraserWidth;
+    drawCtx.beginPath();
+    drawCtx.moveTo(lastX,lastY);
+    drawCtx.lineTo(x,y);
+    drawCtx.stroke();
+    lastX = x; lastY = y;
+}
 
-    function getCanvasDataUrl() {
-      const out = document.createElement('canvas');
-      out.width = drawCanvas.width;
-      out.height = drawCanvas.height;
-      const octx = out.getContext('2d');
-      octx.fillStyle = isWhiteBackground ? "#ffffff" : "#000000";
-      octx.fillRect(0, 0, out.width, out.height);
-      octx.drawImage(drawCanvas, 0, 0);
-      return out.toDataURL("image/png");
-    }
+function endDraw(){ 
+    if(!isDrawing) return;
+    isDrawing=false; 
+    drawCtx.globalCompositeOperation='source-over';
+    pushHistory();
+}
 
-    // Events
-    drawCanvas.addEventListener('mousedown', e=>{
-      const rect = drawCanvas.getBoundingClientRect();
-      startDraw(e.clientX-rect.left,e.clientY-rect.top);
-    });
-    drawCanvas.addEventListener('mousemove', e=>{
-      const rect = drawCanvas.getBoundingClientRect();
-      drawTo(e.clientX-rect.left,e.clientY-rect.top);
-    });
-    window.addEventListener('mouseup', endDraw);
-    drawCanvas.addEventListener('touchstart', e=>{
-      const rect = drawCanvas.getBoundingClientRect();
-      const t=e.touches[0];
-      startDraw(t.clientX-rect.left,t.clientY-rect.top);
-      e.preventDefault();
-    }, {passive:false});
-    drawCanvas.addEventListener('touchmove', e=>{
-      if(!isDrawing) return;
-      const rect = drawCanvas.getBoundingClientRect();
-      const t=e.touches[0];
-      drawTo(t.clientX-rect.left,t.clientY-rect.top);
-      e.preventDefault();
-    }, {passive:false});
-    drawCanvas.addEventListener('touchend', e=>{endDraw(); e.preventDefault();}, {passive:false});
+function saveImage() {
+    const out = document.createElement('canvas');
+    out.width = drawCanvas.width; out.height = drawCanvas.height;
+    const octx = out.getContext('2d');
+    octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
+    octx.fillRect(0,0,out.width,out.height);
+    octx.drawImage(drawCanvas,0,0);
+    const link = document.createElement('a');
+    link.download = `kiwi_${saveCounter++}.png`;
+    link.href = out.toDataURL('image/png');
+    link.click();
+}
 
-    penToolBtn.addEventListener('click', ()=>setActiveTool('pen'));
-    eraserToolBtn.addEventListener('click', ()=>setActiveTool('eraser'));
-    undoBtn.addEventListener('click', ()=>{
-      if(historyIndex > 0){ historyIndex--; loadHistory(historyIndex); }
-      else if (historyIndex === 0) { historyIndex = -1; loadHistory(historyIndex); }
-    });
-    clearBtn.addEventListener('click', ()=>{
-      drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
-      history = []; historyIndex = -1; pushHistory();
-    });
-    toggleBgBtn.addEventListener('click', ()=>{
-      isWhiteBackground = !isWhiteBackground;
-      iconSun.classList.toggle('hidden', !isWhiteBackground);
-      iconMoon.classList.toggle('hidden', isWhiteBackground);
-      paintBackground(); updatePenColorForBackground();
-      if(isWhiteBackground) appContainer.classList.remove('dark-mode');
-      else appContainer.classList.add('dark-mode');
-    });
-    saveBtn.addEventListener('click', ()=>{
-      if (saveBtn.disabled) return;
-      savePrompt.style.display = 'flex';
-    });
+function getCanvasDataUrl() {
+    const out = document.createElement('canvas');
+    out.width = drawCanvas.width; out.height = drawCanvas.height;
+    const octx = out.getContext('2d');
+    octx.fillStyle = isWhiteBackground ? "#ffffff" : "#000000";
+    octx.fillRect(0, 0, out.width, out.height);
+    octx.drawImage(drawCanvas, 0, 0);
+    return out.toDataURL("image/png");
+}
 
- uploadBtn.addEventListener('click', () => {
-  const combinedCanvas = document.createElement('canvas');
-  combinedCanvas.width = drawCanvas.width;
-  combinedCanvas.height = drawCanvas.height;
-  const ctx = combinedCanvas.getContext('2d');
-  ctx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-  ctx.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
-  ctx.drawImage(drawCanvas, 0, 0);
+// Mouse & Touch Events
+function pointerStart(e) {
+    const rect = drawCanvas.getBoundingClientRect();
+    const x = e.clientX ?? e.touches[0].clientX;
+    const y = e.clientY ?? e.touches[0].clientY;
+    startDraw(x-rect.left, y-rect.top);
+    e.preventDefault?.();
+}
 
-  // Convert to Base64
-  const base64Image = combinedCanvas.toDataURL("image/png");
+function pointerMove(e) {
+    if(!isDrawing) return;
+    const rect = drawCanvas.getBoundingClientRect();
+    const x = e.clientX ?? e.touches[0].clientX;
+    const y = e.clientY ?? e.touches[0].clientY;
+    drawTo(x-rect.left, y-rect.top);
+    e.preventDefault?.();
+}
 
-  // ✅ Send message back to Wix frontend
-  window.parent.postMessage({ type: "UPLOAD_REQUEST", image: base64Image }, "*");
+drawCanvas.addEventListener('mousedown', pointerStart);
+drawCanvas.addEventListener('mousemove', pointerMove);
+window.addEventListener('mouseup', endDraw);
+drawCanvas.addEventListener('touchstart', pointerStart, {passive:false});
+drawCanvas.addEventListener('touchmove', pointerMove, {passive:false});
+drawCanvas.addEventListener('touchend', e => { endDraw(); e.preventDefault(); }, {passive:false});
+
+// UI Controls
+penToolBtn.addEventListener('click', ()=>setActiveTool('pen'));
+eraserToolBtn.addEventListener('click', ()=>setActiveTool('eraser'));
+undoBtn.addEventListener('click', ()=>loadHistory(historyIndex>0?--historyIndex:-1));
+clearBtn.addEventListener('click', ()=>{ drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); history = []; historyIndex = -1; pushHistory(); });
+toggleBgBtn.addEventListener('click', ()=>{
+    isWhiteBackground = !isWhiteBackground;
+    iconSun.classList.toggle('hidden', !isWhiteBackground);
+    iconMoon.classList.toggle('hidden', isWhiteBackground);
+    paintBackground(); updatePenColorForBackground();
+    appContainer.classList.toggle('dark-mode', !isWhiteBackground);
+});
+saveBtn.addEventListener('click', ()=>{ if(!saveBtn.disabled) savePrompt.style.display='flex'; });
+
+uploadBtn.addEventListener('click', () => {
+    const base64Image = getCanvasDataUrl();
+    window.parent.postMessage({ type: "UPLOAD_REQUEST", image: base64Image }, "*");
 });
 
-    downloadBtn.addEventListener("click", () => {
-      saveImage();
-      savePrompt.style.display = "none";
-    });
+downloadBtn.addEventListener("click", () => { saveImage(); savePrompt.style.display = "none"; });
+abortBtn.addEventListener("click", () => { savePrompt.style.display = "none"; });
 
-    abortBtn.addEventListener("click", () => {
-      savePrompt.style.display = "none";
-    });
+window.addEventListener('load', ()=>{
+    sizeCanvases(); setActiveTool('pen'); updatePenColorForBackground(); paintBackground(); pushHistory();
+    window.lucide?.createIcons();
+});
+window.addEventListener('resize', sizeCanvases);
 
-    window.addEventListener('load', ()=>{
-      sizeCanvases(); setActiveTool('pen'); updatePenColorForBackground();
-      paintBackground(); pushHistory();
-      if(window.lucide) window.lucide.createIcons();
-    });
-    window.addEventListener('resize', sizeCanvases);
+window.addEventListener("message", async (event) => {
+  const loadingPrompt = document.getElementById("loading-prompt");
 
-    // Handle responses from Wix frontend
-    window.addEventListener("message", async (event) => {
-      if (event.data.type === "UPLOAD_SUCCESS") {
-        await navigator.clipboard.writeText(event.data.url);
-        alert("URL copied:\n" + event.data.url);
-        savePrompt.style.display = "none";
-      }
-      if (event.data.type === "UPLOAD_ERROR") {
-        alert("Error uploading: " + event.data.message);
-      }
-    });
-  </script>
+  if (event.data.type === "UPLOAD_SUCCESS") {
+    loadingPrompt.style.display = "none"; // hide loader ✅
+
+    const uploadedUrl = event.data.url;
+    const uploadedUrlEl = document.getElementById("uploaded-url");
+    const linkPrompt = document.getElementById("link-prompt");
+    const copyLinkBtn = document.getElementById("copy-link-btn");
+    const openLinkBtn = document.getElementById("open-link-btn");
+    const closeLinkBtn = document.getElementById("close-link-btn");
+
+    uploadedUrlEl.textContent = uploadedUrl;
+    linkPrompt.style.display = "flex";
+    savePrompt.style.display = "none";
+
+    copyLinkBtn.onclick = () =>
+      navigator.clipboard.writeText(uploadedUrl).then(() =>
+        alert("✅ URL copied to clipboard!")
+      );
+    openLinkBtn.onclick = () => window.open(uploadedUrl, "_blank");
+    closeLinkBtn.onclick = () => (linkPrompt.style.display = "none");
+  }
+
+  if (event.data.type === "UPLOAD_ERROR") {
+    loadingPrompt.style.display = "none"; // also hide loader ❌
+    alert("Error uploading: " + event.data.message);
+  }
+});
+
+document.getElementById("copy-url-btn").addEventListener("click", () => {
+  document.getElementById("loading-prompt").style.display = "flex";
+});
+
+</script>
+
 </body>
 </html>
