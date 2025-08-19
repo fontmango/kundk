@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* CSS for styling the canvas, stickers, and the new sticker grid */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #canvas-container {
+      width: 90%;
+      max-width: 800px;
+      height: 500px;
+      border: 2px dashed #ccc;
+      background-color: white;
+      position: relative;
+      margin-top: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .sticker {
+      position: absolute;
+      width: 100px;
+      height: auto;
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.1s ease-in-out;
+    }
+    
+    .sticker:active {
+      cursor: grabbing;
+      z-index: 100;
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover {
+      background-color: #0056b3;
+    }
+    
+    /* CSS for the sticker palette grid */
+    #sticker-palette-container {
+      width: 90%;
+      max-width: 800px;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #eee;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 10px;
+    }
+
+    .palette-sticker {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      cursor: grab;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    
+    .palette-sticker:hover {
+      border-color: #007bff;
+      transform: scale(1.1);
+    }
+    
+    /* NEW: Styles for the overlay */
+    #overlay-container {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      display: none; /* Hidden by default */
+      z-index: 200;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      flex-wrap: wrap;
+      gap: 5px;
+      width: 250px;
+    }
+
+    .overlay-sticker {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      cursor: grab;
+      border: 1px solid transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <button id="add-sticker-btn">Add Random Sticker</button>
+  </div>
+  <div id="canvas-container"></div>
+  
+  <h3>Choose a Sticker</h3>
+  <div id="sticker-palette-container">
+    </div>
+
+  <div id="overlay-container"></div>
+
+  <script>
+    // NEW: Updated data structure to group stickers
+    // REPLACE THIS with your actual data from Playbook!
+    const stickerGroups = [
+      {
+        name: "Bananas",
+        urls: [
+          "https://static.wixstatic.com/media/990059_27a6123890a3477c9db4a13419cb533d~mv2.png",
+          "https://images.unsplash.com/photo-1549495973-1f1988899538"
+         
+        ]
+      },
+      {
+        name: "Lions",
+        urls: [
+          "https://images.unsplash.com/photo-1549495973-1f1988899538",
+          "https://images.unsplash.com/photo-1549488421-39c4a883a45c"
+          
+        ]
+      }
+    ];
+
+    const canvas = document.getElementById('canvas-container');
+    const addStickerBtn = document.getElementById('add-sticker-btn');
+    const paletteContainer = document.getElementById('sticker-palette-container');
+    const overlayContainer = document.getElementById('overlay-container');
+
+    let activeSticker = null;
+    let initialX, initialY, offsetX, offsetY;
+    
+    // --- Function to create and add a sticker to the canvas ---
+    function addSticker(url, x, y) {
+      const sticker = document.createElement('img');
+      sticker.src = url;
+      sticker.classList.add('sticker');
+      
+      let finalX, finalY;
+      
+      if (x !== undefined && y !== undefined) {
+          finalX = x;
+          finalY = y;
+      } else {
+          finalX = Math.floor(Math.random() * (canvas.offsetWidth - 100));
+          finalY = Math.floor(Math.random() * (canvas.offsetHeight - 100));
+      }
+
+      sticker.style.left = `${finalX}px`;
+      sticker.style.top = `${finalY}px`;
+      
+      sticker.addEventListener('mousedown', startDrag);
+      addResizeListener(sticker);
+      
+      canvas.appendChild(sticker);
+    }
+    
+    // --- NEW: Function to populate the sticker palette with main groups ---
+    function populatePalette() {
+      stickerGroups.forEach(group => {
+        // Display only the first image from each group
+        const paletteSticker = document.createElement('img');
+        paletteSticker.src = group.urls[0];
+        paletteSticker.classList.add('palette-sticker');
+        
+        // Use a data attribute to link the element to its group
+        paletteSticker.dataset.group = group.name;
+
+        // Add mouse events for the overlay
+        paletteSticker.addEventListener('mouseenter', (e) => showOverlay(e, group.urls));
+        paletteSticker.addEventListener('mouseleave', hideOverlay);
+        
+        // Add drag/drop functionality for the main image
+        paletteSticker.draggable = true;
+        paletteSticker.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', group.urls[0]);
+        });
+        paletteContainer.appendChild(paletteSticker);
+      });
+    }
+
+    // --- NEW: Overlay functions ---
+    function showOverlay(e, urls) {
+      // Clear previous overlay content
+      overlayContainer.innerHTML = '';
+      
+      // Populate the overlay with all images from the group
+      urls.forEach(url => {
+        const overlaySticker = document.createElement('img');
+        overlaySticker.src = url;
+        overlaySticker.classList.add('overlay-sticker');
+        
+        // Make overlay stickers draggable and clickable
+        overlaySticker.draggable = true;
+        overlaySticker.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', url);
+        });
+        overlaySticker.addEventListener('click', () => {
+          addSticker(url);
+        });
+        
+        overlayContainer.appendChild(overlaySticker);
+      });
+
+      // Position the overlay next to the hovered sticker
+      const rect = e.target.getBoundingClientRect();
+      const paletteRect = paletteContainer.getBoundingClientRect();
+      overlayContainer.style.top = `${rect.top - paletteRect.top + 60}px`; // position below sticker
+      overlayContainer.style.left = `${rect.left - paletteRect.left}px`;
+
+      // Show the overlay
+      overlayContainer.style.display = 'flex';
+      overlayContainer.style.position = 'absolute';
+    }
+
+    function hideOverlay() {
+      // This uses a small delay to prevent the overlay from disappearing
+      // if the mouse moves from the button to the overlay itself
+      setTimeout(() => {
+        if (!overlayContainer.matches(':hover') && !paletteContainer.matches(':hover')) {
+          overlayContainer.style.display = 'none';
+        }
+      }, 100);
+    }
+    
+    // Attach mouseleave to the overlay itself to keep it from disappearing
+    overlayContainer.addEventListener('mouseleave', hideOverlay);
+
+    // --- Drag-and-Drop event listeners for the canvas ---
+    canvas.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+
+    canvas.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const url = e.dataTransfer.getData('text/plain');
+      
+      if (url) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        addSticker(url, x, y);
+      }
+    });
+
+    // --- Resizing function (no changes) ---
+    function addResizeListener(sticker) {
+      sticker.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = Math.sign(e.deltaY);
+        const currentWidth = sticker.offsetWidth;
+        const newWidth = currentWidth + (delta * 10);
+        const minSize = 30;
+        const maxSize = 400;
+        if (newWidth >= minSize && newWidth <= maxSize) {
+          sticker.style.width = `${newWidth}px`;
+        }
+      });
+    }
+
+    // --- Dragging functions for stickers on the canvas (no changes) ---
+    function startDrag(e) {
+      e.preventDefault();
+      activeSticker = e.target;
+      initialX = e.clientX;
+      initialY = e.clientY;
+      offsetX = activeSticker.offsetLeft;
+      offsetY = activeSticker.offsetTop;
+      
+      document.addEventListener('mousemove', dragSticker);
+      document.addEventListener('mouseup', stopDrag);
+    }
+
+    function dragSticker(e) {
+      if (!activeSticker) return;
+      const newX = offsetX + (e.clientX - initialX);
+      const newY = offsetY + (e.clientY - initialY);
+      const maxX = canvas.offsetWidth - activeSticker.offsetWidth;
+      const maxY = canvas.offsetHeight - activeSticker.offsetHeight;
+      activeSticker.style.left = `${Math.min(Math.max(0, newX), maxX)}px`;
+      activeSticker.style.top = `${Math.min(Math.max(0, newY), maxY)}px`;
+    }
+
+    function stopDrag() {
+      document.removeEventListener('mousemove', dragSticker);
+      document.removeEventListener('mouseup', stopDrag);
+      activeSticker = null;
+    }
+    
+    // --- Initial function calls ---
+    addStickerBtn.addEventListener('click', () => {
+      const allUrls = stickerGroups.flatMap(group => group.urls);
+      const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+      addSticker(randomUrl);
+    });
+
+    populatePalette();
+
+  </script>
+</body>
+</html>
