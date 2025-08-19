@@ -29,7 +29,7 @@
       border-radius: 8px;
     }
 
-    /* NEW: This styles the parent div container for positioning */
+    /* NEW: This styles the parent div container */
     .sticker {
       position: absolute;
       width: 100px;
@@ -49,7 +49,6 @@
     }
 
     .sticker:hover, .sticker:focus {
-      border: 1px dashed #007bff;
       outline: none;
     }
     
@@ -61,19 +60,18 @@
     /* New styles for the delete button */
     .delete-btn {
       position: absolute;
-      top: -10px;
-      right: -10px;
+      top: 5px;
+      right: 5px;
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background-color: #ff4d4f; /* Red background */
+      background-color: #b4b1b1d7; /* Red background */
       color: white;
       text-align: center;
       line-height: 20px;
       cursor: pointer;
       display: none; /* Hide by default */
       z-index: 101;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       padding: 4px;
     }
     
@@ -84,8 +82,8 @@
     }
 
     .delete-btn-icon {
-        width: 12px;
-        height: 12px;
+        width: 50px;
+        height: 50px;
         fill: white;
         stroke: white;
     }
@@ -280,13 +278,16 @@
       const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
       const currentState = [];
       stickersOnCanvas.forEach(sticker => {
-        currentState.push({
-          url: sticker.src,
-          x: sticker.offsetLeft,
-          y: sticker.offsetTop,
-          width: sticker.offsetWidth,
-          height: sticker.offsetHeight
-        });
+        const stickerImg = sticker.querySelector('img');
+        if (stickerImg) {
+          currentState.push({
+            url: stickerImg.src,
+            x: sticker.offsetLeft,
+            y: sticker.offsetTop,
+            width: sticker.offsetWidth,
+            height: sticker.offsetHeight
+          });
+        }
       });
       history.push(currentState);
       updateUndoButton();
@@ -309,7 +310,6 @@
       stickerImg.src = url;
       sticker.appendChild(stickerImg);
       
-      // NEW: Create and append the delete button with an SVG icon
       const deleteBtn = document.createElement('div');
       deleteBtn.classList.add('delete-btn');
       deleteBtn.innerHTML = `
@@ -340,7 +340,8 @@
       
       // NEW: Attach dragging listener to the image, not the parent div
       stickerImg.addEventListener('mousedown', startDrag);
-      addResizeListener(sticker);
+      // NEW: Attach resize listener to the image
+      addResizeListener(stickerImg);
       
       canvas.appendChild(sticker);
       saveState();
@@ -448,16 +449,16 @@
     });
 
     // --- Resizing function ---
-    function addResizeListener(sticker) {
-      sticker.addEventListener('wheel', (e) => {
+    function addResizeListener(stickerImg) {
+      stickerImg.addEventListener('wheel', (e) => {
         e.preventDefault();
         const delta = Math.sign(e.deltaY);
-        const currentWidth = sticker.offsetWidth;
+        const currentWidth = stickerImg.parentElement.offsetWidth;
         const newWidth = currentWidth + (delta * 10);
         const minSize = 30;
         const maxSize = 400;
         if (newWidth >= minSize && newWidth <= maxSize) {
-          sticker.style.width = `${newWidth}px`;
+          stickerImg.parentElement.style.width = `${newWidth}px`;
         }
       });
     }
