@@ -1,529 +1,512 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drawing App</title>
   <style>
+    /* New simplified styling */
     body {
-      font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
       box-sizing: border-box;
-      background-color: transparent;
     }
 
-    #stage {
+    /* Simple, clean canvas styles */
+    #canvas-container {
+      width: 90%;
+      max-width: 800px;
+      height: 500px;
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
       position: relative;
-      width: 100%;
-      height: 100%;
-      border-radius: 1rem;
+      margin-top: 20px;
       overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
     }
 
-    #bg-canvas,
-    #draw-canvas {
+    /* NEW: This styles the parent div container */
+    .sticker {
       position: absolute;
-      inset: 0;
+      width: 100px;
+      height: auto;
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.1s ease-in-out;
+      border: 1px dashed transparent;
+      box-sizing: border-box;
+    }
+
+    /* NEW: This styles the image inside the sticker container */
+    .sticker img {
       width: 100%;
       height: 100%;
-      touch-action: none;
-      border-radius: 1rem;
+      object-fit: contain;
     }
 
-@keyframes pulse-3x {
-  0%   { transform: scale(1); box-shadow: 0 0 0 rgba(59,130,246,0.7); }
-  50%  { transform: scale(1.1); box-shadow: 0 0 10px rgba(59,130,246,0.9); }
-  100% { transform: scale(1); box-shadow: 0 0 0 rgba(59,130,246,0); }
-}
-
-.pulse-3x {
-  animation: pulse-3x 1s ease;
-  animation-iteration-count: 3; /* 👈 3 times */
-}
-    .icon-stroke {
-      stroke: black;
-      transition: stroke 0.3s ease;
+    .sticker:hover, .sticker:focus {
+      outline: none;
     }
-    .icon-stroke svg {
+    
+    .sticker:active {
+      cursor: grabbing;
+      z-index: 100;
+    }
+    
+    /* New styles for the delete button */
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #b4b1b1d7; /* Red background */
+      color: white;
+      text-align: center;
+      line-height: 20px;
+      cursor: pointer;
+      display: none; /* Hide by default */
+      z-index: 101;
+      padding: 4px;
+    }
+    
+    .sticker:hover > .delete-btn {
+      display: flex; /* Show on sticker hover */
+      align-items: center;
+      justify-content: center;
+    }
+
+    .delete-btn-icon {
+        width: 50px;
+        height: 50px;
+        fill: white;
+        stroke: white;
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Icon button styles */
+    button {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 50%;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+    
+    .icon {
+      width: 1.2em;
+      height: 1.2em;
+      fill: none;
       stroke: currentColor;
     }
-    .dark-mode .icon-stroke {
-      stroke: white;
-    }
 
-  .popup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -40%) scale(0.95);
-  background-color: #fff;
-  color: #1f2937;
-  padding: 1rem 2rem;
-  border-radius: 9999px;
-  font-size: 1rem;
-  font-weight: 500;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1000;
-  border: 1px solid #e5e7eb;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.popup.show {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-    .video-popup-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
+    #sticker-palette-container {
+      width: 90%;
+      max-width: 800px;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
       display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .video-popup-container.hidden {
-      display: none;
-    }
-    .video-popup {
-      background: white;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    }
-    #upload-video,
-    #download-video {
-      width: 400px;
-      height: auto;
-      border-radius: 0.25rem;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 10px;
+      position: relative;
     }
 
-    #controls-bar.disabled {
-      pointer-events: none;
-      opacity: 0.5;
+    .palette-sticker {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, transform 0.2s;
     }
-  </style>
-  <script src="https://cdn.tailwindcss.com"></script>
+
+    .palette-sticker:hover {
+      border-color: #007bff;
+      transform: scale(1.1);
+    }
+
+    #overlay-container {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      display: none;
+      z-index: 200;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      width: 250px;
+    }
+
+    .overlay-sticker {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1/1;
+      object-fit: contain;
+      cursor: grab;
+      border: 1px solid transparent;
+    }
+    </style>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-<div class="flex flex-col items-center justify-between h-screen p-4">
-  <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
-    <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
-      <div id="message-popup" class="popup"></div>
+  <div class="controls">
+    <button id="add-sticker-btn" title="Add Random">
+      <i data-lucide="dices" class="icon"></i>
+    </button>
 
-      <!-- Upload progress video -->
-      <div id="video-popup-container" class="video-popup-container hidden">
-        <div class="video-popup">
-          <video id="upload-video" src="https://video.wixstatic.com/video/990059_627d0fb1d7324ea4aafee0e5e0b889bc/720p/mp4/file.mp4" playsinline muted loop></video>
-        </div>
-      </div>
-
-      <!-- Download progress video -->
-      <div id="download-video-container" class="video-popup-container hidden">
-        <div class="video-popup">
-          <video id="download-video" src="https://video.wixstatic.com/video/990059_7f44f4a052a947ccad90086ac702a9b3/720p/mp4/file.mp4" playsinline muted></video>
-        </div>
-      </div>
-
-      <div id="stage" style="height: 100%;">
-        <canvas id="bg-canvas"></canvas>
-        <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
-      </div>
-    </div>
-
-    <!-- Controls -->
-    <div class="flex-shrink-0 w-full flex justify-center pt-4" id="controls-bar">
-      <div class="flex flex-nowrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
-        <div class="flex items-center gap-1">
-          <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
-            <i data-lucide="pen-line" class="w-4 h-4"></i>
-          </button>
-          <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser">
-            <i data-lucide="eraser" class="w-4 h-4"></i>
-          </button>
-        </div>
-        <button id="undo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Undo">
-          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-        </button>
-        <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">
-          <span id="icon-sun"><i data-lucide="sun" class="w-4 h-4"></i></span>
-          <span id="icon-moon" class="hidden"><i data-lucide="moon" class="w-4 h-4"></i></span>
-        </button>
-        <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
-          <i data-lucide="file-plus" class="w-4 h-4"></i>
-        </button>
-        <button id="save-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Save PNG">
-          <i data-lucide="save" class="w-4 h-4"></i>
-        </button>
-        <button id="upload-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Upload">
-          <i data-lucide="upload-cloud" class="w-4 h-4"></i>
-        </button>
-        <button id="copy-link-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Copy Link">
-          <i data-lucide="link-2" class="w-4 h-4"></i>
-        </button>
-      </div>
-    </div>
+    <button id="undo-btn" title="Undo">
+      <i data-lucide="rotate-ccw" class="icon"></i>
+    </button>
+    
+    <button id="new-btn" title="New Canvas">
+      <i data-lucide="plus-circle" class="icon"></i>
+    </button>
   </div>
-</div>
+  <div id="canvas-container"></div>
+  
+  <h3>Choose a Sticker</h3>
+  <div id="sticker-palette-container">
+    </div>
 
-<script>
-const videoPopupContainer = document.getElementById('video-popup-container');
-const uploadVideo = document.getElementById('upload-video');
-const downloadVideoContainer = document.getElementById('download-video-container');
-const downloadVideo = document.getElementById('download-video');
+  <div id="overlay-container"></div>
 
-const bgCanvas = document.getElementById('bg-canvas');
-const drawCanvas = document.getElementById('draw-canvas');
-const bgCtx = bgCanvas.getContext('2d');
-const drawCtx = drawCanvas.getContext('2d');
-const controlsBar = document.getElementById('controls-bar');
-const penToolBtn = document.getElementById('tool-pen');
-const eraserToolBtn = document.getElementById('tool-eraser');
-const undoBtn = document.getElementById('undo-btn');
-const clearBtn = document.getElementById('clear-canvas');
-const saveBtn = document.getElementById('save-btn');
-const uploadBtn = document.getElementById('upload-btn');
-const copyLinkBtn = document.getElementById('copy-link-btn');
-const toggleBgBtn = document.getElementById('toggle-background');
-const iconSun = document.getElementById('icon-sun');
-const iconMoon = document.getElementById('icon-moon');
-const appContainer = document.getElementById('drawing-app-container');
-const messagePopup = document.getElementById('message-popup');
 
-let isDrawing = false, lastX = 0, lastY = 0;
-let isWhiteBackground = true;
-let currentTool = 'pen';
-let penWidth = 5, eraserWidth = 20;
-let penColor = 'black';
-let history = [], historyIndex = -1;
-let currentUrl = null;
+  <script>
+    const stickerGroups = [
+      {
+        name: "Alpaca",
+        urls: [
+          "https://static.wixstatic.com/media/990059_b8e966fff23243baaeffda0903b26ae5~mv2.png",
+          "https://static.wixstatic.com/media/990059_de180b020be54f9197ee9da700034b23~mv2.png",
+          "https://static.wixstatic.com/media/990059_4a8de8e19a9c45439f68e5ffdcc115d2~mv2.png",
+          "https://static.wixstatic.com/media/990059_43ecc7762e064417811a87e307b7907f~mv2.png",
+          "https://static.wixstatic.com/media/990059_41dc4f48b83446c0b73a62e0956da286~mv2.png",
+          "https://static.wixstatic.com/media/990059_3738e3eb9e9545e09b320de9cf2f3ac6~mv2.png",
+          "https://static.wixstatic.com/media/990059_bd8a968f55534bfa89713e93a9dfc806~mv2.png",
+          "https://static.wixstatic.com/media/990059_ffbd6892bad64ea6ac268f8fe539e1fe~mv2.png",
+          "https://static.wixstatic.com/media/990059_2ee1b55de8434492bfe9e2603bbdfae4~mv2.png",
+          "https://static.wixstatic.com/media/990059_11df952adf7649be8fc5cf072305e867~mv2.png",
+          "https://static.wixstatic.com/media/990059_80d8ebf3215f4306900b0c9555ad019f~mv2.png",
+          "https://static.wixstatic.com/media/990059_037002d97a114b2c8eeddd6606ee5c39~mv2.png",
+          "https://static.wixstatic.com/media/990059_04d0262ad52b4c7c8a44c136a362b7d5~mv2.png",
+          "https://static.wixstatic.com/media/990059_2c4f2b959e474833b61b6f5218b73967~mv2.png",
+          "https://static.wixstatic.com/media/990059_448fbb1d78584097907eb1b312f330c3~mv2.png",
+          "https://static.wixstatic.com/media/990059_e3133404efe44eaf9f33ef1c0e2ccde9~mv2.png",
+          "https://static.wixstatic.com/media/990059_fef1e3bea9814e1b93118cbb3abb066c~mv2.png",
+          "https://static.wixstatic.com/media/990059_b1ed01d0d9b54f5ca211e2975213fd5f~mv2.png",
+          "https://static.wixstatic.com/media/990059_a5715995827641ffba7291c75bf8f9d3~mv2.png",
+          "https://static.wixstatic.com/media/990059_a0b03b03435c4da38095c71bda978915~mv2.png",
+          "https://static.wixstatic.com/media/990059_eaf18884725f4652bb2b16c25a424673~mv2.png",
+          "https://static.wixstatic.com/media/990059_16d71393320b45249789d860719c902c~mv2.png"
+        ]
+      },
+      {
+        name: "80s Wrestler",
+        urls: [
+          "https://static.wixstatic.com/media/990059_27a6123890a3477c9db4a13419cb533d~mv2.png",
+          "https://static.wixstatic.com/media/990059_27a6123890a3477c9db4a13419cb533d~mv2.png",
+        ]
+      }
+    ];
 
-// Upload popup
-function showVideoPopup() {
-  videoPopupContainer.classList.remove('hidden');
-  uploadVideo.play();
-}
-function hideUploadVideo() {
-  setTimeout(() => {
-    videoPopupContainer.classList.add('hidden');
-    uploadVideo.pause();
-    uploadVideo.currentTime = 0;
-  }, 5000);
-}
+    const canvas = document.getElementById('canvas-container');
+    const addStickerBtn = document.getElementById('add-sticker-btn');
+    const undoBtn = document.getElementById('undo-btn');
+    const newBtn = document.getElementById('new-btn');
+    const paletteContainer = document.getElementById('sticker-palette-container');
+    const overlayContainer = document.getElementById('overlay-container');
 
-// Download popup
-function showDownloadVideo() {
-  controlsBar.classList.add('disabled');
-  downloadVideoContainer.classList.remove('hidden');
-  downloadVideo.play();
+    let activeSticker = null;
+    let initialX, initialY, offsetX, offsetY;
+    const history = [];
 
-  // Hide and download after 5s
-  setTimeout(() => {
-    downloadVideoContainer.classList.add('hidden');
-    downloadVideo.pause();
-    downloadVideo.currentTime = 0;
-    startDownload();
-    controlsBar.classList.remove('disabled');
-  }, 3000);
-}
+    let activePaletteSticker = null;
 
-function startDownload() {
-  const out = document.createElement('canvas');
-  out.width = drawCanvas.width;
-  out.height = drawCanvas.height;
-  const octx = out.getContext('2d');
-  octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-  octx.fillRect(0,0,out.width,out.height);
-  octx.drawImage(drawCanvas,0,0);
-  const imageURL = out.toDataURL('image/png');
-  const link = document.createElement('a');
-  link.href = imageURL;
-  link.download = `my-drawing-${Date.now()}.png`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
+    // --- Function to save the current canvas state to the history ---
+    function saveState() {
+      const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+      const currentState = [];
+      stickersOnCanvas.forEach(sticker => {
+        const stickerImg = sticker.querySelector('img');
+        if (stickerImg) {
+          currentState.push({
+            url: stickerImg.src,
+            x: sticker.offsetLeft,
+            y: sticker.offsetTop,
+            width: sticker.offsetWidth,
+            height: sticker.offsetHeight
+          });
+        }
+      });
+      history.push(currentState);
+      updateUndoButton();
+    }
 
-function showPopup(message) {
-  messagePopup.textContent = message;
-  messagePopup.classList.add('show');
-  setTimeout(() => {
-    messagePopup.classList.remove('show');
-    controlsBar.classList.remove('disabled');
-  }, 2000);
-}
+    // --- Function to re-render the canvas from a saved state ---
+    function loadState(state) {
+      canvas.innerHTML = '';
+      state.forEach(data => {
+        addSticker(data.url, data.x, data.y);
+      });
+    }
 
-function showUploadCompleteVideo() {
-    // The controls are already disabled by the upload function, so no need to disable again
-    videoUploadCompleteContainer.classList.remove('hidden');
-    uploadCompleteVideo.play();
+    // --- Function to create and add a sticker to the canvas ---
+    function addSticker(url, x, y) {
+      const sticker = document.createElement('div');
+      sticker.classList.add('sticker');
+      
+      const stickerImg = document.createElement('img');
+      stickerImg.src = url;
+      sticker.appendChild(stickerImg);
+      
+      const deleteBtn = document.createElement('div');
+      deleteBtn.classList.add('delete-btn');
+      deleteBtn.innerHTML = `
+        <svg class="delete-btn-icon" viewBox="0 0 24 24">
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+      `;
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sticker.remove();
+        saveState();
+      });
+      sticker.appendChild(deleteBtn);
+      
+      let finalX, finalY;
+      
+      if (x !== undefined && y !== undefined) {
+          finalX = x;
+          finalY = y;
+      } else {
+          finalX = Math.floor(Math.random() * (canvas.offsetWidth - 100));
+          finalY = Math.floor(Math.random() * (canvas.offsetHeight - 100));
+      }
 
-    setTimeout(() => {
-        videoUploadCompleteContainer.classList.add('hidden');
-        uploadCompleteVideo.pause();
-        uploadCompleteVideo.currentTime = 0;
-        // Re-enable the controls bar after the success video finishes
-        controlsBar.classList.remove('disabled');
-    }, 2000); // 2 seconds duration
-}
-
-function showDownloadCompleteVideo() {
-    // Controls are already disabled
-    videoDownloadCompleteContainer.classList.remove('hidden');
-    downloadCompleteVideo.play();
+      sticker.style.left = `${finalX}px`;
+      sticker.style.top = `${finalY}px`;
+      
+      // NEW: Attach dragging listener to the image, not the parent div
+      stickerImg.addEventListener('mousedown', startDrag);
+      // NEW: Attach resize listener to the image
+      addResizeListener(stickerImg);
+      
+      canvas.appendChild(sticker);
+      saveState();
+    }
     
-    setTimeout(() => {
-        videoDownloadCompleteContainer.classList.add('hidden');
-        downloadCompleteVideo.pause();
-        downloadCompleteVideo.currentTime = 0;
+    // --- Function to populate the sticker palette with main groups ---
+    function populatePalette() {
+      stickerGroups.forEach(group => {
+        const paletteSticker = document.createElement('img');
+        paletteSticker.src = group.urls[0];
+        paletteSticker.classList.add('palette-sticker');
         
-        // After the completion video finishes, start the download and re-enable controls
-        startDownload();
-        controlsBar.classList.remove('disabled');
-    }, 2000); // Assuming this video is 2 seconds long
-}
+        paletteSticker.dataset.group = group.name;
 
-function updateButtonStates() {
-    const isCanvasEmpty = historyIndex <= 0;
-    saveBtn.disabled = isCanvasEmpty;
-    uploadBtn.disabled = isCanvasEmpty;
-    copyLinkBtn.disabled = currentUrl === null;
-}
-
-function sizeCanvases() {
-    const stage = document.getElementById('stage');
-    const rect = stage.getBoundingClientRect();
-    const tmp = document.createElement('canvas');
-    tmp.width = drawCanvas.width;
-    tmp.height = drawCanvas.height;
-    tmp.getContext('2d').drawImage(drawCanvas, 0, 0);
-
-    const dpr = window.devicePixelRatio || 1;
-    bgCanvas.width = drawCanvas.width = Math.floor(rect.width * dpr);
-    bgCanvas.height = drawCanvas.height = Math.floor(rect.height * dpr);
-    bgCanvas.style.width = drawCanvas.style.width = rect.width + 'px';
-    bgCanvas.style.height = drawCanvas.style.height = rect.height + 'px';
-
-    bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    drawCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    paintBackground();
-    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    drawCtx.drawImage(tmp, 0, 0, tmp.width, tmp.height, 0, 0, drawCanvas.width, drawCanvas.height);
-}
-
-function paintBackground() {
-    bgCtx.save();
-    bgCtx.setTransform(1, 0, 0, 1, 0, 0);
-    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-    bgCtx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-    bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-    bgCtx.restore();
-}
-
-function setActiveTool(tool) {
-    currentTool = tool;
-    if (tool === 'pen') {
-        penToolBtn.classList.add('ring-2', 'ring-blue-500');
-        eraserToolBtn.classList.remove('ring-2', 'ring-blue-500');
-    } else {
-        eraserToolBtn.classList.add('ring-2', 'ring-blue-500');
-        penToolBtn.classList.remove('ring-2', 'ring-blue-500');
+        paletteSticker.addEventListener('click', (e) => {
+          if (activePaletteSticker === paletteSticker) {
+            hideOverlay();
+          } else {
+            hideOverlay();
+            showOverlay(e, group.urls);
+            activePaletteSticker = paletteSticker;
+          }
+        });
+        
+        // Add drag/drop functionality for the main image
+        paletteSticker.draggable = true;
+        paletteSticker.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', group.urls[0]);
+          hideOverlay();
+        });
+        paletteContainer.appendChild(paletteSticker);
+      });
     }
-}
-
-function updatePenColorForBackground() {
-    penColor = isWhiteBackground ? 'black' : 'white';
-}
-
-function pushHistory() {
-    const url = drawCanvas.toDataURL('image/png');
-    if (historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
-    history.push(url);
-    historyIndex = history.length - 1;
-    undoBtn.disabled = historyIndex <= 0;
-    updateButtonStates();
-}
-
-function loadHistory(index) {
-    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    if (index >= 0) {
-        const img = new Image();
-        img.onload = () => drawCtx.drawImage(img, 0, 0);
-        img.src = history[index];
-    }
-    undoBtn.disabled = index <= 0;
-    updateButtonStates();
-}
-
-function startDraw(x, y) {
-    isDrawing = true;
-    lastX = x;
-    lastY = y;
-    drawCtx.lineCap = 'round';
-    drawCtx.lineJoin = 'round';
-}
-
-function drawTo(x, y) {
-    if (!isDrawing) return;
-    if (currentTool === 'pen') {
-        drawCtx.globalCompositeOperation = 'source-over';
-        drawCtx.strokeStyle = penColor;
-        drawCtx.lineWidth = penWidth;
-    } else {
-        drawCtx.globalCompositeOperation = 'destination-out';
-        drawCtx.strokeStyle = 'rgba(0,0,0,1)';
-        drawCtx.lineWidth = eraserWidth;
-    }
-    drawCtx.beginPath();
-    drawCtx.moveTo(lastX, lastY);
-    drawCtx.lineTo(x, y);
-    drawCtx.stroke();
-    lastX = x;
-    lastY = y;
-}
-
-function endDraw() {
-    if (!isDrawing) return;
-    isDrawing = false;
-    drawCtx.globalCompositeOperation = 'source-over';
-    pushHistory();
-}
-
-// Mouse & touch events
-drawCanvas.addEventListener('mousedown', e => {
-    const rect = drawCanvas.getBoundingClientRect();
-    startDraw(e.clientX - rect.left, e.clientY - rect.top);
-});
-drawCanvas.addEventListener('mousemove', e => {
-    const rect = drawCanvas.getBoundingClientRect();
-    drawTo(e.clientX - rect.left, e.clientY - rect.top);
-});
-window.addEventListener('mouseup', endDraw);
-
-drawCanvas.addEventListener('touchstart', e => {
-    const rect = drawCanvas.getBoundingClientRect();
-    const t = e.touches[0];
-    startDraw(t.clientX - rect.left, t.clientY - rect.top);
-    e.preventDefault();
-}, {passive:false});
-drawCanvas.addEventListener('touchmove', e => {
-    if (!isDrawing) return;
-    const rect = drawCanvas.getBoundingClientRect();
-    const t = e.touches[0];
-    drawTo(t.clientX - rect.left, t.clientY - rect.top);
-    e.preventDefault();
-}, {passive:false});
-drawCanvas.addEventListener('touchend', e => { endDraw(); e.preventDefault(); }, {passive:false});
-
-// Tool buttons
-penToolBtn.addEventListener('click', () => setActiveTool('pen'));
-eraserToolBtn.addEventListener('click', () => setActiveTool('eraser'));
-undoBtn.addEventListener('click', () => { if(historyIndex>0){historyIndex--;loadHistory(historyIndex);} });
-clearBtn.addEventListener('click', () => { 
-    drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); 
-    history = [];
-    historyIndex = -1;
-    pushHistory();
-    currentUrl = null;
-    updateButtonStates();
-});
-
-toggleBgBtn.addEventListener('click', () => {
-    isWhiteBackground = !isWhiteBackground;
-    iconSun.classList.toggle('hidden', !isWhiteBackground);
-    iconMoon.classList.toggle('hidden', isWhiteBackground);
-    paintBackground();
-    updatePenColorForBackground();
-    if (isWhiteBackground) appContainer.classList.remove('dark-mode');
-    else appContainer.classList.add('dark-mode');
-});
-
-// Save PNG locally
-saveBtn.addEventListener('click', () => {
- showDownloadVideo(); 
-
-});
-
-// Upload to Dropbox / Wix
-uploadBtn.addEventListener('click', () => {
-    const out = document.createElement('canvas');
-    out.width = drawCanvas.width;
-    out.height = drawCanvas.height;
-    const octx = out.getContext('2d');
-    octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-    octx.fillRect(0,0,out.width,out.height);
-    octx.drawImage(drawCanvas,0,0);
-    const base64Data = out.toDataURL('image/png');
-
-    // Send to parent
-    window.parent.postMessage({ type:'UPLOAD_REQUEST', image: base64Data }, '*');
-
-   // Disable the controls bar
-    controlsBar.classList.add('disabled');
-
-    // Show the video popup
-    showVideoPopup();
-
     
-});
-
-window.addEventListener('message', (event) => {
-  if (event.data.type === 'UPLOAD_SUCCESS') {
-    currentUrl = event.data.url;
-    updateButtonStates();    // enables copy-link
-    hideUploadVideo();       // this will hide video + re-enable controls
-   copyLinkBtn.classList.add('pulse-3x');
-setTimeout(() => copyLinkBtn.classList.remove('pulse-3x'), 3000); // 3s total
-  } else if (event.data.type === 'UPLOAD_ERROR') {
-    currentUrl = null;
-    updateButtonStates();
-    hideUploadVideo();       // re-enable only when video is gone
-    showPopup('Upload failed.');
-  }
-});
-
-// Hide progress video AND re-enable controls
-function hideUploadVideo() {
-  videoPopupContainer.classList.add('hidden');
-  uploadVideo.pause();
-  uploadVideo.currentTime = 0;
-  controlsBar.classList.remove('disabled'); // only re-enable here
-}
-
-// New button to copy the link
-copyLinkBtn.addEventListener('click', () => {
-    if (currentUrl) {
-        // Use a temporary input to copy the URL
-        const tempInput = document.createElement('input');
-        document.body.appendChild(tempInput);
-        tempInput.value = currentUrl;
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-        
-        showPopup('In Zwischenablage kopiert.');
+    // --- Hide overlay function ---
+    function hideOverlay() {
+      overlayContainer.style.display = 'none';
+      activePaletteSticker = null;
     }
-});
 
+    // --- Overlay functions ---
+    let activeGroupURLs = [];
+    
+    function showOverlay(e, urls) {
+      activeGroupURLs = urls;
 
-// Init
-window.addEventListener('load', () => {
-    sizeCanvases();
-    setActiveTool('pen');
-    updatePenColorForBackground();
-    paintBackground();
-    pushHistory();
-    if(window.lucide) window.lucide.createIcons();
-    updateButtonStates();
-});
-window.addEventListener('resize', sizeCanvases);
-</script>
+      overlayContainer.innerHTML = '';
+      
+      urls.forEach(url => {
+        const overlaySticker = document.createElement('img');
+        overlaySticker.src = url;
+        overlaySticker.classList.add('overlay-sticker');
+        
+        overlaySticker.draggable = true;
+        overlaySticker.addEventListener('dragstart', (e) => {
+          e.stopPropagation();
+          e.dataTransfer.setData('text/plain', url);
+        });
+        overlaySticker.addEventListener('click', (e) => {
+          e.stopPropagation();
+          addSticker(url);
+        });
+        
+        overlayContainer.appendChild(overlaySticker);
+      });
 
+      const rect = e.target.getBoundingClientRect();
+      const paletteRect = paletteContainer.getBoundingClientRect();
+
+      if (paletteRect.right + 260 < window.innerWidth) {
+        overlayContainer.style.left = `${paletteRect.width + 10}px`;
+      } else {
+        overlayContainer.style.left = `${-overlayContainer.offsetWidth - 10}px`;
+      }
+
+      if (rect.bottom + overlayContainer.offsetHeight < window.innerHeight) {
+        overlayContainer.style.top = `${rect.top - paletteRect.top}px`;
+      } else {
+        overlayContainer.style.top = `${rect.top - paletteRect.top - overlayContainer.offsetHeight}px`;
+      }
+      
+      overlayContainer.style.display = 'grid';
+    }
+    
+    document.addEventListener('click', (e) => {
+      if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target)) {
+        hideOverlay();
+      }
+    });
+
+    // --- Drag-and-Drop event listeners for the canvas ---
+    canvas.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+
+    canvas.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const url = e.dataTransfer.getData('text/plain');
+      if (url) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        addSticker(url, x, y);
+      }
+    });
+
+    // --- Resizing function ---
+    function addResizeListener(stickerImg) {
+      stickerImg.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = Math.sign(e.deltaY);
+        const currentWidth = stickerImg.parentElement.offsetWidth;
+        const newWidth = currentWidth + (delta * 10);
+        const minSize = 30;
+        const maxSize = 400;
+        if (newWidth >= minSize && newWidth <= maxSize) {
+          stickerImg.parentElement.style.width = `${newWidth}px`;
+        }
+      });
+    }
+
+    // --- Dragging functions for stickers on the canvas ---
+    function startDrag(e) {
+      e.preventDefault();
+      activeSticker = e.target;
+      initialX = e.clientX;
+      initialY = e.clientY;
+      offsetX = activeSticker.parentElement.offsetLeft;
+      offsetY = activeSticker.parentElement.offsetTop;
+      
+      document.addEventListener('mousemove', dragSticker);
+      document.addEventListener('mouseup', stopDrag);
+    }
+
+    function dragSticker(e) {
+      if (!activeSticker) return;
+      const newX = offsetX + (e.clientX - initialX);
+      const newY = offsetY + (e.clientY - initialY);
+      const maxX = canvas.offsetWidth - activeSticker.parentElement.offsetWidth;
+      const maxY = canvas.offsetHeight - activeSticker.parentElement.offsetHeight;
+      activeSticker.parentElement.style.left = `${Math.min(Math.max(0, newX), maxX)}px`;
+      activeSticker.parentElement.style.top = `${Math.min(Math.max(0, newY), maxY)}px`;
+    }
+
+    function stopDrag() {
+      document.removeEventListener('mousemove', dragSticker);
+      document.removeEventListener('mouseup', stopDrag);
+      activeSticker = null;
+    }
+
+    // --- New: Undo and New button event listeners ---
+    function updateUndoButton() {
+      undoBtn.disabled = history.length <= 1;
+    }
+
+    undoBtn.addEventListener('click', () => {
+      if (history.length > 1) {
+        history.pop();
+        const prevState = history[history.length - 1];
+        loadState(prevState);
+      }
+    });
+
+    newBtn.addEventListener('click', () => {
+      canvas.innerHTML = '';
+      history.splice(1);
+      updateUndoButton();
+    });
+    
+    // --- Initial function calls ---
+    addStickerBtn.addEventListener('click', () => {
+      const allUrls = stickerGroups.flatMap(group => group.urls);
+      const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+      addSticker(randomUrl);
+    });
+    
+    populatePalette();
+    saveState();
+    
+     // New: Manually create icons after the page has loaded
+    window.addEventListener('load', () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+    
+  </script>
 </body>
 </html>
