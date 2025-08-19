@@ -105,51 +105,27 @@
     </div>
   </div>
 
+  <div id="log" style="position: fixed; bottom: 0; left: 0; background: #000; color: #0f0; padding: 5px;"></div>
+<input type="hidden" id="hiddenUrlField" value="https://example.com">
+
  <!-- Link popup -->
-<div id="link-prompt" style="display: none; 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.5); 
-    backdrop-filter: blur(5px); 
-    z-index: 50; 
-    justify-content: center; 
-    align-items: center;
-    ">
-  <div id="link-prompt-content" style="background: white; padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center;">
-    <h2 class="text-2xl font-bold mb-4">Dein Link ist bereit!</h2>
-    <p class="text-gray-600 mb-4" id="uploaded-url">URL wird hier angezeigt</p>
+<div id="link-prompt" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+  <div class="bg-white p-8 rounded-2xl shadow-xl text-center">
+    <h2 class="text-2xl font-bold mb-4">Dein Link ist verfügbar!</h2>
     <div class="button-group">
-      <button id="copy-link-btn" class="prompt-btn prompt-btn-primary" title="Copy Link">
-        <i data-lucide="link" class="w-6 h-6"></i>
-      </button>
+      <!-- Open link -->
       <button id="open-link-btn" class="prompt-btn prompt-btn-primary" title="Open Link">
-        <i data-lucide="external-link" class="w-6 h-6"></i>
-      </button>
-      <button id="close-link-btn" class="prompt-btn prompt-btn-secondary" title="Close">
-        <i data-lucide="x" class="w-6 h-6"></i>
+        <i data-lucide="link" class="w-6 h-6"></i>
       </button>
     </div>
   </div>
 </div>
 
-<!-- Loading popup -->
-<div id="loading-prompt" style="display: none; 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.5); 
-    backdrop-filter: blur(5px); 
-    z-index: 50; 
-    justify-content: center; 
-    align-items: center; 
-    color: white; 
-    font-size: 1.25rem;
-    font-weight: bold;
-    ">
-  <div class="flex flex-col items-center space-y-4">
-    <div class="animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent"></div>
-    <p>Uploading...</p>
+
+<!-- Uploading overlay -->
+<div id="uploading-overlay" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+  <div class="bg-white p-6 rounded-2xl shadow-xl text-center">
+    <p class="text-lg font-semibold">⏳ Uploading…</p>
   </div>
 </div>
 
@@ -174,6 +150,15 @@ const uploadBtn = document.getElementById("copy-url-btn");
 const downloadBtn = document.getElementById("download-btn");
 const abortBtn = document.getElementById("abort-btn");
 
+const uploadingOverlay = document.getElementById("uploading-overlay");
+const linkPrompt = document.getElementById("link-prompt");
+const copyUrlBtn = document.getElementById("copy-url-btn");
+const openLinkBtn = document.getElementById("open-link-btn");
+
+const logDiv = document.getElementById("log");
+  const hiddenUrlField = document.getElementById("hiddenUrlField");
+
+
 let isDrawing = false, lastX = 0, lastY = 0;
 let isWhiteBackground = true;
 let currentTool = 'pen';
@@ -181,6 +166,43 @@ let penWidth = 5, eraserWidth = 20;
 let penColor = 'black';
 let history = [], historyIndex = -1;
 let saveCounter = 1;
+
+// ✅ Show "Uploading…" when user clicks upload
+copyUrlBtn.addEventListener("click", () => {
+  savePrompt.style.display = "none";      // hide save popup
+  uploadingOverlay.classList.remove("hidden"); // show uploading
+});
+
+  function log(message) {
+    console.log(message); // still logs if you have DevTools open
+    logDiv.textContent = message; // shows on screen
+  }
+
+ openLinkBtn.addEventListener("click", () => {
+  const url = hiddenUrlField.value;
+
+  // Create a temporary input to select and copy the text
+  const tempInput = document.createElement("input");
+  tempInput.value = url;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  tempInput.setSelectionRange(0, 99999); // for mobile
+
+  try {
+    const successful = document.execCommand("copy");
+    if (successful) {
+      console.log("Copied URL:", url);
+      alert("URL copied to clipboard!");
+    } else {
+      console.error("Copy command failed");
+    }
+  } catch (err) {
+    console.error("Failed to copy URL:", err);
+  }
+
+  // Clean up
+  document.body.removeChild(tempInput);
+});
 
 function checkCanvasForContent() {
     const pixels = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height).data;
@@ -363,40 +385,22 @@ window.addEventListener('load', ()=>{
 });
 window.addEventListener('resize', sizeCanvases);
 
-window.addEventListener("message", async (event) => {
-  const loadingPrompt = document.getElementById("loading-prompt");
-
+window.addEventListener("message", (event) => {
   if (event.data.type === "UPLOAD_SUCCESS") {
-    loadingPrompt.style.display = "none"; // hide loader ✅
+    const uploadedUrl = event.data.url; // make sure your parent sends the public Dropbox URL here
+    const hiddenUrlField = document.getElementById("hiddenUrlField");
+    if (hiddenUrlField) hiddenUrlField.value = uploadedUrl;
 
-    const uploadedUrl = event.data.url;
     const uploadedUrlEl = document.getElementById("uploaded-url");
     const linkPrompt = document.getElementById("link-prompt");
-    const copyLinkBtn = document.getElementById("copy-link-btn");
-    const openLinkBtn = document.getElementById("open-link-btn");
-    const closeLinkBtn = document.getElementById("close-link-btn");
+    const uploadingOverlay = document.getElementById("uploading-overlay");
 
-    uploadedUrlEl.textContent = uploadedUrl;
-    linkPrompt.style.display = "flex";
-    savePrompt.style.display = "none";
-
-    copyLinkBtn.onclick = () =>
-      navigator.clipboard.writeText(uploadedUrl).then(() =>
-        alert("✅ URL copied to clipboard!")
-      );
-    openLinkBtn.onclick = () => window.open(uploadedUrl, "_blank");
-    closeLinkBtn.onclick = () => (linkPrompt.style.display = "none");
-  }
-
-  if (event.data.type === "UPLOAD_ERROR") {
-    loadingPrompt.style.display = "none"; // also hide loader ❌
-    alert("Error uploading: " + event.data.message);
+    if (uploadedUrlEl) uploadedUrlEl.textContent = uploadedUrl;
+    if (uploadingOverlay) uploadingOverlay.classList.add("hidden");
+    if (linkPrompt) linkPrompt.classList.remove("hidden");
   }
 });
 
-document.getElementById("copy-url-btn").addEventListener("click", () => {
-  document.getElementById("loading-prompt").style.display = "flex";
-});
 
 </script>
 
