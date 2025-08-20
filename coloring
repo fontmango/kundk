@@ -55,24 +55,23 @@
     }
     
 
-    .delete-btn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background-color: #c2bebeff;
-      color: white;
-      text-align: center;
-      line-height: 20px;
-      cursor: pointer;
-      display: none;
-      z-index: 101;
-      padding: 4px;
-        font-size: 0.6em; /* scale text/icon proportionally */
-
-    }
+   .delete-btn {
+  position: absolute;
+  top: 5%;       /* closer to the top */
+  right: 5%;     /* closer to the right */
+  width: 20%;    /* proportional to sticker size */
+  height: 20%;   /* proportional to sticker size */
+  border-radius: 50%;
+  background-color: #c2bebeff;
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 101;
+  font-size: 0.6em; /* scales the icon/text inside */
+  padding: 0;        /* remove extra padding */
+}
 
    /* Show on hover of the parent sticker */
 .sticker:hover > .delete-btn {
@@ -88,8 +87,8 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* subtle shadow */
 }
     .delete-btn-icon {
-        width: 50px;
-        height: 50px;
+        width: 80px;
+        height: 80px;
         fill: white;
         stroke: white;
     }
@@ -287,7 +286,7 @@
 
 
   <script>
-    const stickerGroups = [
+     const stickerGroups = [
       {
         name: "Alpaca",
         urls: [
@@ -306,7 +305,29 @@
           "https://static.wixstatic.com/media/990059_33fe8d1256f64f36bb515900f04f14a6~mv2.png",
           "https://static.wixstatic.com/media/990059_7786535a11d5461f9f3a82b686538dba~mv2.png"
         ]
+      },
+      {
+        name: "80s Wrestler",
+        urls: [
+          "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png",
+          "https://static.wixstatic.com/media/990059_f3aa94e6bc0744be95006181e96ad12a~mv2.png",
+          "https://static.wixstatic.com/media/990059_5127ca4c3b29451993df63ba61a14a0e~mv2.png",
+          "https://static.wixstatic.com/media/990059_db0d99e95a304512b01c4065e318203f~mv2.png",
+          "https://static.wixstatic.com/media/990059_0ab8fd84c6984427ac56ae3bce1dc9f1~mv2.png"
+        ]
+      },
+      {
+        name: "80s Wrestler",
+        urls: [
+          "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png",
+          "https://static.wixstatic.com/media/990059_800432b2864848e29281d7afe4860948~mv2.png",
+          "https://static.wixstatic.com/media/990059_0a91613ae02d453590976ff5c7886ff7~mv2.png",
+          "https://static.wixstatic.com/media/990059_54a50408c4d74952af04f951d18e88cc~mv2.png",
+          "https://static.wixstatic.com/media/990059_96e920f530ab41258853992df641afab~mv2.png"
+        ]
       }
+      
+      
     ];
 
     const canvas = document.getElementById('canvas-container');
@@ -370,16 +391,16 @@ let bucketMode = false;
 }
 
 
-    // --- Function to create and add a sticker to the canvas ---
-    function addSticker(url, x, y) {
+function addSticker(url, x, y, width = 100) { // width can now be set per sticker
   const sticker = document.createElement('div');
   sticker.classList.add('sticker');
-  
+  sticker.style.width = width + 'px';
+  sticker.style.height = 'auto'; // maintain aspect ratio
+
   const stickerImg = document.createElement('img');
   stickerImg.crossOrigin = "Anonymous";
-stickerImg.src = url;
+  stickerImg.src = url;
   stickerImg.draggable = false;
-
   sticker.appendChild(stickerImg);
 
   // --- Bucket tool handler ---
@@ -394,7 +415,7 @@ stickerImg.src = url;
     }
   });
 
-  // --- Delete button setup (your existing code) ---
+  // --- Delete button ---
   const deleteBtn = document.createElement('div');
   deleteBtn.classList.add('delete-btn');
   deleteBtn.innerHTML = `
@@ -410,19 +431,69 @@ stickerImg.src = url;
   });
   sticker.appendChild(deleteBtn);
 
-  // --- Positioning ---
-  let finalX = x ?? Math.floor(Math.random() * (canvas.offsetWidth - 100));
-  let finalY = y ?? Math.floor(Math.random() * (canvas.offsetHeight - 100));
+  // --- Random non-overlapping positioning ---
+  let finalX = x;
+  let finalY = y;
+
+  const canvasRect = canvas.getBoundingClientRect();
+
+  if (finalX === undefined || finalY === undefined) {
+    let tries = 0;
+    let overlap;
+
+    do {
+      overlap = false;
+      finalX = Math.floor(Math.random() * (canvas.offsetWidth - width));
+      finalY = Math.floor(Math.random() * (canvas.offsetHeight - width)); // approximate square
+
+      document.querySelectorAll('.sticker').forEach(existing => {
+        const rect = existing.getBoundingClientRect();
+        const ex = rect.left - canvasRect.left;
+        const ey = rect.top - canvasRect.top;
+        const ew = rect.width;
+        const eh = rect.height;
+
+        if (
+          finalX < ex + ew &&
+          finalX + width > ex &&
+          finalY < ey + eh &&
+          finalY + width > ey
+        ) {
+          overlap = true;
+        }
+      });
+
+      tries++;
+      if (tries > 200) break; // safety for crowded canvas
+    } while (overlap);
+  }
 
   sticker.style.left = `${finalX}px`;
   sticker.style.top = `${finalY}px`;
 
-  // --- Drag/Resize listeners (your existing code) ---
-stickerImg.addEventListener('mousedown', (e) => {
-  if (!bucketMode) {
-    startDrag(e);
+  // --- Drag/Resize listeners ---
+  stickerImg.addEventListener('mousedown', (e) => {
+    if (!bucketMode) startDrag(e);
+  });
+  addResizeListener(stickerImg);
+
+  // --- Delete button scaling ---
+  function updateDeleteBtn() {
+    const btnSize = sticker.offsetWidth * 0.2; // 20% of sticker width
+    deleteBtn.style.width = btnSize + 'px';
+    deleteBtn.style.height = btnSize + 'px';
+    deleteBtn.style.top = btnSize * 0.25 + 'px'; // small offset from top
+    deleteBtn.style.right = btnSize * 0.25 + 'px';
+    deleteBtn.style.borderRadius = '50%';
+    deleteBtn.style.fontSize = btnSize * 0.5 + 'px';
   }
-});  addResizeListener(stickerImg);
+
+  // Initial update
+  updateDeleteBtn();
+
+  // Update if sticker is resized
+  const observer = new ResizeObserver(updateDeleteBtn);
+  observer.observe(sticker);
 
   canvas.appendChild(sticker);
   saveState();
