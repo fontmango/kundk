@@ -2,7 +2,6 @@
 <html>
 <head>
   <style>
-    /* New simplified styling */
     body {
       margin: 0;
       padding: 0;
@@ -15,7 +14,6 @@
       box-sizing: border-box;
     }
 
-    /* Simple, clean canvas styles */
     #canvas-container {
       width: 90%;
       max-width: 800px;
@@ -29,7 +27,6 @@
       border-radius: 8px;
     }
 
-    /* NEW: This styles the parent div container */
     .sticker {
       position: absolute;
       width: 100px;
@@ -41,23 +38,22 @@
       box-sizing: border-box;
     }
 
-    /* NEW: This styles the image inside the sticker container */
     .sticker img {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
 
-    .sticker:hover, .sticker:focus {
-      outline: none;
-    }
-    
     .sticker:active {
       cursor: grabbing;
       z-index: 100;
     }
     
-    /* New styles for the delete button */
+      .sticker:hover, .sticker:focus {
+      outline: none;
+    }
+    
+
     .delete-btn {
       position: absolute;
       top: 5px;
@@ -65,22 +61,22 @@
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background-color: #b4b1b1d7; /* Red background */
+      background-color: #555;
       color: white;
       text-align: center;
       line-height: 20px;
       cursor: pointer;
-      display: none; /* Hide by default */
+      display: none;
       z-index: 101;
       padding: 4px;
     }
     
-    .sticker:hover > .delete-btn {
+      .sticker:hover > .delete-btn {
       display: flex; /* Show on sticker hover */
       align-items: center;
       justify-content: center;
     }
-
+    
     .delete-btn-icon {
         width: 50px;
         height: 50px;
@@ -91,9 +87,11 @@
     .controls {
       margin-top: 20px;
       display: flex;
-      gap: 10px;
+      gap: 15px;
+      align-items: center;
     }
-
+    
+    
     .bucket-active .sticker {
   border: none !important;
   transition: none !important;
@@ -108,8 +106,7 @@
   cursor: crosshair;
 }
 
-
-    /* Icon button styles */
+    /* Neutral icon buttons (no background) */
     button {
       width: 40px;
       height: 40px;
@@ -117,23 +114,49 @@
       align-items: center;
       justify-content: center;
       border: none;
-      border-radius: 50%;
-      background-color: #007bff;
-      color: white;
+      background: none;
       cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
+      color: #333;
+      transition: transform 0.2s, color 0.2s;
+    }
+    button:hover {
+      color: #000;
+      transform: scale(1.1);
+    }
+   button.active {
+  border-radius: 50%;
+  outline: none;
+  box-shadow: 0 0 0 2px #000; /* "offset outline" effect */
+}
+
+    .icon {
+      width: 1.4em;
+      height: 1.4em;
+      stroke: currentColor;
     }
 
-    button:hover {
-      background-color: #0056b3;
-      transform: scale(1.05);
+    /* Circular color wheel */
+    #color-picker {
+      -webkit-appearance: none;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      padding: 0;
+      cursor: pointer;
+      overflow: hidden;
+      background: conic-gradient(
+        red, yellow, lime, cyan, blue, magenta, red
+      );
     }
     
-    .icon {
-      width: 1.2em;
-      height: 1.2em;
-      fill: none;
-      stroke: currentColor;
+    #color-picker::-webkit-color-swatch-wrapper {
+      padding: 0;
+      border-radius: 50%;
+    }
+    #color-picker::-webkit-color-swatch {
+      border: none;
+      border-radius: 50%;
     }
 
     #sticker-palette-container {
@@ -147,9 +170,7 @@
       box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-wrap: wrap;
-      justify-content: flex-start;
       gap: 10px;
-      position: relative;
     }
 
     .palette-sticker {
@@ -160,13 +181,12 @@
       border: 2px solid transparent;
       transition: border-color 0.2s, transform 0.2s;
     }
-
     .palette-sticker:hover {
-      border-color: #007bff;
+      border-color: #333;
       transform: scale(1.1);
     }
-
-    #overlay-container {
+    
+     #overlay-container {
       position: absolute;
       background-color: rgba(255, 255, 255, 0.95);
       border: 1px solid #ccc;
@@ -190,7 +210,12 @@
       cursor: grab;
       border: 1px solid transparent;
     }
-    </style>
+    
+    #color-picker {
+  display: none; /* fully hidden */
+}
+    
+  </style>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -198,11 +223,17 @@
     <button id="add-sticker-btn" title="Add Random">
       <i data-lucide="dices" class="icon"></i>
     </button>
+    
+    
+   <input type="color" id="color-picker" value="#ff0000" />
+    <button id="color-btn" title="Pick Color">
+      <i data-lucide="loader-pinwheel" class="icon" id="color-icon"></i>
+    </button>
+    
 
-   <input type="color" id="color-picker" title="Pick Fill Color" value="#ff0000" />
-<button id="bucket-btn" title="Fill Sticker">
-  <i data-lucide="paint-bucket" class="icon"></i>
-</button>
+    <button id="bucket-btn" title="Fill Sticker">
+      <i data-lucide="paint-bucket" class="icon"></i>
+    </button>
 
     <button id="undo-btn" title="Undo">
       <i data-lucide="rotate-ccw" class="icon"></i>
@@ -212,6 +243,8 @@
       <i data-lucide="plus-circle" class="icon"></i>
     </button>
   </div>
+  
+  
   <div id="canvas-container"></div>
   
   <h3>Choose a Sticker</h3>
@@ -252,8 +285,11 @@
     const overlayContainer = document.getElementById('overlay-container');
 
     const colorHistory = [];
+    
+      const colorPicker = document.getElementById("color-picker");
+    const colorBtn = document.getElementById("color-btn");
+    const colorIcon = document.getElementById("color-icon");
 
-   const colorPicker = document.getElementById('color-picker');
 const bucketBtn = document.getElementById('bucket-btn');
 let bucketMode = false;
 
@@ -262,6 +298,16 @@ let bucketMode = false;
     const history = [];
 
     let activePaletteSticker = null;
+    
+     colorBtn.addEventListener("click", () => {
+      colorPicker.click();
+    });
+
+   colorPicker.addEventListener("input", () => {
+  colorIcon.style.stroke = colorPicker.value;
+  colorBtn.style.color = colorPicker.value;      // change icon stroke
+  colorBtn.style.borderRadius = "50%"; // make it look like a swatch
+});
 
     // --- Function to save the current canvas state to the history ---
     function saveState() {
@@ -643,19 +689,19 @@ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
     });
 
 
-    // Toggle bucket mode
-bucketBtn.addEventListener('click', () => {
-  bucketMode = !bucketMode;
-  bucketBtn.style.backgroundColor = bucketMode ? "#28a745" : "#007bff";
-  
-  if (bucketMode) {
+  bucketBtn.addEventListener("click", () => {
+      bucketMode = !bucketMode;
+      bucketBtn.classList.toggle("active", bucketMode);
+       if (bucketMode) {
     document.body.classList.add('bucket-active');
     canvas.style.cursor = 'crosshair';
   } else {
     document.body.classList.remove('bucket-active');
     canvas.style.cursor = 'default';
   }
-});
+    });
+
+
     
   </script>
   
