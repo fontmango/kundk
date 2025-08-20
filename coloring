@@ -16,7 +16,6 @@
 
     #canvas-container {
       width: 90%;
-      max-width: 800px;
       height: 500px;
       background-color: #ffffff;
       border: 1px solid #e0e0e0;
@@ -55,23 +54,6 @@
     }
     
 
-   .delete-btn {
-  position: absolute;
-  top: 5%;       /* closer to the top */
-  right: 5%;     /* closer to the right */
-  width: 20%;    /* proportional to sticker size */
-  height: 20%;   /* proportional to sticker size */
-  border-radius: 50%;
-  background-color: #c2bebeff;
-  color: white;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 101;
-  font-size: 0.6em; /* scales the icon/text inside */
-  padding: 0;        /* remove extra padding */
-}
 
    /* Show on hover of the parent sticker */
 .sticker:hover > .delete-btn {
@@ -86,12 +68,7 @@
   transform: scale(1.1);      /* slightly enlarge */
   box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* subtle shadow */
 }
-    .delete-btn-icon {
-        width: 80px;
-        height: 80px;
-        fill: white;
-        stroke: white;
-    }
+    
 
   
     .controls {
@@ -247,6 +224,70 @@
   cursor: pointer;
   padding: 0;
 }
+
+.copy-btn {
+  position: absolute;
+  top: 5%;       /* close to top */
+  left: 5%;      /* close to left */
+  width: 20%;    /* proportional to sticker size */
+  height: 20%;   /* proportional to sticker size */
+  border-radius: 50%;
+  background-color: #c2bebeff;  /* different color for copy */
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 101;
+  font-size: 0.6em;
+  padding: 0;
+}
+
+.copy-btn-icon {
+  width: 40%;
+  height: 40%;
+  fill: white;
+  stroke: white;
+}
+
+.delete-btn-icon {
+        width: 80px;
+        height: 80px;
+        fill: white;
+        stroke: white;
+    }
+    
+   .delete-btn {
+  position: absolute;
+  top: 5%;       /* closer to the top */
+  right: 5%;     /* closer to the right */
+  width: 20%;    /* proportional to sticker size */
+  height: 20%;   /* proportional to sticker size */
+  border-radius: 50%;
+  background-color: #c2bebeff;
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 101;
+  font-size: 0.6em; /* scales the icon/text inside */
+  padding: 0;        /* remove extra padding */
+}
+
+.sticker:hover > .copy-btn {
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+}
+
+.copy-btn:hover {
+  background-color: #6aa84fff; /* darker on hover */
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+
     
   </style>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -415,6 +456,61 @@ function addSticker(url, x, y, width = 100) { // width can now be set per sticke
     }
   });
 
+
+  // --- Copy button setup ---
+const copyBtn = document.createElement('div');
+copyBtn.classList.add('copy-btn');
+copyBtn.innerHTML = `
+  <svg class="copy-btn-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Back sheet with light border -->
+    <rect x="6" y="4" width="12" height="16" rx="2" ry="2" stroke="lightgray"></rect>
+    <!-- Front sheet with main color -->
+    <rect x="4" y="6" width="12" height="16" rx="2" ry="2" stroke="currentColor"></rect>
+  </svg>
+`;
+
+
+
+copyBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+
+  const stickerWidth = sticker.offsetWidth;
+  const stickerHeight = sticker.offsetHeight;
+
+  // Start offset relative to the original
+  let newX = parseInt(sticker.style.left) + 10;
+  let newY = parseInt(sticker.style.top) + 10;
+
+  // Function to check if new position would overlap any existing sticker
+  function isOverlapping(x, y) {
+    const stickers = document.querySelectorAll('.sticker');
+    return Array.from(stickers).some(s => {
+      const sx = parseInt(s.style.left);
+      const sy = parseInt(s.style.top);
+      const sw = s.offsetWidth;
+      const sh = s.offsetHeight;
+
+      return !(x + stickerWidth < sx || x > sx + sw || y + stickerHeight < sy || y > sy + sh);
+    });
+  }
+
+  // Try to find a free spot by moving down/right until no overlap
+  const step = 10;
+  let attempts = 0;
+  while (isOverlapping(newX, newY) && attempts < 100) {
+    newX += step;
+    newY += step;
+
+    // Wrap around if exceeding canvas
+    if (newX + stickerWidth > canvas.offsetWidth) newX = step;
+    if (newY + stickerHeight > canvas.offsetHeight) newY = step;
+
+    attempts++;
+  }
+
+  addSticker(stickerImg.src, newX, newY);
+});
+
   // --- Delete button ---
   const deleteBtn = document.createElement('div');
   deleteBtn.classList.add('delete-btn');
@@ -430,6 +526,8 @@ function addSticker(url, x, y, width = 100) { // width can now be set per sticke
     saveState();
   });
   sticker.appendChild(deleteBtn);
+  sticker.appendChild(copyBtn);
+
 
   // --- Random non-overlapping positioning ---
   let finalX = x;
@@ -797,7 +895,6 @@ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
     });
 
 colorIcon.style.stroke = colorPicker.value;
-
 
     
   </script>
