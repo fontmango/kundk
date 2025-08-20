@@ -36,6 +36,7 @@
       transition: transform 0.1s ease-in-out;
       border: 1px dashed transparent;
       box-sizing: border-box;
+
     }
 
     .sticker img {
@@ -58,10 +59,10 @@
       position: absolute;
       top: 5px;
       right: 5px;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      background-color: #555;
+      background-color: #c2bebeff;
       color: white;
       text-align: center;
       line-height: 20px;
@@ -69,14 +70,23 @@
       display: none;
       z-index: 101;
       padding: 4px;
+        font-size: 0.6em; /* scale text/icon proportionally */
+
     }
-    
-      .sticker:hover > .delete-btn {
-      display: flex; /* Show on sticker hover */
-      align-items: center;
-      justify-content: center;
-    }
-    
+
+   /* Show on hover of the parent sticker */
+.sticker:hover > .delete-btn {
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover effect for the button itself */
+.delete-btn:hover {
+  background-color: #ff4444; /* brighter red */
+  transform: scale(1.1);      /* slightly enlarge */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* subtle shadow */
+}
     .delete-btn-icon {
         width: 50px;
         height: 50px;
@@ -84,6 +94,7 @@
         stroke: white;
     }
 
+  
     .controls {
       margin-top: 20px;
       display: flex;
@@ -161,16 +172,14 @@
 
     #sticker-palette-container {
       width: 90%;
-      max-width: 800px;
-      margin-top: 20px;
-      padding: 10px;
+      margin-top: 5px;
+      padding: 5px;
       background-color: #f8f8f8;
       border: 1px solid #ddd;
       border-radius: 8px;
       box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
     }
 
     .palette-sticker {
@@ -182,8 +191,8 @@
       transition: border-color 0.2s, transform 0.2s;
     }
     .palette-sticker:hover {
-      border-color: #333;
       transform: scale(1.1);
+     
     }
     
      #overlay-container {
@@ -210,9 +219,34 @@
       cursor: grab;
       border: 1px solid transparent;
     }
+
+     .overlay-sticker:hover {
+      transform: scale(1.1);
+      
+    }
     
-    #color-picker {
-  display: none; /* fully hidden */
+    
+ #color-picker {
+  -webkit-appearance: none;
+  border: none;
+  width: 20px;   /* smaller width */
+  height: 20px;  /* smaller height */
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+
+.color-wrapper {
+  width: 40px;        /* same as buttons */
+  height: 40px;       /* same as buttons */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
 }
     
   </style>
@@ -225,11 +259,9 @@
     </button>
     
     
-   <input type="color" id="color-picker" value="#ff0000" />
-    <button id="color-btn" title="Pick Color">
-      <i data-lucide="loader-pinwheel" class="icon" id="color-icon"></i>
-    </button>
-    
+ <div class="color-wrapper">
+    <input type="color" id="color-picker" value="#ff0000" />
+  </div> 
 
     <button id="bucket-btn" title="Fill Sticker">
       <i data-lucide="paint-bucket" class="icon"></i>
@@ -247,7 +279,7 @@
   
   <div id="canvas-container"></div>
   
-  <h3>Choose a Sticker</h3>
+  <h3>Sticker auswählen</h3>
   <div id="sticker-palette-container">
     </div>
 
@@ -287,8 +319,9 @@
     const colorHistory = [];
     
       const colorPicker = document.getElementById("color-picker");
-    const colorBtn = document.getElementById("color-btn");
     const colorIcon = document.getElementById("color-icon");
+    
+    
 
 const bucketBtn = document.getElementById('bucket-btn');
 let bucketMode = false;
@@ -299,16 +332,7 @@ let bucketMode = false;
 
     let activePaletteSticker = null;
     
-     colorBtn.addEventListener("click", () => {
-      colorPicker.click();
-    });
-
-   colorPicker.addEventListener("input", () => {
-  colorIcon.style.stroke = colorPicker.value;
-  colorBtn.style.color = colorPicker.value;      // change icon stroke
-  colorBtn.style.borderRadius = "50%"; // make it look like a swatch
-});
-
+  
     // --- Function to save the current canvas state to the history ---
     function saveState() {
   const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
@@ -700,6 +724,8 @@ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
     canvas.style.cursor = 'default';
   }
     });
+
+colorIcon.style.stroke = colorPicker.value;
 
 
     
