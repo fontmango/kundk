@@ -226,34 +226,20 @@
       {
         name: "Alpaca",
         urls: [
-          "https://static.wixstatic.com/media/990059_b8e966fff23243baaeffda0903b26ae5~mv2.png",
-          "https://static.wixstatic.com/media/990059_de180b020be54f9197ee9da700034b23~mv2.png",
-          "https://static.wixstatic.com/media/990059_4a8de8e19a9c45439f68e5ffdcc115d2~mv2.png",
-          "https://static.wixstatic.com/media/990059_43ecc7762e064417811a87e307b7907f~mv2.png",
-          "https://static.wixstatic.com/media/990059_41dc4f48b83446c0b73a62e0956da286~mv2.png",
-          "https://static.wixstatic.com/media/990059_3738e3eb9e9545e09b320de9cf2f3ac6~mv2.png",
-          "https://static.wixstatic.com/media/990059_bd8a968f55534bfa89713e93a9dfc806~mv2.png",
-          "https://static.wixstatic.com/media/990059_ffbd6892bad64ea6ac268f8fe539e1fe~mv2.png",
-          "https://static.wixstatic.com/media/990059_2ee1b55de8434492bfe9e2603bbdfae4~mv2.png",
-          "https://static.wixstatic.com/media/990059_11df952adf7649be8fc5cf072305e867~mv2.png",
-          "https://static.wixstatic.com/media/990059_80d8ebf3215f4306900b0c9555ad019f~mv2.png",
-          "https://static.wixstatic.com/media/990059_037002d97a114b2c8eeddd6606ee5c39~mv2.png",
-          "https://static.wixstatic.com/media/990059_04d0262ad52b4c7c8a44c136a362b7d5~mv2.png",
-          "https://static.wixstatic.com/media/990059_2c4f2b959e474833b61b6f5218b73967~mv2.png",
-          "https://static.wixstatic.com/media/990059_448fbb1d78584097907eb1b312f330c3~mv2.png",
-          "https://static.wixstatic.com/media/990059_e3133404efe44eaf9f33ef1c0e2ccde9~mv2.png",
-          "https://static.wixstatic.com/media/990059_fef1e3bea9814e1b93118cbb3abb066c~mv2.png",
-          "https://static.wixstatic.com/media/990059_b1ed01d0d9b54f5ca211e2975213fd5f~mv2.png",
-          "https://static.wixstatic.com/media/990059_a5715995827641ffba7291c75bf8f9d3~mv2.png",
-          "https://static.wixstatic.com/media/990059_a0b03b03435c4da38095c71bda978915~mv2.png",
-          "https://static.wixstatic.com/media/990059_eaf18884725f4652bb2b16c25a424673~mv2.png",
-          "https://static.wixstatic.com/media/990059_16d71393320b45249789d860719c902c~mv2.png"
+          
+          "https://static.wixstatic.com/media/990059_caaa5e6cda52435fbb7c5d44baf532b6~mv2.png",
+          "https://static.wixstatic.com/media/990059_91c06e8d3bd0444696cf64ff35870d79~mv2.png",
+          "https://static.wixstatic.com/media/990059_2f5de7bfb37b4edf9375460f2befe73d~mv2.png",
+          "https://static.wixstatic.com/media/990059_2a29f33d7ef34280b86e7786af3971d1~mv2.png",
+          "https://static.wixstatic.com/media/990059_95ffdb66d7d94ad99e0471a5103defec~mv2.png"
         ]
       },
       {
         name: "80s Wrestler",
         urls: [
-          "https://static.wixstatic.com/media/990059_d48da8238dca4caca0d318ae804ff1ac~mv2.png"
+          "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png",
+          "https://static.wixstatic.com/media/990059_33fe8d1256f64f36bb515900f04f14a6~mv2.png",
+          "https://static.wixstatic.com/media/990059_7786535a11d5461f9f3a82b686538dba~mv2.png"
         ]
       }
     ];
