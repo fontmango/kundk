@@ -16,6 +16,7 @@
 
     #canvas-container {
       width: 90%;
+      max-width: 800px;
       height: 500px;
       background-color: #ffffff;
       border: 1px solid #e0e0e0;
@@ -232,15 +233,15 @@ display: none !important;
 
 
 .copy-btn-icon {
-  width: 40%;
-  height: 40%;
+  width: 100%;
+  height: 100%;
   fill: white;
   stroke: white;
 }
 
 .delete-btn-icon {
-        width: 80px;
-        height: 80px;
+        width: 100%;
+        height: 100%;
         fill: white;
         stroke: white;
     }
@@ -259,7 +260,6 @@ display: none !important;
   justify-content: center;
   cursor: pointer;
   z-index: 101;
-  font-size: 0.6em; /* scales the icon/text inside */
   padding: 0;        /* remove extra padding */
 }
 
@@ -277,7 +277,6 @@ display: none !important;
   justify-content: center;
   cursor: pointer;
   z-index: 101;
-  font-size: 0.6em;
   padding: 0;
 }
 
@@ -467,9 +466,9 @@ function addSticker(url, x, y, width = 100) { // width can now be set per sticke
 const copyBtn = document.createElement('div');
 copyBtn.classList.add('copy-btn');
 copyBtn.innerHTML = `
-  <svg class="copy-btn-icon" viewBox="0 0 24 24" width="50%" height="50%" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="6" y="4" width="12" height="16" rx="2" ry="2" stroke="lightgray"></rect>
-    <rect x="4" y="6" width="12" height="16" rx="2" ry="2" stroke="currentColor"></rect>
+<svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="12" y1="8" x2="12" y2="16" />
+<line x1="8" y1="12" x2="16" y2="12" />
   </svg>
 `;
 
@@ -517,10 +516,9 @@ copyBtn.addEventListener('click', (e) => {
   const deleteBtn = document.createElement('div');
   deleteBtn.classList.add('delete-btn');
   deleteBtn.innerHTML = `
-    <svg class="delete-btn-icon" viewBox="0 0 24 24">
-      <line x1="15" y1="9" x2="9" y2="15"></line>
-      <line x1="9" y1="9" x2="15" y2="15"></line>
-    </svg>
+ <svg class="delete-btn-icon" viewBox="0 0 24 24">
+    <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
+  </svg>
   `;
   deleteBtn.addEventListener('click', (e) => {
     e.stopPropagation();
