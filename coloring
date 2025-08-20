@@ -16,7 +16,6 @@
 
     #canvas-container {
       width: 90%;
-      max-width: 800px;
       height: 500px;
       background-color: #ffffff;
       border: 1px solid #e0e0e0;
