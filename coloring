@@ -265,6 +265,8 @@
     const paletteContainer = document.getElementById('sticker-palette-container');
     const overlayContainer = document.getElementById('overlay-container');
 
+    const colorHistory = [];
+
    const colorPicker = document.getElementById('color-picker');
 const bucketBtn = document.getElementById('bucket-btn');
 let bucketMode = false;
@@ -277,36 +279,40 @@ let bucketMode = false;
 
     // --- Function to save the current canvas state to the history ---
     function saveState() {
-      const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-      const currentState = [];
-      stickersOnCanvas.forEach(sticker => {
-        const stickerImg = sticker.querySelector('img');
-        if (stickerImg) {
-          currentState.push({
-            url: stickerImg.src,
-            x: sticker.offsetLeft,
-            y: sticker.offsetTop,
-            width: sticker.offsetWidth,
-            height: sticker.offsetHeight
-          });
-        }
+  const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+  const currentState = {
+    stickers: []
+  };
+
+  stickersOnCanvas.forEach(sticker => {
+    const stickerImg = sticker.querySelector('img');
+    if (stickerImg) {
+      currentState.stickers.push({
+        url: stickerImg.src,          // store the current image data (even recolored)
+        x: sticker.offsetLeft,
+        y: sticker.offsetTop,
+        width: sticker.offsetWidth,
+        height: sticker.offsetHeight
       });
-      history.push(currentState);
-      updateUndoButton();
     }
+  });
+
+  history.push(currentState);
+  updateUndoButton();
+}
 
 
     // --- Function to re-render the canvas from a saved state ---
-  function loadState(state) {
+ function loadState(state) {
   canvas.innerHTML = '';
-  canvas.style.backgroundColor = state.backgroundColor;
-  
+
   state.stickers.forEach(data => {
     const sticker = addSticker(data.url, data.x, data.y);
     sticker.style.width = `${data.width}px`;
     sticker.style.height = `${data.height}px`;
   });
 }
+
 
     // --- Function to create and add a sticker to the canvas ---
     function addSticker(url, x, y) {
@@ -493,12 +499,18 @@ function hexToRgb(hex) {
 }
 
 function recolorSticker(stickerImg, fillColor, clickX, clickY) {
+  // Save current state of this sticker before changing
+  colorHistory.push({
+    sticker: stickerImg,
+    prevSrc: stickerImg.src
+  });
+  updateUndoButton();  // enable undo button
+
   const canvasEl = document.createElement("canvas");
   const ctx = canvasEl.getContext("2d");
 
   canvasEl.width = stickerImg.naturalWidth;
   canvasEl.height = stickerImg.naturalHeight;
-
   ctx.drawImage(stickerImg, 0, 0);
 
   const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
@@ -512,27 +524,22 @@ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
     const [x, y] = stack.pop();
     const i = ((y * canvasEl.width) + x) * 4;
     const key = `${x},${y}`;
-
-    if (visited.has(key) || x < 0 || x >= canvasEl.width || y < 0 || y >= canvasEl.height) {
-      continue;
-    }
+    if (visited.has(key) || x < 0 || x >= canvasEl.width || y < 0 || y >= canvasEl.height) continue;
     visited.add(key);
 
-    // Never recolor black pixels
+    // never recolor black
     const isBlack = (data[i] === 0 && data[i+1] === 0 && data[i+2] === 0 && data[i+3] > 0);
     if (isBlack) continue;
 
-    // Apply new fill color
     data[i] = r;
     data[i+1] = g;
     data[i+2] = b;
     data[i+3] = 255;
 
-    // Push neighbors
-    stack.push([x + 1, y]);
-    stack.push([x - 1, y]);
-    stack.push([x, y + 1]);
-    stack.push([x, y - 1]);
+    stack.push([x+1, y]);
+    stack.push([x-1, y]);
+    stack.push([x, y+1]);
+    stack.push([x, y-1]);
   }
 
   ctx.putImageData(imgData, 0, 0);
@@ -573,17 +580,18 @@ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
     }
 
     // --- New: Undo and New button event listeners ---
-    function updateUndoButton() {
-      undoBtn.disabled = history.length <= 1;
-    }
+  function updateUndoButton() {
+  undoBtn.disabled = colorHistory.length === 0;
+}
 
     undoBtn.addEventListener('click', () => {
-      if (history.length > 1) {
-        history.pop();
-        const prevState = history[history.length - 1];
-        loadState(prevState);
-      }
-    });
+  if (colorHistory.length > 0) {
+    const last = colorHistory.pop();
+    last.sticker.src = last.prevSrc;  // restore old image
+  }
+  updateUndoButton();
+});
+
 
     newBtn.addEventListener('click', () => {
       canvas.innerHTML = '';
