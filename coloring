@@ -6,6 +6,7 @@
       margin: 0;
       padding: 0;
       font-family: sans-serif;
+      background-color: #f0f0f0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -15,6 +16,7 @@
 
     #canvas-container {
       width: 90%;
+      max-width: 800px;
       height: 500px;
       background-color: #ffffff;
       border: 1px solid #e0e0e0;
@@ -228,23 +230,7 @@ display: none !important;
   padding: 0;
 }
 
-.copy-btn {
-  position: absolute;
-  top: 5%;       /* close to top */
-  left: 5%;      /* close to left */
-  width: 20%;    /* proportional to sticker size */
-  height: 20%;   /* proportional to sticker size */
-  border-radius: 50%;
-  background-color: #c2bebeff;  /* different color for copy */
-  color: white;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 101;
-  font-size: 0.6em;
-  padding: 0;
-}
+
 
 .copy-btn-icon {
   width: 40%;
@@ -276,6 +262,24 @@ display: none !important;
   z-index: 101;
   font-size: 0.6em; /* scales the icon/text inside */
   padding: 0;        /* remove extra padding */
+}
+
+.copy-btn {
+  position: absolute;
+  top: 5%;       /* close to top */
+  left: 5%;      /* close to left */
+  width: 20%;    /* proportional to sticker size */
+  height: 20%;   /* proportional to sticker size */
+  border-radius: 50%;
+  background-color: #c2bebeff;  /* different color for copy */
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 101;
+  font-size: 0.6em;
+  padding: 0;
 }
 
 .sticker:hover > .copy-btn {
@@ -464,15 +468,11 @@ function addSticker(url, x, y, width = 100) { // width can now be set per sticke
 const copyBtn = document.createElement('div');
 copyBtn.classList.add('copy-btn');
 copyBtn.innerHTML = `
-  <svg class="copy-btn-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Back sheet with light border -->
+  <svg class="copy-btn-icon" viewBox="0 0 24 24" width="50%" height="50%" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <rect x="6" y="4" width="12" height="16" rx="2" ry="2" stroke="lightgray"></rect>
-    <!-- Front sheet with main color -->
     <rect x="4" y="6" width="12" height="16" rx="2" ry="2" stroke="currentColor"></rect>
   </svg>
 `;
-
-
 
 copyBtn.addEventListener('click', (e) => {
   e.stopPropagation();
