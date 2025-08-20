@@ -485,16 +485,15 @@ function hexToRgb(hex) {
 }
 
 function recolorSticker(stickerImg, fillColor, clickX, clickY) {
-  // Save current state of this sticker before changing
+  // Save current state before changing
   colorHistory.push({
     sticker: stickerImg,
     prevSrc: stickerImg.src
   });
-  updateUndoButton();  // enable undo button
+  updateUndoButton();
 
   const canvasEl = document.createElement("canvas");
   const ctx = canvasEl.getContext("2d");
-
   canvasEl.width = stickerImg.naturalWidth;
   canvasEl.height = stickerImg.naturalHeight;
   ctx.drawImage(stickerImg, 0, 0);
@@ -502,30 +501,71 @@ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
   const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
   const data = imgData.data;
 
-  const stack = [[clickX, clickY]];
   const [r, g, b] = hexToRgb(fillColor);
+
+  const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
+  const startR = data[startIndex];
+  const startG = data[startIndex + 1];
+  const startB = data[startIndex + 2];
+  const startA = data[startIndex + 3];
+
+  // helper: is black outline pixel?
+  const isBlack = (r, g, b, a) => (r === 0 && g === 0 && b === 0 && a > 0);
+
+  // If clicked on black outline → search for nearby transparent pixel
+  if (isBlack(startR, startG, startB, startA)) {
+    let found = false;
+    const offsets = [[1,0],[-1,0],[0,1],[0,-1]];
+    for (const [dx, dy] of offsets) {
+      const nx = clickX + dx;
+      const ny = clickY + dy;
+      if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
+      const ni = ((ny * canvasEl.width) + nx) * 4;
+      if (data[ni+3] === 0) {
+        clickX = nx; clickY = ny;
+        found = true;
+        break;
+      }
+    }
+    if (!found) return; // nothing to fill
+  }
+
+  // Flood fill to detect region
+  const stack = [[clickX, clickY]];
   const visited = new Set();
+  let touchesEdge = false;
 
   while (stack.length) {
     const [x, y] = stack.pop();
+    if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
+      touchesEdge = true;
+      continue;
+    }
     const i = ((y * canvasEl.width) + x) * 4;
     const key = `${x},${y}`;
-    if (visited.has(key) || x < 0 || x >= canvasEl.width || y < 0 || y >= canvasEl.height) continue;
+    if (visited.has(key)) continue;
     visited.add(key);
 
-    // never recolor black
-    const isBlack = (data[i] === 0 && data[i+1] === 0 && data[i+2] === 0 && data[i+3] > 0);
-    if (isBlack) continue;
+    if (isBlack(data[i], data[i+1], data[i+2], data[i+3])) continue;
 
-    data[i] = r;
-    data[i+1] = g;
-    data[i+2] = b;
-    data[i+3] = 255;
-
+    // Candidate region pixel (transparent or colored)
     stack.push([x+1, y]);
     stack.push([x-1, y]);
     stack.push([x, y+1]);
     stack.push([x, y-1]);
+  }
+
+  // If region touches border → it's outside background → skip
+  if (touchesEdge) return;
+
+  // Otherwise fill all visited pixels
+  for (const key of visited) {
+    const [x, y] = key.split(",").map(Number);
+    const i = ((y * canvasEl.width) + x) * 4;
+    data[i] = r;
+    data[i+1] = g;
+    data[i+2] = b;
+    data[i+3] = 255;
   }
 
   ctx.putImageData(imgData, 0, 0);
