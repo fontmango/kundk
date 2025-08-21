@@ -67,6 +67,7 @@
     .sticker.selected > .copy-btn {
       display: flex;
     }
+
     
     .controls {
       display: flex;
@@ -228,6 +229,14 @@
       stroke: white;
     }
 
+    .delete-btn:focus,
+.copy-btn:focus,
+.delete-btn:active,
+.copy-btn:active {
+  outline: none;
+  box-shadow: none;
+}
+
     .delete-btn-icon {
       width: 100%;
       height: 100%;
@@ -251,6 +260,8 @@
       z-index: 101;
       padding: 0;
         transition: transform 0.2s, background-color 0.2s;
+        outline: none; /* Add this line to both */
+  -webkit-tap-highlight-color: transparent; /* Good for mobile */
 
     }
 
@@ -270,6 +281,8 @@
       z-index: 101;
       padding: 0;
         transition: transform 0.2s, background-color 0.2s;
+        outline: none; /* Add this line to both */
+  -webkit-tap-highlight-color: transparent; /* Good for mobile */
 
     }
 
