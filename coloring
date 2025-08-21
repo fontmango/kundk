@@ -155,6 +155,11 @@
             width: max-content;
         }
 
+        .color-swatch:hover {
+           
+            transform: scale(1.2);
+        }
+
         .color-swatch {
             width: 25px;
             height: 25px;
