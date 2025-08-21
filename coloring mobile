@@ -426,7 +426,9 @@
       '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
 
       // Pinks & Browns
-      '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513'
+      '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
+      
+       '#C0C0C0', '#808080'
     ];
     
     function setBucketMode(enabled) {
