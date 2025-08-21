@@ -179,18 +179,34 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        #sticker-palette-container {
-            width: 90%;
-            max-width: 600px;
-            margin-top: 20px;
-            padding: 5px;
-            background-color: #f8f8f8;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-wrap: wrap;
-        }
+    #sticker-palette-container {
+    width: 100%;
+    margin-top: 20px;
+    padding: 5px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-wrap: nowrap;        /* single row */
+    overflow-x: auto;         /* horizontal scroll */
+    overflow-y: hidden;
+
+    align-items: center;      /* vertical centering */
+    justify-content: center;  /* horizontal centering */
+    gap: 10px;                /* space between items */
+    scrollbar-width: thin;
+}
+
+#sticker-palette-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+#sticker-palette-container::-webkit-scrollbar-thumb {
+    background: #bbb; 
+    border-radius: 4px;
+}
 
         .palette-sticker {
             width: 60px;
@@ -337,44 +353,207 @@
     <script>
         const stickerGroups = [
             {
-                name: "Alpaca",
+                
+                name: "Vikings",
                 urls: [
-                    "https://static.wixstatic.com/media/990059_caaa5e6cda52435fbb7c5d44baf532b6~mv2.png",
-                    "https://static.wixstatic.com/media/990059_91c06e8d3bd0444696cf64ff35870d79~mv2.png",
-                    "https://static.wixstatic.com/media/990059_2f5de7bfb37b4edf9375460f2befe73d~mv2.png",
+                    "https://static.wixstatic.com/media/990059_195242b424cb450ea78b93e9de392511~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e5529716f6f64f77a4d7c250ab6cfb5a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4636b8e42e674dccbb6117391652f10b~mv2.png",
+                    "https://static.wixstatic.com/media/990059_b4c7121418e14667bfdf79aecfea0524~mv2.png",
+                    "https://static.wixstatic.com/media/990059_c5244cbdc1014a0292d36824ce277bba~mv2.png",
+                    "https://static.wixstatic.com/media/990059_82d1bde23b3f45709690e3b032b39f7a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_63d7cd18bf4245d687839909ceb3671c~mv2.png",
+                    "https://static.wixstatic.com/media/990059_04487087ffd9403184e0562a09da9952~mv2.png",
+                    "https://static.wixstatic.com/media/990059_0abecd8111674041bda6a9bc58a0325d~mv2.png",
+                    "https://static.wixstatic.com/media/990059_3d5f1cfd966b460a9fc708fbadc23342~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1e7bdf5f8a9c415d940ecabe8aa515f8~mv2.png",
+                    "https://static.wixstatic.com/media/990059_f7bda5bccf6143b59cf118b96fe8d5c3~mv2.png",
+                    "https://static.wixstatic.com/media/990059_17382f604e5240cd9b192d1c408d177c~mv2.png",
+                    "https://static.wixstatic.com/media/990059_8050e711279440069ebb11be47552624~mv2.png",
+                    "https://static.wixstatic.com/media/990059_9280b10abb8f4b439280d80e2d654a00~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e69156957edb46ceb444911d6268d580~mv2.png",
+                    "https://static.wixstatic.com/media/990059_818add1171f44d7b8fb14cc7324bf1ba~mv2.png",
+                    "https://static.wixstatic.com/media/990059_c0876d74524a4a3890c8acc306d6c5b9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4c2a3c3d1f4d44c88bd245577c12d89e~mv2.png",
+                    "https://static.wixstatic.com/media/990059_6a6b1c7017c242bcb387edf0250492f9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_87363ab578ea485fb48b3ba8865da3c5~mv2.png",
+                    "https://static.wixstatic.com/media/990059_786e79df55c3459680a241c123d7edc8~mv2.png",
+                    "https://static.wixstatic.com/media/990059_75f54e8faf5f49aa9a6f554647c0a942~mv2.png",
+                    "https://static.wixstatic.com/media/990059_70b398a8aea848cf92a090ffae357819~mv2.png",
+                    "https://static.wixstatic.com/media/990059_393bb80861a1442cad28cfc4fd11a3b9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4c090a4740134396a9d2650a86431677~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1148bbb54d724dc2beb5cebc69c78d04~mv2.png",
+                    "https://static.wixstatic.com/media/990059_74b3de5669834b7e9cd434ee592a38a1~mv2.png",
+                    "https://static.wixstatic.com/media/990059_30092f18c74c4b1e9ebd8c362ab02b31~mv2.png",
+                    "https://static.wixstatic.com/media/990059_033520b5d83f401bbfafd972bb74e29f~mv2.png",
+                    "https://static.wixstatic.com/media/990059_95ffdb66d7d94ad99e0471a5103defec~mv2.png",
                     "https://static.wixstatic.com/media/990059_2a29f33d7ef34280b86e7786af3971d1~mv2.png",
-                    "https://static.wixstatic.com/media/990059_95ffdb66d7d94ad99e0471a5103defec~mv2.png"
+                    "https://static.wixstatic.com/media/990059_2f5de7bfb37b4edf9375460f2befe73d~mv2.png",
+                    "https://static.wixstatic.com/media/990059_91c06e8d3bd0444696cf64ff35870d79~mv2.png",
+                    "https://static.wixstatic.com/media/990059_caaa5e6cda52435fbb7c5d44baf532b6~mv2.png"
+
                 ]
             },
             {
-                name: "80s Wrestler",
+                name: "2",
                 urls: [
-                    "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png",
-                    "https://static.wixstatic.com/media/990059_33fe8d1256f64f36bb515900f04f14a6~mv2.png",
-                    "https://static.wixstatic.com/media/990059_7786535a11d5461f9f3a82b686538dba~mv2.png"
+                    "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png"
                 ]
             },
             {
-                name: "80s Wrestler",
+                name: "3",
                 urls: [
-                    "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png",
-                    "https://static.wixstatic.com/media/990059_f3aa94e6bc0744be95006181e96ad12a~mv2.png",
-                    "https://static.wixstatic.com/media/990059_5127ca4c3b29451993df63ba61a14a0e~mv2.png",
-                    "https://static.wixstatic.com/media/990059_db0d99e95a304512b01c4065e318203f~mv2.png",
-                    "https://static.wixstatic.com/media/990059_0ab8fd84c6984427ac56ae3bce1dc9f1~mv2.png"
+                    "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png"
                 ]
             },
             {
-                name: "80s Wrestler",
+                name: "4",
                 urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png",
-                    "https://static.wixstatic.com/media/990059_800432b2864848e29281d7afe4860948~mv2.png",
-                    "https://static.wixstatic.com/media/990059_0a91613ae02d453590976ff5c7886ff7~mv2.png",
-                    "https://static.wixstatic.com/media/990059_54a50408c4d74952af04f951d18e88cc~mv2.png",
-                    "https://static.wixstatic.com/media/990059_96e920f530ab41258853992df641afab~mv2.png"
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+           		 name: "5",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+            	 name: "6",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+            	 name: "7",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+                name: "8",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png"
+                ]
+            },
+            {
+                name: "9",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png"
+                ]
+            },
+            {
+                name: "10",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+           		 name: "11",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+            	 name: "12",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+            	 name: "13",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+                name: "14",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png"
+                ]
+            },
+            {
+                name: "15",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png"
+                ]
+            },
+            {
+                name: "16",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+           		 name: "17",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+            	 name: "18",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+            	 name: "19",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+                name: "20",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png"
+                ]
+            },
+            {
+                name: "21",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png"
+                ]
+            },
+            {
+                name: "22",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+           		 name: "23",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+            	 name: "24",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+            	 name: "25",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+            	 name: "26",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
+                ]
+            },
+            {
+            	 name: "27",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
                 ]
             }
+            
+            
         ];
+
 
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
