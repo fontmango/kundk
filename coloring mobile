@@ -441,24 +441,12 @@
         let firstStickerAdded = false;
 
         const colors = [
-            // Reds
             '#FF0000', '#FF4500', '#FF6347', '#D2691E', '#CD5C5C',
-
-            // Oranges & Yellows
             '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
-
-            // Greens
             '#008000', '#228B22', '#3CB371', '#9ACD32', '#ADFF2F',
-
-            // Blues
             '#0000FF', '#0000CD', '#4169E1', '#1E90FF', '#87CEFA',
-
-            // Purples
             '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
-
-            // Pinks & Browns
             '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
-            
             '#C0C0C0', '#808080'
         ];
         
@@ -478,7 +466,7 @@
                 });
             }
         }
-        
+
         // NEW: Central function to add or replace a sticker and center it.
         function addOrReplaceSticker(url) {
             // Deactivate color picker when adding a new sticker.
@@ -623,8 +611,11 @@
                     return;
                 }
                 
-                if (bucketMode) return;
-                
+                // Allow two-finger touch gestures for resizing even when in bucketMode
+                if (bucketMode && (!e.touches || e.touches.length < 2)) {
+                    return;
+                }
+
                 saveState();
                 
                 document.querySelectorAll('.sticker').forEach(s => {
@@ -665,7 +656,7 @@
             }
             
             function handleMove(e) {
-                if (!activeSticker || bucketMode) return;
+                if (!activeSticker) return;
                 e.preventDefault();
                 
                 if (e.touches && e.touches.length === 2) { 
@@ -681,7 +672,7 @@
                     activeSticker.style.left = `${initialCenter.x - newWidth / 2}px`;
                     activeSticker.style.top = `${initialCenter.y - newHeight / 2}px`;
 
-                } else { 
+                } else if (!bucketMode) { // Only allow dragging if bucketMode is not active
                     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
                     const newX = offsetX + (clientX - initialX);
