@@ -916,27 +916,64 @@
       firstStickerAdded = false;
     });
 
-    addStickerBtn.addEventListener('click', () => {
-      setBucketMode(false);
-      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-      selectedColor = null;
+   addStickerBtn.addEventListener('click', () => {
+  setBucketMode(false);
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+  selectedColor = null;
 
-      const allUrls = stickerGroups.flatMap(group => group.urls);
-      const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+  const allUrls = stickerGroups.flatMap(group => group.urls);
+  const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+  
+  const stickerWidth = 120;
+  const canvasWidth = canvas.offsetWidth;
+  const canvasHeight = canvas.offsetHeight;
+  
+  // Check if there are any stickers already on the canvas
+  const existingStickers = document.querySelectorAll('.sticker').length;
+
+  let finalX, finalY;
+
+  if (existingStickers === 0) {
+    // If it's the first sticker, place it in the center
+    finalX = (canvasWidth / 2) - (stickerWidth / 2);
+    finalY = (canvasHeight / 2) - (stickerWidth / 2);
+    firstStickerAdded = true;
+  } else {
+    // For subsequent stickers, find a non-overlapping position
+    const canvasRect = canvas.getBoundingClientRect();
+    let tries = 0;
+    let overlap;
+    
+    do {
+      overlap = false;
+      finalX = Math.floor(Math.random() * (canvasWidth - stickerWidth));
+      finalY = Math.floor(Math.random() * (canvasHeight - stickerWidth));
       
-      const stickerWidth = 120;
-      const canvasWidth = canvas.offsetWidth;
-      const canvasHeight = canvas.offsetHeight;
-      const centerX = (canvasWidth / 2) - (stickerWidth / 2);
-      const centerY = (canvasHeight / 2) - (stickerWidth / 2);
-      saveState();
-      addSticker(randomUrl, centerX, centerY, stickerWidth);
-      firstStickerAdded = true;
-    });
+      document.querySelectorAll('.sticker').forEach(existing => {
+        const rect = existing.getBoundingClientRect();
+        const ex = rect.left - canvasRect.left;
+        const ey = rect.top - canvasRect.top;
+        const ew = rect.width;
+        const eh = rect.height;
+        if (
+          finalX < ex + ew &&
+          finalX + stickerWidth > ex &&
+          finalY < ey + eh &&
+          finalY + stickerWidth > ey
+        ) {
+          overlap = true;
+        }
+      });
+      
+      tries++;
+      if (tries > 200) break;
+    } while (overlap);
+    firstStickerAdded = true;
+  }
 
-    populatePalette();
-    populateColorPalette();
-    saveState();
+  saveState();
+  addSticker(randomUrl, finalX, finalY, stickerWidth);
+});
 
     window.addEventListener('load', () => {
       if (window.lucide) {
