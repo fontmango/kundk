@@ -1,352 +1,352 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sticker Canvas</title>
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticker Canvas</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 100vh;
-      box-sizing: border-box;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-    #canvas-container {
-      width: 90%;
-      max-width: 600px;
-      height: 80vh; 
-      background-color: #ffffff;
-      border: 1px solid #e0e0e0;
-      position: relative;
-      margin-top: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-radius: 16px;
-      touch-action: none;
-    }
-    
-    .sticker {
-      position: absolute;
-      height: auto;
-      cursor: grab;
-      user-select: none;
-      transition: transform 0.1s ease-in-out;
-      box-sizing: border-box;
-      touch-action: none;
-    }
+        #canvas-container {
+            width: 90%;
+            max-width: 600px;
+            height: 80vh;  
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            margin-top: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            touch-action: none;
+        }
+        
+        .sticker {
+            position: absolute;
+            height: auto;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.1s ease-in-out;
+            box-sizing: border-box;
+            touch-action: none;
+        }
 
-    .sticker img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
+        .sticker img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
 
-    .sticker:active {
-      cursor: grabbing;
-      z-index: 100;
-    }
-    
-    .sticker:focus {
-      outline: none;
-    }
+        .sticker:active {
+            cursor: grabbing;
+            z-index: 100;
+        }
+        
+        .sticker:focus {
+            outline: none;
+        }
 
-    .sticker:hover > .delete-btn,
-    .sticker:hover > .copy-btn {
-      display: flex; 
-      align-items: center;
-      justify-content: center;
-    }
-    .sticker.selected > .delete-btn,
-    .sticker.selected > .copy-btn {
-      display: flex;
-    }
+        .sticker:hover > .delete-btn,
+        .sticker:hover > .copy-btn {
+            display: flex;  
+            align-items: center;
+            justify-content: center;
+        }
+        .sticker.selected > .delete-btn,
+        .sticker.selected > .copy-btn {
+            display: flex;
+        }
 
-    
-    .controls {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
-    
-    .bucket-active .sticker {
-      border: none !important;
-      transition: none !important;
-    }
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .bucket-active .sticker {
+            border: none !important;
+            transition: none !important;
+        }
 
-    .bucket-active .sticker .delete-btn,
-    .bucket-active .sticker .copy-btn {
-      display: none !important;
-    }
+        .bucket-active .sticker .delete-btn,
+        .bucket-active .sticker .copy-btn {
+            display: none !important;
+        }
 
-    .bucket-active .sticker:active,
-    .bucket-active .sticker:hover {
-      cursor: crosshair;
-    }
+        .bucket-active .sticker:active,
+        .bucket-active .sticker:hover {
+            cursor: crosshair;
+        }
 
-    .ghost-sticker {
-  position: fixed;
-  pointer-events: none; /* Allows us to see the element underneath */
-  z-index: 1000;
-  opacity: 0.7;
-  width: 100px; /* Adjust size as needed */
-  height: auto;
-  transform: translate(-50%, -50%); /* Center the image on the finger */
-}
+        .ghost-sticker {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.7;
+            width: 100px;
+            height: auto;
+            transform: translate(-50%, -50%);
+        }
 
-    button {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: none;
-      cursor: pointer;
-      color: #333;
-      transition: transform 0.2s, color 0.2s;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-    }
+        button {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #333;
+            transition: transform 0.2s, color 0.2s;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    button:focus, button:active {
-      outline: 0 !important;
-      box-shadow: none !important;
-    }
-    
-    button:hover {
-      color: #000;
-      transform: scale(1.1);
-    }
-    
-    button.active {
-      border-radius: 50%;
-      background-color: #e0e0e0;
-      transform: scale(1.05);
-    }
+        button:focus, button:active {
+            outline: 0 !important;
+            box-shadow: none !important;
+        }
+        
+        button:hover {
+            color: #000;
+            transform: scale(1.1);
+        }
+        
+        button.active {
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            transform: scale(1.05);
+        }
 
-    .icon {
-      width: 1.4em;
-      height: 1.4em;
-      stroke: currentColor;
-    }
+        .icon {
+            width: 1.4em;
+            height: 1.4em;
+            stroke: currentColor;
+        }
 
-    .color-palette-container {
-      width: 90%;
-      max-width: 600px;
-      overflow-x: scroll; /* Allows horizontal scrolling */
-      -webkit-overflow-scrolling: touch; /* Improves scrolling on iOS */
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      touch-action: pan-y; /* Allows vertical panning but enables horizontal scrolling */
-    }
+        .color-palette-container {
+            width: 90%;
+            max-width: 600px;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            touch-action: pan-y;
+        }
 
-    .color-palette-container::-webkit-scrollbar {
-        display: none; 
-    }
+        .color-palette-container::-webkit-scrollbar {
+            display: none;  
+        }
 
-    .color-palette {
-        display: flex;
-        flex-wrap: nowrap; /* Forces all items to be on one line */
-        gap: 8px;
-        margin-top: 10px;
-        padding: 3px;
-        width: max-content; /* Ensures the flex container is as wide as its content */
-    }
+        .color-palette {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 3px;
+            width: max-content;
+        }
 
-    .color-swatch {
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: transform 0.2s, border-color 0.2s;
-      flex-shrink: 0;
-      outline: 0 !important;
-      box-shadow: none !important;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: none; /* Prevents touch events from bubbling up and interfering with scroll */
-    }
+        .color-swatch {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s, border-color 0.2s;
+            flex-shrink: 0;
+            outline: 0 !important;
+            box-shadow: none !important;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: none;
+        }
 
-    .color-swatch.active {
-      border-color: #333;
-      transform: scale(1.1);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    
-    #sticker-palette-container {
-      display: none; /* Hide the old sticker palette container */
-    }
+        .color-swatch.active {
+            border-color: #333;
+            transform: scale(1.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        #sticker-palette-container {
+            display: none;
+        }
 
-    /* New styles for the overlays */
-    .overlay {
-      position: fixed; /* Use fixed to position relative to the viewport */
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: rgba(255, 255, 255, 0.95);
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      display: none;
-      z-index: 200;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      grid-template-columns: repeat(5, 1fr); /* Adjusted for better mobile layout */
-      gap: 10px;
-      max-width: 95vw;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    
-    .overlay-icon {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 1/1;
-      object-fit: contain;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: transform 0.2s;
-    }
+        .overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            display: none;
+            z-index: 200;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            max-width: 100%;
+            max-height: 100%;
+            width: 95%;
+            height: 95%;
+            overflow-y: auto;
+        }
+        
+        .overlay-icon {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
 
-    .overlay-icon:hover {
-      transform: scale(1.05);
-    }
-    
-    .overlay-sticker {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 1/1;
-      object-fit: contain;
-      cursor: pointer;
-      border: 1px solid transparent;
-    }
+        .overlay-icon:hover {
+            transform: scale(1.05);
+        }
+        
+        .overlay-sticker {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
 
-    .overlay-sticker:hover {
-      transform: scale(1.1);
-    }
-    
-    .copy-btn-icon {
-      width: 100%;
-      height: 100%;
-      fill: white;
-      stroke: white;
-    }
+        .overlay-sticker:hover {
+            transform: scale(1.1);
+        }
+        
+        .copy-btn-icon {
+            width: 100%;
+            height: 100%;
+            fill: white;
+            stroke: white;
+        }
 
-    .delete-btn:focus,
-    .copy-btn:focus,
-    .delete-btn:active,
-    .copy-btn:active {
-      outline: none;
-      box-shadow: none;
-    }
+        .delete-btn:focus,
+        .copy-btn:focus,
+        .delete-btn:active,
+        .copy-btn:active {
+            outline: none;
+            box-shadow: none;
+        }
 
-    .delete-btn-icon {
-      width: 100%;
-      height: 100%;
-      fill: white;
-      stroke: white;
-    }
-    
-    .delete-btn {
-      position: absolute;
-      top: 5%;
-      right: 5%;
-      width: 20%;
-      height: 20%;
-      border-radius: 50%;
-      background-color: #c2bebeff;
-      color: white;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 101;
-      padding: 0;
-      transition: transform 0.2s, background-color 0.2s;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-    }
+        .delete-btn-icon {
+            width: 100%;
+            height: 100%;
+            fill: white;
+            stroke: white;
+        }
+        
+        .delete-btn {
+            position: absolute;
+            top: 5%;
+            right: 5%;
+            width: 20%;
+            height: 20%;
+            border-radius: 50%;
+            background-color: #c2bebeff;
+            color: white;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 101;
+            padding: 0;
+            transition: transform 0.2s, background-color 0.2s;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    .copy-btn {
-      position: absolute;
-      top: 5%;
-      left: 5%;
-      width: 20%;
-      height: 20%;
-      border-radius: 50%;
-      background-color: #c2bebeff;
-      color: white;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 101;
-      padding: 0;
-      transition: transform 0.2s, background-color 0.2s;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-    }
+        .copy-btn {
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            width: 20%;
+            height: 20%;
+            border-radius: 50%;
+            background-color: #c2bebeff;
+            color: white;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 101;
+            padding: 0;
+            transition: transform 0.2s, background-color 0.2s;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    .copy-btn:hover {
-      background-color: #6aa84fff;
-      transform: scale(1.1);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
+        .copy-btn:hover {
+            background-color: #6aa84fff;
+            transform: scale(1.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
 
-    .delete-btn:hover {
-      background-color: #f26262ff;
-      transform: scale(1.1);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-  </style>
+        .delete-btn:hover {
+            background-color: #f26262ff;
+            transform: scale(1.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+    </style>
 
-  <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-  <div class="controls">
-    <button id="add-sticker-btn" title="Add Random">
-      <i data-lucide="shuffle" class="icon"></i>
-    </button>
+    <div class="controls">
+        <button id="add-sticker-btn" title="Add Random">
+            <i data-lucide="shuffle" class="icon"></i>
+        </button>
+        
+        <button id="sticker-picker-btn" title="Choose Sticker">
+            <i data-lucide="sticker" class="icon"></i>
+        </button>
+        
+        <button id="undo-btn" title="Undo">
+            <i data-lucide="undo-2" class="icon"></i>
+        </button>
+        
+        <button id="new-btn" title="New Canvas">
+            <i data-lucide="file-plus-2" class="icon"></i>
+        </button>
+    </div>
     
-    <button id="sticker-picker-btn" title="Choose Sticker">
-      <i data-lucide="sticker" class="icon"></i>
-    </button>
+    <div class="color-palette-container">
+        <div class="color-palette" id="color-palette"></div>
+    </div>
     
-    <button id="undo-btn" title="Undo">
-      <i data-lucide="undo-2" class="icon"></i>
-    </button>
+    <div id="canvas-container"></div>
     
-    <button id="new-btn" title="New Canvas">
-      <i data-lucide="file-plus-2" class="icon"></i>
-    </button>
-  </div>
-  
-  <div class="color-palette-container">
-    <div class="color-palette" id="color-palette"></div>
-  </div>
-  
-  <div id="canvas-container"></div>
-  
-  <div id="group-overlay-container" class="overlay"></div>
-  <div id="sticker-overlay-container" class="overlay"></div>
+    <div id="group-overlay-container" class="overlay"></div>
+    <div id="sticker-overlay-container" class="overlay"></div>
 
-  <script>
-    const stickerGroups = [
-      {
-       
-       name: "Vikings",
+    <script>
+        const stickerGroups = [
+            {
+                
+                name: "Vikings",
                 urls: [
                     "https://static.wixstatic.com/media/990059_195242b424cb450ea78b93e9de392511~mv2.png",
                     "https://static.wixstatic.com/media/990059_e5529716f6f64f77a4d7c250ab6cfb5a~mv2.png",
@@ -385,813 +385,697 @@
                     "https://static.wixstatic.com/media/990059_caaa5e6cda52435fbb7c5d44baf532b6~mv2.png",
 
                 ]
-      },
-      {
-        name: "80s Wrestler",
-        urls: [
-          "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png",
-          "https://static.wixstatic.com/media/990059_33fe8d1256f64f36bb515900f04f14a6~mv2.png",
-          "https://static.wixstatic.com/media/990059_7786535a11d5461f9f3a82b686538dba~mv2.png"
-        ]
-      },
-      {
-        name: "80s Wrestler",
-        urls: [
-          "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png",
-          "https://static.wixstatic.com/media/990059_f3aa94e6bc0744be95006181e96ad12a~mv2.png",
-          "https://static.wixstatic.com/media/990059_5127ca4c3b29451993df63ba61a14a0e~mv2.png",
-          "https://static.wixstatic.com/media/990059_db0d99e95a304512b01c4065e318203f~mv2.png",
-          "https://static.wixstatic.com/media/990059_0ab8fd84c6984427ac56ae3bce1dc9f1~mv2.png"
-        ]
-      },
-      {
-        name: "80s Wrestler",
-        urls: [
-          "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png",
-          "https://static.wixstatic.com/media/990059_800432b2864848e29281d7afe4860948~mv2.png",
-          "https://static.wixstatic.com/media/990059_0a91613ae02d453590976ff5c7886ff7~mv2.png",
-          "https://static.wixstatic.com/media/990059_54a50408c4d74952af04f951d18e88cc~mv2.png",
-          "https://static.wixstatic.com/media/990059_96e920f530ab41258853992df641afab~mv2.png"
-        ]
-      }
-    ];
+            },
+            {
+                name: "80s Wrestler",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png",
+                    "https://static.wixstatic.com/media/990059_33fe8d1256f64f36bb515900f04f14a6~mv2.png",
+                    "https://static.wixstatic.com/media/990059_7786535a11d5461f9f3a82b686538dba~mv2.png"
+                ]
+            },
+            {
+                name: "80s Wrestler",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png",
+                    "https://static.wixstatic.com/media/990059_f3aa94e6bc0744be95006181e96ad12a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_5127ca4c3b29451993df63ba61a14a0e~mv2.png",
+                    "https://static.wixstatic.com/media/990059_db0d99e95a304512b01c4065e318203f~mv2.png",
+                    "https://static.wixstatic.com/media/990059_0ab8fd84c6984427ac56ae3bce1dc9f1~mv2.png"
+                ]
+            },
+            {
+                name: "80s Wrestler",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png",
+                    "https://static.wixstatic.com/media/990059_800432b2864848e29281d7afe4860948~mv2.png",
+                    "https://static.wixstatic.com/media/990059_0a91613ae02d453590976ff5c7886ff7~mv2.png",
+                    "https://static.wixstatic.com/media/990059_54a50408c4d74952af04f951d18e88cc~mv2.png",
+                    "https://static.wixstatic.com/media/990059_96e920f530ab41258853992df641afab~mv2.png"
+                ]
+            }
+        ];
 
-    const canvas = document.getElementById('canvas-container');
-    const addStickerBtn = document.getElementById('add-sticker-btn');
-    const undoBtn = document.getElementById('undo-btn');
-    const newBtn = document.getElementById('new-btn');
-    const colorPalette = document.getElementById('color-palette');
-    const history = [];
-    
-    const stickerPickerBtn = document.getElementById('sticker-picker-btn');
-    const groupOverlayContainer = document.getElementById('group-overlay-container');
-    const stickerOverlayContainer = document.getElementById('sticker-overlay-container');
-    
-    let bucketMode = false;
-    let activeSticker = null;
-    let activePaletteSticker = null;
-    let selectedColor = null;
-    
-    let initialX, initialY, offsetX, offsetY;
-    let initialTouchDistance = 0;
-    let initialStickerWidth = 0;
-    let initialStickerHeight = 0;
-    
-    let initialCenter = { x: 0, y: 0 };
-    let firstStickerAdded = false;
-
-    const colors = [
-      // Reds
-      '#FF0000', '#FF4500', '#FF6347', '#D2691E', '#CD5C5C',
-
-      // Oranges & Yellows
-      '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
-
-      // Greens
-      '#008000', '#228B22', '#3CB371', '#9ACD32', '#ADFF2F',
-
-      // Blues
-      '#0000FF', '#0000CD', '#4169E1', '#1E90FF', '#87CEFA',
-
-      // Purples
-      '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
-
-      // Pinks & Browns
-      '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
-      
-       '#C0C0C0', '#808080'
-    ];
-    
-    function setBucketMode(enabled) {
-      bucketMode = enabled;
-      if (bucketMode) {
-        document.body.classList.add('bucket-active');
-        canvas.style.cursor = 'crosshair';
-        document.querySelectorAll('.color-swatch').forEach(swatch => {
-          swatch.draggable = false;
-        });
-      } else {
-        document.body.classList.remove('bucket-active');
-        canvas.style.cursor = 'default';
-        document.querySelectorAll('.color-swatch').forEach(swatch => {
-          swatch.draggable = true;
-        });
-      }
-    }
-  
-    function saveState() {
-      const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-      const currentState = {
-        stickers: []
-      };
-
-      stickersOnCanvas.forEach(sticker => {
-        const stickerImg = sticker.querySelector('img');
-        if (stickerImg) {
-          currentState.stickers.push({
-            url: stickerImg.src,
-            x: sticker.offsetLeft,
-            y: sticker.offsetTop,
-            width: sticker.offsetWidth,
-            height: sticker.offsetHeight
-          });
-        }
-      });
-      history.push(currentState);
-      updateUndoButton();
-    }
-
-    function loadState(state) {
-      canvas.innerHTML = '';
-      state.stickers.forEach(data => {
-        const sticker = addSticker(data.url, data.x, data.y);
-        sticker.style.width = `${data.width}px`;
-        sticker.style.height = `${data.height}px`;
-      });
-    }
-
-    function deselectAllStickers() {
-      document.querySelectorAll('.sticker').forEach(s => {
-        s.classList.remove('selected');
-      });
-    }
-
-    function getTouchDistance(touches) {
-      const dx = touches[0].clientX - touches[1].clientX;
-      const dy = touches[0].clientY - touches[1].clientY;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-    
-    function addSticker(url, x, y, width = 120) {
-      const sticker = document.createElement('div');
-      sticker.classList.add('sticker');
-      sticker.style.width = width + 'px';
-      sticker.style.height = 'auto';
-
-      const stickerImg = document.createElement('img');
-      stickerImg.crossOrigin = "Anonymous";
-      stickerImg.src = url;
-      stickerImg.draggable = false;
-      sticker.appendChild(stickerImg);
-
-      sticker.addEventListener('click', (e) => {
-        if (bucketMode && selectedColor) {
-          e.stopPropagation();
-          const rect = sticker.getBoundingClientRect();
-          const clickX = Math.floor((e.clientX - rect.left) * (stickerImg.naturalWidth / rect.width));
-          const clickY = Math.floor((e.clientY - rect.top) * (stickerImg.naturalHeight / rect.height));
-          recolorSticker(stickerImg, selectedColor, clickX, clickY);
-          saveState();
-        }
-      });
-
-      const copyBtn = document.createElement('div');
-      copyBtn.classList.add('copy-btn');
-      copyBtn.innerHTML = `
-        <svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="8" x2="12" y2="16" />
-        <line x1="8" y1="12" x2="16" y2="12" />
-        </svg>
-      `;
-
-      copyBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const stickerWidth = sticker.offsetWidth;
-        const stickerHeight = sticker.offsetHeight;
-        let newX = parseInt(sticker.style.left) + 10;
-        let newY = parseInt(sticker.style.top) + 10;
-        function isOverlapping(x, y) {
-          const stickers = document.querySelectorAll('.sticker');
-          return Array.from(stickers).some(s => {
-            const sx = parseInt(s.style.left);
-            const sy = parseInt(s.style.top);
-            const sw = s.offsetWidth;
-            const sh = s.offsetHeight;
-            return !(x + stickerWidth < sx || x > sx + sw || y + stickerHeight < sy || y > sy + sh);
-          });
-        }
-        const step = 10;
-        let attempts = 0;
-        while (isOverlapping(newX, newY) && attempts < 100) {
-          newX += step;
-          newY += step;
-          if (newX + stickerWidth > canvas.offsetWidth) newX = step;
-          if (newY + stickerHeight > canvas.offsetHeight) newY = step;
-          attempts++;
-        }
-        saveState();
-        addSticker(stickerImg.src, newX, newY, sticker.offsetWidth);
-      });
-
-      const deleteBtn = document.createElement('div');
-      deleteBtn.classList.add('delete-btn');
-      deleteBtn.innerHTML = `
-        <svg class="delete-btn-icon" viewBox="0 0 24 24">
-            <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
-        </svg>
-      `;
-      deleteBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        saveState();
-        sticker.remove();
-      });
-      sticker.appendChild(deleteBtn);
-      sticker.appendChild(copyBtn);
-
-      function startInteraction(e) {
-        if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn')) {
-          return;
-        }
+        const canvas = document.getElementById('canvas-container');
+        const addStickerBtn = document.getElementById('add-sticker-btn');
+        const undoBtn = document.getElementById('undo-btn');
+        const newBtn = document.getElementById('new-btn');
+        const colorPalette = document.getElementById('color-palette');
+        const history = [];
         
-        if (bucketMode) return;
+        const stickerPickerBtn = document.getElementById('sticker-picker-btn');
+        const groupOverlayContainer = document.getElementById('group-overlay-container');
+        const stickerOverlayContainer = document.getElementById('sticker-overlay-container');
         
-        saveState();
+        let bucketMode = false;
+        let activeSticker = null;
+        let activePaletteSticker = null;
+        let selectedColor = null;
         
-        document.querySelectorAll('.sticker').forEach(s => {
-          if (s !== sticker) {
-            s.classList.remove('selected');
-          }
-        });
-
-        sticker.classList.add('selected');
-
-        e.preventDefault();
-        activeSticker = sticker;
+        let initialX, initialY, offsetX, offsetY;
+        let initialTouchDistance = 0;
+        let initialStickerWidth = 0;
+        let initialStickerHeight = 0;
         
-        initialCenter.x = sticker.offsetLeft + sticker.offsetWidth / 2;
-        initialCenter.y = sticker.offsetTop + sticker.offsetHeight / 2;
-        
-        if (e.touches && e.touches.length === 2) { 
-          initialTouchDistance = getTouchDistance(e.touches);
-          initialStickerWidth = sticker.offsetWidth;
-          initialStickerHeight = sticker.offsetHeight;
-        } else if (e.touches && e.touches.length === 1) { 
-          const touch = e.touches[0];
-          initialX = touch.clientX;
-          initialY = touch.clientY;
-          offsetX = sticker.offsetLeft;
-          offsetY = sticker.offsetTop;
-        } else { 
-          initialX = e.clientX;
-          initialY = e.clientY;
-          offsetX = sticker.offsetLeft;
-          offsetY = sticker.offsetTop;
-        }
-        
-        document.addEventListener('mousemove', handleMove);
-        document.addEventListener('mouseup', handleEnd);
-        document.addEventListener('touchmove', handleMove, { passive: false });
-        document.addEventListener('touchend', handleEnd);
-      }
-      
-      function handleMove(e) {
-        if (!activeSticker || bucketMode) return;
-        e.preventDefault();
-        
-        if (e.touches && e.touches.length === 2) { 
-          const newTouchDistance = getTouchDistance(e.touches);
-          const scaleChange = newTouchDistance / initialTouchDistance;
-          const newWidth = Math.max(initialStickerWidth * scaleChange, 30);
-          const aspectRatio = initialStickerWidth / initialStickerHeight;
-          const newHeight = newWidth / aspectRatio;
-          
-          activeSticker.style.width = `${newWidth}px`;
-          activeSticker.style.height = `${newHeight}px`;
+        let initialCenter = { x: 0, y: 0 };
+        let firstStickerAdded = false;
 
-          activeSticker.style.left = `${initialCenter.x - newWidth / 2}px`;
-          activeSticker.style.top = `${initialCenter.y - newHeight / 2}px`;
+        const colors = [
+            // Reds
+            '#FF0000', '#FF4500', '#FF6347', '#D2691E', '#CD5C5C',
 
-        } else { 
-          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-          const newX = offsetX + (clientX - initialX);
-          const newY = offsetY + (clientY - initialY);
-          activeSticker.style.left = `${newX}px`;
-          activeSticker.style.top = `${newY}px`;
-        }
-      }
-      
-      function handleEnd() {
-        document.removeEventListener('mousemove', handleMove);
-        document.removeEventListener('mouseup', handleEnd);
-        document.removeEventListener('touchmove', handleMove);
-        document.removeEventListener('touchend', handleEnd);
-        activeSticker = null;
-        saveState();
-      }
-      
-      sticker.addEventListener('mousedown', startInteraction);
-      sticker.addEventListener('touchstart', startInteraction);
+            // Oranges & Yellows
+            '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
 
-      canvas.addEventListener('mousedown', (e) => {
-        if (!e.target.closest('.sticker')) {
-          deselectAllStickers();
-        }
-      });
-      canvas.addEventListener('touchstart', (e) => {
-        if (!e.target.closest('.sticker')) {
-          deselectAllStickers();
-        }
-      });
+            // Greens
+            '#008000', '#228B22', '#3CB371', '#9ACD32', '#ADFF2F',
 
-      function addResizeListener(stickerImg) {
-        stickerImg.addEventListener('wheel', (e) => {
-          e.preventDefault();
-          saveState();
-          const parent = stickerImg.parentElement;
-          const delta = Math.sign(e.deltaY);
-          
-          const initialWidth = parent.offsetWidth;
-          const initialHeight = parent.offsetHeight;
-          
-          const initialLeft = parent.offsetLeft;
-          const initialTop = parent.offsetTop;
-          
-          const newSize = initialWidth + (delta * 10);
-          const minSize = 30;
-          
-          if (newSize >= minSize) {
-            const newHeight = newSize / (initialWidth / initialHeight);
+            // Blues
+            '#0000FF', '#0000CD', '#4169E1', '#1E90FF', '#87CEFA',
+
+            // Purples
+            '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
+
+            // Pinks & Browns
+            '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
             
-            parent.style.width = `${newSize}px`;
-            parent.style.height = `${newHeight}px`;
-
-            parent.style.left = `${initialLeft + (initialWidth - newSize) / 2}px`;
-            parent.style.top = `${initialTop + (initialHeight - newHeight) / 2}px`;
+            '#C0C0C0', '#808080'
+        ];
+        
+        function setBucketMode(enabled) {
+            bucketMode = enabled;
+            if (bucketMode) {
+                document.body.classList.add('bucket-active');
+                canvas.style.cursor = 'crosshair';
+                document.querySelectorAll('.color-swatch').forEach(swatch => {
+                    swatch.draggable = false;
+                });
+            } else {
+                document.body.classList.remove('bucket-active');
+                canvas.style.cursor = 'default';
+                document.querySelectorAll('.color-swatch').forEach(swatch => {
+                    swatch.draggable = true;
+                });
+            }
+        }
+        
+        // NEW: Central function to add or replace a sticker and center it.
+        function addOrReplaceSticker(url) {
+            // Deactivate color picker when adding a new sticker.
+            setBucketMode(false);
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            selectedColor = null;
+        
+            const stickerWidth = 120;
+            const canvasWidth = canvas.offsetWidth;
+            const canvasHeight = canvas.offsetHeight;
+            
+            // Clear the canvas and add the new sticker in the center.
+            canvas.innerHTML = '';
+            const finalX = (canvasWidth / 2) - (stickerWidth / 2);
+            const finalY = (canvasHeight / 2) - (stickerWidth / 2);
             
             saveState();
-          }
-        });
-      }
-
-      addResizeListener(stickerImg);
-
-      let finalX = x;
-      let finalY = y;
-      const canvasRect = canvas.getBoundingClientRect();
-
-      if (finalX === undefined || finalY === undefined) {
-        let tries = 0;
-        let overlap;
-        do {
-          overlap = false;
-          finalX = Math.floor(Math.random() * (canvas.offsetWidth - width));
-          finalY = Math.floor(Math.random() * (canvas.offsetHeight - width));
-          document.querySelectorAll('.sticker').forEach(existing => {
-            const rect = existing.getBoundingClientRect();
-            const ex = rect.left - canvasRect.left;
-            const ey = rect.top - canvasRect.top;
-            const ew = rect.width;
-            const eh = rect.height;
-            if (
-              finalX < ex + ew &&
-              finalX + width > ex &&
-              finalY < ey + eh &&
-              finalY + width > ey
-            ) {
-              overlap = true;
-            }
-          });
-          tries++;
-          if (tries > 200) break;
-        } while (overlap);
-      }
-
-      sticker.style.left = `${finalX}px`;
-      sticker.style.top = `${finalY}px`;
-
-      function updateButtonSizes() {
-        const btnSize = sticker.offsetWidth * 0.2;
-        [deleteBtn, copyBtn].forEach(btn => {
-          btn.style.width = btnSize + 'px';
-          btn.style.height = btnSize + 'px';
-        });
-        deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
-        copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
-      }
-
-      updateButtonSizes();
-      const observer = new ResizeObserver(updateButtonSizes);
-      observer.observe(sticker);
-      canvas.appendChild(sticker);
-      return sticker;
-    }
-
-    function hexToRgb(hex) {
-      hex = hex.replace(/^#/, "");
-      const bigint = parseInt(hex, 16);
-      return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
-    }
-
-    function recolorSticker(stickerImg, fillColor, clickX, clickY) {
-      const canvasEl = document.createElement("canvas");
-      const ctx = canvasEl.getContext("2d");
-      canvasEl.width = stickerImg.naturalWidth;
-      canvasEl.height = stickerImg.naturalHeight;
-      ctx.drawImage(stickerImg, 0, 0);
-
-      const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
-      const data = imgData.data;
-      const [r, g, b] = hexToRgb(fillColor);
-      const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
-      const startR = data[startIndex];
-      const startG = data[startIndex + 1];
-      const startB = data[startIndex + 2];
-      const startA = data[startIndex + 3];
-      const isBlack = (r, g, b, a) => (r === 0 && g === 0 && b === 0 && a > 0);
-
-      if (isBlack(startR, startG, startB, startA)) {
-        let found = false;
-        const offsets = [[1,0],[-1,0],[0,1],[0,-1]];
-        for (const [dx, dy] of offsets) {
-          const nx = clickX + dx;
-          const ny = clickY + dy;
-          if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
-          const ni = ((ny * canvasEl.width) + nx) * 4;
-          if (data[ni+3] === 0) {
-            clickX = nx; clickY = ny;
-            found = true;
-            break;
-          }
+            addSticker(url, finalX, finalY, stickerWidth);
         }
-        if (!found) return;
-      }
-      const stack = [[clickX, clickY]];
-      const visited = new Set();
-      let touchesEdge = false;
-      while (stack.length) {
-        const [x, y] = stack.pop();
-        if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
-          touchesEdge = true;
-          continue;
-        }
-        const i = ((y * canvasEl.width) + x) * 4;
-        const key = `${x},${y}`;
-        if (visited.has(key)) continue;
-        visited.add(key);
-        if (isBlack(data[i], data[i+1], data[i+2], data[i+3])) continue;
-        stack.push([x+1, y]);
-        stack.push([x-1, y]);
-        stack.push([x, y+1]);
-        stack.push([x, y-1]);
-      }
-      if (touchesEdge) return;
-      for (const key of visited) {
-        const [x, y] = key.split(",").map(Number);
-        const i = ((y * canvasEl.width) + x) * 4;
-        data[i] = r;
-        data[i+1] = g;
-        data[i+2] = b;
-        data[i+3] = 255;
-      }
-      ctx.putImageData(imgData, 0, 0);
-      stickerImg.src = canvasEl.toDataURL();
-    }
-
-    function updateUndoButton() {
-      undoBtn.disabled = history.length <= 1;
-    }
-
-    undoBtn.addEventListener('click', () => {
-      if (history.length > 1) {
-        history.pop();
-        loadState(history[history.length - 1]);
-        updateUndoButton();
-      }
-    });
-
-    newBtn.addEventListener('click', () => {
-      canvas.innerHTML = '';
-      history.splice(0);
-      saveState();
-      firstStickerAdded = false;
-    });
-
-    addStickerBtn.addEventListener('click', () => {
-      setBucketMode(false);
-      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-      selectedColor = null;
-
-      const allUrls = stickerGroups.flatMap(group => group.urls);
-      const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
-      
-      const stickerWidth = 120;
-      const canvasWidth = canvas.offsetWidth;
-      const canvasHeight = canvas.offsetHeight;
-      
-      const existingStickers = document.querySelectorAll('.sticker').length;
-
-      let finalX, finalY;
-
-      if (existingStickers === 0) {
-        finalX = (canvasWidth / 2) - (stickerWidth / 2);
-        finalY = (canvasHeight / 2) - (stickerWidth / 2);
-        firstStickerAdded = true;
-      } else {
-        const canvasRect = canvas.getBoundingClientRect();
-        let tries = 0;
-        let overlap;
         
-        do {
-          overlap = false;
-          finalX = Math.floor(Math.random() * (canvasWidth - stickerWidth));
-          finalY = Math.floor(Math.random() * (canvasHeight - stickerWidth));
-          
-          document.querySelectorAll('.sticker').forEach(existing => {
-            const rect = existing.getBoundingClientRect();
-            const ex = rect.left - canvasRect.left;
-            const ey = rect.top - canvasRect.top;
-            const ew = rect.width;
-            const eh = rect.height;
-            if (
-              finalX < ex + ew &&
-              finalX + stickerWidth > ex &&
-              finalY < ey + eh &&
-              finalY + stickerWidth > ey
-            ) {
-              overlap = true;
-            }
-          });
-          
-          tries++;
-          if (tries > 200) break;
-        } while (overlap);
-        firstStickerAdded = true;
-      }
+        function saveState() {
+            const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+            const currentState = {
+                stickers: []
+            };
 
-      saveState();
-      addSticker(randomUrl, finalX, finalY, stickerWidth);
-    });
-
-    window.addEventListener('load', () => {
-      if (window.lucide) {
-        lucide.createIcons();
-      }
-      updateCanvasDrop();
-    });
-    
-    let isDragging = false;
-    let startX;
-    let scrollLeft;
-    let isSwiping = false; 
-    let initialTap = { clientX: 0 };
-
-    function addSwipeFunctionality() {
-      const paletteContainer = document.querySelector('.color-palette-container');
-      const palette = document.querySelector('.color-palette');
-
-      const handleStart = (e) => {
-        isDragging = true;
-        startX = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
-        scrollLeft = paletteContainer.scrollLeft;
-        initialTap.clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-      };
-
-      const handleMove = (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
-        const walk = (x - startX) * 1.5; 
-        paletteContainer.scrollLeft = scrollLeft - walk;
-        if (Math.abs(e.clientX - initialTap.clientX) > 10) {
-            isSwiping = true;
+            stickersOnCanvas.forEach(sticker => {
+                const stickerImg = sticker.querySelector('img');
+                if (stickerImg) {
+                    currentState.stickers.push({
+                        url: stickerImg.src,
+                        x: sticker.offsetLeft,
+                        y: sticker.offsetTop,
+                        width: sticker.offsetWidth,
+                        height: sticker.offsetHeight
+                    });
+                }
+            });
+            history.push(currentState);
+            updateUndoButton();
         }
-      };
 
-      const handleEnd = () => {
-        isDragging = false;
-        setTimeout(() => {
-          isSwiping = false;
-        }, 100);
-      };
-
-      [paletteContainer, palette].forEach(element => {
-        element.addEventListener('mousedown', handleStart);
-        element.addEventListener('mousemove', handleMove);
-        element.addEventListener('mouseup', handleEnd);
-        element.addEventListener('mouseleave', handleEnd);
-
-        element.addEventListener('touchstart', handleStart);
-        element.addEventListener('touchmove', handleMove, { passive: false });
-        element.addEventListener('touchend', handleEnd);
-      });
-    }
-
-    function populateColorPalette() {
-      colorPalette.innerHTML = '';
-      colors.forEach(color => {
-        const swatch = document.createElement('div');
-        swatch.classList.add('color-swatch');
-        swatch.style.backgroundColor = color;
-        if (color === selectedColor) {
-          swatch.classList.add('active');
+        function loadState(state) {
+            canvas.innerHTML = '';
+            state.stickers.forEach(data => {
+                const sticker = addSticker(data.url, data.x, data.y);
+                sticker.style.width = `${data.width}px`;
+                sticker.style.height = `${data.height}px`;
+            });
         }
-        swatch.addEventListener('click', (e) => {
-          if (isSwiping) {
-            return;
-          }
-          const wasActive = swatch.classList.contains('active');
-          document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-          
-          if (!wasActive) {
-            swatch.classList.add('active');
-            selectedColor = color;
-            setBucketMode(true);
-          } else {
-            selectedColor = null;
-            setBucketMode(false);
-          }
-        });
-        colorPalette.appendChild(swatch);
-      });
-    }
 
-    // NEW FUNCTIONS FOR THE 2-STEP STICKER PICKER
-    
-    // Function to hide both overlays
-    function hideOverlays() {
-      groupOverlayContainer.style.display = 'none';
-      stickerOverlayContainer.style.display = 'none';
-    }
+        function deselectAllStickers() {
+            document.querySelectorAll('.sticker').forEach(s => {
+                s.classList.remove('selected');
+            });
+        }
 
-    // Function to show the sticker groups in the first overlay
-    function showGroupOverlay() {
-      hideOverlays();
-      groupOverlayContainer.innerHTML = '';
-      stickerGroups.forEach(group => {
-        const groupIcon = document.createElement('img');
-        groupIcon.src = group.urls[0];
-        groupIcon.classList.add('overlay-icon');
-        groupIcon.title = group.name;
+        function getTouchDistance(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
         
-        groupIcon.addEventListener('click', () => {
-          showStickerOverlay(group.urls);
+        function addSticker(url, x, y, width = 120) {
+            const sticker = document.createElement('div');
+            sticker.classList.add('sticker');
+            sticker.style.width = width + 'px';
+            sticker.style.height = 'auto';
+
+            const stickerImg = document.createElement('img');
+            stickerImg.crossOrigin = "Anonymous";
+            stickerImg.src = url;
+            stickerImg.draggable = false;
+            sticker.appendChild(stickerImg);
+
+            sticker.addEventListener('click', (e) => {
+                if (bucketMode && selectedColor) {
+                    e.stopPropagation();
+                    const rect = sticker.getBoundingClientRect();
+                    const clickX = Math.floor((e.clientX - rect.left) * (stickerImg.naturalWidth / rect.width));
+                    const clickY = Math.floor((e.clientY - rect.top) * (stickerImg.naturalHeight / rect.height));
+                    recolorSticker(stickerImg, selectedColor, clickX, clickY);
+                    saveState();
+                }
+            });
+
+            const copyBtn = document.createElement('div');
+            copyBtn.classList.add('copy-btn');
+            copyBtn.innerHTML = `
+                <svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+                </svg>
+            `;
+
+            copyBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const stickerWidth = sticker.offsetWidth;
+                const stickerHeight = sticker.offsetHeight;
+                let newX = parseInt(sticker.style.left) + 10;
+                let newY = parseInt(sticker.style.top) + 10;
+                function isOverlapping(x, y) {
+                    const stickers = document.querySelectorAll('.sticker');
+                    return Array.from(stickers).some(s => {
+                        const sx = parseInt(s.style.left);
+                        const sy = parseInt(s.style.top);
+                        const sw = s.offsetWidth;
+                        const sh = s.offsetHeight;
+                        return !(x + stickerWidth < sx || x > sx + sw || y + stickerHeight < sy || y > sy + sh);
+                    });
+                }
+                const step = 10;
+                let attempts = 0;
+                while (isOverlapping(newX, newY) && attempts < 100) {
+                    newX += step;
+                    newY += step;
+                    if (newX + stickerWidth > canvas.offsetWidth) newX = step;
+                    if (newY + stickerHeight > canvas.offsetHeight) newY = step;
+                    attempts++;
+                }
+                saveState();
+                addSticker(stickerImg.src, newX, newY, sticker.offsetWidth);
+            });
+
+            const deleteBtn = document.createElement('div');
+            deleteBtn.classList.add('delete-btn');
+            deleteBtn.innerHTML = `
+                <svg class="delete-btn-icon" viewBox="0 0 24 24">
+                    <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
+                </svg>
+            `;
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                saveState();
+                sticker.remove();
+            });
+            sticker.appendChild(deleteBtn);
+            sticker.appendChild(copyBtn);
+
+            function startInteraction(e) {
+                if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn')) {
+                    return;
+                }
+                
+                if (bucketMode) return;
+                
+                saveState();
+                
+                document.querySelectorAll('.sticker').forEach(s => {
+                    if (s !== sticker) {
+                        s.classList.remove('selected');
+                    }
+                });
+
+                sticker.classList.add('selected');
+
+                e.preventDefault();
+                activeSticker = sticker;
+                
+                initialCenter.x = sticker.offsetLeft + sticker.offsetWidth / 2;
+                initialCenter.y = sticker.offsetTop + sticker.offsetHeight / 2;
+                
+                if (e.touches && e.touches.length === 2) { 
+                    initialTouchDistance = getTouchDistance(e.touches);
+                    initialStickerWidth = sticker.offsetWidth;
+                    initialStickerHeight = sticker.offsetHeight;
+                } else if (e.touches && e.touches.length === 1) { 
+                    const touch = e.touches[0];
+                    initialX = touch.clientX;
+                    initialY = touch.clientY;
+                    offsetX = sticker.offsetLeft;
+                    offsetY = sticker.offsetTop;
+                } else { 
+                    initialX = e.clientX;
+                    initialY = e.clientY;
+                    offsetX = sticker.offsetLeft;
+                    offsetY = sticker.offsetTop;
+                }
+                
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('mouseup', handleEnd);
+                document.addEventListener('touchmove', handleMove, { passive: false });
+                document.addEventListener('touchend', handleEnd);
+            }
+            
+            function handleMove(e) {
+                if (!activeSticker || bucketMode) return;
+                e.preventDefault();
+                
+                if (e.touches && e.touches.length === 2) { 
+                    const newTouchDistance = getTouchDistance(e.touches);
+                    const scaleChange = newTouchDistance / initialTouchDistance;
+                    const newWidth = Math.max(initialStickerWidth * scaleChange, 30);
+                    const aspectRatio = initialStickerWidth / initialStickerHeight;
+                    const newHeight = newWidth / aspectRatio;
+                    
+                    activeSticker.style.width = `${newWidth}px`;
+                    activeSticker.style.height = `${newHeight}px`;
+
+                    activeSticker.style.left = `${initialCenter.x - newWidth / 2}px`;
+                    activeSticker.style.top = `${initialCenter.y - newHeight / 2}px`;
+
+                } else { 
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    const newX = offsetX + (clientX - initialX);
+                    const newY = offsetY + (clientY - initialY);
+                    activeSticker.style.left = `${newX}px`;
+                    activeSticker.style.top = `${newY}px`;
+                }
+            }
+            
+            function handleEnd() {
+                document.removeEventListener('mousemove', handleMove);
+                document.removeEventListener('mouseup', handleEnd);
+                document.removeEventListener('touchmove', handleMove);
+                document.removeEventListener('touchend', handleEnd);
+                activeSticker = null;
+                saveState();
+            }
+            
+            sticker.addEventListener('mousedown', startInteraction);
+            sticker.addEventListener('touchstart', startInteraction);
+
+            canvas.addEventListener('mousedown', (e) => {
+                if (!e.target.closest('.sticker')) {
+                    deselectAllStickers();
+                }
+            });
+            canvas.addEventListener('touchstart', (e) => {
+                if (!e.target.closest('.sticker')) {
+                    deselectAllStickers();
+                }
+            });
+
+            function addResizeListener(stickerImg) {
+                stickerImg.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    saveState();
+                    const parent = stickerImg.parentElement;
+                    const delta = Math.sign(e.deltaY);
+                    
+                    const initialWidth = parent.offsetWidth;
+                    const initialHeight = parent.offsetHeight;
+                    
+                    const initialLeft = parent.offsetLeft;
+                    const initialTop = parent.offsetTop;
+                    
+                    const newSize = initialWidth + (delta * 10);
+                    const minSize = 30;
+                    
+                    if (newSize >= minSize) {
+                        const newHeight = newSize / (initialWidth / initialHeight);
+                        
+                        parent.style.width = `${newSize}px`;
+                        parent.style.height = `${newHeight}px`;
+
+                        parent.style.left = `${initialLeft + (initialWidth - newSize) / 2}px`;
+                        parent.style.top = `${initialTop + (initialHeight - newHeight) / 2}px`;
+                        
+                        saveState();
+                    }
+                });
+            }
+
+            addResizeListener(stickerImg);
+
+            let finalX = x;
+            let finalY = y;
+            const canvasRect = canvas.getBoundingClientRect();
+
+            if (finalX === undefined || finalY === undefined) {
+                let tries = 0;
+                let overlap;
+                do {
+                    overlap = false;
+                    finalX = Math.floor(Math.random() * (canvas.offsetWidth - width));
+                    finalY = Math.floor(Math.random() * (canvas.offsetHeight - width));
+                    document.querySelectorAll('.sticker').forEach(existing => {
+                        const rect = existing.getBoundingClientRect();
+                        const ex = rect.left - canvasRect.left;
+                        const ey = rect.top - canvasRect.top;
+                        const ew = rect.width;
+                        const eh = rect.height;
+                        if (
+                            finalX < ex + ew &&
+                            finalX + width > ex &&
+                            finalY < ey + eh &&
+                            finalY + width > ey
+                        ) {
+                            overlap = true;
+                        }
+                    });
+                    tries++;
+                    if (tries > 200) break;
+                } while (overlap);
+            }
+
+            sticker.style.left = `${finalX}px`;
+            sticker.style.top = `${finalY}px`;
+
+            function updateButtonSizes() {
+                const btnSize = sticker.offsetWidth * 0.2;
+                [deleteBtn, copyBtn].forEach(btn => {
+                    btn.style.width = btnSize + 'px';
+                    btn.style.height = btnSize + 'px';
+                });
+                deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
+                copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
+            }
+
+            updateButtonSizes();
+            const observer = new ResizeObserver(updateButtonSizes);
+            observer.observe(sticker);
+            canvas.appendChild(sticker);
+            return sticker;
+        }
+
+        function hexToRgb(hex) {
+            hex = hex.replace(/^#/, "");
+            const bigint = parseInt(hex, 16);
+            return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+        }
+
+        function recolorSticker(stickerImg, fillColor, clickX, clickY) {
+            const canvasEl = document.createElement("canvas");
+            const ctx = canvasEl.getContext("2d", { willReadFrequently: true });
+            canvasEl.width = stickerImg.naturalWidth;
+            canvasEl.height = stickerImg.naturalHeight;
+            ctx.drawImage(stickerImg, 0, 0);
+
+            const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+            const data = imgData.data;
+            const [r, g, b] = hexToRgb(fillColor);
+            const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
+            const startR = data[startIndex];
+            const startG = data[startIndex + 1];
+            const startB = data[startIndex + 2];
+            const startA = data[startIndex + 3];
+            const isBlack = (r, g, b, a) => (r === 0 && g === 0 && b === 0 && a > 0);
+
+            if (isBlack(startR, startG, startB, startA)) {
+                let found = false;
+                const offsets = [[1,0],[-1,0],[0,1],[0,-1]];
+                for (const [dx, dy] of offsets) {
+                    const nx = clickX + dx;
+                    const ny = clickY + dy;
+                    if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
+                    const ni = ((ny * canvasEl.width) + nx) * 4;
+                    if (data[ni+3] === 0) {
+                        clickX = nx; clickY = ny;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) return;
+            }
+            const stack = [[clickX, clickY]];
+            const visited = new Set();
+            let touchesEdge = false;
+            while (stack.length) {
+                const [x, y] = stack.pop();
+                if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
+                    touchesEdge = true;
+                    continue;
+                }
+                const i = ((y * canvasEl.width) + x) * 4;
+                const key = `${x},${y}`;
+                if (visited.has(key)) continue;
+                visited.add(key);
+                if (isBlack(data[i], data[i+1], data[i+2], data[i+3])) continue;
+                stack.push([x+1, y]);
+                stack.push([x-1, y]);
+                stack.push([x, y+1]);
+                stack.push([x, y-1]);
+            }
+            if (touchesEdge) return;
+            for (const key of visited) {
+                const [x, y] = key.split(",").map(Number);
+                const i = ((y * canvasEl.width) + x) * 4;
+                data[i] = r;
+                data[i+1] = g;
+                data[i+2] = b;
+                data[i+3] = 255;
+            }
+            ctx.putImageData(imgData, 0, 0);
+            stickerImg.src = canvasEl.toDataURL();
+        }
+
+        function updateUndoButton() {
+            undoBtn.disabled = history.length <= 1;
+        }
+
+        undoBtn.addEventListener('click', () => {
+            if (history.length > 1) {
+                history.pop();
+                loadState(history[history.length - 1]);
+                updateUndoButton();
+            }
         });
-        groupOverlayContainer.appendChild(groupIcon);
-      });
-      groupOverlayContainer.style.display = 'grid';
-    }
 
-    // New function to update the sticker drop listener
-function updateCanvasDrop() {
-  const canvas = document.getElementById('canvas-container');
-  // Remove existing listener to prevent duplicates
-  canvas.removeEventListener('drop', handleCanvasDrop); 
-  canvas.addEventListener('drop', handleCanvasDrop); 
-}
+        newBtn.addEventListener('click', () => {
+            canvas.innerHTML = '';
+            history.splice(0);
+            saveState();
+            firstStickerAdded = false;
+        });
 
-// Handler for the canvas drop event
-function handleCanvasDrop(e) {
-  e.preventDefault();
-  const data = e.dataTransfer.getData('application/json');
-  if (data) {
-    const { url, width } = JSON.parse(data);
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left - (width / 2); // Center the sticker on the drop location
-    const y = e.clientY - rect.top - (width / 2); // Center the sticker on the drop location
-    saveState();
-    addSticker(url, x, y, width);
-  }
-}
+        // MODIFIED: This function now correctly handles replacing the sticker and centering it
+        addStickerBtn.addEventListener('click', () => {
+            const allUrls = stickerGroups.flatMap(group => group.urls);
+            const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+            
+            addOrReplaceSticker(randomUrl);
+        });
 
-let activeTouchSticker = null;
-let touchOffsetX = 0;
-let touchOffsetY = 0;
-    // Function to show the stickers of a selected group
- function showStickerOverlay(urls) {
-  hideOverlays();
-  stickerOverlayContainer.innerHTML = '';
-  urls.forEach(url => {
-    const sticker = document.createElement('img');
-    sticker.src = url;
-    sticker.classList.add('overlay-sticker');
-    sticker.draggable = true; // Keep for desktop drag and drop
-    
-    // Add dragstart event listener for desktop
-    sticker.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('application/json', JSON.stringify({
-        url: e.target.src,
-        width: 150 
-      }));
-    });
-    
-    // Add touchstart event listener for mobile
-    sticker.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      const touch = e.touches[0];
-      const rect = sticker.getBoundingClientRect();
-      activeTouchSticker = sticker;
-      
-      // Calculate touch offset from the top-left corner
-      touchOffsetX = touch.clientX - rect.left;
-      touchOffsetY = touch.clientY - rect.top;
-      
-      // Create a ghost image for dragging
-      const ghost = document.createElement('img');
-      ghost.src = sticker.src;
-      ghost.classList.add('ghost-sticker');
-      ghost.style.position = 'fixed';
-      ghost.style.left = `${touch.clientX - touchOffsetX}px`;
-      ghost.style.top = `${touch.clientY - touchOffsetY}px`;
-      document.body.appendChild(ghost);
+        window.addEventListener('load', () => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+            updateCanvasDrop();
+        });
+        
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+        let isSwiping = false; 
+        let initialTap = { clientX: 0 };
 
-      // Listen for touch movement and drop
-      document.addEventListener('touchmove', handleTouchMove);
-      document.addEventListener('touchend', handleTouchEnd);
-    });
+        function addSwipeFunctionality() {
+            const paletteContainer = document.querySelector('.color-palette-container');
+            const palette = document.querySelector('.color-palette');
 
-    // Add click event listener for non-drag actions
-    sticker.addEventListener('click', () => {
-      addSticker(url);
-      saveState();
-      hideOverlays();
-    });
-    
-    stickerOverlayContainer.appendChild(sticker);
-  });
-  stickerOverlayContainer.style.display = 'grid';
-}
+            const handleStart = (e) => {
+                isDragging = true;
+                startX = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+                scrollLeft = paletteContainer.scrollLeft;
+                initialTap.clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            };
 
-// Handler for touchmove event
-function handleTouchMove(e) {
-  if (!activeTouchSticker) return;
-  const touch = e.touches[0];
-  const ghost = document.querySelector('.ghost-sticker');
-  
-  if (ghost) {
-    ghost.style.left = `${touch.clientX - touchOffsetX}px`;
-    ghost.style.top = `${touch.clientY - touchOffsetY}px`;
-  }
-}
+            const handleMove = (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+                const walk = (x - startX) * 1.5; 
+                paletteContainer.scrollLeft = scrollLeft - walk;
+                if (Math.abs(e.clientX - initialTap.clientX) > 10) {
+                    isSwiping = true;
+                }
+            };
 
-// Handler for touchend event
-function handleTouchEnd(e) {
-  if (!activeTouchSticker) return;
-  const ghost = document.querySelector('.ghost-sticker');
-  
-  // Get the element under the finger
-  const touch = e.changedTouches[0];
-  const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+            const handleEnd = () => {
+                isDragging = false;
+                setTimeout(() => {
+                    isSwiping = false;
+                }, 100);
+            };
 
-  if (dropTarget && dropTarget.id === 'canvas-container') {
-    const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left - (activeTouchSticker.offsetWidth / 2);
-    const y = touch.clientY - rect.top - (activeTouchSticker.offsetHeight / 2);
-    
-    // Get the image URL from the original sticker
-    const url = activeTouchSticker.src;
-    
-    addSticker(url, x, y, activeTouchSticker.offsetWidth);
-    saveState();
-  }
+            [paletteContainer, palette].forEach(element => {
+                element.addEventListener('mousedown', handleStart);
+                element.addEventListener('mousemove', handleMove);
+                element.addEventListener('mouseup', handleEnd);
+                element.addEventListener('mouseleave', handleEnd);
 
-  // Clean up
-  if (ghost) {
-    ghost.remove();
-  }
-  activeTouchSticker = null;
-  document.removeEventListener('touchmove', handleTouchMove);
-  document.removeEventListener('touchend', handleTouchEnd);
-}
+                element.addEventListener('touchstart', handleStart);
+                element.addEventListener('touchmove', handleMove, { passive: false });
+                element.addEventListener('touchend', handleEnd);
+            });
+        }
 
-    // New event listener for the sticker picker button
-    stickerPickerBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (groupOverlayContainer.style.display === 'grid') {
-        hideOverlays();
-      } else {
-        showGroupOverlay();
-      }
-    });
+        function populateColorPalette() {
+            colorPalette.innerHTML = '';
+            colors.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.classList.add('color-swatch');
+                swatch.style.backgroundColor = color;
+                if (color === selectedColor) {
+                    swatch.classList.add('active');
+                }
+                swatch.addEventListener('click', (e) => {
+                    if (isSwiping) {
+                        return;
+                    }
+                    const wasActive = swatch.classList.contains('active');
+                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                    
+                    if (!wasActive) {
+                        swatch.classList.add('active');
+                        selectedColor = color;
+                        setBucketMode(true);
+                    } else {
+                        selectedColor = null;
+                        setBucketMode(false);
+                    }
+                });
+                colorPalette.appendChild(swatch);
+            });
+        }
 
-    // Event listener to hide overlays when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!groupOverlayContainer.contains(e.target) && !stickerOverlayContainer.contains(e.target) && !stickerPickerBtn.contains(e.target)) {
-        hideOverlays();
-      }
-    });
+        function hideOverlays() {
+            groupOverlayContainer.style.display = 'none';
+            stickerOverlayContainer.style.display = 'none';
+        }
 
-    // The old palette and overlay-related event listeners are removed as they are no longer needed
-    canvas.removeEventListener('dragover', (e) => {
-      e.preventDefault();
-    });
+        function showGroupOverlay() {
+            hideOverlays();
+            groupOverlayContainer.innerHTML = '';
+            stickerGroups.forEach(group => {
+                const groupIcon = document.createElement('img');
+                groupIcon.src = group.urls[0];
+                groupIcon.classList.add('overlay-icon');
+                groupIcon.title = group.name;
+                
+                groupIcon.addEventListener('click', () => {
+                    showStickerOverlay(group.urls);
+                });
+                groupOverlayContainer.appendChild(groupIcon);
+            });
+            groupOverlayContainer.style.display = 'grid';
+        }
 
-    canvas.removeEventListener('drop', (e) => {
-      e.preventDefault();
-      const data = e.dataTransfer.getData('application/json');
-      if (data) {
-        const { url, width } = JSON.parse(data);
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        function updateCanvasDrop() {
+            const canvas = document.getElementById('canvas-container');
+            canvas.removeEventListener('drop', handleCanvasDrop); 
+            canvas.addEventListener('drop', handleCanvasDrop); 
+        }
+
+        function handleCanvasDrop(e) {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('application/json');
+            if (data) {
+                const { url, width } = JSON.parse(data);
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left - (width / 2);
+                const y = e.clientY - rect.top - (width / 2);
+                saveState();
+                addSticker(url, x, y, width);
+            }
+        }
+
+        let activeTouchSticker = null;
+        let touchOffsetX = 0;
+        let touchOffsetY = 0;
+        
+        function showStickerOverlay(urls) {
+            hideOverlays();
+            stickerOverlayContainer.innerHTML = '';
+            urls.forEach(url => {
+                const sticker = document.createElement('img');
+                sticker.src = url;
+                sticker.classList.add('overlay-sticker');
+                
+                sticker.addEventListener('click', () => {
+                    addOrReplaceSticker(url);
+                    hideOverlays();
+                });
+                
+                stickerOverlayContainer.appendChild(sticker);
+            });
+            stickerOverlayContainer.style.display = 'grid';
+        }
+
+        stickerPickerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (groupOverlayContainer.style.display === 'grid') {
+                hideOverlays();
+            } else {
+                showGroupOverlay();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!groupOverlayContainer.contains(e.target) && !stickerOverlayContainer.contains(e.target) && !stickerPickerBtn.contains(e.target)) {
+                hideOverlays();
+            }
+        });
+
+        canvas.removeEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        canvas.removeEventListener('drop', (e) => {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('application/json');
+            if (data) {
+                const { url, width } = JSON.parse(data);
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                saveState();
+                addSticker(url, x, y, width);
+            }
+        });
+
+        addSwipeFunctionality();
+        populateColorPalette();
         saveState();
-        addSticker(url, x, y, width);
-      }
-    });
-
-    addSwipeFunctionality();
-    populateColorPalette();
-    saveState();
-  </script>
+    </script>
 </body>
 </html>
