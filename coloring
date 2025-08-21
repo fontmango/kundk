@@ -156,7 +156,6 @@
         }
 
         .color-swatch:hover {
-           
             transform: scale(1.2);
         }
 
@@ -205,32 +204,32 @@
         .palette-sticker:hover {
             transform: scale(1.1);
         }
-#overlay-container {
-    position: absolute;
-    background-color: rgba(255, 255, 255, 0.95);
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px; /* Increased padding */
-    display: none;
-    z-index: 200;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    grid-template-columns: repeat(5, 1fr);
-    gap: 15px; /* Increased gap */
-    width: 350px; /* Increased width */
-}
+        #overlay-container {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            display: none;
+            z-index: 200;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            width: 350px;
+        }
 
-.overlay-sticker {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1/1;
-    object-fit: contain;
-    cursor: grab;
-    border: 1px solid transparent;
-}
+        .overlay-sticker {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+            cursor: grab;
+            border: 1px solid transparent;
+        }
 
-.overlay-sticker:hover {
-    transform: scale(1.1);
-}
+        .overlay-sticker:hover {
+            transform: scale(1.1);
+        }
 
         .copy-btn-icon, .delete-btn-icon {
             width: 100%;
@@ -240,7 +239,6 @@
         }
 
         .resize-handle-icon {
-        
             width: 60%;
             height: 60%;
             fill: white;
@@ -316,6 +314,10 @@
         <button id="undo-btn" title="Undo">
             <i data-lucide="rotate-ccw" class="icon"></i>
         </button>
+        
+        <button id="eraser-btn" title="Erase">
+            <i data-lucide="eraser" class="icon"></i>
+        </button>
 
         <button id="new-btn" title="New Canvas">
             <i data-lucide="plus-circle" class="icon"></i>
@@ -378,6 +380,7 @@
         const addStickerBtn = document.getElementById('add-sticker-btn');
         const undoBtn = document.getElementById('undo-btn');
         const newBtn = document.getElementById('new-btn');
+        const eraserBtn = document.getElementById('eraser-btn');
         const paletteContainer = document.getElementById('sticker-palette-container');
         const overlayContainer = document.getElementById('overlay-container');
         const colorPalette = document.getElementById('color-palette');
@@ -413,8 +416,13 @@
             '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
 
             // Pinks & Browns
-            '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513'
+            '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
+
+            '#C0C0C0', '#808080'
         ];
+        
+        // This is the special "erase" object that will be used by the eraser button.
+        const transparentColor = { type: 'erase' };
 
         function setBucketMode(enabled) {
             bucketMode = enabled;
@@ -751,45 +759,50 @@
             const existingStickers = document.querySelectorAll('.sticker');
 
             if (existingStickers.length === 0) {
-                // Center the first sticker
                 finalX = (canvas.offsetWidth / 2) - (width / 2);
                 finalY = (canvas.offsetHeight / 2) - (width / 2);
             } else if (x !== undefined && y !== undefined) {
-                // Drop from palette
                 finalX = x;
                 finalY = y;
             } else {
-                // Find a non-overlapping random position
-                let tries = 0;
-                let overlap;
                 const newStickerWidth = width;
                 const newStickerHeight = (stickerImg.naturalHeight / stickerImg.naturalWidth) * newStickerWidth;
-                
-                do {
-                    overlap = false;
+                let foundPosition = false;
+
+                const step = newStickerWidth / 2;
+                for (let yy = 0; yy < canvas.offsetHeight - newStickerHeight && !foundPosition; yy += step) {
+                    for (let xx = 0; xx < canvas.offsetWidth - newStickerWidth && !foundPosition; xx += step) {
+                        let overlap = false;
+                        document.querySelectorAll('.sticker').forEach(existing => {
+                            const rect = existing.getBoundingClientRect();
+                            const ex = rect.left - canvasRect.left;
+                            const ey = rect.top - canvasRect.top;
+                            const ew = rect.width;
+                            const eh = rect.height;
+
+                            if (
+                                xx < ex + ew &&
+                                xx + newStickerWidth > ex &&
+                                yy < ey + eh &&
+                                yy + newStickerHeight > ey
+                            ) {
+                                overlap = true;
+                            }
+                        });
+
+                        if (!overlap) {
+                            finalX = xx;
+                            finalY = yy;
+                            foundPosition = true;
+                        }
+                    }
+                }
+
+                if (!foundPosition) {
                     finalX = Math.floor(Math.random() * (canvas.offsetWidth - newStickerWidth));
                     finalY = Math.floor(Math.random() * (canvas.offsetHeight - newStickerHeight));
-                    
-                    document.querySelectorAll('.sticker').forEach(existing => {
-                        const rect = existing.getBoundingClientRect();
-                        const ex = rect.left - canvasRect.left;
-                        const ey = rect.top - canvasRect.top;
-                        const ew = rect.width;
-                        const eh = rect.height;
-                        if (
-                            finalX < ex + ew &&
-                            finalX + newStickerWidth > ex &&
-                            finalY < ey + eh &&
-                            finalY + newStickerHeight > ey
-                        ) {
-                            overlap = true;
-                        }
-                    });
-                    tries++;
-                    if (tries > 200) break;
-                } while (overlap);
+                }
             }
-
 
             sticker.style.left = `${finalX}px`;
             sticker.style.top = `${finalY}px`;
@@ -829,7 +842,7 @@
                     }
                 });
 
-                paletteSticker.draggable = false;
+                paletteSticker.draggable = true;
                 paletteSticker.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('application/json', JSON.stringify({
                         url: e.target.src,
@@ -927,13 +940,21 @@
 
             const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
             const data = imgData.data;
-            const [r, g, b] = hexToRgb(fillColor);
+            const isBlack = (r, g, b, a) => (r === 0 && g === 0 && b === 0 && a > 0);
+            const isTransparent = (fillColor && fillColor.type === 'erase');
+
+            let r, g, b;
+
+            if (!isTransparent) {
+                const hexColor = fillColor;
+                [r, g, b] = hexToRgb(hexColor);
+            }
+
             const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
             const startR = data[startIndex];
             const startG = data[startIndex + 1];
             const startB = data[startIndex + 2];
             const startA = data[startIndex + 3];
-            const isBlack = (r, g, b, a) => (r === 0 && g === 0 && b === 0 && a > 0);
 
             if (isBlack(startR, startG, startB, startA)) {
                 let found = false;
@@ -944,17 +965,19 @@
                     if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
                     const ni = ((ny * canvasEl.width) + nx) * 4;
                     if (data[ni + 3] === 0) {
-                        clickX = nx;
-                        clickY = ny;
+                        clickX = nx; clickY = ny;
                         found = true;
                         break;
                     }
                 }
                 if (!found) return;
             }
+
             const stack = [[clickX, clickY]];
             const visited = new Set();
             let touchesEdge = false;
+            let pixelsToFill = [];
+
             while (stack.length) {
                 const [x, y] = stack.pop();
                 if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
@@ -965,23 +988,32 @@
                 const key = `${x},${y}`;
                 if (visited.has(key)) continue;
                 visited.add(key);
+
                 if (isBlack(data[i], data[i + 1], data[i + 2], data[i + 3])) continue;
+
+                pixelsToFill.push(i);
                 stack.push([x + 1, y]);
                 stack.push([x - 1, y]);
                 stack.push([x, y + 1]);
                 stack.push([x, y - 1]);
             }
+
             if (touchesEdge) return;
-            for (const key of visited) {
-                const [x, y] = key.split(",").map(Number);
-                const i = ((y * canvasEl.width) + x) * 4;
-                data[i] = r;
-                data[i + 1] = g;
-                data[i + 2] = b;
-                data[i + 3] = 255;
+
+            if (isTransparent) {
+                for (const i of pixelsToFill) {
+                    data[i + 3] = 0; // Set alpha to 0
+                }
+            } else {
+                for (const i of pixelsToFill) {
+                    data[i] = r;
+                    data[i + 1] = g;
+                    data[i + 2] = b;
+                    data[i + 3] = 255;
+                }
             }
-            ctx.putImageData(imgData, 0, 0);
-            stickerImg.src = canvasEl.toDataURL();
+             ctx.putImageData(imgData, 0, 0);
+             stickerImg.src = canvasEl.toDataURL();
         }
 
         function updateUndoButton() {
@@ -1002,10 +1034,30 @@
             saveState();
             firstStickerAdded = false;
         });
+        
+        eraserBtn.addEventListener('click', () => {
+            setBucketMode(true);
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            selectedColor = transparentColor;
+            
+            const wasActive = eraserBtn.classList.contains('active');
+            document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+
+            if (!wasActive) {
+                eraserBtn.classList.add('active');
+            } else {
+                selectedColor = null;
+                setBucketMode(false);
+            }
+        });
 
         addStickerBtn.addEventListener('click', () => {
             setBucketMode(false);
             document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.controls button').forEach(b => {
+                 if (b.id === 'add-sticker-btn') b.classList.add('active');
+                 else b.classList.remove('active');
+            });
             selectedColor = null;
 
             const allUrls = stickerGroups.flatMap(group => group.urls);
@@ -1078,16 +1130,19 @@
                 const swatch = document.createElement('div');
                 swatch.classList.add('color-swatch');
                 swatch.style.backgroundColor = color;
-                if (color === selectedColor) {
+                
+                if (selectedColor === color) {
                     swatch.classList.add('active');
                 }
+
                 swatch.addEventListener('click', (e) => {
-                    if (isSwiping) {
-                        return;
-                    }
+                    if (isSwiping) return;
+                    
+                    document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+
                     const wasActive = swatch.classList.contains('active');
                     document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-
+                    
                     if (!wasActive) {
                         swatch.classList.add('active');
                         selectedColor = color;
