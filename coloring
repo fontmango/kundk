@@ -533,7 +533,7 @@ copyBtn.addEventListener('click', (e) => {
     attempts++;
   }
 
-  addSticker(stickerImg.src, newX, newY);
+  addSticker(stickerImg.src, newX, newY, sticker.offsetWidth);
 });
 
   // --- Delete button ---
