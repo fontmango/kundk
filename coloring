@@ -312,8 +312,8 @@
 }
 
 .size-btn-icon {
-  width: 100%;
-  height: 100%;
+  width: 60%;
+  height: 60%;
   fill: white;
   stroke: white;
 }
@@ -329,7 +329,7 @@
     
     
  <div class="color-wrapper">
-    <input type="color" id="color-picker" value="#ff0000" />
+    <input type="color" id="color-picker" value="#60D273" />
   </div> 
 
     <button id="bucket-btn" title="Fill Sticker">
