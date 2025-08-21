@@ -619,8 +619,10 @@ copyBtn.addEventListener('click', (e) => {
         // Add drag/drop functionality for the main image
         paletteSticker.draggable = true;
         paletteSticker.addEventListener('dragstart', (e) => {
-          e.dataTransfer.setData('text/plain', group.urls[0]);
-          hideOverlay();
+e.dataTransfer.setData('application/json', JSON.stringify({
+    url: url,
+    width: 100 // or a default value
+}));          hideOverlay();
         });
         paletteContainer.appendChild(paletteSticker);
       });
@@ -648,8 +650,10 @@ copyBtn.addEventListener('click', (e) => {
         overlaySticker.draggable = true;
         overlaySticker.addEventListener('dragstart', (e) => {
           e.stopPropagation();
-          e.dataTransfer.setData('text/plain', url);
-        });
+e.dataTransfer.setData('application/json', JSON.stringify({
+    url: group.urls[0],
+    width: 60 // or a default value
+}));        });
         overlaySticker.addEventListener('click', (e) => {
           e.stopPropagation();
           addSticker(url);
@@ -692,23 +696,25 @@ if (bottom + overlayContainer.offsetHeight < window.innerHeight) {
 
     canvas.addEventListener('drop', (e) => {
       e.preventDefault();
-      const url = e.dataTransfer.getData('text/plain');
-      if (url) {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        addSticker(url, x, y);
-      }
+     const data = e.dataTransfer.getData('application/json');
+if (data) {
+  const { url, width } = JSON.parse(data);
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  addSticker(url, x, y, width); // Pass the original width to the addSticker function
+}
     });
 
-  function addResizeListener(stickerImg) {
+ function addResizeListener(stickerImg) {
   stickerImg.addEventListener('wheel', (e) => {
     e.preventDefault();
     const delta = Math.sign(e.deltaY);
     const parent = stickerImg.parentElement;
     const newSize = parent.offsetWidth + (delta * 10);
-    const minSize = 30, maxSize = 400;
-    if (newSize >= minSize && newSize <= maxSize) {
+    const minSize = 30; // We keep a minimum size to prevent the sticker from disappearing
+
+    if (newSize >= minSize) {
       parent.style.width = `${newSize}px`;
       parent.style.height = 'auto';
     }
@@ -824,14 +830,13 @@ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
     }
 
     function dragSticker(e) {
-      if (!activeSticker) return;
-      const newX = offsetX + (e.clientX - initialX);
-      const newY = offsetY + (e.clientY - initialY);
-      const maxX = canvas.offsetWidth - activeSticker.parentElement.offsetWidth;
-      const maxY = canvas.offsetHeight - activeSticker.parentElement.offsetHeight;
-      activeSticker.parentElement.style.left = `${Math.min(Math.max(0, newX), maxX)}px`;
-      activeSticker.parentElement.style.top = `${Math.min(Math.max(0, newY), maxY)}px`;
-    }
+  if (!activeSticker) return;
+  const newX = offsetX + (e.clientX - initialX);
+  const newY = offsetY + (e.clientY - initialY);
+  // Remove boundary checks to allow dragging outside the canvas
+  activeSticker.parentElement.style.left = `${newX}px`;
+  activeSticker.parentElement.style.top = `${newY}px`;
+}
 
     function stopDrag() {
        if (bucketMode) {
