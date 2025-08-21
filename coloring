@@ -53,9 +53,10 @@
     }
     
 
-
-   /* Show on hover of the parent sticker */
-.sticker:hover > .delete-btn {
+    /* Show on hover of the parent sticker */
+.sticker:hover > .delete-btn,
+.sticker:hover > .copy-btn,
+.sticker:hover > .size-btn {
   display: flex; 
   align-items: center;
   justify-content: center;
@@ -64,12 +65,11 @@
 /* Hover effect for the button itself */
 .delete-btn:hover {
   background-color: #ff4444; /* brighter red */
-  transform: scale(1.1);      /* slightly enlarge */
+  transform: scale(1.1);       /* slightly enlarge */
   box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* subtle shadow */
 }
-    
 
-  
+    
     .controls {
       margin-top: 20px;
       display: flex;
@@ -83,12 +83,10 @@
   transition: none !important;
 }
 
-.bucket-active .sticker .delete-btn{
+.bucket-active .sticker .delete-btn,
+.bucket-active .sticker .copy-btn,
+.bucket-active .sticker .size-btn {
   display: none !important;
-}
-
-.bucket-active .copy-btn{
-display: none !important;
 }
 
 .bucket-active .sticker:active,
@@ -171,10 +169,10 @@ display: none !important;
     }
     .palette-sticker:hover {
       transform: scale(1.1);
-     
+      
     }
     
-     #overlay-container {
+      #overlay-container {
       position: absolute;
       background-color: rgba(255, 255, 255, 0.95);
       border: 1px solid #ccc;
@@ -199,13 +197,13 @@ display: none !important;
       border: 1px solid transparent;
     }
 
-     .overlay-sticker:hover {
+      .overlay-sticker:hover {
       transform: scale(1.1);
       
     }
     
     
- #color-picker {
+#color-picker {
   -webkit-appearance: none;
   border: none;
   width: 20px;   /* smaller width */
@@ -217,8 +215,8 @@ display: none !important;
 
 
 .color-wrapper {
-  width: 40px;        /* same as buttons */
-  height: 40px;       /* same as buttons */
+  width: 40px;         /* same as buttons */
+  height: 40px;        /* same as buttons */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -246,10 +244,10 @@ display: none !important;
     
    .delete-btn {
   position: absolute;
-  top: 5%;       /* closer to the top */
-  right: 5%;     /* closer to the right */
+  top: 5%;      /* closer to the top */
+  right: 5%;      /* closer to the right */
   width: 20%;    /* proportional to sticker size */
-  height: 20%;   /* proportional to sticker size */
+  height: 20%;    /* proportional to sticker size */
   border-radius: 50%;
   background-color: #c2bebeff;
   color: white;
@@ -258,15 +256,15 @@ display: none !important;
   justify-content: center;
   cursor: pointer;
   z-index: 101;
-  padding: 0;        /* remove extra padding */
+  padding: 0;         /* remove extra padding */
 }
 
 .copy-btn {
   position: absolute;
-  top: 5%;       /* close to top */
+  top: 5%;      /* close to top */
   left: 5%;      /* close to left */
   width: 20%;    /* proportional to sticker size */
-  height: 20%;   /* proportional to sticker size */
+  height: 20%;    /* proportional to sticker size */
   border-radius: 50%;
   background-color: #c2bebeff;  /* different color for copy */
   color: white;
@@ -290,7 +288,35 @@ display: none !important;
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
+.size-btn {
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+  width: 20%;
+  height: 20%;
+  border-radius: 50%;
+  background-color: #c2bebeff;
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: se-resize; /* "south-east" resize cursor */
+  z-index: 101;
+  padding: 0;
+}
 
+.size-btn:hover {
+  background-color: #4a90e2;
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.size-btn-icon {
+  width: 100%;
+  height: 100%;
+  fill: white;
+  stroke: white;
+}
     
   </style>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -330,7 +356,7 @@ display: none !important;
 
 
   <script>
-     const stickerGroups = [
+      const stickerGroups = [
       {
         name: "Alpaca",
         urls: [
@@ -409,7 +435,7 @@ let bucketMode = false;
     const stickerImg = sticker.querySelector('img');
     if (stickerImg) {
       currentState.stickers.push({
-        url: stickerImg.src,          // store the current image data (even recolored)
+        url: stickerImg.src,      // store the current image data (even recolored)
         x: sticker.offsetLeft,
         y: sticker.offsetTop,
         width: sticker.offsetWidth,
@@ -424,7 +450,7 @@ let bucketMode = false;
 
 
     // --- Function to re-render the canvas from a saved state ---
- function loadState(state) {
+  function loadState(state) {
   canvas.innerHTML = '';
 
   state.stickers.forEach(data => {
@@ -526,6 +552,53 @@ copyBtn.addEventListener('click', (e) => {
   sticker.appendChild(deleteBtn);
   sticker.appendChild(copyBtn);
 
+// --- New: Change Size button ---
+const sizeBtn = document.createElement('div');
+sizeBtn.classList.add('size-btn');
+sizeBtn.innerHTML = `
+<svg class="size-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="15 3 21 3 21 9"></polyline>
+<polyline points="9 21 3 21 3 15"></polyline>
+<line x1="21" y1="3" x2="14" y2="10"></line>
+<line x1="3" y1="21" x2="10" y2="14"></line>
+</svg>
+`;
+sticker.appendChild(sizeBtn);
+
+// Drag-to-resize logic for the new button
+let initialSizeX, initialSizeY, initialStickerWidth, initialStickerHeight;
+
+sizeBtn.addEventListener('mousedown', (e) => {
+  e.stopPropagation(); // Prevents the sticker from being dragged
+  initialSizeX = e.clientX;
+  initialSizeY = e.clientY;
+  initialStickerWidth = sticker.offsetWidth;
+  initialStickerHeight = sticker.offsetHeight;
+  document.addEventListener('mousemove', doResizeDrag);
+  document.addEventListener('mouseup', stopResizeDrag);
+});
+
+function doResizeDrag(e) {
+  const deltaX = e.clientX - initialSizeX;
+  const deltaY = e.clientY - initialSizeY;
+  const resizeAmount = Math.max(deltaX, deltaY); // Use the larger movement for a smooth feel
+
+  const newWidth = Math.max(initialStickerWidth + resizeAmount, 30); // Prevent shrinking below 30px
+  
+  // Calculate new height to maintain aspect ratio
+  const aspectRatio = initialStickerWidth / initialStickerHeight;
+  const newHeight = newWidth / aspectRatio;
+
+  sticker.style.width = `${newWidth}px`;
+  sticker.style.height = `${newHeight}px`;
+}
+
+function stopResizeDrag() {
+  document.removeEventListener('mousemove', doResizeDrag);
+  document.removeEventListener('mouseup', stopResizeDrag);
+  saveState();
+}
+
 
   // --- Random non-overlapping positioning ---
   let finalX = x;
@@ -620,8 +693,8 @@ copyBtn.addEventListener('click', (e) => {
         paletteSticker.draggable = true;
         paletteSticker.addEventListener('dragstart', (e) => {
 e.dataTransfer.setData('application/json', JSON.stringify({
-    url: url,
-    width: 100 // or a default value
+    url: e.target.src,
+    width: 60 
 }));          hideOverlay();
         });
         paletteContainer.appendChild(paletteSticker);
@@ -651,8 +724,8 @@ e.dataTransfer.setData('application/json', JSON.stringify({
         overlaySticker.addEventListener('dragstart', (e) => {
           e.stopPropagation();
 e.dataTransfer.setData('application/json', JSON.stringify({
-    url: group.urls[0],
-    width: 60 // or a default value
+    url: e.target.src,
+    width: 100 
 }));        });
         overlaySticker.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -696,17 +769,17 @@ if (bottom + overlayContainer.offsetHeight < window.innerHeight) {
 
     canvas.addEventListener('drop', (e) => {
       e.preventDefault();
-     const data = e.dataTransfer.getData('application/json');
-if (data) {
-  const { url, width } = JSON.parse(data);
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  addSticker(url, x, y, width); // Pass the original width to the addSticker function
-}
+      const data = e.dataTransfer.getData('application/json');
+      if (data) {
+        const { url, width } = JSON.parse(data);
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        addSticker(url, x, y, width); // Pass the original width to the addSticker function
+      }
     });
 
- function addResizeListener(stickerImg) {
+  function addResizeListener(stickerImg) {
   stickerImg.addEventListener('wheel', (e) => {
     e.preventDefault();
     const delta = Math.sign(e.deltaY);
@@ -830,18 +903,17 @@ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
     }
 
     function dragSticker(e) {
-  if (!activeSticker) return;
-  const newX = offsetX + (e.clientX - initialX);
-  const newY = offsetY + (e.clientY - initialY);
-  // Remove boundary checks to allow dragging outside the canvas
-  activeSticker.parentElement.style.left = `${newX}px`;
-  activeSticker.parentElement.style.top = `${newY}px`;
-}
+      if (!activeSticker) return;
+      const newX = offsetX + (e.clientX - initialX);
+      const newY = offsetY + (e.clientY - initialY);
+      activeSticker.parentElement.style.left = `${newX}px`;
+      activeSticker.parentElement.style.top = `${newY}px`;
+    }
 
     function stopDrag() {
-       if (bucketMode) {
-     return;
-   }
+      if (bucketMode) {
+      return;
+    }
       document.removeEventListener('mousemove', dragSticker);
       document.removeEventListener('mouseup', stopDrag);
       activeSticker = null;
@@ -888,7 +960,7 @@ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
   bucketBtn.addEventListener("click", () => {
       bucketMode = !bucketMode;
       bucketBtn.classList.toggle("active", bucketMode);
-       if (bucketMode) {
+      if (bucketMode) {
     document.body.classList.add('bucket-active');
     canvas.style.cursor = 'crosshair';
   } else {
