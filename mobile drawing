@@ -370,10 +370,25 @@
     let initialCenter = { x: 0, y: 0 };
     let firstStickerAdded = false;
 
-    const colors = [
-      '#FF6347', '#FFD700', '#ADFF2F', '#00CED1', '#4169E1', '#8A2BE2', '#FF69B4', '#A52A2A', '#FFA07A', '#F08080', '#98FB98', '#B0E0E6', '#ADD8E6', '#FFC0CB',
-      '#FF4500', '#9932CC', '#32CD32', '#00BFFF', '#FF1493', '#1E90FF', '#7CFC00', '#FF8C00', '#DAA520', '#C71585', '#00FA9A', '#808000', '#4B0082', '#008B8B'
-    ];
+ const colors = [
+  // Reds
+  '#FF0000', '#FF4500', '#FF6347', '#D2691E', '#CD5C5C',
+
+  // Oranges & Yellows
+  '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
+
+  // Greens
+  '#008000', '#228B22', '#3CB371', '#9ACD32', '#ADFF2F',
+
+  // Blues
+  '#0000FF', '#0000CD', '#4169E1', '#1E90FF', '#87CEFA',
+
+  // Purples
+  '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
+
+  // Pinks & Browns
+  '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513'
+];
     
     function setBucketMode(enabled) {
       bucketMode = enabled;
