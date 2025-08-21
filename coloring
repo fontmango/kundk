@@ -825,11 +825,11 @@
                     }
                 });
 
-                paletteSticker.draggable = true;
+                paletteSticker.draggable = false;
                 paletteSticker.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('application/json', JSON.stringify({
                         url: e.target.src,
-                        width: 60
+                        width: 120
                     }));
                     hideOverlay();
                 });
