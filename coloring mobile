@@ -12,7 +12,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      min-height: 1vh;
       box-sizing: border-box;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -26,7 +26,7 @@
       background-color: #ffffff;
       border: 1px solid #e0e0e0;
       position: relative;
-      margin-top: 20px;
+      margin-top: 10px;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       border-radius: 16px;
@@ -131,11 +131,11 @@
     .color-palette-container {
       width: 90%;
       max-width: 600px;
-      overflow-x: scroll;
-      -webkit-overflow-scrolling: touch;
+      overflow-x: scroll; /* Allows horizontal scrolling */
+      -webkit-overflow-scrolling: touch; /* Improves scrolling on iOS */
       scrollbar-width: none;
       -ms-overflow-style: none;
-      touch-action: pan-y;
+      touch-action: pan-y; /* Allows vertical panning but enables horizontal scrolling */
     }
 
     .color-palette-container::-webkit-scrollbar {
@@ -144,16 +144,16 @@
 
     .color-palette {
         display: flex;
-        flex-wrap: nowrap;
+        flex-wrap: nowrap; /* Forces all items to be on one line */
         gap: 8px;
         margin-top: 10px;
-        padding: 5px;
-        width: max-content;
+        padding: 3px;
+        width: max-content; /* Ensures the flex container is as wide as its content */
     }
 
     .color-swatch {
-      width: 30px;
-      height: 30px;
+      width: 25px;
+      height: 25px;
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid transparent;
@@ -162,6 +162,7 @@
       outline: 0 !important;
       box-shadow: none !important;
       -webkit-tap-highlight-color: transparent;
+      touch-action: none; /* Prevents touch events from bubbling up and interfering with scroll */
     }
 
     .color-swatch.active {
@@ -251,6 +252,8 @@
       cursor: pointer;
       z-index: 101;
       padding: 0;
+        transition: transform 0.2s, background-color 0.2s;
+
     }
 
     .copy-btn {
@@ -260,7 +263,7 @@
       width: 20%;
       height: 20%;
       border-radius: 50%;
-      background-color: #6aa84fff;
+      background-color: #c2bebeff;
       color: white;
       display: none;
       align-items: center;
@@ -268,13 +271,21 @@
       cursor: pointer;
       z-index: 101;
       padding: 0;
+        transition: transform 0.2s, background-color 0.2s;
+
     }
 
     .copy-btn:hover {
-      background-color: #4a86e8;
+      background-color: #6aa84fff;
       transform: scale(1.1);
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
+
+    .delete-btn:hover {
+  background-color: #f26262ff; /* A more "delete" color */
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
   </style>
 
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -369,9 +380,25 @@
     let initialCenter = { x: 0, y: 0 };
     let firstStickerAdded = false;
 
-    const colors = [
-      '#FF6347', '#FFD700', '#ADFF2F', '#00CED1', '#4169E1', '#8A2BE2', '#FF69B4', '#A52A2A', '#FFA07A', '#F08080', '#98FB98', '#B0E0E6', '#ADD8E6', '#FFC0CB'
-    ];
+ const colors = [
+  // Reds
+  '#FF0000', '#FF4500', '#FF6347', '#D2691E', '#CD5C5C',
+
+  // Oranges & Yellows
+  '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
+
+  // Greens
+  '#008000', '#228B22', '#3CB371', '#9ACD32', '#ADFF2F',
+
+  // Blues
+  '#0000FF', '#0000CD', '#4169E1', '#1E90FF', '#87CEFA',
+
+  // Purples
+  '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
+
+  // Pinks & Browns
+  '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513'
+];
     
     function setBucketMode(enabled) {
       bucketMode = enabled;
@@ -389,38 +416,7 @@
         });
       }
     }
-    
-    function populateColorPalette() {
-      colorPalette.innerHTML = '';
-      colors.forEach(color => {
-        const swatch = document.createElement('div');
-        swatch.classList.add('color-swatch');
-        swatch.style.backgroundColor = color;
-        if (color === selectedColor) {
-          swatch.classList.add('active');
-        }
-        swatch.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const wasActive = swatch.classList.contains('active');
-          document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-          
-          if (!wasActive) {
-            swatch.classList.add('active');
-            selectedColor = color;
-            setBucketMode(true);
-          } else {
-            selectedColor = null;
-            setBucketMode(false);
-          }
-        });
-
-        swatch.addEventListener('touchstart', (e) => {
-            e.stopPropagation();
-        });
-        colorPalette.appendChild(swatch);
-      });
-    }
-
+  
     function saveState() {
       const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
       const currentState = {
@@ -936,6 +932,93 @@
         lucide.createIcons();
       }
     });
+    
+  let isDragging = false;
+    let startX;
+    let scrollLeft;
+    let isSwiping = false; 
+    let initialTap = { clientX: 0 };
+
+    // Function to add swipe functionality
+    function addSwipeFunctionality() {
+      const paletteContainer = document.querySelector('.color-palette-container');
+      const palette = document.querySelector('.color-palette');
+
+      const handleStart = (e) => {
+        isDragging = true;
+        startX = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+        scrollLeft = paletteContainer.scrollLeft;
+        initialTap.clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+      };
+
+      const handleMove = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+        const walk = (x - startX) * 1.5; 
+        paletteContainer.scrollLeft = scrollLeft - walk;
+        // Check if there's significant movement to consider it a swipe
+        if (Math.abs(e.clientX - initialTap.clientX) > 10) {
+            isSwiping = true;
+        }
+      };
+
+      const handleEnd = () => {
+        isDragging = false;
+        setTimeout(() => {
+          isSwiping = false;
+        }, 100);
+      };
+
+      [paletteContainer, palette].forEach(element => {
+        element.addEventListener('mousedown', handleStart);
+        element.addEventListener('mousemove', handleMove);
+        element.addEventListener('mouseup', handleEnd);
+        element.addEventListener('mouseleave', handleEnd);
+
+        element.addEventListener('touchstart', handleStart);
+        element.addEventListener('touchmove', handleMove, { passive: false });
+        element.addEventListener('touchend', handleEnd);
+      });
+    }
+
+
+
+    function populateColorPalette() {
+      colorPalette.innerHTML = '';
+      colors.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.classList.add('color-swatch');
+        swatch.style.backgroundColor = color;
+        if (color === selectedColor) {
+          swatch.classList.add('active');
+        }
+        swatch.addEventListener('click', (e) => {
+          // Check the isSwiping flag to differentiate a click from a swipe.
+          // This allows taps to work again.
+          if (isSwiping) {
+            return;
+          }
+          const wasActive = swatch.classList.contains('active');
+          document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+          
+          if (!wasActive) {
+            swatch.classList.add('active');
+            selectedColor = color;
+            setBucketMode(true);
+          } else {
+            selectedColor = null;
+            setBucketMode(false);
+          }
+        });
+
+        colorPalette.appendChild(swatch);
+      });
+    }
+
+    addSwipeFunctionality();
+    populateColorPalette();
+
   </script>
 </body>
 </html>
