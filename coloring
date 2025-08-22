@@ -419,6 +419,7 @@
         let activeSticker = null;
         let activePaletteSticker = null;
         let selectedColor = null;
+        let isRestoring = false;
 
         let initialX, initialY, offsetX, offsetY;
         let initialTouchDistance = 0;
@@ -474,12 +475,12 @@
             }
         }
 
-        function saveState() {
+      function saveState() {
+        if (isRestoring) return; 
             const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
             const currentState = {
                 stickers: []
             };
-
             stickersOnCanvas.forEach(sticker => {
                 const stickerImg = sticker.querySelector('img');
                 if (stickerImg) {
@@ -497,11 +498,15 @@
         }
 
         function loadState(state) {
-            canvas.innerHTML = '';
-            state.stickers.forEach(data => {
-                addSticker(data.url, data.x, data.y, data.width, data.height);
-            });
-        }
+    isRestoring = true;
+    canvas.innerHTML = '';
+    state.stickers.forEach(data => {
+        // pass suppressSave: true so addSticker doesn't push history while restoring
+        addSticker(data.url, data.x, data.y, data.width, data.height, { suppressSave: true });
+    });
+    isRestoring = false;
+    updateUndoButton();
+}
 
         function deselectAllStickers() {
             document.querySelectorAll('.sticker').forEach(s => {
@@ -515,8 +520,9 @@
             return Math.sqrt(dx * dx + dy * dy);
         }
 
-        function addSticker(url, x, y, width = 200, height = 200) {
-            const sticker = document.createElement('div');
+function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
+    const { suppressSave = false } = opts;
+                const sticker = document.createElement('div');
             sticker.classList.add('sticker');
            sticker.style.width = `${width}px`;
             sticker.style.height = `${height}px`;
@@ -534,7 +540,7 @@
                     const clickX = Math.floor((e.clientX - rect.left) * (stickerImg.naturalWidth / rect.width));
                     const clickY = Math.floor((e.clientY - rect.top) * (stickerImg.naturalHeight / rect.height));
                     recolorSticker(stickerImg, selectedColor, clickX, clickY);
-                    saveState();
+                    
                 }
             });
 
@@ -869,7 +875,9 @@
             canvas.appendChild(sticker);
             
             // Save state after a sticker is added to the DOM
-            saveState();
+           if (!suppressSave && !isRestoring) {
+    saveState();
+}
             
             return sticker;
         }
@@ -980,102 +988,108 @@
             return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
         }
 
-        function recolorSticker(stickerImg, fillColor, clickX, clickY) {
-            const canvasEl = document.createElement("canvas");
-            const ctx = canvasEl.getContext("2d");
-            canvasEl.width = stickerImg.naturalWidth;
-            canvasEl.height = stickerImg.naturalHeight;
-            ctx.drawImage(stickerImg, 0, 0);
+ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
 
-            const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
-            const data = imgData.data;
-            const isBlack = (r, g, b, a) => (r === 0 && g === 0 && b === 0 && a > 0);
-            const isTransparent = (fillColor && fillColor.type === 'erase');
 
-            let r, g, b;
+    const canvasEl = document.createElement("canvas");
+    const ctx = canvasEl.getContext("2d");
+    canvasEl.width = stickerImg.naturalWidth;
+    canvasEl.height = stickerImg.naturalHeight;
+    ctx.drawImage(stickerImg, 0, 0);
 
-            if (!isTransparent) {
-                const hexColor = fillColor;
-                [r, g, b] = hexToRgb(hexColor);
+    const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+    const data = imgData.data;
+    const isBlack = (r, g, b, a) => (r < 50 && g < 50 && b < 50 && a > 100);
+    const isTransparent = (fillColor && fillColor.type === 'erase');
+
+    let r, g, b;
+    if (!isTransparent) {
+        const hexColor = fillColor;
+        const bigint = parseInt(hexColor.replace(/^#/, ""), 16);
+        [r, g, b] = [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+    }
+
+    const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
+    const startR = data[startIndex];
+    const startG = data[startIndex + 1];
+    const startB = data[startIndex + 2];
+    const startA = data[startIndex + 3];
+
+    if (isBlack(startR, startG, startB, startA)) {
+        let found = false;
+        const offsets = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+        for (const [dx, dy] of offsets) {
+            const nx = clickX + dx;
+            const ny = clickY + dy;
+            if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
+            const ni = ((ny * canvasEl.width) + nx) * 4;
+            if (data[ni + 3] === 0) {
+                clickX = nx;
+                clickY = ny;
+                found = true;
+                break;
             }
-
-            const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
-            const startR = data[startIndex];
-            const startG = data[startIndex + 1];
-            const startB = data[startIndex + 2];
-            const startA = data[startIndex + 3];
-
-            if (isBlack(startR, startG, startB, startA)) {
-                let found = false;
-                const offsets = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-                for (const [dx, dy] of offsets) {
-                    const nx = clickX + dx;
-                    const ny = clickY + dy;
-                    if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
-                    const ni = ((ny * canvasEl.width) + nx) * 4;
-                    if (data[ni + 3] === 0) {
-                        clickX = nx; clickY = ny;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) return;
-            }
-
-            const stack = [[clickX, clickY]];
-            const visited = new Set();
-            let touchesEdge = false;
-            let pixelsToFill = [];
-
-            while (stack.length) {
-                const [x, y] = stack.pop();
-                if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
-                    touchesEdge = true;
-                    continue;
-                }
-                const i = ((y * canvasEl.width) + x) * 4;
-                const key = `${x},${y}`;
-                if (visited.has(key)) continue;
-                visited.add(key);
-
-                if (isBlack(data[i], data[i + 1], data[i + 2], data[i + 3])) continue;
-
-                pixelsToFill.push(i);
-                stack.push([x + 1, y]);
-                stack.push([x - 1, y]);
-                stack.push([x, y + 1]);
-                stack.push([x, y - 1]);
-            }
-
-            if (touchesEdge) return;
-
-            if (isTransparent) {
-                for (const i of pixelsToFill) {
-                    data[i + 3] = 0; // Set alpha to 0
-                }
-            } else {
-                for (const i of pixelsToFill) {
-                    data[i] = r;
-                    data[i + 1] = g;
-                    data[i + 2] = b;
-                    data[i + 3] = 255;
-                }
-            }
-             ctx.putImageData(imgData, 0, 0);
-             stickerImg.src = canvasEl.toDataURL();
         }
+        if (!found) return;
+    }
+
+    const stack = [[clickX, clickY]];
+    const visited = new Set();
+    let touchesEdge = false;
+    let pixelsToFill = [];
+
+    while (stack.length) {
+        const [x, y] = stack.pop();
+        if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
+            touchesEdge = true;
+            continue;
+        }
+        const i = ((y * canvasEl.width) + x) * 4;
+        const key = `${x},${y}`;
+        if (visited.has(key)) continue;
+        visited.add(key);
+        if (isBlack(data[i], data[i + 1], data[i + 2], data[i + 3])) continue;
+        pixelsToFill.push(i);
+        stack.push([x + 1, y]);
+        stack.push([x - 1, y]);
+        stack.push([x, y + 1]);
+        stack.push([x, y - 1]);
+    }
+
+    if (touchesEdge) return;
+
+    if (isTransparent) {
+        for (const i of pixelsToFill) {
+            data[i + 3] = 0;
+        }
+    } else {
+        for (const i of pixelsToFill) {
+            data[i] = r;
+            data[i + 1] = g;
+            data[i + 2] = b;
+            data[i + 3] = 255;
+        }
+    }
+
+    if (pixelsToFill.length > 0) {
+        ctx.putImageData(imgData, 0, 0);
+        stickerImg.src = canvasEl.toDataURL();
+         saveState();
+    }
+}
 
         function updateUndoButton() {
             undoBtn.disabled = history.length <= 1;
         }
 
-        undoBtn.addEventListener('click', () => {
-            if (history.length > 1) {
-                history.pop();
-                loadState(history[history.length - 1]);
-                updateUndoButton();
-            }
-        });
+       undoBtn.addEventListener('click', () => {
+    // Check for more than one history state to avoid an empty canvas
+    if (history.length > 1) {
+        history.pop();
+        loadState(history[history.length - 1]);
+        updateUndoButton();
+    }
+});
 
         newBtn.addEventListener('click', () => {
             canvas.innerHTML = '';
