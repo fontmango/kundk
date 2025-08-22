@@ -928,7 +928,7 @@
             return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
         }
 
-        function recolorSticker(stickerImg, fillColor, clickX, clickY) {
+function recolorSticker(stickerImg, fillColor, clickX, clickY) {
     const canvasEl = document.createElement("canvas");
     const ctx = canvasEl.getContext("2d", { willReadFrequently: true });
     canvasEl.width = stickerImg.naturalWidth;
@@ -937,71 +937,72 @@
 
     const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
     const data = imgData.data;
-    
-    // Check if the fill color is the special 'erase' object
+
     const isEraser = fillColor && fillColor.type === 'erase';
     const [r, g, b] = isEraser ? [0, 0, 0] : hexToRgb(fillColor);
-    const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
-    const startR = data[startIndex];
-    const startG = data[startIndex + 1];
-    const startB = data[startIndex + 2];
-    const startA = data[startIndex + 3];
 
-    // The logic to find the boundary of the area to fill/erase
-    // remains the same. The change is in the for loop below.
-    const isBlack = (r, g, b, a) => (r === 0 && g === 0 && b === 0 && a > 0);
-    if (isBlack(startR, startG, startB, startA)) {
-        let found = false;
-        const offsets = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-        for (const [dx, dy] of offsets) {
-            const nx = clickX + dx;
-            const ny = clickY + dy;
-            if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
-            const ni = ((ny * canvasEl.width) + nx) * 4;
-            if (data[ni + 3] === 0) {
-                clickX = nx;
-                clickY = ny;
-                found = true;
-                break;
-            }
-        }
-        if (!found) return;
+    // border detection: treat dark pixels as "walls"
+    const blackThreshold = 30;
+    function isBorderPixel(pxR, pxG, pxB, pxA) {
+        return (pxA > 0 && pxR < blackThreshold && pxG < blackThreshold && pxB < blackThreshold);
     }
+
+    function colorsMatch(data, i, target, tolerance = 30) {
+        return (
+            Math.abs(data[i]   - target[0]) <= tolerance &&
+            Math.abs(data[i+1] - target[1]) <= tolerance &&
+            Math.abs(data[i+2] - target[2]) <= tolerance &&
+            Math.abs(data[i+3] - target[3]) <= tolerance
+        );
+    }
+
+    const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
+    const targetColor = [
+        data[startIndex],
+        data[startIndex + 1],
+        data[startIndex + 2],
+        data[startIndex + 3]
+    ];
 
     const stack = [[clickX, clickY]];
     const visited = new Set();
+    const fillPixels = []; // collect pixels first
     let touchesEdge = false;
+
     while (stack.length) {
         const [x, y] = stack.pop();
-        if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
-            touchesEdge = true;
-            continue;
-        }
+        if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) continue;
         const i = ((y * canvasEl.width) + x) * 4;
         const key = `${x},${y}`;
         if (visited.has(key)) continue;
-        visited.add(key);
-        if (isBlack(data[i], data[i + 1], data[i + 2], data[i + 3])) continue;
-        stack.push([x + 1, y]);
-        stack.push([x - 1, y]);
-        stack.push([x, y + 1]);
-        stack.push([x, y - 1]);
+
+        if (!isBorderPixel(data[i], data[i+1], data[i+2], data[i+3]) && colorsMatch(data, i, targetColor, 30)) {
+            visited.add(key);
+            fillPixels.push(i);
+
+            // if this region touches canvas edge → not enclosed
+            if (x === 0 || y === 0 || x === canvasEl.width-1 || y === canvasEl.height-1) {
+                touchesEdge = true;
+            }
+
+            stack.push([x + 1, y]);
+            stack.push([x - 1, y]);
+            stack.push([x, y + 1]);
+            stack.push([x, y - 1]);
+        }
     }
 
-    if (touchesEdge) return;
-
-    // The key change is here:
-    for (const key of visited) {
-        const [x, y] = key.split(",").map(Number);
-        const i = ((y * canvasEl.width) + x) * 4;
-
-        if (isEraser) {
-            data[i + 3] = 0; // Set the alpha channel to 0 for erasing
-        } else {
-            data[i] = r;
-            data[i + 1] = g;
-            data[i + 2] = b;
-            data[i + 3] = 255;
+    // Only apply fill if region is enclosed
+    if (!touchesEdge) {
+        for (const i of fillPixels) {
+            if (isEraser) {
+                data[i + 3] = 0;
+            } else {
+                data[i] = r;
+                data[i + 1] = g;
+                data[i + 2] = b;
+                data[i + 3] = 255;
+            }
         }
     }
 
