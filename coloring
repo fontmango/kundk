@@ -330,6 +330,10 @@
         <button id="undo-btn" title="Undo">
             <i data-lucide="undo-2" class="icon"></i>
         </button>
+
+        <button id="redo-btn" title="Redo">
+        <i data-lucide="redo-2" class="icon"></i>
+    </button>
         
         <button id="eraser-btn" title="Erase">
             <i data-lucide="eraser" class="icon"></i>
@@ -408,6 +412,8 @@
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
         const undoBtn = document.getElementById('undo-btn');
+                const redoBtn = document.getElementById('redo-btn');
+
         const newBtn = document.getElementById('new-btn');
         const eraserBtn = document.getElementById('eraser-btn');
         const paletteContainer = document.getElementById('sticker-palette-container');
@@ -420,6 +426,7 @@
         let activePaletteSticker = null;
         let selectedColor = null;
         let isRestoring = false;
+        let redoStack = [];
 
         let initialX, initialY, offsetX, offsetY;
         let initialTouchDistance = 0;
@@ -494,6 +501,7 @@
                 }
             });
             history.push(currentState);
+             redoStack = []; 
             updateUndoButton();
         }
 
@@ -1082,14 +1090,28 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
             undoBtn.disabled = history.length <= 1;
         }
 
-       undoBtn.addEventListener('click', () => {
-    // Check for more than one history state to avoid an empty canvas
+   undoBtn.addEventListener('click', () => {
     if (history.length > 1) {
-        history.pop();
+        const lastState = history.pop();
+        redoStack.push(lastState); // 👈 save for redo
         loadState(history[history.length - 1]);
-        updateUndoButton();
+        updateUndoRedoButtons();
     }
 });
+
+redoBtn.addEventListener('click', () => {
+    if (redoStack.length > 0) {
+        const nextState = redoStack.pop();
+        history.push(nextState);
+        loadState(nextState);
+        updateUndoRedoButtons();
+    }
+});
+
+function updateUndoRedoButtons() {
+    undoBtn.disabled = history.length <= 1;
+    redoBtn.disabled = redoStack.length === 0;
+}
 
         newBtn.addEventListener('click', () => {
             canvas.innerHTML = '';
