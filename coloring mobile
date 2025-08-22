@@ -327,10 +327,7 @@
         <button id="undo-btn" title="Undo">
             <i data-lucide="undo-2" class="icon"></i>
         </button>
-        
-        <button id="new-btn" title="New Canvas">
-            <i data-lucide="file-plus-2" class="icon"></i>
-        </button>
+       
     </div>
     
     <div class="color-palette-container">
@@ -549,7 +546,6 @@
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
         const undoBtn = document.getElementById('undo-btn');
-        const newBtn = document.getElementById('new-btn');
         const colorPalette = document.getElementById('color-palette');
         const history = [];
         
@@ -1001,13 +997,7 @@
             }
         });
 
-        newBtn.addEventListener('click', () => {
-            canvas.innerHTML = '';
-            history.splice(0);
-            saveState();
-            firstStickerAdded = false;
-        });
-
+     
         // MODIFIED: This function now correctly handles replacing the sticker and centering it
         addStickerBtn.addEventListener('click', () => {
             const allUrls = stickerGroups.flatMap(group => group.urls);
