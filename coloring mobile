@@ -327,6 +327,10 @@
         <button id="undo-btn" title="Undo">
             <i data-lucide="undo-2" class="icon"></i>
         </button>
+        
+        <button id="eraser-btn" title="Erase">
+            <i data-lucide="eraser" class="icon"></i>
+        </button>
        
     </div>
     
@@ -548,6 +552,7 @@
         const undoBtn = document.getElementById('undo-btn');
         const colorPalette = document.getElementById('color-palette');
         const history = [];
+        const eraserBtn = document.getElementById('eraser-btn');
         
         const stickerPickerBtn = document.getElementById('sticker-picker-btn');
         const groupOverlayContainer = document.getElementById('group-overlay-container');
@@ -575,6 +580,9 @@
             '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
             '#C0C0C0', '#808080'
         ];
+        
+         // This is the special "erase" object that will be used by the eraser button.
+        const transparentColor = { type: 'erase' };
         
         function setBucketMode(enabled) {
             bucketMode = enabled;
@@ -921,73 +929,105 @@
         }
 
         function recolorSticker(stickerImg, fillColor, clickX, clickY) {
-            const canvasEl = document.createElement("canvas");
-            const ctx = canvasEl.getContext("2d", { willReadFrequently: true });
-            canvasEl.width = stickerImg.naturalWidth;
-            canvasEl.height = stickerImg.naturalHeight;
-            ctx.drawImage(stickerImg, 0, 0);
+    const canvasEl = document.createElement("canvas");
+    const ctx = canvasEl.getContext("2d", { willReadFrequently: true });
+    canvasEl.width = stickerImg.naturalWidth;
+    canvasEl.height = stickerImg.naturalHeight;
+    ctx.drawImage(stickerImg, 0, 0);
 
-            const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
-            const data = imgData.data;
-            const [r, g, b] = hexToRgb(fillColor);
-            const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
-            const startR = data[startIndex];
-            const startG = data[startIndex + 1];
-            const startB = data[startIndex + 2];
-            const startA = data[startIndex + 3];
-            const isBlack = (r, g, b, a) => (r === 0 && g === 0 && b === 0 && a > 0);
+    const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+    const data = imgData.data;
+    
+    // Check if the fill color is the special 'erase' object
+    const isEraser = fillColor && fillColor.type === 'erase';
+    const [r, g, b] = isEraser ? [0, 0, 0] : hexToRgb(fillColor);
+    const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
+    const startR = data[startIndex];
+    const startG = data[startIndex + 1];
+    const startB = data[startIndex + 2];
+    const startA = data[startIndex + 3];
 
-            if (isBlack(startR, startG, startB, startA)) {
-                let found = false;
-                const offsets = [[1,0],[-1,0],[0,1],[0,-1]];
-                for (const [dx, dy] of offsets) {
-                    const nx = clickX + dx;
-                    const ny = clickY + dy;
-                    if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
-                    const ni = ((ny * canvasEl.width) + nx) * 4;
-                    if (data[ni+3] === 0) {
-                        clickX = nx; clickY = ny;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) return;
+    // The logic to find the boundary of the area to fill/erase
+    // remains the same. The change is in the for loop below.
+    const isBlack = (r, g, b, a) => (r === 0 && g === 0 && b === 0 && a > 0);
+    if (isBlack(startR, startG, startB, startA)) {
+        let found = false;
+        const offsets = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+        for (const [dx, dy] of offsets) {
+            const nx = clickX + dx;
+            const ny = clickY + dy;
+            if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
+            const ni = ((ny * canvasEl.width) + nx) * 4;
+            if (data[ni + 3] === 0) {
+                clickX = nx;
+                clickY = ny;
+                found = true;
+                break;
             }
-            const stack = [[clickX, clickY]];
-            const visited = new Set();
-            let touchesEdge = false;
-            while (stack.length) {
-                const [x, y] = stack.pop();
-                if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
-                    touchesEdge = true;
-                    continue;
-                }
-                const i = ((y * canvasEl.width) + x) * 4;
-                const key = `${x},${y}`;
-                if (visited.has(key)) continue;
-                visited.add(key);
-                if (isBlack(data[i], data[i+1], data[i+2], data[i+3])) continue;
-                stack.push([x+1, y]);
-                stack.push([x-1, y]);
-                stack.push([x, y+1]);
-                stack.push([x, y-1]);
-            }
-            if (touchesEdge) return;
-            for (const key of visited) {
-                const [x, y] = key.split(",").map(Number);
-                const i = ((y * canvasEl.width) + x) * 4;
-                data[i] = r;
-                data[i+1] = g;
-                data[i+2] = b;
-                data[i+3] = 255;
-            }
-            ctx.putImageData(imgData, 0, 0);
-            stickerImg.src = canvasEl.toDataURL();
         }
+        if (!found) return;
+    }
+
+    const stack = [[clickX, clickY]];
+    const visited = new Set();
+    let touchesEdge = false;
+    while (stack.length) {
+        const [x, y] = stack.pop();
+        if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
+            touchesEdge = true;
+            continue;
+        }
+        const i = ((y * canvasEl.width) + x) * 4;
+        const key = `${x},${y}`;
+        if (visited.has(key)) continue;
+        visited.add(key);
+        if (isBlack(data[i], data[i + 1], data[i + 2], data[i + 3])) continue;
+        stack.push([x + 1, y]);
+        stack.push([x - 1, y]);
+        stack.push([x, y + 1]);
+        stack.push([x, y - 1]);
+    }
+
+    if (touchesEdge) return;
+
+    // The key change is here:
+    for (const key of visited) {
+        const [x, y] = key.split(",").map(Number);
+        const i = ((y * canvasEl.width) + x) * 4;
+
+        if (isEraser) {
+            data[i + 3] = 0; // Set the alpha channel to 0 for erasing
+        } else {
+            data[i] = r;
+            data[i + 1] = g;
+            data[i + 2] = b;
+            data[i + 3] = 255;
+        }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+    stickerImg.src = canvasEl.toDataURL();
+}
 
         function updateUndoButton() {
             undoBtn.disabled = history.length <= 1;
         }
+        
+         eraserBtn.addEventListener('click', () => {
+            setBucketMode(true);
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            selectedColor = transparentColor;
+            
+            const wasActive = eraserBtn.classList.contains('active');
+            document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+
+            if (!wasActive) {
+                eraserBtn.classList.add('active');
+            } else {
+                selectedColor = null;
+                setBucketMode(false);
+            }
+        });
 
         undoBtn.addEventListener('click', () => {
             if (history.length > 1) {
@@ -1061,33 +1101,36 @@
         }
 
         function populateColorPalette() {
-            colorPalette.innerHTML = '';
-            colors.forEach(color => {
-                const swatch = document.createElement('div');
-                swatch.classList.add('color-swatch');
-                swatch.style.backgroundColor = color;
-                if (color === selectedColor) {
-                    swatch.classList.add('active');
-                }
-                swatch.addEventListener('click', (e) => {
-                    if (isSwiping) {
-                        return;
-                    }
-                    const wasActive = swatch.classList.contains('active');
-                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-                    
-                    if (!wasActive) {
-                        swatch.classList.add('active');
-                        selectedColor = color;
-                        setBucketMode(true);
-                    } else {
-                        selectedColor = null;
-                        setBucketMode(false);
-                    }
-                });
-                colorPalette.appendChild(swatch);
-            });
+    colorPalette.innerHTML = '';
+    colors.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.classList.add('color-swatch');
+        swatch.style.backgroundColor = color;
+        if (color === selectedColor) {
+            swatch.classList.add('active');
         }
+        swatch.addEventListener('click', (e) => {
+            if (isSwiping) {
+                return;
+            }
+            const wasActive = swatch.classList.contains('active');
+            
+            // Deactivate all color swatches and the eraser button
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            eraserBtn.classList.remove('active'); // NEW: Deactivate the eraser button
+            
+            if (!wasActive) {
+                swatch.classList.add('active');
+                selectedColor = color;
+                setBucketMode(true);
+            } else {
+                selectedColor = null;
+                setBucketMode(false);
+            }
+        });
+        colorPalette.appendChild(swatch);
+    });
+}
 
         function hideOverlays() {
             groupOverlayContainer.style.display = 'none';
