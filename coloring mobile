@@ -327,6 +327,10 @@
         <button id="undo-btn" title="Undo">
             <i data-lucide="undo-2" class="icon"></i>
         </button>
+
+        <button id="redo-btn" title="Redo">
+        <i data-lucide="redo-2" class="icon"></i>
+    </button>
         
         <button id="eraser-btn" title="Erase">
             <i data-lucide="eraser" class="icon"></i>
@@ -550,6 +554,8 @@
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
         const undoBtn = document.getElementById('undo-btn');
+        const redoBtn = document.getElementById('redo-btn');
+
         const colorPalette = document.getElementById('color-palette');
         const history = [];
         const eraserBtn = document.getElementById('eraser-btn');
@@ -563,6 +569,8 @@
         let activePaletteSticker = null;
         let selectedColor = null;
         let isRestoring = false;
+        let redoStack = [];
+
         
         let initialX, initialY, offsetX, offsetY;
         let initialTouchDistance = 0;
@@ -655,6 +663,7 @@
                 }
             });
             history.push(currentState);
+             redoStack = [];
             updateUndoButton();
         }
 
@@ -1055,12 +1064,27 @@ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
         });
 
         undoBtn.addEventListener('click', () => {
-            if (history.length > 1) {
-                history.pop();
-                loadState(history[history.length - 1]);
-                updateUndoButton();
-            }
-        });
+    if (history.length > 1) {
+        const lastState = history.pop();
+        redoStack.push(lastState); // 👈 save for redo
+        loadState(history[history.length - 1]);
+        updateUndoRedoButtons();
+    }
+});
+
+redoBtn.addEventListener('click', () => {
+    if (redoStack.length > 0) {
+        const nextState = redoStack.pop();
+        history.push(nextState);
+        loadState(nextState);
+        updateUndoRedoButtons();
+    }
+});
+
+function updateUndoRedoButtons() {
+    undoBtn.disabled = history.length <= 1;
+    redoBtn.disabled = redoStack.length === 0;
+}
 
      
         // MODIFIED: This function now correctly handles replacing the sticker and centering it
