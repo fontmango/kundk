@@ -515,7 +515,7 @@
             return Math.sqrt(dx * dx + dy * dy);
         }
 
-        function addSticker(url, x, y, width = 200, height = 'auto') {
+        function addSticker(url, x, y, width = 200, height = 200) {
             const sticker = document.createElement('div');
             sticker.classList.add('sticker');
            sticker.style.width = `${width}px`;
