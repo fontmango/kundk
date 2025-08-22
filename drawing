@@ -1,9 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Drawing App</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400..700&family=Inter:wght@400;500;600;700&display=swap" 
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -11,6 +24,14 @@
       padding: 0;
       box-sizing: border-box;
       background-color: transparent;
+    }
+
+    .logo-font {
+      font-family: 'Permanent Marker', cursive;
+    }
+
+    .headline-font {
+      font-family: 'Caveat', cursive;
     }
 
     #stage {
@@ -31,72 +52,68 @@
       border-radius: 1rem;
     }
 
-@keyframes pulse-3x {
-  0%   { transform: scale(1); box-shadow: 0 0 0 rgba(59,130,246,0.7); }
-  50%  { transform: scale(1.1); box-shadow: 0 0 10px rgba(59,130,246,0.9); }
-  100% { transform: scale(1); box-shadow: 0 0 0 rgba(59,130,246,0); }
-}
-
-.pulse-3x {
-  animation: pulse-3x 1s ease;
-  animation-iteration-count: 3; /* 👈 3 times */
-}
-    .icon-stroke {
-      stroke: black;
-      transition: stroke 0.3s ease;
-    }
-    .icon-stroke svg {
-      stroke: currentColor;
-    }
-    .dark-mode .icon-stroke {
-      stroke: white;
+    /* Animations */
+    @keyframes pulse-3x {
+      0% { transform: scale(1); box-shadow: 0 0 0 rgba(59,130,246,0.7); }
+      50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(59,130,246,0.9); }
+      100% { transform: scale(1); box-shadow: 0 0 0 rgba(59,130,246,0); }
     }
 
-  .popup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -40%) scale(0.95);
-  background-color: #fff;
-  color: #1f2937;
-  padding: 1rem 2rem;
-  border-radius: 9999px;
-  font-size: 1rem;
-  font-weight: 500;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1000;
-  border: 1px solid #e5e7eb;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
+    .pulse-3x {
+      animation: pulse-3x 1s ease;
+      animation-iteration-count: 3;
+    }
 
-.popup.show {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
+    .icon-stroke { stroke: black; transition: stroke 0.3s ease; }
+    .icon-stroke svg { stroke: currentColor; }
+    .dark-mode .icon-stroke { stroke: white; }
+
+    /* Popup */
+    .popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -40%) scale(0.95);
+      background-color: #fff;
+      color: #1f2937;
+      padding: 1rem 2rem;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1000;
+      border: 1px solid #e5e7eb;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .popup.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Video Popup */
     .video-popup-container {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.7);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 1000;
     }
-    .video-popup-container.hidden {
-      display: none;
-    }
+
+    .video-popup-container.hidden { display: none; }
+
     .video-popup {
       background: white;
       padding: 1rem;
       border-radius: 0.5rem;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     }
-    #upload-video,
-    #download-video {
+
+    #upload-video, #download-video {
       width: 400px;
       height: auto;
       border-radius: 0.25rem;
@@ -110,10 +127,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
+
 <div class="flex flex-col items-center justify-between h-screen p-4">
-  <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
-    <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
+  <div id="drawing-app-container" class="w-full mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
+    <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-400">
       <div id="message-popup" class="popup"></div>
 
       <!-- Upload progress video -->
