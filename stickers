@@ -58,8 +58,7 @@
 
         .sticker:hover > .delete-btn,
         .sticker:hover > .copy-btn,
-        .sticker:hover > .resize-handle,
-            .sticker:hover > .rotate-btn {
+        .sticker:hover > .resize-handle {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -67,9 +66,7 @@
 
         .sticker.selected > .delete-btn,
         .sticker.selected > .copy-btn,
-        .sticker.selected > .resize-handle,
-            .sticker.selected > .rotate-btn {
-
+        .sticker.selected > .resize-handle {
             display: flex;
         }
 
@@ -133,7 +130,7 @@
             stroke: currentColor;
         }
 
-        
+       
 
     #sticker-palette-container {
     width: 100%;
@@ -273,46 +270,6 @@
             transform: scale(1.1);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
-
-
-.rotate-btn {
-    position: absolute;
-    width: 20%;
-    height: 20%;
-    border-radius: 50%;
-    background-color: #c2bebeff;
-    color: white;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: grab;
-    z-index: 101;
-    padding: 0;
-    transition: transform 0.2s, background-color 0.2s;
-
-    bottom: 5%;
-    left: 5%;
-}
-
-.rotate-btn:active {
-    cursor: grabbing;
-}
-
-.rotate-btn:hover {
-    background-color: #4a86e8;
-    transform: scale(1.1);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-
-.rotate-btn-icon {
-    width: 60%;
-    height: 60%;
-    fill: white;
-    stroke: white;
-}
-
-}
-
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -331,12 +288,14 @@
         <i data-lucide="redo-2" class="icon"></i>
     </button>
         
-    
         <button id="new-btn" title="New Canvas">
             <i data-lucide="file-plus-2" class="icon"></i>
         </button>
     </div>
 
+    <div class="color-palette-container">
+        <div class="color-palette" id="color-palette"></div>
+    </div>
 
     <div id="canvas-container"></div>
 
@@ -350,20 +309,53 @@
                 
                 name: "Vikings",
                 urls: [
-                    "https://static.wixstatic.com/media/990059_a40c70232ee84ecfa996d9a6bbe71fb9~mv2.png"
+                    "https://static.wixstatic.com/media/990059_195242b424cb450ea78b93e9de392511~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e5529716f6f64f77a4d7c250ab6cfb5a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4636b8e42e674dccbb6117391652f10b~mv2.png",
+                    "https://static.wixstatic.com/media/990059_b4c7121418e14667bfdf79aecfea0524~mv2.png",
+                    "https://static.wixstatic.com/media/990059_c5244cbdc1014a0292d36824ce277bba~mv2.png",
+                    "https://static.wixstatic.com/media/990059_82d1bde23b3f45709690e3b032b39f7a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_63d7cd18bf4245d687839909ceb3671c~mv2.png",
+                    "https://static.wixstatic.com/media/990059_04487087ffd9403184e0562a09da9952~mv2.png",
+                    "https://static.wixstatic.com/media/990059_0abecd8111674041bda6a9bc58a0325d~mv2.png",
+                    "https://static.wixstatic.com/media/990059_3d5f1cfd966b460a9fc708fbadc23342~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1e7bdf5f8a9c415d940ecabe8aa515f8~mv2.png",
+                    "https://static.wixstatic.com/media/990059_f7bda5bccf6143b59cf118b96fe8d5c3~mv2.png",
+                    "https://static.wixstatic.com/media/990059_17382f604e5240cd9b192d1c408d177c~mv2.png",
+                    "https://static.wixstatic.com/media/990059_8050e711279440069ebb11be47552624~mv2.png",
+                    "https://static.wixstatic.com/media/990059_9280b10abb8f4b439280d80e2d654a00~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e69156957edb46ceb444911d6268d580~mv2.png",
+                    "https://static.wixstatic.com/media/990059_818add1171f44d7b8fb14cc7324bf1ba~mv2.png",
+                    "https://static.wixstatic.com/media/990059_c0876d74524a4a3890c8acc306d6c5b9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4c2a3c3d1f4d44c88bd245577c12d89e~mv2.png",
+                    "https://static.wixstatic.com/media/990059_6a6b1c7017c242bcb387edf0250492f9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_87363ab578ea485fb48b3ba8865da3c5~mv2.png",
+                    "https://static.wixstatic.com/media/990059_786e79df55c3459680a241c123d7edc8~mv2.png",
+                    "https://static.wixstatic.com/media/990059_75f54e8faf5f49aa9a6f554647c0a942~mv2.png",
+                    "https://static.wixstatic.com/media/990059_70b398a8aea848cf92a090ffae357819~mv2.png",
+                    "https://static.wixstatic.com/media/990059_393bb80861a1442cad28cfc4fd11a3b9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4c090a4740134396a9d2650a86431677~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1148bbb54d724dc2beb5cebc69c78d04~mv2.png",
+                    "https://static.wixstatic.com/media/990059_74b3de5669834b7e9cd434ee592a38a1~mv2.png",
+                    "https://static.wixstatic.com/media/990059_30092f18c74c4b1e9ebd8c362ab02b31~mv2.png",
+                    "https://static.wixstatic.com/media/990059_033520b5d83f401bbfafd972bb74e29f~mv2.png",
+                    "https://static.wixstatic.com/media/990059_95ffdb66d7d94ad99e0471a5103defec~mv2.png",
+                    "https://static.wixstatic.com/media/990059_2a29f33d7ef34280b86e7786af3971d1~mv2.png",
+                    "https://static.wixstatic.com/media/990059_2f5de7bfb37b4edf9375460f2befe73d~mv2.png",
+                    "https://static.wixstatic.com/media/990059_91c06e8d3bd0444696cf64ff35870d79~mv2.png",
+                    "https://static.wixstatic.com/media/990059_caaa5e6cda52435fbb7c5d44baf532b6~mv2.png"
 
                 ]
             },
             {
                 name: "2",
                 urls: [
-                    "https://static.wixstatic.com/media/990059_b8e966fff23243baaeffda0903b26ae5~mv2.png"
+                    "https://static.wixstatic.com/media/990059_195242b424cb450ea78b93e9de392511~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e5529716f6f64f77a4d7c250ab6cfb5a~mv2.png"
                     
             ]
            }, 
         ];
-        
-        
 
 
         const canvas = document.getElementById('canvas-container');
@@ -374,6 +366,7 @@
         const newBtn = document.getElementById('new-btn');
         const paletteContainer = document.getElementById('sticker-palette-container');
         const overlayContainer = document.getElementById('overlay-container');
+        const colorPalette = document.getElementById('color-palette');
         const history = [];
 
         let bucketMode = false;
@@ -391,57 +384,85 @@
         let initialCenter = { x: 0, y: 0 };
         let firstStickerAdded = false;
 
-      
-function setTransform(sticker) {
-  const x = parseFloat(sticker.dataset.x) || 0;
-  const y = parseFloat(sticker.dataset.y) || 0;
-  const scale = parseFloat(sticker.dataset.scale) || 1;
-  const rotation = parseFloat(sticker.dataset.rotation) || 0;
+        const colors = [
 
-  sticker.style.transform =
-    `translate(${x}px, ${y}px) scale(${scale}) rotate(${rotation}deg)`;
-}
+             '#8d5524', '#c68642', '#e0ac69' ,'#f1c27d','#ffdbac',
+            // Reds
+            '#FF0000', '#FF4500', '#FF6347', '#D2691E', '#CD5C5C',
+
+            // Oranges & Yellows
+            '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
+
+            // Greens
+            '#008000', '#228B22', '#3CB371', '#9ACD32', '#ADFF2F',
+
+            // Blues
+            '#0000FF', '#0000CD', '#4169E1', '#1E90FF', '#87CEFA',
+
+            // Purples
+            '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
+
+            // Pinks & Browns
+            '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
+
+            '#C0C0C0', '#808080',
+
+            
+        ];
+        
 
 
-  function saveState() {
-    if (isRestoring) return; 
-
-    const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-    const currentState = {
-        stickers: []
-    };
-
-    stickersOnCanvas.forEach(sticker => {
-        const stickerImg = sticker.querySelector('img');
-        if (stickerImg) {
-            currentState.stickers.push({
-                url: stickerImg.src,
-                x: parseFloat(sticker.dataset.x) || 0,
-                y: parseFloat(sticker.dataset.y) || 0,
-                scale: parseFloat(sticker.dataset.scale) || 1,
-                rotation: parseFloat(sticker.dataset.rotation) || 0
-            });
+        function setBucketMode(enabled) {
+            bucketMode = enabled;
+            if (bucketMode) {
+                document.body.classList.add('bucket-active');
+                canvas.style.cursor = 'crosshair';
+                document.querySelectorAll('.color-swatch').forEach(swatch => {
+                    swatch.draggable = false;
+                });
+            } else {
+                document.body.classList.remove('bucket-active');
+                canvas.style.cursor = 'default';
+                document.querySelectorAll('.color-swatch').forEach(swatch => {
+                    swatch.draggable = true;
+                });
+            }
         }
-    });
 
-    history.push(currentState);
-    redoStack = []; 
-    updateUndoButton();
-}
+      function saveState() {
+        if (isRestoring) return; 
+            const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+            const currentState = {
+                stickers: []
+            };
+            stickersOnCanvas.forEach(sticker => {
+                const stickerImg = sticker.querySelector('img');
+                if (stickerImg) {
+                    currentState.stickers.push({
+                        url: stickerImg.src,
+                        x: sticker.offsetLeft,
+                        y: sticker.offsetTop,
+                        width: sticker.offsetWidth,
+                        height: sticker.offsetHeight
+                    });
+                }
+            });
+            history.push(currentState);
+             redoStack = []; 
+            updateUndoButton();
+        }
 
-function loadState(state) {
+        function loadState(state) {
     isRestoring = true;
     canvas.innerHTML = '';
     state.stickers.forEach(data => {
-        addSticker(data.url, data.x, data.y, 200, { 
-            suppressSave: true,
-            scale: data.scale,
-            rotation: data.rotation
-        });
+        // pass suppressSave: true so addSticker doesn't push history while restoring
+        addSticker(data.url, data.x, data.y, data.width, data.height, { suppressSave: true });
     });
     isRestoring = false;
     updateUndoButton();
 }
+
         function deselectAllStickers() {
             document.querySelectorAll('.sticker').forEach(s => {
                 s.classList.remove('selected');
@@ -455,29 +476,28 @@ function loadState(state) {
         }
 
 function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
- const { suppressSave = false, scale = 1, rotation = 0 } = opts;
+    const { suppressSave = false } = opts;
                 const sticker = document.createElement('div');
             sticker.classList.add('sticker');
+           sticker.style.width = `${width}px`;
+            sticker.style.height = `${height}px`;
 
+            const stickerImg = document.createElement('img');
+            stickerImg.crossOrigin = "Anonymous";
+            stickerImg.src = url;
+            stickerImg.draggable = false;
+            sticker.appendChild(stickerImg);
 
-         // 🔑 baseline size, never changes after creation
-    sticker.style.width = `${width}px`;
-    sticker.style.height = `auto`; // let aspect ratio follow image
-
-    const stickerImg = document.createElement('img');
-    stickerImg.crossOrigin = "Anonymous";
-    stickerImg.src = url;
-    stickerImg.draggable = false;
-    sticker.appendChild(stickerImg);
-
-    // Initial transform data
-    sticker.dataset.x = x || 0;
-    sticker.dataset.y = y || 0;
-    sticker.dataset.scale = scale;
-    sticker.dataset.rotation = rotation;
-
-    setTransform(sticker);
-      
+            sticker.addEventListener('click', (e) => {
+                if (bucketMode && selectedColor) {
+                    e.stopPropagation();
+                    const rect = sticker.getBoundingClientRect();
+                    const clickX = Math.floor((e.clientX - rect.left) * (stickerImg.naturalWidth / rect.width));
+                    const clickY = Math.floor((e.clientY - rect.top) * (stickerImg.naturalHeight / rect.height));
+                    recolorSticker(stickerImg, selectedColor, clickX, clickY);
+                    
+                }
+            });
 
             const copyBtn = document.createElement('div');
             copyBtn.classList.add('copy-btn');
@@ -529,77 +549,6 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
                 saveState();
                 sticker.remove();
             });
-            
-            
-            
-            
-// Create rotate button
-const rotateBtn = document.createElement('div');
-rotateBtn.classList.add('rotate-btn');
-rotateBtn.innerHTML = `
-    <svg class="rotate-btn-icon" viewBox="0 0 24 24">
-        <path d="M12 6v-4l-5 5 5 5v-4a5 5 0 1 1-5 5"
-              stroke="white" stroke-width="2" fill="none"
-              stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-`;
-sticker.appendChild(rotateBtn);
-
-// Rotation logic
-let rotating = false;
-let startAngle = 0;
-
-rotateBtn.addEventListener("pointerdown", (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    rotating = true;
-
-    const rect = sticker.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    function getAngle(clientX, clientY) {
-        return Math.atan2(clientY - centerY, clientX - centerX) * 180 / Math.PI;
-    }
-
-    // start from stored rotation
-    let baseRotation = parseFloat(sticker.dataset.rotation) || 0;
-
-    // last pointer angle reference (updates on every move)
-    let lastPointerAngle = getAngle(e.clientX, e.clientY);
-
-    function onMove(ev) {
-        if (!rotating) return;
-
-        const pointerAngle = getAngle(ev.clientX, ev.clientY);
-
-        // difference since last move
-        let delta = pointerAngle - lastPointerAngle;
-
-        // normalize to -180..180
-        if (delta > 180) delta -= 360;
-        if (delta < -180) delta += 360;
-
-        // accumulate
-        baseRotation += delta;
-
-        // update for next move
-        lastPointerAngle = pointerAngle;
-
-        // store & render
-        sticker.dataset.rotation = baseRotation;
-        setTransform(sticker);
-    }
-
-    function onUp() {
-        rotating = false;
-        window.removeEventListener("pointermove", onMove);
-        window.removeEventListener("pointerup", onUp);
-    }
-
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
-});
 
             const resizeHandle = document.createElement('div');
             resizeHandle.classList.add('resize-handle');
@@ -617,12 +566,9 @@ rotateBtn.addEventListener("pointerdown", (e) => {
             sticker.appendChild(resizeHandle);
 
             function startInteraction(e) {
-               if (
-  e.target.closest(".delete-btn") ||
-  e.target.closest(".copy-btn") ||
-  e.target.closest(".resize-handle") ||
-  e.target.closest(".rotate-btn")
-) return;
+                if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.resize-handle')) {
+                    return;
+                }
                 if (bucketMode) return;
                 
                 // Save state at the beginning of an interaction
@@ -701,49 +647,56 @@ rotateBtn.addEventListener("pointerdown", (e) => {
     let startX, startY, startWidth, startHeight, startLeft, startTop;
 
     const startResize = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+        e.stopPropagation();
+        e.preventDefault();
 
-    saveState();
+        saveState();
 
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-    startX = clientX;
-    startY = clientY;
+        startX = clientX;
+        startY = clientY;
+        startWidth = sticker.offsetWidth;
+        startHeight = sticker.offsetHeight;
+        startLeft = sticker.offsetLeft;
+        startTop = sticker.offsetTop;
 
-    startScale = parseFloat(sticker.dataset.scale) || 1;
+        document.addEventListener('mousemove', doResize);
+        document.addEventListener('mouseup', endResize);
+        document.addEventListener('touchmove', doResize, { passive: false });
+        document.addEventListener('touchend', endResize);
+    };
 
-    document.addEventListener('mousemove', doResize);
-    document.addEventListener('mouseup', endResize);
-    document.addEventListener('touchmove', doResize, { passive: false });
-    document.addEventListener('touchend', endResize);
-};
+    const doResize = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
 
-const doResize = (e) => {
-    e.preventDefault();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const deltaX = clientX - startX;
+        const newWidth = Math.max(startWidth + deltaX, 30);
+        const aspectRatio = startWidth / startHeight;
+        const newHeight = newWidth / aspectRatio;
 
-    const dx = clientX - startX;
-    const dy = clientY - startY;
+        sticker.style.width = `${newWidth}px`;
+        sticker.style.height = `${newHeight}px`;
 
-    // signed distance, so dragging left/up shrinks
-    const distance = (dx + dy) / 200;
+        // The key change is here:
+        // Adjust the top-left position to simulate resizing from the center or another anchor point.
+        sticker.style.left = `${startLeft + (startWidth - newWidth) / 2}px`;
+        sticker.style.top = `${startTop + (startHeight - newHeight) / 2}px`;
 
-    const newScale = Math.max(0.2, startScale + distance);
-    sticker.dataset.scale = newScale;
+    };
 
-    setTransform(sticker);
-};
-
-const endResize = () => {
-    document.removeEventListener('mousemove', doResize);
-    document.removeEventListener('mouseup', endResize);
-    document.removeEventListener('touchmove', doResize);
-    document.removeEventListener('touchend', endResize);
-};
+    const endResize = () => {
+        document.removeEventListener('mousemove', doResize);
+        document.removeEventListener('mouseup', endResize);
+        document.removeEventListener('touchmove', doResize);
+        document.removeEventListener('touchend', endResize);
+        saveState();
+    };
 
     handle.addEventListener('mousedown', startResize);
     handle.addEventListener('touchstart', startResize);
@@ -882,12 +835,6 @@ const endResize = () => {
 }
             
             return sticker;
-
-            sticker.dataset.x = x || 0;
-sticker.dataset.y = y || 0;
-sticker.dataset.scale = 1;
-sticker.dataset.rotation = 0;
-setTransform(sticker);
         }
 
         function populatePalette() {
@@ -967,6 +914,12 @@ setTransform(sticker);
             overlayContainer.style.display = 'grid';
         }
 
+        document.addEventListener('click', (e) => {
+            if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target) && !colorPalette.contains(e.target)) {
+                hideOverlay();
+            }
+        });
+
         canvas.addEventListener('dragover', (e) => {
             e.preventDefault();
         });
@@ -990,6 +943,94 @@ setTransform(sticker);
             return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
         }
 
+ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
+
+
+    const canvasEl = document.createElement("canvas");
+    const ctx = canvasEl.getContext("2d");
+    canvasEl.width = stickerImg.naturalWidth;
+    canvasEl.height = stickerImg.naturalHeight;
+    ctx.drawImage(stickerImg, 0, 0);
+
+    const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+    const data = imgData.data;
+    const isBlack = (r, g, b, a) => (r < 50 && g < 50 && b < 50 && a > 100);
+
+    let r, g, b;
+    if (!isTransparent) {
+        const hexColor = fillColor;
+        const bigint = parseInt(hexColor.replace(/^#/, ""), 16);
+        [r, g, b] = [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+    }
+
+    const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
+    const startR = data[startIndex];
+    const startG = data[startIndex + 1];
+    const startB = data[startIndex + 2];
+    const startA = data[startIndex + 3];
+
+    if (isBlack(startR, startG, startB, startA)) {
+        let found = false;
+        const offsets = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+        for (const [dx, dy] of offsets) {
+            const nx = clickX + dx;
+            const ny = clickY + dy;
+            if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
+            const ni = ((ny * canvasEl.width) + nx) * 4;
+            if (data[ni + 3] === 0) {
+                clickX = nx;
+                clickY = ny;
+                found = true;
+                break;
+            }
+        }
+        if (!found) return;
+    }
+
+    const stack = [[clickX, clickY]];
+    const visited = new Set();
+    let touchesEdge = false;
+    let pixelsToFill = [];
+
+    while (stack.length) {
+        const [x, y] = stack.pop();
+        if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
+            touchesEdge = true;
+            continue;
+        }
+        const i = ((y * canvasEl.width) + x) * 4;
+        const key = `${x},${y}`;
+        if (visited.has(key)) continue;
+        visited.add(key);
+        if (isBlack(data[i], data[i + 1], data[i + 2], data[i + 3])) continue;
+        pixelsToFill.push(i);
+        stack.push([x + 1, y]);
+        stack.push([x - 1, y]);
+        stack.push([x, y + 1]);
+        stack.push([x, y - 1]);
+    }
+
+    if (touchesEdge) return;
+
+    if (isTransparent) {
+        for (const i of pixelsToFill) {
+            data[i + 3] = 0;
+        }
+    } else {
+        for (const i of pixelsToFill) {
+            data[i] = r;
+            data[i + 1] = g;
+            data[i + 2] = b;
+            data[i + 3] = 255;
+        }
+    }
+
+    if (pixelsToFill.length > 0) {
+        ctx.putImageData(imgData, 0, 0);
+        stickerImg.src = canvasEl.toDataURL();
+         saveState();
+    }
+}
 
         function updateUndoButton() {
             undoBtn.disabled = history.length <= 1;
@@ -1024,11 +1065,16 @@ function updateUndoRedoButtons() {
             saveState();
             firstStickerAdded = false;
         });
-        
-  
+
 
         addStickerBtn.addEventListener('click', () => {
-           
+            setBucketMode(false);
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.controls button').forEach(b => {
+                 if (b.id === 'add-sticker-btn') b.classList.add('active');
+                 else b.classList.remove('active');
+            });
+            selectedColor = null;
 
             const allUrls = stickerGroups.flatMap(group => group.urls);
             const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
@@ -1037,7 +1083,7 @@ function updateUndoRedoButtons() {
         });
 
         populatePalette();
-       
+        populateColorPalette();
         saveState();
 
         window.addEventListener('load', () => {
@@ -1053,7 +1099,8 @@ function updateUndoRedoButtons() {
         let initialTap = { clientX: 0 };
 
         function addSwipeFunctionality() {
-          
+            const paletteContainer = document.querySelector('.color-palette-container');
+            const palette = document.querySelector('.color-palette');
 
             const handleStart = (e) => {
                 isDragging = true;
@@ -1062,35 +1109,16 @@ function updateUndoRedoButtons() {
                 initialTap.clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
             };
 
-           function handleMove(e) {
-    // 1) If dragging a sticker on the canvas
-    if (isDragging && activeSticker) {
-        e.preventDefault();
-        const clientX = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
-        const clientY = e.type.includes('mouse') ? e.pageY : e.touches[0].clientY;
-
-        const dx = clientX - initialX;
-        const dy = clientY - initialY;
-
-        activeSticker.dataset.x = parseFloat(startStickerX) + dx;
-        activeSticker.dataset.y = parseFloat(startStickerY) + dy;
-
-        setTransform(activeSticker);
-        return; // stop here, don’t scroll palette
-    }
-
-    // 2) If dragging/swiping the palette
-    if (!isDragging) return;
-    e.preventDefault();
-
-    const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
-    const walk = (x - startX) * 1.5;
-    paletteContainer.scrollLeft = scrollLeft - walk;
-
-    if (Math.abs(e.clientX - initialTap.clientX) > 10) {
-        isSwiping = true;
-    }
-}
+            const handleMove = (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+                const walk = (x - startX) * 1.5;
+                paletteContainer.scrollLeft = scrollLeft - walk;
+                if (Math.abs(e.clientX - initialTap.clientX) > 10) {
+                    isSwiping = true;
+                }
+            };
 
             const handleEnd = () => {
                 isDragging = false;
@@ -1111,11 +1139,41 @@ function updateUndoRedoButtons() {
             });
         }
 
-      
+        function populateColorPalette() {
+            colorPalette.innerHTML = '';
+            colors.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.classList.add('color-swatch');
+                swatch.style.backgroundColor = color;
+                
+                if (selectedColor === color) {
+                    swatch.classList.add('active');
+                }
+
+                swatch.addEventListener('click', (e) => {
+                    if (isSwiping) return;
+                    
+                    document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+
+                    const wasActive = swatch.classList.contains('active');
+                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                    
+                    if (!wasActive) {
+                        swatch.classList.add('active');
+                        selectedColor = color;
+                        setBucketMode(true);
+                    } else {
+                        selectedColor = null;
+                        setBucketMode(false);
+                    }
+                });
+
+                colorPalette.appendChild(swatch);
+            });
+        }
+
         addSwipeFunctionality();
-
-
-
+        populateColorPalette();
     </script>
 </body>
 </html>
