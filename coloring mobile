@@ -191,25 +191,13 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: none;
         }
+       
 
-        @keyframes circle-pulse {
-            0% {
-                transform: scale(1.2) rotate(0deg);
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            }
-            50% {
-                transform: scale(1.3) rotate(180deg);
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-            }
-            100% {
-                transform: scale(1.2) rotate(360deg);
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            }
+         .color-swatch.active {
+            transform: scale(1.2);
+              border-color: #000000;
         }
 
-        .color-swatch.active {
-            animation: circle-pulse 1s ease-in-out infinite;
-        }
 
         #sticker-palette-container {
             display: none;
@@ -705,6 +693,52 @@
 
                     ]
                     },
+               {
+        name: "fries",
+        urls: [
+
+        "https://static.wixstatic.com/media/990059_a3590360b33141ab83a55ab790dd32bf~mv2.png",
+        "https://static.wixstatic.com/media/990059_2cd1214adff748c49b56508fece16c05~mv2.png",
+        "https://static.wixstatic.com/media/990059_bfe122a87b1549d0856ffa5719131327~mv2.png",
+        "https://static.wixstatic.com/media/990059_7fb7d1016f4442c69a6fc1f96864bffd~mv2.png",
+        "https://static.wixstatic.com/media/990059_5841076be75e4208a60f4d63ad8b30f8~mv2.png",
+        "https://static.wixstatic.com/media/990059_fe53e6b5d7904555a13913b379456363~mv2.png",
+        "https://static.wixstatic.com/media/990059_0cc8f0c7073445b8bb7a7a60e044f884~mv2.png",
+        "https://static.wixstatic.com/media/990059_1f1d56f8fb014d44b7277e30d8c91a32~mv2.png",
+        "https://static.wixstatic.com/media/990059_0202510143de4c28a3d772b1a919c4f9~mv2.png",
+        "https://static.wixstatic.com/media/990059_59d9968225cd4abf8ca801e59efc95a6~mv2.png",
+        "https://static.wixstatic.com/media/990059_b8ebbf0bef1744f0be731ac919d6da72~mv2.png",
+        "https://static.wixstatic.com/media/990059_d277b492fb9d46e7a2e4661a656df8f5~mv2.png",
+        "https://static.wixstatic.com/media/990059_3753a8014a7948f2a0b31080fadfd655~mv2.png",
+        "https://static.wixstatic.com/media/990059_68fd86c6e278435da073d07bb770d756~mv2.png",
+        "https://static.wixstatic.com/media/990059_aba10f2ee5db4d6781a386f6966852cc~mv2.png",
+        "https://static.wixstatic.com/media/990059_093ab8a4518c4e1eac993b3ee7b5e718~mv2.png",
+        "https://static.wixstatic.com/media/990059_92fe737f6e0c4abd971a0ce0be833858~mv2.png",
+        "https://static.wixstatic.com/media/990059_2be05f3c03ee40bfa48feb479f11c374~mv2.png",
+        "https://static.wixstatic.com/media/990059_6175bb1614144e91ad3be31e97aa2941~mv2.png",
+        "https://static.wixstatic.com/media/990059_1cd85d180f5241f89522e4ae8769bbe4~mv2.png",
+        "https://static.wixstatic.com/media/990059_37457195d5ac438bab7e4daab42462d6~mv2.png",
+        "https://static.wixstatic.com/media/990059_f223371ffdb34370a8561a0296df0a2b~mv2.png",
+        "https://static.wixstatic.com/media/990059_271539b289204c929493759b35edfbdf~mv2.png",
+        "https://static.wixstatic.com/media/990059_bd5a6b7c2aad49f1a2167d289dace27e~mv2.png",
+        "https://static.wixstatic.com/media/990059_7b40c38354fe460790230121bb8ea139~mv2.png",
+        "https://static.wixstatic.com/media/990059_e113b64be8ea47498d89d1799ec08a59~mv2.png",
+        "https://static.wixstatic.com/media/990059_d8609781e62445ebac2090eaae5f5168~mv2.png",
+        "https://static.wixstatic.com/media/990059_fafefcb0d0ec47ff9693c20d964986e0~mv2.png",
+        "https://static.wixstatic.com/media/990059_f2cd634f190d4476b3da89a068a87225~mv2.png",
+        "https://static.wixstatic.com/media/990059_7bf242b90566479b88e887edb6fc2ae7~mv2.png",
+        "https://static.wixstatic.com/media/990059_0bf3c5ec163b477bae5307f3a1919702~mv2.png",
+        "https://static.wixstatic.com/media/990059_eb4d1e97ff73440c9af11a94ff1a12b9~mv2.png",
+        "https://static.wixstatic.com/media/990059_65c32aa4455d47beae34f18704326882~mv2.png",
+        "https://static.wixstatic.com/media/990059_827a4d0d444442c4b8bad43aeae30907~mv2.png",
+        "https://static.wixstatic.com/media/990059_4217800395df45dcb521d41b1c8ed11a~mv2.png"
+
+        ]
+        },
+
+            
+            
+            
         ];
 
 
@@ -753,7 +787,7 @@
             '#008000', '#228B22', '#3CB371', '#9ACD32', '#ADFF2F',
 
             // Blues
-            '#0000FF', '#0000CD', '#4169E1', '#1E90FF', '#87CEFA',
+            '#0000FF', '#4169E1', '#1E90FF', '#87CEFA',
 
             // Purples
             '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
@@ -762,6 +796,12 @@
             '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
 
             '#C0C0C0', '#808080',
+          
+          '#ff71ce','#01cdfe','#05ffa1','#b967ff','#fffb96',
+
+            '#ffb3ba','#ffdfba','#ffffba','#baffc9','#bae1ff',
+            
+            '#ffdef2','#f2e2ff','#e2eeff','#ddfffc','#ffffe3'
         ];
 
         // This is the special "erase" object that will be used by the eraser button.
