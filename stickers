@@ -130,54 +130,7 @@
             stroke: currentColor;
         }
 
-        .color-palette-container {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            touch-action: pan-y;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .color-palette-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .color-palette {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 8px;
-            margin-top: 10px;
-            padding: 3px;
-            width: max-content;
-        }
-
-        .color-swatch:hover {
-            transform: scale(1.2);
-        }
-
-        .color-swatch {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: transform 0.2s, border-color 0.2s;
-            flex-shrink: 0;
-            outline: 0 !important;
-            box-shadow: none !important;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: none;
-        }
-
-        .color-swatch.active {
-            border-color: #333;
-            transform: scale(1.1);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
+        
 
     #sticker-palette-container {
     width: 100%;
@@ -341,9 +294,6 @@
         </button>
     </div>
 
-    <div class="color-palette-container">
-        <div class="color-palette" id="color-palette"></div>
-    </div>
 
     <div id="canvas-container"></div>
 
@@ -414,7 +364,6 @@
         const newBtn = document.getElementById('new-btn');
         const paletteContainer = document.getElementById('sticker-palette-container');
         const overlayContainer = document.getElementById('overlay-container');
-        const colorPalette = document.getElementById('color-palette');
         const history = [];
 
         let bucketMode = false;
@@ -432,50 +381,9 @@
         let initialCenter = { x: 0, y: 0 };
         let firstStickerAdded = false;
 
-        const colors = [
-
-             '#8d5524', '#c68642', '#e0ac69' ,'#f1c27d','#ffdbac',
-            // Reds
-            '#FF0000', '#FF4500', '#FF6347', '#D2691E', '#CD5C5C',
-
-            // Oranges & Yellows
-            '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
-
-            // Greens
-            '#008000', '#228B22', '#3CB371', '#9ACD32', '#ADFF2F',
-
-            // Blues
-            '#0000FF', '#0000CD', '#4169E1', '#1E90FF', '#87CEFA',
-
-            // Purples
-            '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
-
-            // Pinks & Browns
-            '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
-
-            '#C0C0C0', '#808080',
-
-            
-        ];
-        
+      
 
 
-        function setBucketMode(enabled) {
-            bucketMode = enabled;
-            if (bucketMode) {
-                document.body.classList.add('bucket-active');
-                canvas.style.cursor = 'crosshair';
-                document.querySelectorAll('.color-swatch').forEach(swatch => {
-                    swatch.draggable = false;
-                });
-            } else {
-                document.body.classList.remove('bucket-active');
-                canvas.style.cursor = 'default';
-                document.querySelectorAll('.color-swatch').forEach(swatch => {
-                    swatch.draggable = true;
-                });
-            }
-        }
 
       function saveState() {
         if (isRestoring) return; 
@@ -536,16 +444,7 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
             stickerImg.draggable = false;
             sticker.appendChild(stickerImg);
 
-            sticker.addEventListener('click', (e) => {
-                if (bucketMode && selectedColor) {
-                    e.stopPropagation();
-                    const rect = sticker.getBoundingClientRect();
-                    const clickX = Math.floor((e.clientX - rect.left) * (stickerImg.naturalWidth / rect.width));
-                    const clickY = Math.floor((e.clientY - rect.top) * (stickerImg.naturalHeight / rect.height));
-                    recolorSticker(stickerImg, selectedColor, clickX, clickY);
-                    
-                }
-            });
+      
 
             const copyBtn = document.createElement('div');
             copyBtn.classList.add('copy-btn');
@@ -962,12 +861,6 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
             overlayContainer.style.display = 'grid';
         }
 
-        document.addEventListener('click', (e) => {
-            if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target) && !colorPalette.contains(e.target)) {
-                hideOverlay();
-            }
-        });
-
         canvas.addEventListener('dragover', (e) => {
             e.preventDefault();
         });
@@ -991,95 +884,6 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
             return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
         }
 
- function recolorSticker(stickerImg, fillColor, clickX, clickY) {
-
-
-    const canvasEl = document.createElement("canvas");
-    const ctx = canvasEl.getContext("2d");
-    canvasEl.width = stickerImg.naturalWidth;
-    canvasEl.height = stickerImg.naturalHeight;
-    ctx.drawImage(stickerImg, 0, 0);
-
-    const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
-    const data = imgData.data;
-    const isBlack = (r, g, b, a) => (r < 50 && g < 50 && b < 50 && a > 100);
-    const isTransparent = (fillColor && fillColor.type === 'erase');
-
-    let r, g, b;
-    if (!isTransparent) {
-        const hexColor = fillColor;
-        const bigint = parseInt(hexColor.replace(/^#/, ""), 16);
-        [r, g, b] = [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
-    }
-
-    const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
-    const startR = data[startIndex];
-    const startG = data[startIndex + 1];
-    const startB = data[startIndex + 2];
-    const startA = data[startIndex + 3];
-
-    if (isBlack(startR, startG, startB, startA)) {
-        let found = false;
-        const offsets = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-        for (const [dx, dy] of offsets) {
-            const nx = clickX + dx;
-            const ny = clickY + dy;
-            if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
-            const ni = ((ny * canvasEl.width) + nx) * 4;
-            if (data[ni + 3] === 0) {
-                clickX = nx;
-                clickY = ny;
-                found = true;
-                break;
-            }
-        }
-        if (!found) return;
-    }
-
-    const stack = [[clickX, clickY]];
-    const visited = new Set();
-    let touchesEdge = false;
-    let pixelsToFill = [];
-
-    while (stack.length) {
-        const [x, y] = stack.pop();
-        if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
-            touchesEdge = true;
-            continue;
-        }
-        const i = ((y * canvasEl.width) + x) * 4;
-        const key = `${x},${y}`;
-        if (visited.has(key)) continue;
-        visited.add(key);
-        if (isBlack(data[i], data[i + 1], data[i + 2], data[i + 3])) continue;
-        pixelsToFill.push(i);
-        stack.push([x + 1, y]);
-        stack.push([x - 1, y]);
-        stack.push([x, y + 1]);
-        stack.push([x, y - 1]);
-    }
-
-    if (touchesEdge) return;
-
-    if (isTransparent) {
-        for (const i of pixelsToFill) {
-            data[i + 3] = 0;
-        }
-    } else {
-        for (const i of pixelsToFill) {
-            data[i] = r;
-            data[i + 1] = g;
-            data[i + 2] = b;
-            data[i + 3] = 255;
-        }
-    }
-
-    if (pixelsToFill.length > 0) {
-        ctx.putImageData(imgData, 0, 0);
-        stickerImg.src = canvasEl.toDataURL();
-         saveState();
-    }
-}
 
         function updateUndoButton() {
             undoBtn.disabled = history.length <= 1;
@@ -1118,13 +922,7 @@ function updateUndoRedoButtons() {
   
 
         addStickerBtn.addEventListener('click', () => {
-            setBucketMode(false);
-            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.controls button').forEach(b => {
-                 if (b.id === 'add-sticker-btn') b.classList.add('active');
-                 else b.classList.remove('active');
-            });
-            selectedColor = null;
+           
 
             const allUrls = stickerGroups.flatMap(group => group.urls);
             const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
@@ -1133,7 +931,7 @@ function updateUndoRedoButtons() {
         });
 
         populatePalette();
-        populateColorPalette();
+       
         saveState();
 
         window.addEventListener('load', () => {
@@ -1149,8 +947,7 @@ function updateUndoRedoButtons() {
         let initialTap = { clientX: 0 };
 
         function addSwipeFunctionality() {
-            const paletteContainer = document.querySelector('.color-palette-container');
-            const palette = document.querySelector('.color-palette');
+          
 
             const handleStart = (e) => {
                 isDragging = true;
@@ -1189,41 +986,8 @@ function updateUndoRedoButtons() {
             });
         }
 
-        function populateColorPalette() {
-            colorPalette.innerHTML = '';
-            colors.forEach(color => {
-                const swatch = document.createElement('div');
-                swatch.classList.add('color-swatch');
-                swatch.style.backgroundColor = color;
-                
-                if (selectedColor === color) {
-                    swatch.classList.add('active');
-                }
-
-                swatch.addEventListener('click', (e) => {
-                    if (isSwiping) return;
-                    
-                    document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
-
-                    const wasActive = swatch.classList.contains('active');
-                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-                    
-                    if (!wasActive) {
-                        swatch.classList.add('active');
-                        selectedColor = color;
-                        setBucketMode(true);
-                    } else {
-                        selectedColor = null;
-                        setBucketMode(false);
-                    }
-                });
-
-                colorPalette.appendChild(swatch);
-            });
-        }
-
+      
         addSwipeFunctionality();
-        populateColorPalette();
     </script>
 </body>
 </html>
