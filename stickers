@@ -403,40 +403,45 @@ function setTransform(sticker) {
 }
 
 
-      function saveState() {
-        if (isRestoring) return; 
-            const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-            const currentState = {
-                stickers: []
-            };
-            stickersOnCanvas.forEach(sticker => {
-                const stickerImg = sticker.querySelector('img');
-                if (stickerImg) {
-                    currentState.stickers.push({
-                        url: stickerImg.src,
-                        x: sticker.offsetLeft,
-                        y: sticker.offsetTop,
-                        width: sticker.offsetWidth,
-                        height: sticker.offsetHeight
-                    });
-                }
-            });
-            history.push(currentState);
-             redoStack = []; 
-            updateUndoButton();
-        }
+  function saveState() {
+    if (isRestoring) return; 
 
-        function loadState(state) {
+    const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+    const currentState = {
+        stickers: []
+    };
+
+    stickersOnCanvas.forEach(sticker => {
+        const stickerImg = sticker.querySelector('img');
+        if (stickerImg) {
+            currentState.stickers.push({
+                url: stickerImg.src,
+                x: parseFloat(sticker.dataset.x) || 0,
+                y: parseFloat(sticker.dataset.y) || 0,
+                scale: parseFloat(sticker.dataset.scale) || 1,
+                rotation: parseFloat(sticker.dataset.rotation) || 0
+            });
+        }
+    });
+
+    history.push(currentState);
+    redoStack = []; 
+    updateUndoButton();
+}
+
+function loadState(state) {
     isRestoring = true;
     canvas.innerHTML = '';
     state.stickers.forEach(data => {
-        // pass suppressSave: true so addSticker doesn't push history while restoring
-        addSticker(data.url, data.x, data.y, data.width, data.height, { suppressSave: true });
+        addSticker(data.url, data.x, data.y, 200, { 
+            suppressSave: true,
+            scale: data.scale,
+            rotation: data.rotation
+        });
     });
     isRestoring = false;
     updateUndoButton();
 }
-
         function deselectAllStickers() {
             document.querySelectorAll('.sticker').forEach(s => {
                 s.classList.remove('selected');
@@ -450,18 +455,28 @@ function setTransform(sticker) {
         }
 
 function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
-    const { suppressSave = false } = opts;
+ const { suppressSave = false, scale = 1, rotation = 0 } = opts;
                 const sticker = document.createElement('div');
             sticker.classList.add('sticker');
-           sticker.style.width = `${width}px`;
-            sticker.style.height = `${height}px`;
 
-            const stickerImg = document.createElement('img');
-            stickerImg.crossOrigin = "Anonymous";
-            stickerImg.src = url;
-            stickerImg.draggable = false;
-            sticker.appendChild(stickerImg);
 
+         // 🔑 baseline size, never changes after creation
+    sticker.style.width = `${width}px`;
+    sticker.style.height = `auto`; // let aspect ratio follow image
+
+    const stickerImg = document.createElement('img');
+    stickerImg.crossOrigin = "Anonymous";
+    stickerImg.src = url;
+    stickerImg.draggable = false;
+    sticker.appendChild(stickerImg);
+
+    // Initial transform data
+    sticker.dataset.x = x || 0;
+    sticker.dataset.y = y || 0;
+    sticker.dataset.scale = scale;
+    sticker.dataset.rotation = rotation;
+
+    setTransform(sticker);
       
 
             const copyBtn = document.createElement('div');
