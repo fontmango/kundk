@@ -390,7 +390,7 @@
         }
 
         .sticker.locked .lock-btn {
-            background-color: #cc6600; /* Darker orange when locked */
+            background-color: #ff9933; /* Darker orange when locked */
             transform: scale(1.1) translateX(-50%);
         }
 
@@ -443,8 +443,18 @@
     <div id="sticker-overlay-container" class="overlay"></div>
 
     <script>
-        const stickerGroups = [{
-
+        const stickerGroups = [
+            
+         {
+            name: "Marshmallows",
+            urls: [
+        
+        "https://static.wixstatic.com/media/990059_f119038793e242d7a3bca9e5cd85c928~mv2.png"
+        
+             ]
+        }, 
+        
+        {
             name: "Vikings",
             urls: [
                 "https://static.wixstatic.com/media/990059_195242b424cb450ea78b93e9de392511~mv2.png",
@@ -484,7 +494,8 @@
                 "https://static.wixstatic.com/media/990059_caaa5e6cda52435fbb7c5d44baf532b6~mv2.png"
 
             ]
-        }, {
+        }, 
+        {
             name: "2",
             urls: [
                 "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png"
