@@ -120,7 +120,7 @@
 
         button.active {
             border-radius: 50%;
-            background-color: #e0e0e0;
+          
             transform: scale(1.05);
         }
 
@@ -276,19 +276,19 @@
 </head>
 <body>
     <div class="controls">
-        <button id="add-sticker-btn" title="Add Random">
+        <button id="add-sticker-btn" title="Überrasch mich">
             <i data-lucide="shuffle" class="icon"></i>
         </button>
 
-        <button id="undo-btn" title="Undo">
+        <button id="undo-btn" title="Zurück">
             <i data-lucide="undo-2" class="icon"></i>
         </button>
 
-        <button id="redo-btn" title="Redo">
+        <button id="redo-btn" title="Vor">
         <i data-lucide="redo-2" class="icon"></i>
     </button>
         
-        <button id="new-btn" title="New Canvas">
+        <button id="new-btn" title="Neu">
             <i data-lucide="file-plus-2" class="icon"></i>
         </button>
     </div>
