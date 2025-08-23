@@ -58,7 +58,8 @@
 
         .sticker:hover > .delete-btn,
         .sticker:hover > .copy-btn,
-        .sticker:hover > .resize-handle {
+        .sticker:hover > .resize-handle,
+            .sticker:hover > .rotate-btn {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -66,7 +67,9 @@
 
         .sticker.selected > .delete-btn,
         .sticker.selected > .copy-btn,
-        .sticker.selected > .resize-handle {
+        .sticker.selected > .resize-handle,
+            .sticker.selected > .rotate-btn {
+
             display: flex;
         }
 
@@ -270,6 +273,46 @@
             transform: scale(1.1);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
+
+
+.rotate-btn {
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: #c2bebeff;
+    color: white;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    z-index: 101;
+    padding: 0;
+    transition: transform 0.2s, background-color 0.2s;
+
+    bottom: 5%;
+    left: 5%;
+}
+
+.rotate-btn:active {
+    cursor: grabbing;
+}
+
+.rotate-btn:hover {
+    background-color: #4a86e8;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.rotate-btn-icon {
+    width: 60%;
+    height: 60%;
+    fill: white;
+    stroke: white;
+}
+
+}
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -319,6 +362,8 @@
             ]
            }, 
         ];
+        
+        
 
 
         const canvas = document.getElementById('canvas-container');
@@ -347,7 +392,15 @@
         let firstStickerAdded = false;
 
       
+function setTransform(sticker) {
+  const x = parseFloat(sticker.dataset.x) || 0;
+  const y = parseFloat(sticker.dataset.y) || 0;
+  const scale = parseFloat(sticker.dataset.scale) || 1;
+  const rotation = parseFloat(sticker.dataset.rotation) || 0;
 
+  sticker.style.transform =
+    `translate(${x}px, ${y}px) scale(${scale}) rotate(${rotation}deg)`;
+}
 
 
       function saveState() {
@@ -461,6 +514,77 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
                 saveState();
                 sticker.remove();
             });
+            
+            
+            
+            
+// Create rotate button
+const rotateBtn = document.createElement('div');
+rotateBtn.classList.add('rotate-btn');
+rotateBtn.innerHTML = `
+    <svg class="rotate-btn-icon" viewBox="0 0 24 24">
+        <path d="M12 6v-4l-5 5 5 5v-4a5 5 0 1 1-5 5"
+              stroke="white" stroke-width="2" fill="none"
+              stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+`;
+sticker.appendChild(rotateBtn);
+
+// Rotation logic
+let rotating = false;
+let startAngle = 0;
+
+rotateBtn.addEventListener("pointerdown", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    rotating = true;
+
+    const rect = sticker.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    function getAngle(clientX, clientY) {
+        return Math.atan2(clientY - centerY, clientX - centerX) * 180 / Math.PI;
+    }
+
+    // start from stored rotation
+    let baseRotation = parseFloat(sticker.dataset.rotation) || 0;
+
+    // last pointer angle reference (updates on every move)
+    let lastPointerAngle = getAngle(e.clientX, e.clientY);
+
+    function onMove(ev) {
+        if (!rotating) return;
+
+        const pointerAngle = getAngle(ev.clientX, ev.clientY);
+
+        // difference since last move
+        let delta = pointerAngle - lastPointerAngle;
+
+        // normalize to -180..180
+        if (delta > 180) delta -= 360;
+        if (delta < -180) delta += 360;
+
+        // accumulate
+        baseRotation += delta;
+
+        // update for next move
+        lastPointerAngle = pointerAngle;
+
+        // store & render
+        sticker.dataset.rotation = baseRotation;
+        setTransform(sticker);
+    }
+
+    function onUp() {
+        rotating = false;
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+    }
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+});
 
             const resizeHandle = document.createElement('div');
             resizeHandle.classList.add('resize-handle');
@@ -478,9 +602,12 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
             sticker.appendChild(resizeHandle);
 
             function startInteraction(e) {
-                if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.resize-handle')) {
-                    return;
-                }
+               if (
+  e.target.closest(".delete-btn") ||
+  e.target.closest(".copy-btn") ||
+  e.target.closest(".resize-handle") ||
+  e.target.closest(".rotate-btn")
+) return;
                 if (bucketMode) return;
                 
                 // Save state at the beginning of an interaction
@@ -559,56 +686,49 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     let startX, startY, startWidth, startHeight, startLeft, startTop;
 
     const startResize = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
+    e.stopPropagation();
+    e.preventDefault();
 
-        saveState();
+    saveState();
 
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-        startX = clientX;
-        startY = clientY;
-        startWidth = sticker.offsetWidth;
-        startHeight = sticker.offsetHeight;
-        startLeft = sticker.offsetLeft;
-        startTop = sticker.offsetTop;
+    startX = clientX;
+    startY = clientY;
 
-        document.addEventListener('mousemove', doResize);
-        document.addEventListener('mouseup', endResize);
-        document.addEventListener('touchmove', doResize, { passive: false });
-        document.addEventListener('touchend', endResize);
-    };
+    startScale = parseFloat(sticker.dataset.scale) || 1;
 
-    const doResize = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
+    document.addEventListener('mousemove', doResize);
+    document.addEventListener('mouseup', endResize);
+    document.addEventListener('touchmove', doResize, { passive: false });
+    document.addEventListener('touchend', endResize);
+};
 
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+const doResize = (e) => {
+    e.preventDefault();
 
-        const deltaX = clientX - startX;
-        const newWidth = Math.max(startWidth + deltaX, 30);
-        const aspectRatio = startWidth / startHeight;
-        const newHeight = newWidth / aspectRatio;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-        sticker.style.width = `${newWidth}px`;
-        sticker.style.height = `${newHeight}px`;
+    const dx = clientX - startX;
+    const dy = clientY - startY;
 
-        // The key change is here:
-        // Adjust the top-left position to simulate resizing from the center or another anchor point.
-        sticker.style.left = `${startLeft + (startWidth - newWidth) / 2}px`;
-        sticker.style.top = `${startTop + (startHeight - newHeight) / 2}px`;
+    // signed distance, so dragging left/up shrinks
+    const distance = (dx + dy) / 200;
 
-    };
+    const newScale = Math.max(0.2, startScale + distance);
+    sticker.dataset.scale = newScale;
 
-    const endResize = () => {
-        document.removeEventListener('mousemove', doResize);
-        document.removeEventListener('mouseup', endResize);
-        document.removeEventListener('touchmove', doResize);
-        document.removeEventListener('touchend', endResize);
-        saveState();
-    };
+    setTransform(sticker);
+};
+
+const endResize = () => {
+    document.removeEventListener('mousemove', doResize);
+    document.removeEventListener('mouseup', endResize);
+    document.removeEventListener('touchmove', doResize);
+    document.removeEventListener('touchend', endResize);
+};
 
     handle.addEventListener('mousedown', startResize);
     handle.addEventListener('touchstart', startResize);
@@ -747,6 +867,12 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
 }
             
             return sticker;
+
+            sticker.dataset.x = x || 0;
+sticker.dataset.y = y || 0;
+sticker.dataset.scale = 1;
+sticker.dataset.rotation = 0;
+setTransform(sticker);
         }
 
         function populatePalette() {
@@ -921,16 +1047,35 @@ function updateUndoRedoButtons() {
                 initialTap.clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
             };
 
-            const handleMove = (e) => {
-                if (!isDragging) return;
-                e.preventDefault();
-                const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
-                const walk = (x - startX) * 1.5;
-                paletteContainer.scrollLeft = scrollLeft - walk;
-                if (Math.abs(e.clientX - initialTap.clientX) > 10) {
-                    isSwiping = true;
-                }
-            };
+           function handleMove(e) {
+    // 1) If dragging a sticker on the canvas
+    if (isDragging && activeSticker) {
+        e.preventDefault();
+        const clientX = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+        const clientY = e.type.includes('mouse') ? e.pageY : e.touches[0].clientY;
+
+        const dx = clientX - initialX;
+        const dy = clientY - initialY;
+
+        activeSticker.dataset.x = parseFloat(startStickerX) + dx;
+        activeSticker.dataset.y = parseFloat(startStickerY) + dy;
+
+        setTransform(activeSticker);
+        return; // stop here, don’t scroll palette
+    }
+
+    // 2) If dragging/swiping the palette
+    if (!isDragging) return;
+    e.preventDefault();
+
+    const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+    const walk = (x - startX) * 1.5;
+    paletteContainer.scrollLeft = scrollLeft - walk;
+
+    if (Math.abs(e.clientX - initialTap.clientX) > 10) {
+        isSwiping = true;
+    }
+}
 
             const handleEnd = () => {
                 isDragging = false;
@@ -953,6 +1098,9 @@ function updateUndoRedoButtons() {
 
       
         addSwipeFunctionality();
+
+
+
     </script>
 </body>
 </html>
