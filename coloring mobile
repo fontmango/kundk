@@ -189,53 +189,85 @@
             display: none;
         }
 
-        .overlay {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.95);
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            display: none;
-            z-index: 200;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            max-width: 100%;
-            max-height: 100%;
-            width: 95%;
-            height: 95%;
-            overflow-y: auto;
-        }
-        
-        .overlay-icon {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: transform 0.2s;
-        }
+        /* Overlay box (popup wrapper) */
+.overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  display: none;          /* <- start hidden */
+  z-index: 200;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  width: 80%;
+  height: 90%;
+  overflow-y: auto;
 
-        .overlay-icon:hover {
-            transform: scale(1.05);
-        }
-        
-        .overlay-sticker {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
+  /* grid layout for children */
+  display: none;          /* important: no grid by default */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 
-        .overlay-sticker:hover {
-            transform: scale(1.1);
-        }
+}
+
+/* close button */
+.overlay .close-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 210;
+}
+
+/* Show overlay */
+.overlay.active {
+  display: block;
+}
+
+/* Content inside overlay (grid of groups or stickers) */
+.overlay-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+  height: calc(100% - 40px); /* leave space for close button */
+}
+
+/* Group icons */
+.overlay-icon {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+
+.overlay-icon:hover {
+  transform: scale(1.05);
+}
+
+/* Stickers */
+.overlay-sticker {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.2s;
+}
+
+.overlay-sticker:hover {
+  transform: scale(1.1);
+}
         
         .copy-btn-icon {
             width: 100%;
@@ -1196,22 +1228,34 @@ function updateUndoRedoButtons() {
             stickerOverlayContainer.style.display = 'none';
         }
 
-        function showGroupOverlay() {
-            hideOverlays();
-            groupOverlayContainer.innerHTML = '';
-            stickerGroups.forEach(group => {
-                const groupIcon = document.createElement('img');
-                groupIcon.src = group.urls[0];
-                groupIcon.classList.add('overlay-icon');
-                groupIcon.title = group.name;
-                
-                groupIcon.addEventListener('click', () => {
-                    showStickerOverlay(group.urls);
-                });
-                groupOverlayContainer.appendChild(groupIcon);
-            });
-            groupOverlayContainer.style.display = 'grid';
-        }
+       function showGroupOverlay() {
+  hideOverlays();
+  groupOverlayContainer.innerHTML = '';
+
+  // add close button
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕';
+  closeBtn.classList.add('close-btn');
+  closeBtn.addEventListener('click', hideOverlays);
+  groupOverlayContainer.appendChild(closeBtn);
+
+  // add group icons
+  stickerGroups.forEach(group => {
+    const groupIcon = document.createElement('img');
+    groupIcon.src = group.urls[0];
+    groupIcon.classList.add('overlay-icon');
+    groupIcon.title = group.name;
+
+    groupIcon.addEventListener('click', () => {
+      showStickerOverlay(group.urls);
+    });
+
+    groupOverlayContainer.appendChild(groupIcon);
+  });
+
+  // finally: show overlay
+  groupOverlayContainer.style.display = 'grid';
+}
 
         function updateCanvasDrop() {
             const canvas = document.getElementById('canvas-container');
@@ -1236,23 +1280,32 @@ function updateUndoRedoButtons() {
         let touchOffsetX = 0;
         let touchOffsetY = 0;
         
-        function showStickerOverlay(urls) {
-            hideOverlays();
-            stickerOverlayContainer.innerHTML = '';
-            urls.forEach(url => {
-                const sticker = document.createElement('img');
-                sticker.src = url;
-                sticker.classList.add('overlay-sticker');
-                
-                sticker.addEventListener('click', () => {
-                    addOrReplaceSticker(url);
-                    hideOverlays();
-                });
-                
-                stickerOverlayContainer.appendChild(sticker);
-            });
-            stickerOverlayContainer.style.display = 'grid';
-        }
+     function showStickerOverlay(urls) {
+  hideOverlays();
+  stickerOverlayContainer.innerHTML = '';
+
+  // add close button
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕';
+  closeBtn.classList.add('close-btn');
+  closeBtn.addEventListener('click', hideOverlays);
+  stickerOverlayContainer.appendChild(closeBtn);
+
+  // add stickers
+  urls.forEach(url => {
+    const sticker = document.createElement('img');
+    sticker.src = url;
+    sticker.classList.add('overlay-sticker');
+    sticker.addEventListener('click', () => {
+      addOrReplaceSticker(url);
+      hideOverlays();
+    });
+    stickerOverlayContainer.appendChild(sticker);
+  });
+
+  // finally: show the overlay
+  stickerOverlayContainer.style.display = 'grid';
+}
 
         stickerPickerBtn.addEventListener('click', (e) => {
             e.stopPropagation();
