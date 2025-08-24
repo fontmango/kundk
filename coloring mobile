@@ -428,7 +428,48 @@ button.active {
 
     <script>
           const stickerGroups = [
-            
+            {
+name: "sumo",
+urls: [
+"https://static.wixstatic.com/media/990059_e6ee4977bd5c46388247e622a259a27f~mv2.png",
+"https://static.wixstatic.com/media/990059_10160b23fa2a4813a1d3458257da888d~mv2.png",
+"https://static.wixstatic.com/media/990059_768ce7c21d3e4574a6ca7e6d6bf7b5c6~mv2.png",
+"https://static.wixstatic.com/media/990059_59c7668d9c7d4b1482140cd9edb4577f~mv2.png",
+"https://static.wixstatic.com/media/990059_a854f4de291c4afd9ad546cd9db6cbbf~mv2.png",
+"https://static.wixstatic.com/media/990059_fc39d5566bed432fb24c1716bb1e8fb6~mv2.png",
+"https://static.wixstatic.com/media/990059_e5314791507b4e5d8a7588b5ce16e570~mv2.png",
+"https://static.wixstatic.com/media/990059_a984ed8cc18b45fa8bdff1aa93f00643~mv2.png",
+"https://static.wixstatic.com/media/990059_3ed3f70439184dd1a74d4b16265f50e5~mv2.png",
+"https://static.wixstatic.com/media/990059_7603700400c34c5687c3a57816a07548~mv2.png",
+"https://static.wixstatic.com/media/990059_280842bca7fa4a2ebe082ea1a461cab8~mv2.png",
+"https://static.wixstatic.com/media/990059_e650ed7d53814c04811304fe7dd0cd76~mv2.png",
+"https://static.wixstatic.com/media/990059_4cbfa9774f5942c1ab573994a42b275e~mv2.png",
+"https://static.wixstatic.com/media/990059_2073c5179c864e0a8bbf0e53c03524eb~mv2.png",
+"https://static.wixstatic.com/media/990059_7db10dd3e8634ca8845c6e80921b2e80~mv2.png",
+
+"https://static.wixstatic.com/media/990059_908057edb3ee4df2936a9ef51bc61346~mv2.png",
+"https://static.wixstatic.com/media/990059_96ddf89243ed4836a3f6f4718f9e83fd~mv2.png",
+"https://static.wixstatic.com/media/990059_c9d936c12c2d4345ba951107471bdd55~mv2.png",
+"https://static.wixstatic.com/media/990059_1420c6ae225e4930a2c4b726492401e7~mv2.png",
+"https://static.wixstatic.com/media/990059_c3ef511510ee4d5caaa45dec0b93b9f5~mv2.png",
+"https://static.wixstatic.com/media/990059_c060a51015cb4f5da4d32087389851ec~mv2.png",
+"https://static.wixstatic.com/media/990059_53dcf381c70941108ee8765b6d578dfb~mv2.png",
+"https://static.wixstatic.com/media/990059_7cd0500f00834909afafc0b8092cac33~mv2.png",
+"https://static.wixstatic.com/media/990059_3867a101bc9e4adca2c8f9f719c2def2~mv2.png",
+"https://static.wixstatic.com/media/990059_fbd05db09ed34d7db89a9eea02b65c14~mv2.png",
+"https://static.wixstatic.com/media/990059_0a81900714234097b82084eaa378161f~mv2.png",
+"https://static.wixstatic.com/media/990059_4f5a086af1da4cbebd1e0c90a8645022~mv2.png",
+"https://static.wixstatic.com/media/990059_91e8683c97e642c98b46d7990ed8c4bd~mv2.png",
+"https://static.wixstatic.com/media/990059_12095f16e3804cc0bafc8d7e009d7789~mv2.png",
+"https://static.wixstatic.com/media/990059_6bc461d574ad4396af4b4a75ed16544b~mv2.png",
+"https://static.wixstatic.com/media/990059_788e1fbc151f48e9ad1fb08c92e72a7e~mv2.png",
+"https://static.wixstatic.com/media/990059_f023c7f5b16a4f88a2e2449d59821e05~mv2.png",
+"https://static.wixstatic.com/media/990059_257360597fe2490c8b19264eb3c39aa9~mv2.png",
+"https://static.wixstatic.com/media/990059_c84b68aeb0e44a08b863719bc5b48453~mv2.png",
+"https://static.wixstatic.com/media/990059_b73e8d8e9b8a44158a9193ccf502958f~mv2.png"
+
+]
+},
 
               {
                 name: "Carrot",
@@ -1400,48 +1441,7 @@ urls: [
 
 ]
 },
-{
-name: "sumo",
-urls: [
 
-"https://static.wixstatic.com/media/990059_10160b23fa2a4813a1d3458257da888d~mv2.png",
-"https://static.wixstatic.com/media/990059_768ce7c21d3e4574a6ca7e6d6bf7b5c6~mv2.png",
-"https://static.wixstatic.com/media/990059_59c7668d9c7d4b1482140cd9edb4577f~mv2.png",
-"https://static.wixstatic.com/media/990059_a854f4de291c4afd9ad546cd9db6cbbf~mv2.png",
-"https://static.wixstatic.com/media/990059_fc39d5566bed432fb24c1716bb1e8fb6~mv2.png",
-"https://static.wixstatic.com/media/990059_e5314791507b4e5d8a7588b5ce16e570~mv2.png",
-"https://static.wixstatic.com/media/990059_a984ed8cc18b45fa8bdff1aa93f00643~mv2.png",
-"https://static.wixstatic.com/media/990059_3ed3f70439184dd1a74d4b16265f50e5~mv2.png",
-"https://static.wixstatic.com/media/990059_7603700400c34c5687c3a57816a07548~mv2.png",
-"https://static.wixstatic.com/media/990059_280842bca7fa4a2ebe082ea1a461cab8~mv2.png",
-"https://static.wixstatic.com/media/990059_e650ed7d53814c04811304fe7dd0cd76~mv2.png",
-"https://static.wixstatic.com/media/990059_4cbfa9774f5942c1ab573994a42b275e~mv2.png",
-"https://static.wixstatic.com/media/990059_2073c5179c864e0a8bbf0e53c03524eb~mv2.png",
-"https://static.wixstatic.com/media/990059_7db10dd3e8634ca8845c6e80921b2e80~mv2.png",
-"https://static.wixstatic.com/media/990059_e6ee4977bd5c46388247e622a259a27f~mv2.png",
-"https://static.wixstatic.com/media/990059_908057edb3ee4df2936a9ef51bc61346~mv2.png",
-"https://static.wixstatic.com/media/990059_96ddf89243ed4836a3f6f4718f9e83fd~mv2.png",
-"https://static.wixstatic.com/media/990059_c9d936c12c2d4345ba951107471bdd55~mv2.png",
-"https://static.wixstatic.com/media/990059_1420c6ae225e4930a2c4b726492401e7~mv2.png",
-"https://static.wixstatic.com/media/990059_c3ef511510ee4d5caaa45dec0b93b9f5~mv2.png",
-"https://static.wixstatic.com/media/990059_c060a51015cb4f5da4d32087389851ec~mv2.png",
-"https://static.wixstatic.com/media/990059_53dcf381c70941108ee8765b6d578dfb~mv2.png",
-"https://static.wixstatic.com/media/990059_7cd0500f00834909afafc0b8092cac33~mv2.png",
-"https://static.wixstatic.com/media/990059_3867a101bc9e4adca2c8f9f719c2def2~mv2.png",
-"https://static.wixstatic.com/media/990059_fbd05db09ed34d7db89a9eea02b65c14~mv2.png",
-"https://static.wixstatic.com/media/990059_0a81900714234097b82084eaa378161f~mv2.png",
-"https://static.wixstatic.com/media/990059_4f5a086af1da4cbebd1e0c90a8645022~mv2.png",
-"https://static.wixstatic.com/media/990059_91e8683c97e642c98b46d7990ed8c4bd~mv2.png",
-"https://static.wixstatic.com/media/990059_12095f16e3804cc0bafc8d7e009d7789~mv2.png",
-"https://static.wixstatic.com/media/990059_6bc461d574ad4396af4b4a75ed16544b~mv2.png",
-"https://static.wixstatic.com/media/990059_788e1fbc151f48e9ad1fb08c92e72a7e~mv2.png",
-"https://static.wixstatic.com/media/990059_f023c7f5b16a4f88a2e2449d59821e05~mv2.png",
-"https://static.wixstatic.com/media/990059_257360597fe2490c8b19264eb3c39aa9~mv2.png",
-"https://static.wixstatic.com/media/990059_c84b68aeb0e44a08b863719bc5b48453~mv2.png",
-"https://static.wixstatic.com/media/990059_b73e8d8e9b8a44158a9193ccf502958f~mv2.png"
-
-]
-},
 {
 name: "snail",
 urls: [
@@ -1608,19 +1608,19 @@ urls: [
         const colors = [
             '#8d5524', '#c68642', '#e0ac69', '#f1c27d', '#ffdbac',
             // Reds
-            '#FF0000', '#FF4500', '#FF6347', '#D2691E', '#CD5C5C',
+            '#FF0000', '#FF6347', '#D2691E', '#CD5C5C',
 
             // Oranges & Yellows
             '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
 
             // Greens
-            '#008000', '#228B22', '#3CB371', '#9ACD32', '#ADFF2F',
+            '#008000', '#3CB371', '#9ACD32', '#ADFF2F',
 
             // Blues
             '#0000FF', '#4169E1', '#1E90FF', '#87CEFA',
 
             // Purples
-            '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
+            '#800080', '#4B0082','#BA55D3', '#DA70D6',
 
             // Pinks & Browns
             '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
@@ -2019,93 +2019,123 @@ function handleEnd() {
             return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
         }
 
-        function recolorSticker(stickerImg, fillColor, clickX, clickY) {
-            const canvasEl = document.createElement("canvas");
-            const ctx = canvasEl.getContext("2d", {
-                willReadFrequently: true
-            });
-            canvasEl.width = stickerImg.naturalWidth;
-            canvasEl.height = stickerImg.naturalHeight;
-            ctx.drawImage(stickerImg, 0, 0);
+        async function recolorSticker(stickerImg, fillColor, clickX, clickY) {
+    const canvasEl = document.createElement("canvas");
+    const ctx = canvasEl.getContext("2d", { willReadFrequently: true });
+    canvasEl.width = stickerImg.naturalWidth;
+    canvasEl.height = stickerImg.naturalHeight;
+    ctx.drawImage(stickerImg, 0, 0);
 
-            const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
-            const data = imgData.data;
+    const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+    const data = imgData.data;
 
-            const isEraser = fillColor && fillColor.type === 'erase';
-            const [r, g, b] = isEraser ? [0, 0, 0] : hexToRgb(fillColor);
+    const isEraser = fillColor && fillColor.type === 'erase';
+    const [r, g, b] = isEraser ? [0, 0, 0] : hexToRgb(fillColor);
 
-            // border detection: treat dark pixels as "walls"
-            const blackThreshold = 30;
+    // --- border detection ---
+    const blackThreshold = 30;
+    function isBorderPixel(pxR, pxG, pxB, pxA) {
+        return (pxA > 0 && pxR < blackThreshold && pxG < blackThreshold && pxB < blackThreshold);
+    }
 
-            function isBorderPixel(pxR, pxG, pxB, pxA) {
-                return (pxA > 0 && pxR < blackThreshold && pxG < blackThreshold && pxB < blackThreshold);
+    function colorsMatch(data, i, target, tolerance = 30) {
+        return (
+            Math.abs(data[i] - target[0]) <= tolerance &&
+            Math.abs(data[i + 1] - target[1]) <= tolerance &&
+            Math.abs(data[i + 2] - target[2]) <= tolerance &&
+            Math.abs(data[i + 3] - target[3]) <= tolerance
+        );
+    }
+
+    const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
+    const targetColor = [
+        data[startIndex],
+        data[startIndex + 1],
+        data[startIndex + 2],
+        data[startIndex + 3]
+    ];
+
+    const visited = new Uint8Array(canvasEl.width * canvasEl.height);
+    let touchesEdge = false;
+
+    // --- Scanline Flood Fill ---
+    const stack = [[clickX, clickY]];
+
+    while (stack.length) {
+        let [x, y] = stack.pop();
+
+        // move left until border
+        let left = x;
+        while (left >= 0) {
+            const idx = (y * canvasEl.width + left) * 4;
+            if (visited[y * canvasEl.width + left] ||
+                isBorderPixel(data[idx], data[idx + 1], data[idx + 2], data[idx + 3]) ||
+                !colorsMatch(data, idx, targetColor, 30)) {
+                break;
             }
-
-            function colorsMatch(data, i, target, tolerance = 30) {
-                return (
-                    Math.abs(data[i] - target[0]) <= tolerance &&
-                    Math.abs(data[i + 1] - target[1]) <= tolerance &&
-                    Math.abs(data[i + 2] - target[2]) <= tolerance &&
-                    Math.abs(data[i + 3] - target[3]) <= tolerance
-                );
-            }
-
-            const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
-            const targetColor = [
-                data[startIndex],
-                data[startIndex + 1],
-                data[startIndex + 2],
-                data[startIndex + 3]
-            ];
-
-            const stack = [
-                [clickX, clickY]
-            ];
-            const visited = new Set();
-            const fillPixels = []; // collect pixels first
-            let touchesEdge = false;
-
-            while (stack.length) {
-                const [x, y] = stack.pop();
-                if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) continue;
-                const i = ((y * canvasEl.width) + x) * 4;
-                const key = `${x},${y}`;
-                if (visited.has(key)) continue;
-
-                if (!isBorderPixel(data[i], data[i + 1], data[i + 2], data[i + 3]) && colorsMatch(data, i, targetColor, 30)) {
-                    visited.add(key);
-                    fillPixels.push(i);
-
-                    // if this region touches canvas edge → not enclosed
-                    if (x === 0 || y === 0 || x === canvasEl.width - 1 || y === canvasEl.height - 1) {
-                        touchesEdge = true;
-                    }
-
-                    stack.push([x + 1, y]);
-                    stack.push([x - 1, y]);
-                    stack.push([x, y + 1]);
-                    stack.push([x, y - 1]);
-                }
-            }
-
-            // Only apply fill if region is enclosed
-            if (!touchesEdge) {
-                for (const i of fillPixels) {
-                    if (isEraser) {
-                        data[i + 3] = 0;
-                    } else {
-                        data[i] = r;
-                        data[i + 1] = g;
-                        data[i + 2] = b;
-                        data[i + 3] = 255;
-                    }
-                }
-            }
-
-            ctx.putImageData(imgData, 0, 0);
-            stickerImg.src = canvasEl.toDataURL();
-            saveState();
+            left--;
         }
+        left++;
+
+        // move right until border
+        let right = x;
+        while (right < canvasEl.width) {
+            const idx = (y * canvasEl.width + right) * 4;
+            if (visited[y * canvasEl.width + right] ||
+                isBorderPixel(data[idx], data[idx + 1], data[idx + 2], data[idx + 3]) ||
+                !colorsMatch(data, idx, targetColor, 30)) {
+                break;
+            }
+            right++;
+        }
+        right--;
+
+        // fill the horizontal span
+        for (let xi = left; xi <= right; xi++) {
+            const idx = y * canvasEl.width + xi;
+            const i = idx * 4;
+            visited[idx] = 1;
+
+            if (isEraser) {
+                data[i + 3] = 0;
+            } else {
+                data[i] = r;
+                data[i + 1] = g;
+                data[i + 2] = b;
+                data[i + 3] = 255;
+            }
+
+            // check if region touches canvas edge
+            if (xi === 0 || xi === canvasEl.width - 1 || y === 0 || y === canvasEl.height - 1) {
+                touchesEdge = true;
+            }
+        }
+
+        // enqueue spans above & below
+        for (let xi = left; xi <= right; xi++) {
+            const upIdx = (y - 1) * canvasEl.width + xi;
+            const downIdx = (y + 1) * canvasEl.width + xi;
+
+            if (y > 0 && !visited[upIdx]) stack.push([xi, y - 1]);
+            if (y < canvasEl.height - 1 && !visited[downIdx]) stack.push([xi, y + 1]);
+        }
+    }
+
+    // apply changes only if not leaking
+    if (!touchesEdge) {
+        ctx.putImageData(imgData, 0, 0);
+
+        // much faster than toDataURL
+        const bitmap = await createImageBitmap(canvasEl);
+        const offscreen = document.createElement("canvas");
+        offscreen.width = bitmap.width;
+        offscreen.height = bitmap.height;
+        offscreen.getContext("2d").drawImage(bitmap, 0, 0);
+        stickerImg.src = offscreen.toDataURL();
+    }
+
+    saveState();
+}
 
         function updateUndoRedoButtons() {
             undoBtn.disabled = history.length <= 1;
