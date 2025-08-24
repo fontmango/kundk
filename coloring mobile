@@ -46,7 +46,7 @@
             
             box-sizing: border-box;
             touch-action: none;
-             transition: all 0.2s ease;
+            
         }
 
         .sticker img {
@@ -1485,61 +1485,65 @@ urls: [
     sticker.appendChild(copyBtn);
     sticker.appendChild(lockBtn);
 
-    // --- Main Interaction Handlers (Consolidated) ---
-    function startInteraction(e) {
-        if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.lock-btn')) {
-            return;
-        }
-
-        if (bucketMode && (!e.touches || e.touches.length < 2)) {
-            return;
-        }
-
-        activeSticker = sticker;
-        deselectAllStickers();
-        sticker.classList.add('selected');
-        e.preventDefault();
-
-        if (e.touches && e.touches.length === 2) {
-            const touch1 = e.touches[0];
-            const touch2 = e.touches[1];
-            initialPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
-            initialStickerWidth = sticker.offsetWidth;
-            initialStickerHeight = sticker.offsetHeight;
-            initialRect = sticker.getBoundingClientRect();
-        } else if (e.touches && e.touches.length === 1) {
-            const touch = e.touches[0];
-            initialX = touch.clientX;
-            initialY = touch.clientY;
-            offsetX = sticker.offsetLeft;
-            offsetY = sticker.offsetTop;
-        } else {
-            initialX = e.clientX;
-            initialY = e.clientY;
-            offsetX = sticker.offsetLeft;
-            offsetY = sticker.offsetTop;
-        }
-
-        document.addEventListener('mousemove', handleMove);
-        document.addEventListener('mouseup', handleEnd);
-        document.addEventListener('touchmove', handleMove, { passive: false });
-        document.addEventListener('touchend', handleEnd);
-        saveState();
+   function startInteraction(e) {
+    if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.lock-btn')) {
+        return;
     }
 
-    function handleMove(e) {
-    if (!activeSticker) return;
-    e.preventDefault();
+    if (bucketMode && (!e.touches || e.touches.length < 2)) {
+        return;
+    }
 
-    // Mobile Resizing Logic (2-finger pinch)
+    activeSticker = sticker;
+    deselectAllStickers();
+    sticker.classList.add('selected');
+    saveState();
+
     if (e.touches && e.touches.length === 2) {
+        // Two-finger gesture (resizing)
+        e.preventDefault(); 
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        initialPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+        initialStickerWidth = sticker.offsetWidth;
+        initialStickerHeight = sticker.offsetHeight;
+        initialRect = sticker.getBoundingClientRect();
+        
+        document.addEventListener('touchmove', handleMove, { passive: false });
+    } else if (e.touches && e.touches.length === 1) {
+        // Single-finger gesture (dragging)
+        const touch = e.touches[0];
+        initialX = touch.clientX;
+        initialY = touch.clientY;
+        offsetX = sticker.offsetLeft;
+        offsetY = sticker.offsetTop;
+        
+        document.addEventListener('touchmove', handleMove, { passive: false });
+    } else {
+        // Mouse interaction (dragging)
+        initialX = e.clientX;
+        initialY = e.clientY;
+        offsetX = sticker.offsetLeft;
+        offsetY = sticker.offsetTop;
+        
+        document.addEventListener('mousemove', handleMove);
+    }
+
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchend', handleEnd);
+}
+
+function handleMove(e) {
+    if (!activeSticker) return;
+
+    if (e.touches && e.touches.length === 2) {
+        e.preventDefault();
+        
         const touch1 = e.touches[0];
         const touch2 = e.touches[1];
         const currentPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
         
-        // This is the key change. We no longer update the initialPinchDistance here.
         const scaleFactor = currentPinchDistance / initialPinchDistance;
-
         const newWidth = initialStickerWidth * scaleFactor;
         const newHeight = initialStickerHeight * scaleFactor;
         const minSize = 30;
@@ -1572,26 +1576,27 @@ urls: [
             activeSticker.style.left = `${adjustedLeft - canvasRect.left}px`;
             activeSticker.style.top = `${adjustedTop - canvasRect.top}px`;
         }
-    }
-    // Dragging Logic (single finger or mouse)
-    else if (!bucketMode) {
+    } else if (!bucketMode && (!e.touches || e.touches.length === 1)) {
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        const newX = offsetX + (clientX - initialX);
-        const newY = offsetY + (clientY - initialY);
-        activeSticker.style.left = `${newX}px`;
-        activeSticker.style.top = `${newY}px`;
+        
+        // Directly calculate the new position based on the move event
+        const dx = clientX - initialX;
+        const dy = clientY - initialY;
+        
+        activeSticker.style.left = `${offsetX + dx}px`;
+        activeSticker.style.top = `${offsetY + dy}px`;
     }
 }
 
-    function handleEnd() {
-        document.removeEventListener('mousemove', handleMove);
-        document.removeEventListener('mouseup', handleEnd);
-        document.removeEventListener('touchmove', handleMove);
-        document.removeEventListener('touchend', handleEnd);
-        activeSticker = null;
-        saveState();
-    }
+function handleEnd() {
+    document.removeEventListener('mousemove', handleMove);
+    document.removeEventListener('mouseup', handleEnd);
+    document.removeEventListener('touchmove', handleMove, { passive: false });
+    document.removeEventListener('touchend', handleEnd);
+    activeSticker = null;
+    saveState();
+}
 
     // --- Event Listeners ---
     sticker.addEventListener('mousedown', startInteraction);
