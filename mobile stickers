@@ -951,11 +951,24 @@ function handleMove(e) {
 }
 
 function handleEnd() {
+    // Remove event listeners
     document.removeEventListener('mousemove', handleMove);
     document.removeEventListener('mouseup', handleEnd);
-    document.removeEventListener('touchmove', handleMove, { passive: false });
+    document.removeEventListener('touchmove', handleMove);
     document.removeEventListener('touchend', handleEnd);
+
+    // Remove the .selected class from the active sticker
+    if (activeSticker) {
+        activeSticker.classList.remove('selected');
+    }
+
+    // Reset state variables
     activeSticker = null;
+    initialRect = null;
+    initialTouchDistance = 0;
+    initialStickerWidth = 0;
+    initialStickerHeight = 0;
+    
     saveState();
 }
 
@@ -1071,54 +1084,61 @@ function updateUndoRedoButtons() {
 }
 
  function addOrReplaceSticker(newUrl) {
-            const unlockedSticker = document.querySelector('.sticker:not(.locked)');
-            const stickerSize = 120;
-            const canvasWidth = canvas.offsetWidth;
-            const canvasHeight = canvas.offsetHeight;
-            const centerX = (canvasWidth / 2) - (stickerSize / 2);
-            const centerY = (canvasHeight / 2) - (stickerSize / 2);
+    const unlockedSticker = document.querySelector('.sticker:not(.locked)');
+    const stickerSize = 120;
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
 
-            if (unlockedSticker) {
-                unlockedSticker.querySelector('img').src = newUrl;
-            } else {
-                addSticker(newUrl, centerX, centerY, stickerSize);
-            }
-            saveState();
-        }
+    if (unlockedSticker) {
+        // Hide the sticker temporarily
+        unlockedSticker.style.opacity = '0';
+        
+        // Update the sticker's properties
+        unlockedSticker.querySelector('img').src = newUrl;
+        unlockedSticker.style.width = `${stickerSize}px`;
+        unlockedSticker.style.height = 'auto';
+        unlockedSticker.style.left = `${centerX}px`;
+        unlockedSticker.style.top = `${centerY}px`;
+        
+        // Use an event listener to show the sticker only after the image has loaded
+        unlockedSticker.querySelector('img').onload = () => {
+            unlockedSticker.style.opacity = '1';
+        };
 
+    } else {
+        // Create a brand new sticker if none are unlocked
+        addSticker(newUrl, centerX, centerY, stickerSize);
+    }
+    saveState();
+}
 
-     
-        // MODIFIED: This function now correctly handles replacing the sticker and centering it
-   addStickerBtn.addEventListener('click', () => {
-            const allUrls = stickerGroups.flatMap(group => group.urls);
-            const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
-            const unlockedSticker = document.querySelector('.sticker:not(.locked)');
-
-            if (unlockedSticker) {
-                unlockedSticker.querySelector('img').src = randomUrl;
-            } else {
-                const stickerSize = 120;
-                const canvasWidth = canvas.offsetWidth;
-                const canvasHeight = canvas.offsetHeight;
-                const centerX = (canvasWidth / 2) - (stickerSize / 2);
-                const centerY = (canvasHeight / 2) - (stickerSize / 2);
-                addSticker(randomUrl, centerX, centerY, stickerSize);
-            }
-            saveState();
-        });
+addStickerBtn.addEventListener('click', () => {
+    const allUrls = stickerGroups.flatMap(group => group.urls);
+    const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+    addOrReplaceSticker(randomUrl);
+});
 
         window.addEventListener('load', () => {
             if (window.lucide) {
                 lucide.createIcons();
             }
             updateCanvasDrop();
+            const allStickers = document.querySelectorAll('.sticker');
+            if (allStickers.length === 0) {
+                addOrReplaceSticker(stickerGroups.flatMap(g => g.urls)[0]);
+            }
         });
-        
+
         let isDragging = false;
         let startX;
         let scrollLeft;
-        let isSwiping = false; 
-        let initialTap = { clientX: 0 };
+        let isSwiping = false;
+        let initialTap = {
+            clientX: 0
+        };
+
 
         function addSwipeFunctionality() {
          
