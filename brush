@@ -1,1 +1,2315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticker Canvas</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 1vh;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
+        #canvas-container {
+            width: 90%;
+            height: 500px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            margin-top: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            touch-action: none;
+        }
+
+        .sticker {
+            position: absolute;
+            height: auto;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.1s ease-in-out;
+            box-sizing: border-box;
+            touch-action: none;
+        }
+
+        .sticker img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .sticker:active {
+            cursor: grabbing;
+            z-index: 100;
+        }
+
+        .sticker:focus {
+            outline: none;
+        }
+
+        .sticker:hover > .delete-btn,
+        .sticker:hover > .copy-btn,
+        .sticker:hover > .resize-handle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .sticker.selected > .delete-btn,
+        .sticker.selected > .copy-btn,
+        .sticker.selected > .resize-handle {
+            display: flex;
+        }
+
+        .controls {
+            margin-top: 10px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .bucket-active .sticker {
+            border: none !important;
+            transition: none !important;
+        }
+
+        .bucket-active .sticker .delete-btn,
+        .bucket-active .sticker .copy-btn,
+        .bucket-active .sticker .resize-handle {
+            display: none !important;
+        }
+
+        .bucket-active .sticker:active,
+        .bucket-active .sticker:hover {
+            cursor: crosshair;
+        }
+
+
+        button {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #333;
+            transition: transform 0.2s, color 0.2s;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:focus, button:active {
+            outline: 0 !important;
+            box-shadow: none !important;
+        }
+
+        button:hover {
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        button.active {
+            border-radius: 50%;
+            transform: scale(1.05);
+            background-color: #ddd;
+        }
+
+        .icon {
+            width: 1.4em;
+            height: 1.4em;
+            stroke: currentColor;
+        }
+
+        .color-palette-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            touch-action: pan-y;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          
+        }
+
+        .color-palette-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .color-palette {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 8px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            padding: 3px;
+            width: max-content;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.2);
+        }
+
+         .color-swatch {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s, border-color 0.2s;
+            flex-shrink: 0;
+            outline: 0 !important;
+            box-shadow: none !important;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: none;
+        }
+
+
+        .color-swatch.active {
+            transform: scale(1.2);
+              border-color: #000000;
+        }
+
+    #sticker-palette-container {
+    width: 100%;
+    margin-top: 20px;
+    padding: 5px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-wrap: nowrap;        /* single row */
+    overflow-x: auto;         /* horizontal scroll */
+    overflow-y: hidden;
+
+    align-items: center;      /* vertical centering */
+    justify-content: center;  /* horizontal centering */
+    gap: 10px;                /* space between items */
+    scrollbar-width: thin;
+}
+
+#sticker-palette-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+#sticker-palette-container::-webkit-scrollbar-thumb {
+    background: #bbb; 
+    border-radius: 4px;
+}
+
+        .palette-sticker {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .palette-sticker:hover {
+            transform: scale(1.1);
+        }
+        #overlay-container {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            display: none;
+            z-index: 200;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            width: 350px;
+        }
+
+        .overlay-sticker {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+            cursor: grab;
+            border: 1px solid transparent;
+        }
+
+        .overlay-sticker:hover {
+            transform: scale(1.1);
+        }
+
+        .copy-btn-icon, .delete-btn-icon {
+            width: 100%;
+            height: 100%;
+            fill: white;
+            stroke: white;
+        }
+
+        .resize-handle-icon {
+            width: 60%;
+            height: 60%;
+            fill: white;
+            stroke: white;
+        }
+
+        .delete-btn, .copy-btn, .resize-handle {
+            position: absolute;
+            width: 20%;
+            height: 20%;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 101;
+            padding: 0;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .delete-btn {
+            top: 5%;
+            right: 5%;
+            background-color: #c2bebeff;
+        }
+
+        .copy-btn {
+            top: 5%;
+            left: 5%;
+            background-color: #c2bebeff;
+        }
+
+        .resize-handle {
+            bottom: 5%;
+            right: 5%;
+            background-color: #c2bebeff;
+            cursor: pointer;
+        }
+
+        .resize-handle:active {
+            cursor: ne-resize;
+        }
+
+        .copy-btn:hover {
+            background-color: #6aa84fff;
+            transform: scale(1.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .delete-btn:hover {
+            background-color: #f26262ff;
+            transform: scale(1.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .resize-handle:hover {
+            background-color: #4a86e8;
+            transform: scale(1.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+
+.tool-buttons button.active {
+  background: #ddd;       /* highlight active tool */
+  border-radius: 8px;
+}
+
+.coloring-active .sticker .delete-btn,
+.coloring-active .sticker .copy-btn,
+.coloring-active .sticker .lock-btn,
+.coloring-active .sticker .resize-handle {
+  display: none !important;  /* hide while coloring */
+}
+    </style>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="controls">
+        <button id="add-sticker-btn" title="Überrasche mich">
+            <i data-lucide="shuffle" class="icon"></i>
+        </button>
+
+        <button id="brush-btn" title="Pinsel">
+    <i data-lucide="brush" class="icon"></i>
+</button>
+
+ <button id="bucket-btn" title="Bucket">
+    <i data-lucide="paint-bucket" class="icon"></i>
+  </button>
+
+        <button id="undo-btn" title="Zurück">
+            <i data-lucide="undo-2" class="icon"></i>
+        </button>
+
+        <button id="redo-btn" title="Vor">
+        <i data-lucide="redo-2" class="icon"></i>
+    </button>
+        
+        <button id="eraser-btn" title="Radierer">
+            <i data-lucide="eraser" class="icon"></i>
+        </button>
+
+        <button id="new-btn" title="Neu">
+            <i data-lucide="file-plus-2" class="icon"></i>
+        </button>
+    </div>
+
+    <div class="color-palette-container">
+        <div class="color-palette" id="color-palette"></div>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <div id="sticker-palette-container"></div>
+
+    <div id="overlay-container"></div>
+
+    <script>
+         const stickerGroups = [
+            {
+                
+                name: "Vikings",
+                urls: [
+                    "https://static.wixstatic.com/media/990059_195242b424cb450ea78b93e9de392511~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e5529716f6f64f77a4d7c250ab6cfb5a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4636b8e42e674dccbb6117391652f10b~mv2.png",
+                    "https://static.wixstatic.com/media/990059_b4c7121418e14667bfdf79aecfea0524~mv2.png",
+                    "https://static.wixstatic.com/media/990059_c5244cbdc1014a0292d36824ce277bba~mv2.png",
+                    "https://static.wixstatic.com/media/990059_82d1bde23b3f45709690e3b032b39f7a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_63d7cd18bf4245d687839909ceb3671c~mv2.png",
+                    "https://static.wixstatic.com/media/990059_04487087ffd9403184e0562a09da9952~mv2.png",
+                    "https://static.wixstatic.com/media/990059_0abecd8111674041bda6a9bc58a0325d~mv2.png",
+                    "https://static.wixstatic.com/media/990059_3d5f1cfd966b460a9fc708fbadc23342~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1e7bdf5f8a9c415d940ecabe8aa515f8~mv2.png",
+                    "https://static.wixstatic.com/media/990059_f7bda5bccf6143b59cf118b96fe8d5c3~mv2.png",
+                    "https://static.wixstatic.com/media/990059_17382f604e5240cd9b192d1c408d177c~mv2.png",
+                    "https://static.wixstatic.com/media/990059_8050e711279440069ebb11be47552624~mv2.png",
+                    "https://static.wixstatic.com/media/990059_9280b10abb8f4b439280d80e2d654a00~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e69156957edb46ceb444911d6268d580~mv2.png",
+                    "https://static.wixstatic.com/media/990059_818add1171f44d7b8fb14cc7324bf1ba~mv2.png",
+                    "https://static.wixstatic.com/media/990059_c0876d74524a4a3890c8acc306d6c5b9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4c2a3c3d1f4d44c88bd245577c12d89e~mv2.png",
+                    "https://static.wixstatic.com/media/990059_6a6b1c7017c242bcb387edf0250492f9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_87363ab578ea485fb48b3ba8865da3c5~mv2.png",
+                    "https://static.wixstatic.com/media/990059_786e79df55c3459680a241c123d7edc8~mv2.png",
+                    "https://static.wixstatic.com/media/990059_75f54e8faf5f49aa9a6f554647c0a942~mv2.png",
+                    "https://static.wixstatic.com/media/990059_70b398a8aea848cf92a090ffae357819~mv2.png",
+                    "https://static.wixstatic.com/media/990059_393bb80861a1442cad28cfc4fd11a3b9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4c090a4740134396a9d2650a86431677~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1148bbb54d724dc2beb5cebc69c78d04~mv2.png",
+                    "https://static.wixstatic.com/media/990059_74b3de5669834b7e9cd434ee592a38a1~mv2.png",
+                    "https://static.wixstatic.com/media/990059_30092f18c74c4b1e9ebd8c362ab02b31~mv2.png",
+                    "https://static.wixstatic.com/media/990059_033520b5d83f401bbfafd972bb74e29f~mv2.png",
+                    "https://static.wixstatic.com/media/990059_95ffdb66d7d94ad99e0471a5103defec~mv2.png",
+                    "https://static.wixstatic.com/media/990059_2a29f33d7ef34280b86e7786af3971d1~mv2.png",
+                    "https://static.wixstatic.com/media/990059_2f5de7bfb37b4edf9375460f2befe73d~mv2.png",
+                    "https://static.wixstatic.com/media/990059_91c06e8d3bd0444696cf64ff35870d79~mv2.png",
+                    "https://static.wixstatic.com/media/990059_caaa5e6cda52435fbb7c5d44baf532b6~mv2.png"
+
+                ]
+            },
+
+             {        
+            name: "Axolotl",
+                    urls: [
+                    "https://static.wixstatic.com/media/990059_05060e38c4154aff9a528594d88be741~mv2.png",
+                    "https://static.wixstatic.com/media/990059_0aad71dddd5d453c9968c93e6f389207~mv2.png",
+                    "https://static.wixstatic.com/media/990059_2cdfa6cb22764564abfe44022de23042~mv2.png",
+                    "https://static.wixstatic.com/media/990059_b24b42c1b1764b16921c3662e14bd27f~mv2.png",
+                    "https://static.wixstatic.com/media/990059_c8014075dcbb499a8ce35539758e5ac4~mv2.png",
+                    "https://static.wixstatic.com/media/990059_977fbe4daa794d42a19b3d745f360bc1~mv2.png",
+                    "https://static.wixstatic.com/media/990059_dfe7434392994df1a2ae863cf886e93a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_098854f7f52840d9b8bc501e3be80bab~mv2.png",
+                    "https://static.wixstatic.com/media/990059_148751e9242148cc8d04ec90c2e7087c~mv2.png",
+                    "https://static.wixstatic.com/media/990059_dddff335b2c0453ca56720ab19a472d4~mv2.png",
+                    "https://static.wixstatic.com/media/990059_6ae18c2eef3a4dc8a9920051da3284f8~mv2.png",
+                    "https://static.wixstatic.com/media/990059_299d03ced8e34651a9fba332c275471d~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e8af05f7acaf4640ab2f2957cb6c085f~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1f8fc998e11940cdb6d0038dfc618cb5~mv2.png",
+                    "https://static.wixstatic.com/media/990059_f06d1e4746044821873f542239e3945a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_0d54dcc3726542da808a39b6e82ad48f~mv2.png",
+                    "https://static.wixstatic.com/media/990059_635b2665d9984185abcb2ec7f3ed078c~mv2.png",
+                    "https://static.wixstatic.com/media/990059_13e89fc85ec744478ed3f4b7daf1b7e8~mv2.png",
+                    "https://static.wixstatic.com/media/990059_7c0c995adc424cc2aae20e36cffc5e9c~mv2.png",
+                    "https://static.wixstatic.com/media/990059_d7a65ff7535b4c6eab4fe38639517be1~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1b43610b447b4aef9a836451afed057e~mv2.png",
+                    "https://static.wixstatic.com/media/990059_3f476689813740ca9fe930f6d4d78a69~mv2.png",
+                    "https://static.wixstatic.com/media/990059_3d57b97f9a754cac9416e7ae18897c06~mv2.png",
+                    "https://static.wixstatic.com/media/990059_490f38cae0a347c2940b410116ad7411~mv2.png",
+                    "https://static.wixstatic.com/media/990059_34ec2c45f4454c1fb529335aa7e3a817~mv2.png",
+                    "https://static.wixstatic.com/media/990059_bfc05b12bd5642458a82acc6fe592714~mv2.png",
+                    "https://static.wixstatic.com/media/990059_6dc14ab81cad4c60ace34ecbd07aa59f~mv2.png",
+                    "https://static.wixstatic.com/media/990059_373210328de242bc9a5253e6d34abbff~mv2.png",
+                    "https://static.wixstatic.com/media/990059_46f8033a1d124986bc0cd336046fed65~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1b13499c1ca043b8b602bd3df6f8d158~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1a86097c50584da69ea9b478a6a32b13~mv2.png",
+                    "https://static.wixstatic.com/media/990059_3241ca0106634225996b5c0720a5ebd8~mv2.png",
+                    "https://static.wixstatic.com/media/990059_997f7df22aa34ceaa20158f04a5bb691~mv2.png",
+                    "https://static.wixstatic.com/media/990059_cb2a614ad61f462fbb647f061638967d~mv2.png",
+                    "https://static.wixstatic.com/media/990059_80f65b27d9124304bc617aaedf8f9b4a~mv2.png"
+
+                    ]
+            },
+           {
+                name: "Cactus",
+                urls: [
+                "https://static.wixstatic.com/media/990059_d76586ef59324d9a85ca9ab432a7d7eb~mv2.png",
+                "https://static.wixstatic.com/media/990059_205c19c9983f476f9a0aaa1363d145e6~mv2.png",
+                "https://static.wixstatic.com/media/990059_aa1517e851b74defbda2311301ca0cba~mv2.png",
+                "https://static.wixstatic.com/media/990059_397c6a0dfa764e4a9a44baa4781a310e~mv2.png",
+                "https://static.wixstatic.com/media/990059_9db161ae358d49648c258644fa93e9c3~mv2.png",
+                "https://static.wixstatic.com/media/990059_d69d1f72dbfb43eb980afe2f29a2e8c9~mv2.png",
+                "https://static.wixstatic.com/media/990059_50123e97a1c149d39c3efffb439c73e4~mv2.png",
+                "https://static.wixstatic.com/media/990059_a641dd06f62548979628c54a6238f162~mv2.png",
+                "https://static.wixstatic.com/media/990059_b5f3a66128e24918ab7bb62730495146~mv2.png",
+                "https://static.wixstatic.com/media/990059_865b6380073c4b52a0d362bd218a1960~mv2.png",
+                "https://static.wixstatic.com/media/990059_2c733e157a3942d88afc16de11b90528~mv2.png",
+                "https://static.wixstatic.com/media/990059_3bcaf2587d7543a0b75a1148d6d340cb~mv2.png",
+                "https://static.wixstatic.com/media/990059_d450b700fde74f99b9047d2d38d1a5b3~mv2.png",
+                "https://static.wixstatic.com/media/990059_de4de20370d940b284270dc2867713b6~mv2.png",
+                "https://static.wixstatic.com/media/990059_1f4121ece0f14173b8a66be5f54752d7~mv2.png",
+                "https://static.wixstatic.com/media/990059_3016b56477b94524ab09c2e97ecfb8b9~mv2.png",
+                "https://static.wixstatic.com/media/990059_97328a17c90243bea4f338b18884432b~mv2.png",
+                "https://static.wixstatic.com/media/990059_d0e12209d3b8445588522ca241b75c1f~mv2.png",
+                "https://static.wixstatic.com/media/990059_2382e8ce720d4220acbad29058827115~mv2.png",
+                "https://static.wixstatic.com/media/990059_1b21edfbec4746a888a3d1978b0d0634~mv2.png",
+                "https://static.wixstatic.com/media/990059_9cd1c38f8523484eb6de2f81d3c3a57d~mv2.png",
+                "https://static.wixstatic.com/media/990059_25f2b1efc54f43d8a73dce25dbd85bd0~mv2.png",
+                "https://static.wixstatic.com/media/990059_430a5cbe98f040f491ec40d43da3278c~mv2.png",
+                "https://static.wixstatic.com/media/990059_1d7ae173047045608fe8b3c3be368046~mv2.png",
+                "https://static.wixstatic.com/media/990059_e2099eefb2504d98af3785eca38e199e~mv2.png",
+                "https://static.wixstatic.com/media/990059_909b9dde80a44408b40ce9b8398fcc41~mv2.png",
+                "https://static.wixstatic.com/media/990059_74e1f1fb01ac4d1ead4106099f365fa8~mv2.png",
+                "https://static.wixstatic.com/media/990059_196e79379a924ba9bd8349b3bf36cba5~mv2.png",
+                "https://static.wixstatic.com/media/990059_c918d0dcd20f46db9c6809235be9eaff~mv2.png",
+                "https://static.wixstatic.com/media/990059_fd1dbbe81fa64fac88b307533e2b6ad5~mv2.png",
+                "https://static.wixstatic.com/media/990059_2db465c8541a4f909215b0c2b70bd5d3~mv2.png",
+                "https://static.wixstatic.com/media/990059_67461d4f19ab471db24cd80fb72fe5cc~mv2.png",
+                "https://static.wixstatic.com/media/990059_a7660e45eab6489c985077a255103b8e~mv2.png",
+                "https://static.wixstatic.com/media/990059_d745900a1031472b8769e8cba06a7c3f~mv2.png",
+                "https://static.wixstatic.com/media/990059_4e29f4fcf2644c4999613d6fa797b215~mv2.png",
+                ]
+                },
+                {
+                name: "Carrot",
+                urls: [
+                "https://static.wixstatic.com/media/990059_f4ab7a2a7f0d4f83b6380024bd207009~mv2.png",
+                "https://static.wixstatic.com/media/990059_4e8bfdc0a4734e55b182ee556673f7e1~mv2.png",
+                "https://static.wixstatic.com/media/990059_60afc6299c8d4a278ab7e1c56addc92f~mv2.png",
+                "https://static.wixstatic.com/media/990059_dcc18cc05a6442f4b361ca98db336b15~mv2.png",
+                "https://static.wixstatic.com/media/990059_24c533454a6246129978d4c1efda60bb~mv2.png",
+                "https://static.wixstatic.com/media/990059_9cca88f4f766445faa9597c92f0be6b3~mv2.png",
+                "https://static.wixstatic.com/media/990059_d75bf0b3adb541798323fdfc28c9ef00~mv2.png",
+                "https://static.wixstatic.com/media/990059_586f92ccb1ec44dd93daeae5030eb812~mv2.png",
+                "https://static.wixstatic.com/media/990059_53701ccd3ba647b48d245a6a6c429061~mv2.png",
+                "https://static.wixstatic.com/media/990059_35ed0f1ba488459695b9b85b000d2370~mv2.png",
+                "https://static.wixstatic.com/media/990059_090c1ece33204cb5968d4ba47284fe8d~mv2.png",
+                "https://static.wixstatic.com/media/990059_328e05e032b2487a9bed73c3db51e85d~mv2.png",
+                "https://static.wixstatic.com/media/990059_2ef347e78f684d56bf1d10690e2767d2~mv2.png",
+                "https://static.wixstatic.com/media/990059_93d988413e734be3950f65445549ab0b~mv2.png",
+                "https://static.wixstatic.com/media/990059_e657f4e0c4a84bdf889a4bb50d5e478a~mv2.png",
+                "https://static.wixstatic.com/media/990059_0712986d016944a4b1fe4c908c9ee379~mv2.png",
+                "https://static.wixstatic.com/media/990059_831be5e7663e459cb7a2f939a8398dc3~mv2.png",
+                "https://static.wixstatic.com/media/990059_e71dbfc5b9be4ca987e5c22e24f880a0~mv2.png",
+                "https://static.wixstatic.com/media/990059_0b5c1c7c068d44e79f0e50332fa451dd~mv2.png",
+                "https://static.wixstatic.com/media/990059_3bc037e10af944dca121729c560f5ca3~mv2.png",
+                "https://static.wixstatic.com/media/990059_7cfbfecb15a1491fb21ae16c50fdd4dd~mv2.png",
+                "https://static.wixstatic.com/media/990059_e5dc9d251c294f9ead128a42bbcc5d3b~mv2.png",
+                "https://static.wixstatic.com/media/990059_70c74bf614f140838c130d5764fa0257~mv2.png",
+                "https://static.wixstatic.com/media/990059_341b0a1ac73c426fb7327ffbd9d8cd83~mv2.png",
+                "https://static.wixstatic.com/media/990059_ec3eb99178d84137ad443e3a9eccfa7a~mv2.png",
+                "https://static.wixstatic.com/media/990059_124a342715994546a2ae4e32d924eaad~mv2.png",
+                "https://static.wixstatic.com/media/990059_16d83f65390444b085c9e13b9acecfb0~mv2.png",
+                "https://static.wixstatic.com/media/990059_d07c72345f444193a975af63cbddbd21~mv2.png",
+                "https://static.wixstatic.com/media/990059_3963217226664d5e8ebe0eb83c616d17~mv2.png",
+                "https://static.wixstatic.com/media/990059_4653a8ccdca34e729b303a7b2da4e1c8~mv2.png",
+                "https://static.wixstatic.com/media/990059_86ed905e22d64b86a5c5de02e040ffbe~mv2.png",
+                "https://static.wixstatic.com/media/990059_7bc563645d6549e180514c24e9d3b581~mv2.png",
+                "https://static.wixstatic.com/media/990059_ddd7e521489a447c8814b91949095e9e~mv2.png",
+                "https://static.wixstatic.com/media/990059_39ad562bf47341dc9b30b0c3f2701b4f~mv2.png",
+                "https://static.wixstatic.com/media/990059_d54fd310397b4712aedfd8c8197f6335~mv2.png"
+
+                ]
+                },
+
+                {
+                    name: "dumpling",
+                    urls: [
+                    "https://static.wixstatic.com/media/990059_f14c8ceb1a994ec98a3ae9083bf50e2a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_c6d1d446774746dca8f4ba7e815f5024~mv2.png",
+                    "https://static.wixstatic.com/media/990059_fd71e8914ebb4a938638b1c178723393~mv2.png",
+                    "https://static.wixstatic.com/media/990059_29e1612004684d74b8f51934d59548b4~mv2.png",
+                    "https://static.wixstatic.com/media/990059_7749e102af384ac1bf175a91ad9753f0~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4db4b46f4c5e482da0847194bf92651e~mv2.png",
+                    "https://static.wixstatic.com/media/990059_f353d9d6ed5041dea052476778cddbb2~mv2.png",
+                    "https://static.wixstatic.com/media/990059_fc012dd57fa448428fae012749b74461~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e164e7f73d4a4dfe89df0d6ee2837fb4~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e35cd518b40640f895f7e86712f3e4ba~mv2.png",
+                    "https://static.wixstatic.com/media/990059_579bc0a455f045deb92be7ea029fea9a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_c756896061fc47c09a2a53ee54593d40~mv2.png",
+                    "https://static.wixstatic.com/media/990059_e4a09ff60f954c8181c49ca338f4df09~mv2.png",
+                    "https://static.wixstatic.com/media/990059_a57efb259eea42cc8e3ab376a739c390~mv2.png",
+                    "https://static.wixstatic.com/media/990059_a92889fc71434747916135382b1fdc07~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4d0035b0faa448b882274621175128a0~mv2.png",
+                    "https://static.wixstatic.com/media/990059_bc89b210800148818a062b1cb94b3686~mv2.png",
+                    "https://static.wixstatic.com/media/990059_66268224446d4fe38781df61b51b9fa8~mv2.png",
+                    "https://static.wixstatic.com/media/990059_8fec9151a5164263a2927abbd8c6dc63~mv2.png",
+                    "https://static.wixstatic.com/media/990059_5c12b0723d85461e8bc5cf1c0b7a8f47~mv2.png",
+                    "https://static.wixstatic.com/media/990059_3cb10ae4c08949f981f0d506062e440d~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1fc4ae021cb0481d92ba6bd90385af75~mv2.png",
+                    "https://static.wixstatic.com/media/990059_49d4ce1d24194e6bb7656418b883e8a7~mv2.png",
+                    "https://static.wixstatic.com/media/990059_a4f72598dc654b3eb41fbec682c2f728~mv2.png",
+                    "https://static.wixstatic.com/media/990059_3ab1f40e7c6a42c4b2b8c94bc962ece9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_ff41845dddfd4c8f98edce2e324fa9d5~mv2.png",
+                    "https://static.wixstatic.com/media/990059_7675ab4b76bf4f4294ae784138412564~mv2.png",
+                    "https://static.wixstatic.com/media/990059_70363d7f967e4ff1a2a305d0ccb30bfa~mv2.png",
+                    "https://static.wixstatic.com/media/990059_4cd005763cbb4285ae23ee736381c735~mv2.png",
+                    "https://static.wixstatic.com/media/990059_1a34d9180dfa4430807e2a71d0b35c32~mv2.png",
+                    "https://static.wixstatic.com/media/990059_9a52c55c5dee4947ac04cc25bb00e232~mv2.png",
+                    "https://static.wixstatic.com/media/990059_61aab69bfeb044fd943df8cfd856e543~mv2.png",
+                    "https://static.wixstatic.com/media/990059_fe5dbd1cf4bb43349596aedcf17c3172~mv2.png",
+                    "https://static.wixstatic.com/media/990059_8354b4448bea4871bde20f72994e71bc~mv2.png",
+                    "https://static.wixstatic.com/media/990059_6cc416fa35ac4c7aacd1ebde07e3ca27~mv2.png"
+                    ]
+                    },
+
+                    {
+                    name: "fox",
+                    urls: [
+
+                    "https://static.wixstatic.com/media/990059_0cb3048c0b254c3090c8a079bc3eba81~mv2.png",
+                    "https://static.wixstatic.com/media/990059_85b0ef79a34940f9952e9f830fd20951~mv2.png",
+                    "https://static.wixstatic.com/media/990059_de25546fed7844bf995c8fda1d90d865~mv2.png",
+                    "https://static.wixstatic.com/media/990059_67db3d9ea82f43098003f2e2f6ad67b1~mv2.png",
+                    "https://static.wixstatic.com/media/990059_bb317504649f4601958591c8b9cf74a7~mv2.png",
+                    "https://static.wixstatic.com/media/990059_7c07047b8e324c1f8d4d41b2374263e5~mv2.png",
+                    "https://static.wixstatic.com/media/990059_b730db7787f24761899f6dfd9a10e061~mv2.png",
+                    "https://static.wixstatic.com/media/990059_081dadb37bab4af9b4639f9bac7dc8a9~mv2.png",
+                    "https://static.wixstatic.com/media/990059_28651f361fe64faaaf76f0080b9be6ed~mv2.png",
+                    "https://static.wixstatic.com/media/990059_cbdfbb4ae3ce470985411fd65065a185~mv2.png",
+                    "https://static.wixstatic.com/media/990059_a7cc60bf9ab548cb8340e00ad233acb7~mv2.png",
+                    "https://static.wixstatic.com/media/990059_8e12be41db13422e9b7ff3433cd578c7~mv2.png",
+                    "https://static.wixstatic.com/media/990059_0d672486e1264659883bfce7cffc42fb~mv2.png",
+                    "https://static.wixstatic.com/media/990059_ff2c29f8e2434b5880ebf8b5ac039f77~mv2.png",
+                    "https://static.wixstatic.com/media/990059_8fcf5f74980f4fdda76b130a036ebd00~mv2.png",
+                    "https://static.wixstatic.com/media/990059_8f8b57917f824a94ac15111931fab861~mv2.png",
+                    "https://static.wixstatic.com/media/990059_fc88df339d344e46ba42786051cb7830~mv2.png",
+                    "https://static.wixstatic.com/media/990059_08d5eb5dfcb44cd2be8692bb02ff34ac~mv2.png",
+                    "https://static.wixstatic.com/media/990059_29482e38b2dc4cde96191a05fd652d6b~mv2.png",
+                    "https://static.wixstatic.com/media/990059_a25fb7c1413349358458a0fdb6ceae5a~mv2.png",
+                    "https://static.wixstatic.com/media/990059_08d93695a2684616ad69037b44f8aaca~mv2.png",
+                    "https://static.wixstatic.com/media/990059_bf92b153ce2b4188b25d712f8ccb08ad~mv2.png",
+                    "https://static.wixstatic.com/media/990059_07e7ce3a74cd4834a0682458832d518e~mv2.png",
+                    "https://static.wixstatic.com/media/990059_31f9053c43a6433081fe8ec8a5bdde70~mv2.png",
+                    "https://static.wixstatic.com/media/990059_dc6c976192804347b668effb0430ae9e~mv2.png",
+                    "https://static.wixstatic.com/media/990059_40891431fe2a4e94b2478d10e8b0502e~mv2.png",
+                    "https://static.wixstatic.com/media/990059_799d33dad8924eefbf9260d43eaf13f6~mv2.png",
+                    "https://static.wixstatic.com/media/990059_f3a14de50c4c41ad928d17c58a2c05cf~mv2.png",
+                    "https://static.wixstatic.com/media/990059_75d6e87a2a5e47bfa0adda9d4f88ee65~mv2.png",
+                    "https://static.wixstatic.com/media/990059_73ad025c3f88450d82f9115e14d63c32~mv2.png",
+                    "https://static.wixstatic.com/media/990059_f321d4cbb4a04a12836af476eaf41664~mv2.png",
+                    "https://static.wixstatic.com/media/990059_d9c34c65c92347378ff4b4da0e8fb474~mv2.png",
+                    "https://static.wixstatic.com/media/990059_6933571bc8a74465a6fcf440518a2023~mv2.png",
+                    "https://static.wixstatic.com/media/990059_456400428ce44bb9a478bcfb69938905~mv2.png",
+                    "https://static.wixstatic.com/media/990059_2ca6750db86c46bc83f1ca81b966c80b~mv2.png"
+
+                    ]
+                    },
+                    
+                      {
+        name: "fries",
+        urls: [
+
+        "https://static.wixstatic.com/media/990059_a3590360b33141ab83a55ab790dd32bf~mv2.png",
+        "https://static.wixstatic.com/media/990059_2cd1214adff748c49b56508fece16c05~mv2.png",
+        "https://static.wixstatic.com/media/990059_bfe122a87b1549d0856ffa5719131327~mv2.png",
+        "https://static.wixstatic.com/media/990059_7fb7d1016f4442c69a6fc1f96864bffd~mv2.png",
+        "https://static.wixstatic.com/media/990059_5841076be75e4208a60f4d63ad8b30f8~mv2.png",
+        "https://static.wixstatic.com/media/990059_fe53e6b5d7904555a13913b379456363~mv2.png",
+        "https://static.wixstatic.com/media/990059_0cc8f0c7073445b8bb7a7a60e044f884~mv2.png",
+        "https://static.wixstatic.com/media/990059_1f1d56f8fb014d44b7277e30d8c91a32~mv2.png",
+        "https://static.wixstatic.com/media/990059_0202510143de4c28a3d772b1a919c4f9~mv2.png",
+        "https://static.wixstatic.com/media/990059_59d9968225cd4abf8ca801e59efc95a6~mv2.png",
+        "https://static.wixstatic.com/media/990059_b8ebbf0bef1744f0be731ac919d6da72~mv2.png",
+        "https://static.wixstatic.com/media/990059_d277b492fb9d46e7a2e4661a656df8f5~mv2.png",
+        "https://static.wixstatic.com/media/990059_3753a8014a7948f2a0b31080fadfd655~mv2.png",
+        "https://static.wixstatic.com/media/990059_68fd86c6e278435da073d07bb770d756~mv2.png",
+        "https://static.wixstatic.com/media/990059_aba10f2ee5db4d6781a386f6966852cc~mv2.png",
+        "https://static.wixstatic.com/media/990059_093ab8a4518c4e1eac993b3ee7b5e718~mv2.png",
+        "https://static.wixstatic.com/media/990059_92fe737f6e0c4abd971a0ce0be833858~mv2.png",
+        "https://static.wixstatic.com/media/990059_2be05f3c03ee40bfa48feb479f11c374~mv2.png",
+        "https://static.wixstatic.com/media/990059_6175bb1614144e91ad3be31e97aa2941~mv2.png",
+        "https://static.wixstatic.com/media/990059_1cd85d180f5241f89522e4ae8769bbe4~mv2.png",
+        "https://static.wixstatic.com/media/990059_37457195d5ac438bab7e4daab42462d6~mv2.png",
+        "https://static.wixstatic.com/media/990059_f223371ffdb34370a8561a0296df0a2b~mv2.png",
+        "https://static.wixstatic.com/media/990059_271539b289204c929493759b35edfbdf~mv2.png",
+        "https://static.wixstatic.com/media/990059_bd5a6b7c2aad49f1a2167d289dace27e~mv2.png",
+        "https://static.wixstatic.com/media/990059_7b40c38354fe460790230121bb8ea139~mv2.png",
+        "https://static.wixstatic.com/media/990059_e113b64be8ea47498d89d1799ec08a59~mv2.png",
+        "https://static.wixstatic.com/media/990059_d8609781e62445ebac2090eaae5f5168~mv2.png",
+        "https://static.wixstatic.com/media/990059_fafefcb0d0ec47ff9693c20d964986e0~mv2.png",
+        "https://static.wixstatic.com/media/990059_f2cd634f190d4476b3da89a068a87225~mv2.png",
+        "https://static.wixstatic.com/media/990059_7bf242b90566479b88e887edb6fc2ae7~mv2.png",
+        "https://static.wixstatic.com/media/990059_0bf3c5ec163b477bae5307f3a1919702~mv2.png",
+        "https://static.wixstatic.com/media/990059_eb4d1e97ff73440c9af11a94ff1a12b9~mv2.png",
+        "https://static.wixstatic.com/media/990059_65c32aa4455d47beae34f18704326882~mv2.png",
+        "https://static.wixstatic.com/media/990059_827a4d0d444442c4b8bad43aeae30907~mv2.png",
+        "https://static.wixstatic.com/media/990059_4217800395df45dcb521d41b1c8ed11a~mv2.png"
+
+        ]
+        },
+
+         {
+name: "giraffe",
+urls: [
+
+"https://static.wixstatic.com/media/990059_4acf027958d64037966d48d285fb9b49~mv2.png",
+"https://static.wixstatic.com/media/990059_bb753c60b2c1478eb091b9ceca005426~mv2.png",
+"https://static.wixstatic.com/media/990059_6b311d7ac83e4f83a1725839180100d0~mv2.png",
+"https://static.wixstatic.com/media/990059_1ee453101570485c9a3894d54e074f73~mv2.png",
+"https://static.wixstatic.com/media/990059_26cf1ab8100d45edbe74e0a12134b471~mv2.png",
+"https://static.wixstatic.com/media/990059_41f408fcf5cb48bd87c927a0aacfe3ed~mv2.png",
+"https://static.wixstatic.com/media/990059_d92c0f2c91644f85b5ac9885cff6c0d6~mv2.png",
+"https://static.wixstatic.com/media/990059_cdc9de6d1d0e46b6a59847fab38ffa40~mv2.png",
+"https://static.wixstatic.com/media/990059_def6e212fcc14e4da70855f9a31285f3~mv2.png",
+"https://static.wixstatic.com/media/990059_cd4bceb155cf477cb55075e4b7db2fbd~mv2.png",
+"https://static.wixstatic.com/media/990059_4ed63152f96248ca8d02764dd9060926~mv2.png",
+"https://static.wixstatic.com/media/990059_efb592dbc6f440cc831077a6157266dd~mv2.png",
+"https://static.wixstatic.com/media/990059_8476b8c08a3746afb69a9ffa2b3de578~mv2.png",
+"https://static.wixstatic.com/media/990059_8e0902c08ecf416b90fe8d9b6af91b6c~mv2.png",
+"https://static.wixstatic.com/media/990059_ed3e92099e3a4570874b7cce2a65667c~mv2.png",
+"https://static.wixstatic.com/media/990059_6917cf07cd9740a3ae2a78503a0005c9~mv2.png",
+"https://static.wixstatic.com/media/990059_c7e68a09d9004e11bf747e0ecff37492~mv2.png",
+"https://static.wixstatic.com/media/990059_96e920f530ab41258853992df641afab~mv2.png",
+"https://static.wixstatic.com/media/990059_7bc57e0722f24415914822e690690a5a~mv2.png",
+"https://static.wixstatic.com/media/990059_0f1d8fdce3b24649a10d47c2dc772f76~mv2.png",
+"https://static.wixstatic.com/media/990059_e144e728673040ce8cf064b5412769e5~mv2.png",
+"https://static.wixstatic.com/media/990059_9ee393599c734af98948f6c59d74fc3a~mv2.png",
+"https://static.wixstatic.com/media/990059_77d388b2a03f4e92853dffb085af8811~mv2.png",
+"https://static.wixstatic.com/media/990059_74dd327e5f8f4da986567b57d98ed008~mv2.png",
+"https://static.wixstatic.com/media/990059_1304bda75b6649ab8105fa9bbdfe65ee~mv2.png",
+"https://static.wixstatic.com/media/990059_54a50408c4d74952af04f951d18e88cc~mv2.png",
+"https://static.wixstatic.com/media/990059_48243d4520f9496aa84ea65065db077b~mv2.png",
+"https://static.wixstatic.com/media/990059_6a84e1a80ca848cf9610b982bed714cc~mv2.png",
+"https://static.wixstatic.com/media/990059_2aa5119702994e96af85e700011a7859~mv2.png",
+"https://static.wixstatic.com/media/990059_0a91613ae02d453590976ff5c7886ff7~mv2.png",
+"https://static.wixstatic.com/media/990059_800432b2864848e29281d7afe4860948~mv2.png",
+"https://static.wixstatic.com/media/990059_b1d34fff837c4757bccd451ae900746f~mv2.png",
+"https://static.wixstatic.com/media/990059_3bdc6b29eb854c6d94696cda63cb61a2~mv2.png",
+"https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png",
+"https://static.wixstatic.com/media/990059_33f4d993d3e6499aa9d55132d2aa7aff~mv2.png"
+
+]
+},
+{
+name: "hamburger",
+urls: [
+
+"https://static.wixstatic.com/media/990059_c3047d500be74683ba73dc654100b18d~mv2.png",
+"https://static.wixstatic.com/media/990059_85820fa5d0ca475eacfc4a985d5945cb~mv2.png",
+"https://static.wixstatic.com/media/990059_13b06ace16b3462b8590247bec53f4be~mv2.png",
+"https://static.wixstatic.com/media/990059_cba3751ea1f94ae5b8eae95fbaa311ce~mv2.png",
+"https://static.wixstatic.com/media/990059_bc92041b8a4d4d73959623be425b2e2a~mv2.png",
+"https://static.wixstatic.com/media/990059_e6eaff2d4ea944d291bc965d8dbf93d6~mv2.png",
+"https://static.wixstatic.com/media/990059_0b8ec38351504f70aaf9cf31100fe373~mv2.png",
+"https://static.wixstatic.com/media/990059_c1487c3956a94846b4a10c053619e88a~mv2.png",
+"https://static.wixstatic.com/media/990059_d1c14b510adc40f1a149cb3788724856~mv2.png",
+"https://static.wixstatic.com/media/990059_8dda563c4fb24ca6957f21bac94514bf~mv2.png",
+"https://static.wixstatic.com/media/990059_b7333b07f39c46de9f12cbd18dc5eeb3~mv2.png",
+"https://static.wixstatic.com/media/990059_20d443e8df2a44f886c242105c2fb909~mv2.png",
+"https://static.wixstatic.com/media/990059_912c3bf1a0a849c2b1f598cb4fec8821~mv2.png",
+"https://static.wixstatic.com/media/990059_cd8e8a7bba2e439aa4fd17f063d2e5a1~mv2.png",
+"https://static.wixstatic.com/media/990059_1e4309dc5b9f44d989d39d2d4f4e8a96~mv2.png",
+"https://static.wixstatic.com/media/990059_e55f7930ed1b4e6883c4003c82af55b8~mv2.png",
+"https://static.wixstatic.com/media/990059_e6a1f486c40f4a25861af55218cc8d97~mv2.png",
+"https://static.wixstatic.com/media/990059_05d483ddcf394effb3092e5b9b32495d~mv2.png",
+"https://static.wixstatic.com/media/990059_9a07a99fcf694b51888a5833079234d3~mv2.png",
+"https://static.wixstatic.com/media/990059_e819bdf567c94367a1d062328561e708~mv2.png",
+"https://static.wixstatic.com/media/990059_99348bad0bf140239d21ddf2399d8fdb~mv2.png",
+"https://static.wixstatic.com/media/990059_7205d5a5d4484b20ad0bb73abc2b811c~mv2.png",
+"https://static.wixstatic.com/media/990059_20ab252030aa45d89e2969f3efb451b9~mv2.png",
+"https://static.wixstatic.com/media/990059_1914c5570a114132891c9a4d976cad66~mv2.png",
+"https://static.wixstatic.com/media/990059_20f6e65bd01748d5955c7f3deaede36a~mv2.png",
+"https://static.wixstatic.com/media/990059_1f12943995f54e9490e1552809f4ec5f~mv2.png",
+"https://static.wixstatic.com/media/990059_888315feca8646828c3f2713deccf19d~mv2.png",
+"https://static.wixstatic.com/media/990059_664f01eb69de4474872ae2c4e8ce21a8~mv2.png",
+"https://static.wixstatic.com/media/990059_c235c6edb1a84f02830146fd48dd8ce7~mv2.png",
+"https://static.wixstatic.com/media/990059_393445438f5b4b509b9ac89deaff64a7~mv2.png",
+"https://static.wixstatic.com/media/990059_2666ca97df934872afedd27c6fed54a2~mv2.png",
+"https://static.wixstatic.com/media/990059_1815e3ca35674d39ae7804e483acb4c1~mv2.png",
+"https://static.wixstatic.com/media/990059_daa06f444fb14462bd91d2f503092d59~mv2.png",
+"https://static.wixstatic.com/media/990059_e6ec056eec2c4499816e77647f2ffb67~mv2.png",
+"https://static.wixstatic.com/media/990059_215662562e454b838529aa4cf15e063a~mv2.png"
+
+]
+},
+{
+name: "hamster",
+urls: [
+
+"https://static.wixstatic.com/media/990059_06a3b8b76d2e408abae6e026d7cff521~mv2.png",
+"https://static.wixstatic.com/media/990059_a9e04e7b297f4bc9a6f8dceb40f20220~mv2.png",
+"https://static.wixstatic.com/media/990059_8bf8bbd6a3f34035910d42c26816f6a8~mv2.png",
+"https://static.wixstatic.com/media/990059_b6fac0f01e0c48239ec895e05aaeab90~mv2.png",
+"https://static.wixstatic.com/media/990059_144256121dd14e389f39c3680b557b84~mv2.png",
+"https://static.wixstatic.com/media/990059_487c5daddb6f43f1ae513d238ed58767~mv2.png",
+"https://static.wixstatic.com/media/990059_7085ccea51194cd4ac987a52f3bbe869~mv2.png",
+"https://static.wixstatic.com/media/990059_2ec4bbc582804f049b0ded0edb04efe8~mv2.png",
+"https://static.wixstatic.com/media/990059_7022079fa952477084c2f40e5569da8e~mv2.png",
+"https://static.wixstatic.com/media/990059_5aba6695312d431a9ac26283a9c21ed4~mv2.png",
+"https://static.wixstatic.com/media/990059_a23297124c614d248f38c2a7b14444a3~mv2.png",
+"https://static.wixstatic.com/media/990059_38077b9cc93e4dac9de6e3c0d2cfd591~mv2.png",
+"https://static.wixstatic.com/media/990059_c5aba88e76ec4cc3ba7f25ae352ee8e4~mv2.png",
+"https://static.wixstatic.com/media/990059_83def1106f56451ea505347da264b440~mv2.png",
+"https://static.wixstatic.com/media/990059_c27012009b454f418147ecff933a12e7~mv2.png",
+"https://static.wixstatic.com/media/990059_e10b56d0db3f4ccd8224652e225376f4~mv2.png",
+"https://static.wixstatic.com/media/990059_e46f0a4951ec41e69df217af4ea62283~mv2.png",
+"https://static.wixstatic.com/media/990059_6eda8a8382ad494fb97174135ffc30a1~mv2.png",
+"https://static.wixstatic.com/media/990059_72e345bec94249a48d1d562480380db6~mv2.png",
+"https://static.wixstatic.com/media/990059_d982dabff399469e9ee5eb7c7c1cb1a3~mv2.png",
+"https://static.wixstatic.com/media/990059_885260b0cd8c4e4f97ba4933c387587f~mv2.png",
+"https://static.wixstatic.com/media/990059_93c0fc2bf8a44e349ad7efcfb2acafa7~mv2.png",
+"https://static.wixstatic.com/media/990059_5851844ca46c4504a6174cd659b17d25~mv2.png",
+"https://static.wixstatic.com/media/990059_4b4c3b71a8fe42a5a82632fd4a2ade9b~mv2.png",
+"https://static.wixstatic.com/media/990059_e64327e9389e4b72a68076e70692da64~mv2.png",
+"https://static.wixstatic.com/media/990059_ed374b18da4a4271a61ccafcd9c0159c~mv2.png",
+"https://static.wixstatic.com/media/990059_30e2f809c8264d85af5640c4a9facfd5~mv2.png",
+"https://static.wixstatic.com/media/990059_d12731ee05c94319861a7bd61c71c7b3~mv2.png",
+"https://static.wixstatic.com/media/990059_0f671e7527ef42f1bc8eb5664bf61bcb~mv2.png",
+"https://static.wixstatic.com/media/990059_dcb42d8095fb4cb0b0fdf3f887daf05d~mv2.png",
+"https://static.wixstatic.com/media/990059_4141ae406c334db9859668262a8f5f42~mv2.png",
+"https://static.wixstatic.com/media/990059_72b15c0dd20e4361aacb321b7ddcbf15~mv2.png",
+"https://static.wixstatic.com/media/990059_3d39d834be8545b3b546e6a034ad9bd4~mv2.png",
+"https://static.wixstatic.com/media/990059_eb7ee98d4cee4adf8c167cba00b16216~mv2.png",
+"https://static.wixstatic.com/media/990059_3448cf82d7b249e8b6e74c51ea5bbfd6~mv2.png"
+
+]
+},
+{
+name: "knight",
+urls: [
+
+"https://static.wixstatic.com/media/990059_606a4e47265b480190f765d07a07df14~mv2.png",
+"https://static.wixstatic.com/media/990059_d05c39cffcca4e5bbce2bc954c8228e8~mv2.png",
+"https://static.wixstatic.com/media/990059_6f7de67e15aa4574b20777d968daab49~mv2.png",
+"https://static.wixstatic.com/media/990059_f214ce4aa4af4e8886dc5a03d4795dbb~mv2.png",
+"https://static.wixstatic.com/media/990059_00fea463c12f4bb696b3d5e358b7e82d~mv2.png",
+"https://static.wixstatic.com/media/990059_5a29ee5fc0e8445c841f5de06831d6dc~mv2.png",
+"https://static.wixstatic.com/media/990059_bfc9d2fcd91b4eceb992ab5bf2d02ec9~mv2.png",
+"https://static.wixstatic.com/media/990059_9acdad9eef364474bd26755f3fbffcfa~mv2.png",
+"https://static.wixstatic.com/media/990059_67ffd6b23fa3482092f5a4b822b79a8b~mv2.png",
+"https://static.wixstatic.com/media/990059_3a5d52b5b83441febf96c7e3015cec82~mv2.png",
+"https://static.wixstatic.com/media/990059_b21f7a25994e44f2bee5b2fa74a25850~mv2.png",
+"https://static.wixstatic.com/media/990059_cc96e66d1fd44e7096295850f13d8674~mv2.png",
+"https://static.wixstatic.com/media/990059_3f5e0c8f39c44f30a6a7daecc230ea71~mv2.png",
+"https://static.wixstatic.com/media/990059_0513347b427540509d6cb2200b2e6b5f~mv2.png",
+"https://static.wixstatic.com/media/990059_bff8ba2a7ae540db851c36e396e5c4ba~mv2.png",
+"https://static.wixstatic.com/media/990059_34d3c819c089432dbf01d0c5b96f78ee~mv2.png",
+"https://static.wixstatic.com/media/990059_7ffb8703fa494af9859a469af9b487c1~mv2.png",
+"https://static.wixstatic.com/media/990059_1141f615095d4e5185bf063f951593ab~mv2.png",
+"https://static.wixstatic.com/media/990059_36d95d92fb594a50b5b5413edb374f64~mv2.png",
+"https://static.wixstatic.com/media/990059_b45f3dc40f2648778f3c1d263f9c3473~mv2.png",
+"https://static.wixstatic.com/media/990059_a7df1f5916934f498763041647624fba~mv2.png",
+"https://static.wixstatic.com/media/990059_49d895bbd2f747c383b6a59ee39d8744~mv2.png",
+"https://static.wixstatic.com/media/990059_a6c68f8108684dada26f3322ca00a0be~mv2.png",
+"https://static.wixstatic.com/media/990059_c9958473a79240c88f0331f90016db53~mv2.png",
+"https://static.wixstatic.com/media/990059_19f2b27a6f72405c9e7320ad6242eee2~mv2.png",
+"https://static.wixstatic.com/media/990059_515020d32f75496aabcc9c7c09c0d49f~mv2.png",
+"https://static.wixstatic.com/media/990059_7786535a11d5461f9f3a82b686538dba~mv2.png",
+"https://static.wixstatic.com/media/990059_d01ebdd46f79484db567d1b11c648517~mv2.png",
+"https://static.wixstatic.com/media/990059_ea676316f6744068b8674df4271cb3bf~mv2.png",
+"https://static.wixstatic.com/media/990059_81b1bff7087d4484b705589aab2199ae~mv2.png",
+"https://static.wixstatic.com/media/990059_acf7620d425a44dfad5df91e2bdb8e44~mv2.png",
+"https://static.wixstatic.com/media/990059_11701a36a9d2449583f5a4479425308d~mv2.png",
+"https://static.wixstatic.com/media/990059_33fe8d1256f64f36bb515900f04f14a6~mv2.png",
+"https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png",
+"https://static.wixstatic.com/media/990059_1df513791ffd4282b43320713af28391~mv2.png"
+
+]
+},
+{
+name: "lucha",
+urls: [
+
+"https://static.wixstatic.com/media/990059_e4b8b35a122e4b3cb19e72abfbbf6a83~mv2.png",
+"https://static.wixstatic.com/media/990059_09cc9d3e41644588bf7d22626da81997~mv2.png",
+"https://static.wixstatic.com/media/990059_9903dc92a75742b0ade1cff5fbcb8296~mv2.png",
+"https://static.wixstatic.com/media/990059_ba4f950b18a045529d12e5155252ef79~mv2.png",
+"https://static.wixstatic.com/media/990059_306ee68d85674330b50a44d735d0cb95~mv2.png",
+"https://static.wixstatic.com/media/990059_a1a8734fe0ae4b92ad61c5eab6aa96c2~mv2.png",
+"https://static.wixstatic.com/media/990059_4ff4f6436cb74e38a2c65f7d66fd737e~mv2.png",
+"https://static.wixstatic.com/media/990059_da47217e4c1d4ca6a33f39622fb66c47~mv2.png",
+"https://static.wixstatic.com/media/990059_f01bafcca3d7427f93f6ea1fbdab24a4~mv2.png",
+"https://static.wixstatic.com/media/990059_bf489c4b512c45fd989132525cb8e93d~mv2.png",
+"https://static.wixstatic.com/media/990059_9cecdb4527b34fd58b5f49c2e07d74c7~mv2.png",
+"https://static.wixstatic.com/media/990059_2bdd76e460774ae59be738786d31d7af~mv2.png",
+"https://static.wixstatic.com/media/990059_298344b7260c4c6fa0116e3e4f9a857e~mv2.png",
+"https://static.wixstatic.com/media/990059_30abb4653a0145edbc8fe5285229e120~mv2.png",
+"https://static.wixstatic.com/media/990059_6f533110283f4b2693c12653244442e6~mv2.png",
+"https://static.wixstatic.com/media/990059_09d75cbcad0b4d68b18449b19f6aab8e~mv2.png",
+"https://static.wixstatic.com/media/990059_4e2875f7616642c8b6bd848217b48dfd~mv2.png",
+"https://static.wixstatic.com/media/990059_e95e841e7dc04c42959485036fc8d986~mv2.png",
+"https://static.wixstatic.com/media/990059_4c4020ffb93e48edb2c2964837cbfdde~mv2.png",
+"https://static.wixstatic.com/media/990059_84f2277def0c45a7843f7611c1f7d72e~mv2.png",
+"https://static.wixstatic.com/media/990059_e2676fb725fa457d9b9d645fa1174ac3~mv2.png",
+"https://static.wixstatic.com/media/990059_154fb851bdf74eb3bce8a7c4931d61c8~mv2.png",
+"https://static.wixstatic.com/media/990059_a1aff96f07484e8c98dbf05fa10b55c2~mv2.png",
+"https://static.wixstatic.com/media/990059_c5ba296e8e5c45759d60f510f4a1654e~mv2.png",
+"https://static.wixstatic.com/media/990059_337dd8acc45d446faac7f8a654219a52~mv2.png",
+"https://static.wixstatic.com/media/990059_8c1f5bd6a51b412b9be7d7da0bf6fa06~mv2.png",
+"https://static.wixstatic.com/media/990059_5f182f06355148f19958cc3f2c689a6d~mv2.png",
+"https://static.wixstatic.com/media/990059_8b9c66c71dff441d94b08e80cb1dacc2~mv2.png",
+"https://static.wixstatic.com/media/990059_6ac342e158ce4ab98896dd275c1b6f19~mv2.png",
+"https://static.wixstatic.com/media/990059_9ee43ec7e4e84df5ac5d3ec5194e4da0~mv2.png",
+"https://static.wixstatic.com/media/990059_28f2630f6a0d476aa3872844c6883925~mv2.png",
+"https://static.wixstatic.com/media/990059_79c6c87e1bbb40c8adba88ee63061210~mv2.png",
+"https://static.wixstatic.com/media/990059_b5a08581f9df482d9fe2cd42a0b2f349~mv2.png",
+"https://static.wixstatic.com/media/990059_cbd18f379d5248eab26f037d4b07dc01~mv2.png",
+"https://static.wixstatic.com/media/990059_8f2b1560863c4a9591877d7d0bcfd885~mv2.png"
+
+]
+},
+{
+name: "manatee",
+urls: [
+
+"https://static.wixstatic.com/media/990059_b9f5d229b5d14e37a7176c70f852c986~mv2.png",
+"https://static.wixstatic.com/media/990059_4f60045e4ef6402da5a13828e89799c1~mv2.png",
+"https://static.wixstatic.com/media/990059_b7fda03fd78c4de68e6a8ab017277142~mv2.png",
+"https://static.wixstatic.com/media/990059_7f7ff74784814e6d9d1335fa7a76d26c~mv2.png",
+"https://static.wixstatic.com/media/990059_deeaaf7e691c4a3592137614cb31fcbd~mv2.png",
+"https://static.wixstatic.com/media/990059_c707c955fd1941b6ad22fd7ece0b1f07~mv2.png",
+"https://static.wixstatic.com/media/990059_091c075d64c1417d8f2c6b530ebe1667~mv2.png",
+"https://static.wixstatic.com/media/990059_50dcf2a2d30f47ddbb9c437ed48d36cc~mv2.png",
+"https://static.wixstatic.com/media/990059_85bb59569d864bbda6625a17a2b58260~mv2.png",
+"https://static.wixstatic.com/media/990059_e10c06c50a3d4372934a3f3ed28cbfec~mv2.png",
+"https://static.wixstatic.com/media/990059_1f5da64955c04f60a2a1a21930ee4ce9~mv2.png",
+"https://static.wixstatic.com/media/990059_8a3e73f8788943d384644607f2a2a8a5~mv2.png",
+"https://static.wixstatic.com/media/990059_dd3b43f10b004734b85846378d464f61~mv2.png",
+"https://static.wixstatic.com/media/990059_df3d851e9b2b4407afba662225f8278f~mv2.png",
+"https://static.wixstatic.com/media/990059_a4f2c77fe81a457199bd7e2d08673c31~mv2.png",
+"https://static.wixstatic.com/media/990059_abc7af01aa4c45dc9b8995a297aaddbc~mv2.png",
+"https://static.wixstatic.com/media/990059_780c3b0c754a4e81a1fbe5fe0d87ce4e~mv2.png",
+"https://static.wixstatic.com/media/990059_23f8785393ff4c8eb72e1d1f59a58a26~mv2.png",
+"https://static.wixstatic.com/media/990059_ba6608c1b7354d679d3e32268c5b07e7~mv2.png",
+"https://static.wixstatic.com/media/990059_cca89451f961434c8b33cb2bd48826de~mv2.png",
+"https://static.wixstatic.com/media/990059_ce0a546873f24bf1af9a2290d2ad50b9~mv2.png",
+"https://static.wixstatic.com/media/990059_80fc2f480935456192b27b5609967651~mv2.png",
+"https://static.wixstatic.com/media/990059_0a0b5a0792284ee1a3898e36cde01f34~mv2.png",
+"https://static.wixstatic.com/media/990059_6c8b0d2640ee4192ac5266bb8c0e4f4a~mv2.png",
+"https://static.wixstatic.com/media/990059_6fb2192970f144919a076d1183988d04~mv2.png",
+"https://static.wixstatic.com/media/990059_9616e12f69e34f37a43c921723473ca0~mv2.png",
+"https://static.wixstatic.com/media/990059_417d890c19a24af888e31be101db0eca~mv2.png",
+"https://static.wixstatic.com/media/990059_c495bf153d6e4c43b4780dadc17d57bf~mv2.png",
+"https://static.wixstatic.com/media/990059_0eef6670558a444cbbf4acfb327ccfae~mv2.png",
+"https://static.wixstatic.com/media/990059_8a354e84b99b43a1a899796cecf7da46~mv2.png",
+"https://static.wixstatic.com/media/990059_b62de5dc45fb43f4af88b5c6b79897a9~mv2.png",
+"https://static.wixstatic.com/media/990059_3baec6e609664a33a0fda747a67080de~mv2.png",
+"https://static.wixstatic.com/media/990059_d611a4ad59b243c9bb95ebbff4091687~mv2.png",
+"https://static.wixstatic.com/media/990059_6b98aea785d14e098f32b734f873501f~mv2.png",
+"https://static.wixstatic.com/media/990059_96097d6da1fe49be95ad143e58aedc78~mv2.png"
+
+]
+},
+
+{
+name: "maori",
+urls: [
+
+"https://static.wixstatic.com/media/990059_d5126aedc25049978f5103ce028ac6b1~mv2.png",
+"https://static.wixstatic.com/media/990059_9d6fe34319704a4ab9023430bde56e99~mv2.png",
+"https://static.wixstatic.com/media/990059_34b92bf1c74e44e9987c702a2c3c8cfc~mv2.png",
+"https://static.wixstatic.com/media/990059_b2a195e402344fefbd0cd7bf80673068~mv2.png",
+"https://static.wixstatic.com/media/990059_21bd2e40572040c3b0568bcefc81a2f9~mv2.png",
+"https://static.wixstatic.com/media/990059_4bed99a9b51b4ef3b9c0170f33a8be8e~mv2.png",
+"https://static.wixstatic.com/media/990059_ec5f4cf0ceb74aca95431afa3ab351cf~mv2.png",
+"https://static.wixstatic.com/media/990059_7602767264da4d5aa79221ad3dd982ff~mv2.png",
+"https://static.wixstatic.com/media/990059_2f233a0976e2441db56394f9f6fc530f~mv2.png",
+"https://static.wixstatic.com/media/990059_90bae4b868124f10830c68eccebc8186~mv2.png",
+"https://static.wixstatic.com/media/990059_e41d7c12fefe473bacc36600d43b2af9~mv2.png",
+"https://static.wixstatic.com/media/990059_a3dc8fa372e44d859191211de935a48d~mv2.png",
+"https://static.wixstatic.com/media/990059_5eefd4f62ada404abcf7648659f00757~mv2.png",
+"https://static.wixstatic.com/media/990059_643217c4965344f6a6f71a2b7ccfe7f2~mv2.png",
+"https://static.wixstatic.com/media/990059_168df5cd162b4ba08e17d4fb685a94fc~mv2.png",
+"https://static.wixstatic.com/media/990059_355c2804fec74d24a4a6bfc3508b9c8d~mv2.png",
+"https://static.wixstatic.com/media/990059_90525c188763476eb018b0332f2e0fc9~mv2.png",
+"https://static.wixstatic.com/media/990059_6d7146554a1643fab6f4e61df3480224~mv2.png",
+"https://static.wixstatic.com/media/990059_66ce8463122349e79df0d10d1ce7b4b5~mv2.png",
+"https://static.wixstatic.com/media/990059_b2322b6d7f934992bd6eedb725eecffd~mv2.png",
+"https://static.wixstatic.com/media/990059_3fac713207ad4a108c044b5ef91b4edb~mv2.png",
+"https://static.wixstatic.com/media/990059_1eb229ed2852411ebf61e85a02400a97~mv2.png",
+"https://static.wixstatic.com/media/990059_7e7c56d399634b929d78da171b9a125c~mv2.png",
+"https://static.wixstatic.com/media/990059_b022b8bdea1345b79de579de90ca7bab~mv2.png",
+"https://static.wixstatic.com/media/990059_2c32721909e04d44a9b3d65c7ac3b395~mv2.png",
+"https://static.wixstatic.com/media/990059_1ab7822bd51643ee9a5ddb91de23e336~mv2.png",
+"https://static.wixstatic.com/media/990059_d8fb5d3482c7432ea192b01e443e5492~mv2.png",
+"https://static.wixstatic.com/media/990059_9ec6f589074047a1a5962dfbe45207d7~mv2.png",
+"https://static.wixstatic.com/media/990059_3e746b19f9eb4637813d0d3ce49bf089~mv2.png",
+"https://static.wixstatic.com/media/990059_a5f6916c455d425c834236f7d30c86d7~mv2.png",
+"https://static.wixstatic.com/media/990059_78410f975dca467bb3b19974194ab4d2~mv2.png",
+"https://static.wixstatic.com/media/990059_fe3a7b0ae620448f96e5f0cd947e1ebb~mv2.png",
+"https://static.wixstatic.com/media/990059_53f9b0f086754d9da63b81f28241153f~mv2.png",
+"https://static.wixstatic.com/media/990059_74d58f7f76734d29b6f72834c6bef3ed~mv2.png",
+"https://static.wixstatic.com/media/990059_68fff053c9e24940999fc13876770dfb~mv2.png"
+
+]
+},
+
+{
+name: "marshmallow",
+urls: [
+
+"https://static.wixstatic.com/media/990059_a6dc0bc0a30a4cd1aca9f4f2f49c0b25~mv2.png",
+"https://static.wixstatic.com/media/990059_529c33a6f91643bf809d1d03477217f9~mv2.png",
+"https://static.wixstatic.com/media/990059_bd3d5413719449d7a678a556d36edda6~mv2.png",
+"https://static.wixstatic.com/media/990059_78d91611d587472aae4348b5d51bfc42~mv2.png",
+"https://static.wixstatic.com/media/990059_f119038793e242d7a3bca9e5cd85c928~mv2.png",
+"https://static.wixstatic.com/media/990059_db6843f191f54c3ab315f1eb42582895~mv2.png",
+"https://static.wixstatic.com/media/990059_4796cd05431a4452a222caabf0a57789~mv2.png",
+"https://static.wixstatic.com/media/990059_7c41185642b0487385fcffabfd0b4280~mv2.png",
+"https://static.wixstatic.com/media/990059_8f90b6b5b3c44369b2320137ffc71904~mv2.png",
+"https://static.wixstatic.com/media/990059_b8918ef43370470abaac304f55fb4517~mv2.png",
+"https://static.wixstatic.com/media/990059_daa89b4860b64dffbf1074befdfb1f83~mv2.png",
+"https://static.wixstatic.com/media/990059_2192ad3a88fa43d18c8f2d13bb5f485d~mv2.png",
+"https://static.wixstatic.com/media/990059_8d020d6b94a94dd7a0a6c821c51d70de~mv2.png",
+"https://static.wixstatic.com/media/990059_373e1c5d36524a5a85ac8bfe09792de4~mv2.png",
+"https://static.wixstatic.com/media/990059_f6b1e5e35470450586069775c172bb3b~mv2.png",
+"https://static.wixstatic.com/media/990059_51eda6837d2d4fa49b3c7b24d4fc8a53~mv2.png",
+"https://static.wixstatic.com/media/990059_267d22db7adf4947b265d8311bbfc76a~mv2.png",
+"https://static.wixstatic.com/media/990059_23e2eab5eb474c9f8515ded90e1c3994~mv2.png",
+"https://static.wixstatic.com/media/990059_d209c968c03449d186a5b2b67eb9224b~mv2.png",
+"https://static.wixstatic.com/media/990059_d910c03cf3624999a81f2e573f094e0c~mv2.png",
+"https://static.wixstatic.com/media/990059_27ef7bd2bd6045a58b86305cb377d9d8~mv2.png",
+"https://static.wixstatic.com/media/990059_4d21f164e1cc4fa9b0a30ee175458f04~mv2.png",
+"https://static.wixstatic.com/media/990059_8f8c29b43ad342d1a7d46ee97b5df3e0~mv2.png",
+"https://static.wixstatic.com/media/990059_ff1a96d001b74219b8202296a1a6967f~mv2.png",
+"https://static.wixstatic.com/media/990059_3c1473dea6db41d9beeb1aff07f316e0~mv2.png",
+"https://static.wixstatic.com/media/990059_24f889fbfd9544bc8b4e4b5942cc2f6e~mv2.png",
+"https://static.wixstatic.com/media/990059_2bced88131d5403bac9550e0310f834e~mv2.png",
+"https://static.wixstatic.com/media/990059_0baef52d9e164e6dae36f0b632fea82d~mv2.png",
+"https://static.wixstatic.com/media/990059_bd16171f41c949729ae41b96f50248cc~mv2.png",
+"https://static.wixstatic.com/media/990059_33e9c6423fc64802887dbb200db3f1bc~mv2.png",
+"https://static.wixstatic.com/media/990059_767bc09657554f459353a4a4833df7e2~mv2.png",
+"https://static.wixstatic.com/media/990059_1dffedbdc05f4196b59dbfddef164d4c~mv2.png",
+"https://static.wixstatic.com/media/990059_913b43d2439d414aa255197cf862e4ce~mv2.png",
+"https://static.wixstatic.com/media/990059_baa12720a6f8490692878337b30c50b8~mv2.png",
+"https://static.wixstatic.com/media/990059_9fab15b3ac62473a8ae8008ad9cc1807~mv2.png"
+
+]
+},
+
+{
+name: "nacho",
+urls: [
+
+"https://static.wixstatic.com/media/990059_17f90b4bab7d440ca5eab7a6ab9b0b06~mv2.png",
+"https://static.wixstatic.com/media/990059_423e596e024a4718b5aa246a5e8fe452~mv2.png",
+"https://static.wixstatic.com/media/990059_5fee4d5ae10947ef82e34f3204d9a043~mv2.png",
+"https://static.wixstatic.com/media/990059_41a3ceccf7bd44289545aff98fa6332f~mv2.png",
+"https://static.wixstatic.com/media/990059_e14b86cc17b043d29c5f39bb66030873~mv2.png",
+"https://static.wixstatic.com/media/990059_d117356ddc4545f0a3e7e6c38497236e~mv2.png",
+"https://static.wixstatic.com/media/990059_fbb266c0c1da43ee94271e071407c4b8~mv2.png",
+"https://static.wixstatic.com/media/990059_130fc7eb944e4580866e8e9229fc32da~mv2.png",
+"https://static.wixstatic.com/media/990059_6b405162c8a14302a639644051df683b~mv2.png",
+"https://static.wixstatic.com/media/990059_139dae0101f340bba9d8a204f59068f5~mv2.png",
+"https://static.wixstatic.com/media/990059_d6c220d13cf7463aa9f0585aad5ba792~mv2.png",
+"https://static.wixstatic.com/media/990059_97afde1e53e44f6e8efc0f738d25ed54~mv2.png",
+"https://static.wixstatic.com/media/990059_b29cfc8cf4ae41b7b20152b9659f9de0~mv2.png",
+"https://static.wixstatic.com/media/990059_2bd06ef7d16e40aca62c6045292222e2~mv2.png",
+"https://static.wixstatic.com/media/990059_160ddb8a75a541dd89263792dcae6946~mv2.png",
+"https://static.wixstatic.com/media/990059_6e0460a1901a47f7aa9e45464fa6739b~mv2.png",
+"https://static.wixstatic.com/media/990059_5b08775132b44820b6f0ecb1156356a4~mv2.png",
+"https://static.wixstatic.com/media/990059_4469c927899247f6a6d648760979eac0~mv2.png",
+"https://static.wixstatic.com/media/990059_1be0a44b68324086855b10f80b2d29fd~mv2.png",
+"https://static.wixstatic.com/media/990059_ef10dfca3fe741a982915c2c978e192a~mv2.png",
+"https://static.wixstatic.com/media/990059_2416e01be8fc4d1fa20d6790e6bed2a9~mv2.png",
+"https://static.wixstatic.com/media/990059_ee0233e848d74647acc96c1625169e27~mv2.png",
+"https://static.wixstatic.com/media/990059_fd230a25d6324f3d8e23f31afd4ce9da~mv2.png",
+"https://static.wixstatic.com/media/990059_1e55baa0086145b18c2a1fef4d7ee0f1~mv2.png",
+"https://static.wixstatic.com/media/990059_7744a598d6aa48c7a6bb6ef6b4662508~mv2.png",
+"https://static.wixstatic.com/media/990059_92c72e719ea648328f94b457fb2c1d09~mv2.png",
+"https://static.wixstatic.com/media/990059_b6389f6630074a4bbe70bece50510469~mv2.png",
+"https://static.wixstatic.com/media/990059_1d0520dbf32e476abf8a3dcc96608c0b~mv2.png",
+"https://static.wixstatic.com/media/990059_b27f4ef9ed00436da769aaf5b21a4e78~mv2.png",
+"https://static.wixstatic.com/media/990059_4f686ab7799a4db49711ba3483d4d024~mv2.png",
+"https://static.wixstatic.com/media/990059_34ddd11a62504360be1a3569c004e3aa~mv2.png",
+"https://static.wixstatic.com/media/990059_1787513977704ac68462f6f6ddddd096~mv2.png",
+"https://static.wixstatic.com/media/990059_9b75b18e58de4ad887413a89cdf02231~mv2.png",
+"https://static.wixstatic.com/media/990059_68a1ba2de21e416da3cdd4917bd66091~mv2.png",
+"https://static.wixstatic.com/media/990059_5608dba03abe4779b18abe1732ab4981~mv2.png"
+
+]
+},
+
+{
+name: "popcorn",
+urls: [
+
+"https://static.wixstatic.com/media/990059_43cdc221115f4bbfb26316bf0e14228a~mv2.png",
+"https://static.wixstatic.com/media/990059_80bea329604446dd996d66a5dbb8fab2~mv2.png",
+"https://static.wixstatic.com/media/990059_653c2d8b2f8f446780bb5dd06db1f0d9~mv2.png",
+"https://static.wixstatic.com/media/990059_5b76b7595bd447309b16df72326c0f0a~mv2.png",
+"https://static.wixstatic.com/media/990059_fbbdd925d17147e7be59bf3724b88264~mv2.png",
+"https://static.wixstatic.com/media/990059_77fef97dbd044763b40a5425bd5660ff~mv2.png",
+"https://static.wixstatic.com/media/990059_ea36f9b593464438b8be1ea106149370~mv2.png",
+"https://static.wixstatic.com/media/990059_698def5747c64771bedfab2df9d50dea~mv2.png",
+"https://static.wixstatic.com/media/990059_1859bcdb05474456ba32c959f4559125~mv2.png",
+"https://static.wixstatic.com/media/990059_b7d2bbdd8dba488dba529b208f187c19~mv2.png",
+"https://static.wixstatic.com/media/990059_63b2bbdf10eb47158699ff3079fab532~mv2.png",
+"https://static.wixstatic.com/media/990059_a58c76e6f3b14cd49c854815506a1962~mv2.png",
+"https://static.wixstatic.com/media/990059_9cf647ec102d46a891548fb9c77b6c2a~mv2.png",
+"https://static.wixstatic.com/media/990059_77ec23acf3674f0b830153617665f528~mv2.png",
+"https://static.wixstatic.com/media/990059_baeaf1ef3c19457c80926723f386005b~mv2.png",
+"https://static.wixstatic.com/media/990059_c196479f0d2440c8a86d8988ed20a775~mv2.png",
+"https://static.wixstatic.com/media/990059_981f735ed1de493eae386d4ed70dcee7~mv2.png",
+"https://static.wixstatic.com/media/990059_2dc495bd9c0642dfbc4ea2440e7847d7~mv2.png",
+"https://static.wixstatic.com/media/990059_1df23d14bde34eff8e42af3cae7ba73e~mv2.png",
+"https://static.wixstatic.com/media/990059_2a8f6265c243444c9093d0252e661a2e~mv2.png",
+"https://static.wixstatic.com/media/990059_c3a82a90a1764bb7ab787ad9c04a035e~mv2.png",
+"https://static.wixstatic.com/media/990059_305acdd6f6f549aeafd8eace8d255fbf~mv2.png",
+"https://static.wixstatic.com/media/990059_cd468d78410f4f9d8a9c1f2db3614f13~mv2.png",
+"https://static.wixstatic.com/media/990059_214f34f3539249cdb975a1162975e137~mv2.png",
+"https://static.wixstatic.com/media/990059_9a329ecd62d64a0c965278e28ae2ce29~mv2.png",
+"https://static.wixstatic.com/media/990059_7ac89d0b80f848059c66f2fd22ba4c4d~mv2.png",
+"https://static.wixstatic.com/media/990059_eaf564a53a894fac892317a29e25283e~mv2.png",
+"https://static.wixstatic.com/media/990059_04363de31e45436cabbfe4f4ec504aaa~mv2.png",
+"https://static.wixstatic.com/media/990059_f6758250846f4c0bba2fa08598a3edc8~mv2.png",
+"https://static.wixstatic.com/media/990059_f9576dcadcb042d7b9cfb43eac5f2c34~mv2.png",
+"https://static.wixstatic.com/media/990059_adb8d864a69a42bc8717593daf8a2183~mv2.png",
+"https://static.wixstatic.com/media/990059_eddba968fb2048ada3525d77da5b7507~mv2.png",
+"https://static.wixstatic.com/media/990059_c031502fe3db49bd9997e582e10d6933~mv2.png",
+"https://static.wixstatic.com/media/990059_45026cc7f0484695b4b7b7298703c3f2~mv2.png",
+"https://static.wixstatic.com/media/990059_45026cc7f0484695b4b7b7298703c3f2~mv2.png"
+
+]
+},
+
+{
+name: "potato",
+urls: [
+
+"https://static.wixstatic.com/media/990059_df960faf5b914f42aabd7868df57f7f1~mv2.png",
+"https://static.wixstatic.com/media/990059_f333ccbbb3a64bd998e6384cbbb4626e~mv2.png",
+"https://static.wixstatic.com/media/990059_809ebb13b94f46be9d21053d7135c73b~mv2.png",
+"https://static.wixstatic.com/media/990059_c265aa23e90048a69bd40a06cc8eaf92~mv2.png",
+"https://static.wixstatic.com/media/990059_7de7364cbd5a47839ffb7635ae6a4064~mv2.png",
+"https://static.wixstatic.com/media/990059_5f2fb27a6deb42d782ae796627a3ed9e~mv2.png",
+"https://static.wixstatic.com/media/990059_2148c4a9fa684b689ac0924f5fd51d04~mv2.png",
+"https://static.wixstatic.com/media/990059_4741b177b44a4e678014f14702347e7d~mv2.png",
+"https://static.wixstatic.com/media/990059_81ec65bac8f74bfa951fc2bd497827a3~mv2.png",
+"https://static.wixstatic.com/media/990059_39adc193ad2f46488c6ad6251b04b9f0~mv2.png",
+"https://static.wixstatic.com/media/990059_54c258b82e08490e8aba9cdcf5973251~mv2.png",
+"https://static.wixstatic.com/media/990059_3d33946301e74c8ca479de6e78af83b1~mv2.png",
+"https://static.wixstatic.com/media/990059_34a585b1b7844399a26c063e134ffdd1~mv2.png",
+"https://static.wixstatic.com/media/990059_410abcc60be14f3eb087b37c947e140a~mv2.png",
+"https://static.wixstatic.com/media/990059_fc3aea7e3c2942cd8abb270e2f74310f~mv2.png",
+"https://static.wixstatic.com/media/990059_b82aeca665334c0bb22d57706465836c~mv2.png",
+"https://static.wixstatic.com/media/990059_5127ca4c3b29451993df63ba61a14a0e~mv2.png",
+"https://static.wixstatic.com/media/990059_13a763dd150948efbdb1c59fa1b5790b~mv2.png",
+"https://static.wixstatic.com/media/990059_ca4265438bc54902b50d9a100440e8a0~mv2.png",
+"https://static.wixstatic.com/media/990059_3c7ec05ad1f4455b99c97f65473bf7d1~mv2.png",
+"https://static.wixstatic.com/media/990059_3e28f5fc59bf4a64a2520c89fe281970~mv2.png",
+"https://static.wixstatic.com/media/990059_a3d1e39e978344dcb4811cb82ce084be~mv2.png",
+"https://static.wixstatic.com/media/990059_22ec2551e2304e028ef466ca69d81653~mv2.png",
+"https://static.wixstatic.com/media/990059_c3ae08615bcb44e189378efd1cff282e~mv2.png",
+"https://static.wixstatic.com/media/990059_6487c18376604a45a9e75c81068a1cd0~mv2.png",
+"https://static.wixstatic.com/media/990059_f3aa94e6bc0744be95006181e96ad12a~mv2.png",
+"https://static.wixstatic.com/media/990059_b7cb82a3d1d144c1bf5c81e948876d22~mv2.png",
+"https://static.wixstatic.com/media/990059_0ab8fd84c6984427ac56ae3bce1dc9f1~mv2.png",
+"https://static.wixstatic.com/media/990059_b52bb68b84c24c45ad93e7671300b2f5~mv2.png",
+"https://static.wixstatic.com/media/990059_611ccb798b434e1c88626cef55661f50~mv2.png",
+"https://static.wixstatic.com/media/990059_db0d99e95a304512b01c4065e318203f~mv2.png",
+"https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png",
+"https://static.wixstatic.com/media/990059_5dd1b297cb2f4bf985aff39135ddd5db~mv2.png",
+"https://static.wixstatic.com/media/990059_27d4187242b84c118c80a330bc68ad69~mv2.png",
+"https://static.wixstatic.com/media/990059_32301d4dc0a3442da03802513bd4d498~mv2.png"
+
+]
+},
+
+{
+name: "yeti",
+urls: [
+
+"https://static.wixstatic.com/media/990059_212238a4e26a4ce584f56b3db74b00be~mv2.png",
+"https://static.wixstatic.com/media/990059_eff957c14aa74504a042483dac892e25~mv2.png",
+"https://static.wixstatic.com/media/990059_c15b04ab64ff4af585754e1dbf9630e6~mv2.png",
+"https://static.wixstatic.com/media/990059_f819976ad2cc48aa8b9d5a1876a5b8c2~mv2.png",
+"https://static.wixstatic.com/media/990059_d61d45d149ed44a49f15a874515489ee~mv2.png",
+"https://static.wixstatic.com/media/990059_9e2cfc455e8f4b38bb6be4c5ea2f156f~mv2.png",
+"https://static.wixstatic.com/media/990059_988ef4fa85bc4d918562b52d98ae2094~mv2.png",
+"https://static.wixstatic.com/media/990059_c0affc8b8a3b4146b16fc05aa675679c~mv2.png",
+"https://static.wixstatic.com/media/990059_29890b4d40b9435f993ea3a6c2170437~mv2.png",
+"https://static.wixstatic.com/media/990059_802873dfca814139bbebe1712b5b2ed4~mv2.png",
+"https://static.wixstatic.com/media/990059_b777bfaf79b946969ab9a44bfc260b96~mv2.png",
+"https://static.wixstatic.com/media/990059_4f33f66490584331adb216fb128c90e5~mv2.png",
+"https://static.wixstatic.com/media/990059_ce23eef17b8540c9ae2bd37f06524d36~mv2.png",
+"https://static.wixstatic.com/media/990059_a6b86d1cf72b456a8a60d2abede09bb9~mv2.png",
+"https://static.wixstatic.com/media/990059_b1bd18fa33754b36912da1aa2efbe36b~mv2.png",
+"https://static.wixstatic.com/media/990059_8acf8ac477fe44cb92ac6d3353b3d7c9~mv2.png",
+"https://static.wixstatic.com/media/990059_a649fd1b4d224531a7575bcb1c8f1167~mv2.png",
+"https://static.wixstatic.com/media/990059_13d73ec5191e46249da01deecaa03770~mv2.png",
+"https://static.wixstatic.com/media/990059_a846235ae9ce4ac69e06aa24a8d7f19e~mv2.png",
+"https://static.wixstatic.com/media/990059_8d4378195f194fb28c5f62bdb9ef08b8~mv2.png",
+"https://static.wixstatic.com/media/990059_523b0ddcd08f4bbfaaac2b62be4f7b47~mv2.png",
+"https://static.wixstatic.com/media/990059_1ff65670a9094736bc6223da337ae2ae~mv2.png",
+"https://static.wixstatic.com/media/990059_90d28307def64dad8f061e2da2b3264d~mv2.png",
+"https://static.wixstatic.com/media/990059_c1bd034fd53e4dd9a5c5b1951aff4fe0~mv2.png",
+"https://static.wixstatic.com/media/990059_b76a355751774eb188380d59da0b003c~mv2.png",
+"https://static.wixstatic.com/media/990059_652f99f8bb25438f9a3ddd64d1dca08b~mv2.png",
+"https://static.wixstatic.com/media/990059_3748e22cbe084e46b1bb4c6a7a725437~mv2.png",
+"https://static.wixstatic.com/media/990059_5f64bbb21f8a49328b4cedffe45190d1~mv2.png",
+"https://static.wixstatic.com/media/990059_25c2b6fe44de4b1bb5e34f93e71a338c~mv2.png",
+"https://static.wixstatic.com/media/990059_04344ff60f124a92b8bab364b79faeec~mv2.png",
+"https://static.wixstatic.com/media/990059_08ba54be605c407d9e3b2795c5716e30~mv2.png",
+"https://static.wixstatic.com/media/990059_2b3b3222fdc844dd917212d74ca1c317~mv2.png",
+"https://static.wixstatic.com/media/990059_e1ae18a9b86d4ac690d54446a72ce961~mv2.png",
+"https://static.wixstatic.com/media/990059_0a81fddec4de4e128a980985e997ca5f~mv2.png",
+"https://static.wixstatic.com/media/990059_ec0144b90282408fb5c75d75930cca4b~mv2.png"
+
+]
+},
+        ];
+
+
+
+        const canvas = document.getElementById('canvas-container');
+        const addStickerBtn = document.getElementById('add-sticker-btn');
+        const undoBtn = document.getElementById('undo-btn');
+                const redoBtn = document.getElementById('redo-btn');
+
+        const newBtn = document.getElementById('new-btn');
+        const eraserBtn = document.getElementById('eraser-btn');
+        const paletteContainer = document.getElementById('sticker-palette-container');
+        const overlayContainer = document.getElementById('overlay-container');
+        const colorPalette = document.getElementById('color-palette');
+        const history = [];
+
+        const brushBtn = document.getElementById("brush-btn");
+        const bucketBtn = document.getElementById('bucket-btn');
+
+        let bucketMode = false;
+        let activeSticker = null;
+        let activePaletteSticker = null;
+        let currentTool = null;
+        let selectedColor = null;
+        let isRestoring = false;
+        let redoStack = [];
+
+        let activeBrushSticker = null; // track which sticker is being painted
+
+
+        let initialX, initialY, offsetX, offsetY;
+        let initialTouchDistance = 0;
+        let initialStickerWidth = 0;
+        let initialStickerHeight = 0;
+
+        let initialCenter = { x: 0, y: 0 };
+        let firstStickerAdded = false;
+
+
+        let brushMode = false;
+        let isBrushing = false;
+        let brushColor = '#FF0000'; // default red
+        let brushSize = 15;   
+let lastX = 0, lastY = 0;
+
+        const colors = [
+
+             '#8d5524', '#c68642', '#e0ac69' ,'#f1c27d','#ffdbac',
+            // Reds
+            '#FF0000', '#FF4500', '#FF6347', '#D2691E', '#CD5C5C',
+
+            // Oranges & Yellows
+            '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
+
+            // Greens
+            '#008000', '#228B22', '#3CB371', '#9ACD32', '#ADFF2F',
+
+            // Blues
+            '#0000FF', '#4169E1', '#1E90FF', '#87CEFA',
+
+            // Purples
+            '#800080', '#4B0082', '#9932CC', '#BA55D3', '#DA70D6',
+
+            // Pinks & Browns
+            '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
+
+            '#C0C0C0', '#808080',
+          
+          '#ff71ce','#01cdfe','#05ffa1','#b967ff','#fffb96',
+
+            '#ffb3ba','#ffdfba','#ffffba','#baffc9','#bae1ff',
+            
+            '#ffdef2','#f2e2ff','#e2eeff','#ddfffc','#ffffe3'
+
+            
+        ];
+        
+        // This is the special "erase" object that will be used by the eraser button.
+        const transparentColor = { type: 'erase' };
+
+brushBtn.addEventListener('click', () => {
+    setBrushMode(!brushMode); // toggle
+    if (brushMode) {
+        setBucketMode(false); // turn off bucket if brush is on
+    }
+    updateToolUI();
+});
+
+bucketBtn.addEventListener('click', () => {
+    setBucketMode(!bucketMode); // toggle
+    if (bucketMode) {
+        setBrushMode(false); // turn off brush if bucket is on
+    }
+    updateToolUI();
+});
+
+function updateToolUI() {
+    brushBtn.classList.toggle('active', brushMode);
+    bucketBtn.classList.toggle('active', bucketMode);
+
+    // add a shared CSS hook when either tool is active
+    if (brushMode || bucketMode) {
+        document.body.classList.add('coloring-active');
+    } else {
+        document.body.classList.remove('coloring-active');
+    }
+}
+
+
+
+
+function setTool(tool) {
+    currentTool = tool;
+
+    brushMode = (tool === "brush");
+    bucketMode = (tool === "bucket");
+    isEraserMode = (tool === "eraser");
+
+    // Toggle button highlight
+    brushBtn.classList.toggle("active", brushMode);
+    bucketBtn?.classList.toggle("active", bucketMode);
+    eraserBtn?.classList.toggle("active", isEraserMode);
+
+    // Add/remove brush-active class on body
+    if (brushMode) {
+        canvas.style.cursor = selectedColor ? "crosshair" : "not-allowed";
+        document.body.classList.add("brush-active");
+    } else {
+        canvas.style.cursor = "default";
+        document.body.classList.remove("brush-active");
+    }
+}
+
+function setBrushMode(enabled) {
+    brushMode = enabled;
+    if (brushMode) {
+        bucketMode = false; // turn off bucket
+        canvas.style.cursor = 'crosshair';
+
+        // Hide sticker controls + disable drag
+        document.querySelectorAll('.sticker img').forEach(img => {
+           
+            img.style.cursor = 'crosshair'; // force crosshair
+            img.style.pointerEvents = 'auto'; // still let brush events through
+        });
+
+        document.querySelectorAll('.sticker .controls').forEach(ctrl => {
+            ctrl.style.display = "none";
+        });
+
+    } else {
+        canvas.style.cursor = 'default';
+
+        // Restore drag + buttons
+        document.querySelectorAll('.sticker img').forEach(img => {
+            img.style.cursor = 'grab';
+        });
+
+        document.querySelectorAll('.sticker .controls').forEach(ctrl => {
+            ctrl.style.display = "";
+        });
+    }
+}
+
+function getCanvasCoords(e, stickerImg) {
+    const rect = stickerImg.getBoundingClientRect();
+    const scaleX = stickerImg._canvas.width / rect.width;
+    const scaleY = stickerImg._canvas.height / rect.height;
+    return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+    };
+}
+
+function startBrush(e, stickerImg) {
+    if (!brushMode || !selectedColor) return;
+    e.stopPropagation();
+    isBrushing = true;
+    activeBrushSticker = stickerImg; // remember which one
+
+    if (!stickerImg._canvas) {
+        const c = document.createElement("canvas");
+        c.width = stickerImg.naturalWidth;
+        c.height = stickerImg.naturalHeight;
+        c.getContext("2d").drawImage(stickerImg, 0, 0);
+        stickerImg._canvas = c;
+    }
+
+   if (!stickerImg._overlay) {
+    const overlay = document.createElement("canvas");
+
+    // match *internal pixel resolution* of the base canvas
+    overlay.width = stickerImg._canvas.width;
+    overlay.height = stickerImg._canvas.height;
+
+    overlay.style.position = "absolute";
+    overlay.style.left = "0";
+    overlay.style.top = "0";
+    overlay.style.width = "100%";   // scaled with image
+    overlay.style.height = "100%";  // scaled with image
+    overlay.style.pointerEvents = "none";
+
+    // parent must be relative for correct overlay positioning
+    stickerImg.parentNode.style.position = "relative";
+    stickerImg.parentNode.appendChild(overlay);
+
+    stickerImg._overlay = overlay;
+}
+
+    const { x, y } = getCanvasCoords(e, stickerImg);
+    lastX = x;
+    lastY = y;
+}
+
+
+function applyBrushStrokeToOverlay(stickerImg, x0, y0, x1, y1) {
+    const octx = stickerImg._overlay.getContext("2d");
+
+    // convert hex → rgb
+    const hex = selectedColor;
+    const bigint = parseInt(hex.replace(/^#/, ""), 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    octx.strokeStyle = `rgb(${r},${g},${b})`;
+    octx.lineWidth = brushSize * 2;
+    octx.lineCap = "round";
+    octx.beginPath();
+    octx.moveTo(x0, y0);
+    octx.lineTo(x1, y1);
+    octx.stroke();
+}
+
+function moveBrush(e, stickerImg) {
+    if (!isBrushing) return;
+    const { x, y } = getCanvasCoords(e, stickerImg);
+    applyBrushStrokeToOverlay(stickerImg, lastX, lastY, x, y);
+    lastX = x;
+    lastY = y;
+}
+
+function stopBrush() {
+    if (!isBrushing) return;
+    isBrushing = false;
+
+    if (currentSticker && currentSticker._overlay) {
+        const ctx = currentSticker._canvas.getContext("2d");
+        ctx.drawImage(
+            currentSticker._overlay,
+            0, 0,
+            currentSticker._overlay.width,
+            currentSticker._overlay.height,
+            0, 0,
+            currentSticker._canvas.width,
+            currentSticker._canvas.height
+        );
+
+        // clear overlay for next strokes
+        currentSticker._overlay.getContext("2d").clearRect(
+            0, 0,
+            currentSticker._overlay.width,
+            currentSticker._overlay.height
+        );
+    }
+}
+
+function applyBrushStroke(stickerImg, x0, y0, x1, y1) {
+    const canvasEl = document.createElement("canvas");
+    const ctx = canvasEl.getContext("2d");
+    canvasEl.width = stickerImg.naturalWidth;
+    canvasEl.height = stickerImg.naturalHeight;
+    ctx.drawImage(stickerImg, 0, 0);
+
+    const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+    const data = imgData.data;
+
+    // Convert brush color
+    const hexColor = selectedColor;
+    const bigint = parseInt(hexColor.replace(/^#/, ""), 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    // Draw a line between (x0, y0) → (x1, y1)
+    const dx = Math.abs(x1 - x0);
+    const dy = Math.abs(y1 - y0);
+    const sx = x0 < x1 ? 1 : -1;
+    const sy = y0 < y1 ? 1 : -1;
+    let err = dx - dy;
+
+    let x = x0, y = y0;
+    while (true) {
+        // Brush is circular: fill pixels within brushSize radius
+        for (let yy = -brushSize; yy <= brushSize; yy++) {
+            for (let xx = -brushSize; xx <= brushSize; xx++) {
+                if (xx*xx + yy*yy <= brushSize*brushSize) {
+                    const px = x + xx;
+                    const py = y + yy;
+                    if (px >= 0 && py >= 0 && px < canvasEl.width && py < canvasEl.height) {
+                        const i = (py * canvasEl.width + px) * 4;
+                        const isBlack = data[i] < 50 && data[i+1] < 50 && data[i+2] < 50 && data[i+3] > 100;
+                        if (!isBlack) { // don’t paint over black lines
+                            data[i] = r;
+                            data[i+1] = g;
+                            data[i+2] = b;
+                            data[i+3] = 255;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (x === x1 && y === y1) break;
+        const e2 = 2 * err;
+        if (e2 > -dy) { err -= dy; x += sx; }
+        if (e2 < dx) { err += dx; y += sy; }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+    stickerImg.src = canvasEl.toDataURL();
+}
+
+ function setBucketMode(enabled) {
+    bucketMode = enabled;
+    if (bucketMode) {
+        brushMode = false; // turn off brush if bucket is on
+        document.body.classList.add('bucket-active');
+        canvas.style.cursor = 'url("bucket-cursor.png") 8 8, crosshair'; 
+        // fallback to crosshair if no image is set
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.draggable = false;
+        });
+
+        // Make stickers also show bucket cursor
+        document.querySelectorAll('.sticker img').forEach(img => {
+            img.style.cursor = 'url("bucket-cursor.png") 8 8, crosshair';
+        });
+    } else {
+        document.body.classList.remove('bucket-active');
+        canvas.style.cursor = 'default';
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.draggable = true;
+        });
+
+        // Reset stickers back to draggable
+        document.querySelectorAll('.sticker img').forEach(img => {
+            img.style.cursor = 'grab';
+        });
+    }
+}
+
+      function saveState() {
+        if (isRestoring) return; 
+            const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+            const currentState = {
+                stickers: []
+            };
+            stickersOnCanvas.forEach(sticker => {
+                const stickerImg = sticker.querySelector('img');
+                if (stickerImg) {
+                    currentState.stickers.push({
+                        url: stickerImg.src,
+                        x: sticker.offsetLeft,
+                        y: sticker.offsetTop,
+                        width: sticker.offsetWidth,
+                        height: sticker.offsetHeight
+                    });
+                }
+            });
+            history.push(currentState);
+             redoStack = []; 
+            updateUndoButton();
+        }
+
+        function loadState(state) {
+    isRestoring = true;
+    canvas.innerHTML = '';
+    state.stickers.forEach(data => {
+        // pass suppressSave: true so addSticker doesn't push history while restoring
+        addSticker(data.url, data.x, data.y, data.width, data.height, { suppressSave: true });
+    });
+    isRestoring = false;
+    updateUndoButton();
+}
+
+        function deselectAllStickers() {
+            document.querySelectorAll('.sticker').forEach(s => {
+                s.classList.remove('selected');
+            });
+        }
+
+        function getTouchDistance(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
+    const { suppressSave = false } = opts;
+                const sticker = document.createElement('div');
+            sticker.classList.add('sticker');
+           sticker.style.width = `${width}px`;
+            sticker.style.height = `${height}px`;
+
+            const stickerImg = document.createElement('img');
+            stickerImg.crossOrigin = "Anonymous";
+            stickerImg.src = url;
+            stickerImg.draggable = false;
+            sticker.appendChild(stickerImg);
+
+            // --- Brush listeners ---
+stickerImg.addEventListener('mousedown', (e) => startBrush(e, stickerImg));
+stickerImg.addEventListener('mousemove', (e) => moveBrush(e, stickerImg));
+
+
+window.addEventListener('mouseup', stopBrush);
+
+            sticker.addEventListener('click', (e) => {
+                if (bucketMode && selectedColor) {
+                    e.stopPropagation();
+                    const rect = sticker.getBoundingClientRect();
+                    const clickX = Math.floor((e.clientX - rect.left) * (stickerImg.naturalWidth / rect.width));
+                    const clickY = Math.floor((e.clientY - rect.top) * (stickerImg.naturalHeight / rect.height));
+                    recolorSticker(stickerImg, selectedColor, clickX, clickY);
+                    
+                }
+            });
+
+            const copyBtn = document.createElement('div');
+            copyBtn.classList.add('copy-btn');
+            copyBtn.innerHTML = `
+                <svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
+                </svg>
+            `;
+
+            copyBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const stickerWidth = sticker.offsetWidth;
+                const stickerHeight = sticker.offsetHeight;
+                let newX = parseInt(sticker.style.left) + 10;
+                let newY = parseInt(sticker.style.top) + 10;
+                function isOverlapping(x, y) {
+                    const stickers = document.querySelectorAll('.sticker');
+                    return Array.from(stickers).some(s => {
+                        const sx = parseInt(s.style.left);
+                        const sy = parseInt(s.style.top);
+                        const sw = s.offsetWidth;
+                        const sh = s.offsetHeight;
+                        return !(x + stickerWidth < sx || x > sx + sw || y + stickerHeight < sy || y > sy + sh);
+                    });
+                }
+                const step = 10;
+                let attempts = 0;
+                while (isOverlapping(newX, newY) && attempts < 100) {
+                    newX += step;
+                    newY += step;
+                    if (newX + stickerWidth > canvas.offsetWidth) newX = step;
+                    if (newY + stickerHeight > canvas.offsetHeight) newY = step;
+                    attempts++;
+                }
+                saveState();
+                addSticker(stickerImg.src, newX, newY, sticker.offsetWidth);
+            });
+
+            const deleteBtn = document.createElement('div');
+            deleteBtn.classList.add('delete-btn');
+            deleteBtn.innerHTML = `
+                <svg class="delete-btn-icon" viewBox="0 0 24 24">
+                    <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
+                </svg>
+            `;
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                saveState();
+                sticker.remove();
+            });
+
+            const resizeHandle = document.createElement('div');
+            resizeHandle.classList.add('resize-handle');
+            resizeHandle.innerHTML = `
+                <svg class="resize-handle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+            `;
+
+            sticker.appendChild(deleteBtn);
+            sticker.appendChild(copyBtn);
+            sticker.appendChild(resizeHandle);
+
+            function startInteraction(e) {
+                if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.resize-handle')) {
+                    return;
+                }
+                if (bucketMode) return;
+                
+                // Save state at the beginning of an interaction
+                saveState();
+
+                deselectAllStickers();
+                sticker.classList.add('selected');
+
+                e.preventDefault();
+                activeSticker = sticker;
+
+                initialCenter.x = sticker.offsetLeft + sticker.offsetWidth / 2;
+                initialCenter.y = sticker.offsetTop + sticker.offsetHeight / 2;
+
+                if (e.touches && e.touches.length === 2) {
+                    initialTouchDistance = getTouchDistance(e.touches);
+                    initialStickerWidth = sticker.offsetWidth;
+                    initialStickerHeight = sticker.offsetHeight;
+                } else if (e.touches && e.touches.length === 1) {
+                    const touch = e.touches[0];
+                    initialX = touch.clientX;
+                    initialY = touch.clientY;
+                    offsetX = sticker.offsetLeft;
+                    offsetY = sticker.offsetTop;
+                } else {
+                    initialX = e.clientX;
+                    initialY = e.clientY;
+                    offsetX = sticker.offsetLeft;
+                    offsetY = sticker.offsetTop;
+                }
+
+                document.addEventListener('mousemove', handleMove);
+                document.addEventListener('mouseup', handleEnd);
+                document.addEventListener('touchmove', handleMove, { passive: false });
+                document.addEventListener('touchend', handleEnd);
+            }
+
+            function handleMove(e) {
+                if (!activeSticker || bucketMode) return;
+                e.preventDefault();
+
+                if (e.touches && e.touches.length === 2) {
+                    const newTouchDistance = getTouchDistance(e.touches);
+                    const scaleChange = newTouchDistance / initialTouchDistance;
+                    const newWidth = Math.max(initialStickerWidth * scaleChange, 30);
+                    const aspectRatio = initialStickerWidth / initialStickerHeight;
+                    const newHeight = newWidth / aspectRatio;
+
+                    activeSticker.style.width = `${newWidth}px`;
+                    activeSticker.style.height = `${newHeight}px`;
+
+                    activeSticker.style.left = `${initialCenter.x - newWidth / 2}px`;
+                    activeSticker.style.top = `${initialCenter.y - newHeight / 2}px`;
+
+                } else {
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    const newX = offsetX + (clientX - initialX);
+                    const newY = offsetY + (clientY - initialY);
+                    activeSticker.style.left = `${newX}px`;
+                    activeSticker.style.top = `${newY}px`;
+                }
+            }
+
+            function handleEnd() {
+                document.removeEventListener('mousemove', handleMove);
+                document.removeEventListener('mouseup', handleEnd);
+                document.removeEventListener('touchmove', handleMove);
+                document.removeEventListener('touchend', handleEnd);
+                activeSticker = null;
+                // Save state here, AFTER the drag/resize is complete
+                saveState();
+            }
+
+            function addResizeHandleListeners(handle, sticker) {
+    let startX, startY, startWidth, startHeight, startLeft, startTop;
+
+    const startResize = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        saveState();
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        startX = clientX;
+        startY = clientY;
+        startWidth = sticker.offsetWidth;
+        startHeight = sticker.offsetHeight;
+        startLeft = sticker.offsetLeft;
+        startTop = sticker.offsetTop;
+
+        document.addEventListener('mousemove', doResize);
+        document.addEventListener('mouseup', endResize);
+        document.addEventListener('touchmove', doResize, { passive: false });
+        document.addEventListener('touchend', endResize);
+    };
+
+    const doResize = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        const deltaX = clientX - startX;
+        const newWidth = Math.max(startWidth + deltaX, 30);
+        const aspectRatio = startWidth / startHeight;
+        const newHeight = newWidth / aspectRatio;
+
+        sticker.style.width = `${newWidth}px`;
+        sticker.style.height = `${newHeight}px`;
+
+        // The key change is here:
+        // Adjust the top-left position to simulate resizing from the center or another anchor point.
+        sticker.style.left = `${startLeft + (startWidth - newWidth) / 2}px`;
+        sticker.style.top = `${startTop + (startHeight - newHeight) / 2}px`;
+
+    };
+
+    const endResize = () => {
+        document.removeEventListener('mousemove', doResize);
+        document.removeEventListener('mouseup', endResize);
+        document.removeEventListener('touchmove', doResize);
+        document.removeEventListener('touchend', endResize);
+        saveState();
+    };
+
+    handle.addEventListener('mousedown', startResize);
+    handle.addEventListener('touchstart', startResize);
+}
+
+            addResizeHandleListeners(resizeHandle, sticker);
+
+            function addWheelResize(stickerImg) {
+                let lastWheelTime = 0;
+                let timeoutId = null;
+                stickerImg.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    
+                    // Save the state before the first scroll delta in a sequence
+                    if (Date.now() - lastWheelTime > 200 || history.length === 0) {
+                        saveState();
+                    }
+
+                    const parent = stickerImg.parentElement;
+                    const delta = Math.sign(e.deltaY);
+
+                    const initialWidth = parent.offsetWidth;
+                    const initialHeight = parent.offsetHeight;
+
+                    const initialLeft = parent.offsetLeft;
+                    const initialTop = parent.offsetTop;
+
+                    const newSize = initialWidth + (delta * 10);
+                    const minSize = 30;
+
+                    if (newSize >= minSize) {
+                        const newHeight = newSize / (initialWidth / initialHeight);
+
+                        parent.style.width = `${newSize}px`;
+                        parent.style.height = `${newHeight}px`;
+
+                        parent.style.left = `${initialLeft + (initialWidth - newSize) / 2}px`;
+                        parent.style.top = `${initialTop + (initialHeight - newHeight) / 2}px`;
+                    }
+                    lastWheelTime = Date.now();
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(() => {
+                        saveState();
+                    }, 200);
+                });
+            }
+
+            addWheelResize(stickerImg);
+
+            sticker.addEventListener('mousedown', startInteraction);
+            sticker.addEventListener('touchstart', startInteraction);
+
+            canvas.addEventListener('mousedown', (e) => {
+                if (!e.target.closest('.sticker')) {
+                    deselectAllStickers();
+                }
+            });
+            canvas.addEventListener('touchstart', (e) => {
+                if (!e.target.closest('.sticker')) {
+                    deselectAllStickers();
+                }
+            });
+
+            let finalX, finalY;
+            const canvasRect = canvas.getBoundingClientRect();
+            const existingStickers = document.querySelectorAll('.sticker');
+
+            if (existingStickers.length === 0) {
+                finalX = (canvas.offsetWidth / 2) - (width / 2);
+                finalY = (canvas.offsetHeight / 2) - (width / 2);
+            } else if (x !== undefined && y !== undefined) {
+                finalX = x;
+                finalY = y;
+            } else {
+                const newStickerWidth = width;
+                const newStickerHeight = (stickerImg.naturalHeight / stickerImg.naturalWidth) * newStickerWidth;
+                let foundPosition = false;
+
+                const step = newStickerWidth / 2;
+                for (let yy = 0; yy < canvas.offsetHeight - newStickerHeight && !foundPosition; yy += step) {
+                    for (let xx = 0; xx < canvas.offsetWidth - newStickerWidth && !foundPosition; xx += step) {
+                        let overlap = false;
+                        document.querySelectorAll('.sticker').forEach(existing => {
+                            const rect = existing.getBoundingClientRect();
+                            const ex = rect.left - canvasRect.left;
+                            const ey = rect.top - canvasRect.top;
+                            const ew = rect.width;
+                            const eh = rect.height;
+
+                            if (
+                                xx < ex + ew &&
+                                xx + newStickerWidth > ex &&
+                                yy < ey + eh &&
+                                yy + newStickerHeight > ey
+                            ) {
+                                overlap = true;
+                            }
+                        });
+
+                        if (!overlap) {
+                            finalX = xx;
+                            finalY = yy;
+                            foundPosition = true;
+                        }
+                    }
+                }
+
+                if (!foundPosition) {
+                    finalX = Math.floor(Math.random() * (canvas.offsetWidth - newStickerWidth));
+                    finalY = Math.floor(Math.random() * (canvas.offsetHeight - newStickerHeight));
+                }
+            }
+
+            sticker.style.left = `${finalX}px`;
+            sticker.style.top = `${finalY}px`;
+
+            function updateButtonSizes() {
+                const btnSize = sticker.offsetWidth * 0.2;
+                [deleteBtn, copyBtn, resizeHandle].forEach(btn => {
+                    btn.style.width = btnSize + 'px';
+                    btn.style.height = btnSize + 'px';
+                });
+                deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
+                copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
+                resizeHandle.style.bottom = resizeHandle.style.right = `${btnSize * 0.25}px`;
+            }
+
+            updateButtonSizes();
+            const observer = new ResizeObserver(updateButtonSizes);
+            observer.observe(sticker);
+            canvas.appendChild(sticker);
+            
+            // Save state after a sticker is added to the DOM
+           if (!suppressSave && !isRestoring) {
+    saveState();
+}
+            
+            return sticker;
+        }
+
+        function populatePalette() {
+            stickerGroups.forEach(group => {
+                const paletteSticker = document.createElement('img');
+                paletteSticker.src = group.urls[0];
+                paletteSticker.classList.add('palette-sticker');
+                paletteSticker.dataset.group = group.name;
+
+                paletteSticker.addEventListener('click', (e) => {
+                    if (activePaletteSticker === paletteSticker) {
+                        hideOverlay();
+                    } else {
+                        hideOverlay();
+                        showOverlay(e, group.urls);
+                        activePaletteSticker = paletteSticker;
+                    }
+                });
+
+                paletteSticker.draggable = true;
+                paletteSticker.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('application/json', JSON.stringify({
+                        url: e.target.src,
+                        width: 200
+                    }));
+                    hideOverlay();
+                });
+                paletteContainer.appendChild(paletteSticker);
+            });
+        }
+
+        function hideOverlay() {
+            overlayContainer.style.display = 'none';
+            activePaletteSticker = null;
+        }
+
+        let activeGroupURLs = [];
+
+        function showOverlay(e, urls) {
+            activeGroupURLs = urls;
+            overlayContainer.innerHTML = '';
+            urls.forEach(url => {
+                const overlaySticker = document.createElement('img');
+                overlaySticker.src = url;
+                overlaySticker.classList.add('overlay-sticker');
+                overlaySticker.draggable = true;
+                overlaySticker.addEventListener('dragstart', (e) => {
+                    e.stopPropagation();
+                    e.dataTransfer.setData('application/json', JSON.stringify({
+                        url: e.target.src,
+                        width: 200
+                    }));
+                });
+                overlaySticker.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    addSticker(url);
+                    // saveState() is now in addSticker()
+                });
+                overlayContainer.appendChild(overlaySticker);
+            });
+
+            const rect = e.target.getBoundingClientRect();
+            const paletteRect = paletteContainer.getBoundingClientRect();
+            const { right, bottom } = rect;
+
+            if (right + 260 < window.innerWidth) {
+                overlayContainer.style.left = `${rect.right - paletteRect.left + 10}px`;
+            } else {
+                overlayContainer.style.left = `${rect.left - paletteRect.left - 260}px`;
+            }
+
+            if (bottom + overlayContainer.offsetHeight < window.innerHeight) {
+                overlayContainer.style.top = `${rect.top - paletteRect.top}px`;
+            } else {
+                overlayContainer.style.top = `${rect.top - paletteRect.top - overlayContainer.offsetHeight}px`;
+            }
+            overlayContainer.style.display = 'grid';
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target) && !colorPalette.contains(e.target)) {
+                hideOverlay();
+            }
+        });
+
+        canvas.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('application/json');
+            if (data) {
+                const { url, width } = JSON.parse(data);
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                // saveState() is now in addSticker()
+                addSticker(url, x, y, width);
+            }
+        });
+
+        function hexToRgb(hex) {
+            hex = hex.replace(/^#/, "");
+            const bigint = parseInt(hex, 16);
+            return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+        }
+
+ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
+
+
+    const canvasEl = document.createElement("canvas");
+    const ctx = canvasEl.getContext("2d");
+    canvasEl.width = stickerImg.naturalWidth;
+    canvasEl.height = stickerImg.naturalHeight;
+    ctx.drawImage(stickerImg, 0, 0);
+
+    const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+    const data = imgData.data;
+    const isBlack = (r, g, b, a) => (r < 50 && g < 50 && b < 50 && a > 100);
+    const isTransparent = (fillColor && fillColor.type === 'erase');
+
+    let r, g, b;
+    if (!isTransparent) {
+        const hexColor = fillColor;
+        const bigint = parseInt(hexColor.replace(/^#/, ""), 16);
+        [r, g, b] = [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+    }
+
+    const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
+    const startR = data[startIndex];
+    const startG = data[startIndex + 1];
+    const startB = data[startIndex + 2];
+    const startA = data[startIndex + 3];
+
+    if (isBlack(startR, startG, startB, startA)) {
+        let found = false;
+        const offsets = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+        for (const [dx, dy] of offsets) {
+            const nx = clickX + dx;
+            const ny = clickY + dy;
+            if (nx < 0 || ny < 0 || nx >= canvasEl.width || ny >= canvasEl.height) continue;
+            const ni = ((ny * canvasEl.width) + nx) * 4;
+            if (data[ni + 3] === 0) {
+                clickX = nx;
+                clickY = ny;
+                found = true;
+                break;
+            }
+        }
+        if (!found) return;
+    }
+
+    const stack = [[clickX, clickY]];
+    const visited = new Set();
+    let touchesEdge = false;
+    let pixelsToFill = [];
+
+    while (stack.length) {
+        const [x, y] = stack.pop();
+        if (x < 0 || y < 0 || x >= canvasEl.width || y >= canvasEl.height) {
+            touchesEdge = true;
+            continue;
+        }
+        const i = ((y * canvasEl.width) + x) * 4;
+        const key = `${x},${y}`;
+        if (visited.has(key)) continue;
+        visited.add(key);
+        if (isBlack(data[i], data[i + 1], data[i + 2], data[i + 3])) continue;
+        pixelsToFill.push(i);
+        stack.push([x + 1, y]);
+        stack.push([x - 1, y]);
+        stack.push([x, y + 1]);
+        stack.push([x, y - 1]);
+    }
+
+    if (touchesEdge) return;
+
+    if (isTransparent) {
+        for (const i of pixelsToFill) {
+            data[i + 3] = 0;
+        }
+    } else {
+        for (const i of pixelsToFill) {
+            data[i] = r;
+            data[i + 1] = g;
+            data[i + 2] = b;
+            data[i + 3] = 255;
+        }
+    }
+
+    if (pixelsToFill.length > 0) {
+        ctx.putImageData(imgData, 0, 0);
+        stickerImg.src = canvasEl.toDataURL();
+         saveState();
+    }
+}
+
+        function updateUndoButton() {
+            undoBtn.disabled = history.length <= 1;
+        }
+
+   undoBtn.addEventListener('click', () => {
+    if (history.length > 1) {
+        const lastState = history.pop();
+        redoStack.push(lastState); // 👈 save for redo
+        loadState(history[history.length - 1]);
+        updateUndoRedoButtons();
+    }
+});
+
+redoBtn.addEventListener('click', () => {
+    if (redoStack.length > 0) {
+        const nextState = redoStack.pop();
+        history.push(nextState);
+        loadState(nextState);
+        updateUndoRedoButtons();
+    }
+});
+
+function updateUndoRedoButtons() {
+    undoBtn.disabled = history.length <= 1;
+    redoBtn.disabled = redoStack.length === 0;
+}
+
+        newBtn.addEventListener('click', () => {
+            canvas.innerHTML = '';
+            history.splice(0);
+            saveState();
+            firstStickerAdded = false;
+        });
+        
+        eraserBtn.addEventListener('click', () => {
+            setBucketMode(true);
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            selectedColor = transparentColor;
+            
+            const wasActive = eraserBtn.classList.contains('active');
+            document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+
+            if (!wasActive) {
+                eraserBtn.classList.add('active');
+            } else {
+                selectedColor = null;
+                setBucketMode(false);
+            }
+        });
+
+        addStickerBtn.addEventListener("click", () => {
+    // reset tools
+    setTool(null);
+    setBucketMode(false);
+
+    // clear UI states
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.controls button').forEach(b => {
+        if (b.id === 'add-sticker-btn') b.classList.add('active');
+        else b.classList.remove('active');
+    });
+
+    // reset color
+    selectedColor = null;
+
+    // pick random sticker
+    const allUrls = stickerGroups.flatMap(group => group.urls);
+    const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+
+    // add it
+    addSticker(randomUrl);
+});
+
+        populatePalette();
+        populateColorPalette();
+        saveState();
+
+        window.addEventListener('load', () => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+        let isSwiping = false;
+        let initialTap = { clientX: 0 };
+
+        function addSwipeFunctionality() {
+            const paletteContainer = document.querySelector('.color-palette-container');
+            const palette = document.querySelector('.color-palette');
+
+            const handleStart = (e) => {
+                isDragging = true;
+                startX = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+                scrollLeft = paletteContainer.scrollLeft;
+                initialTap.clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            };
+
+            const handleMove = (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+                const walk = (x - startX) * 1.5;
+                paletteContainer.scrollLeft = scrollLeft - walk;
+                if (Math.abs(e.clientX - initialTap.clientX) > 10) {
+                    isSwiping = true;
+                }
+            };
+
+            const handleEnd = () => {
+                isDragging = false;
+                setTimeout(() => {
+                    isSwiping = false;
+                }, 100);
+            };
+
+            [paletteContainer, palette].forEach(element => {
+                element.addEventListener('mousedown', handleStart);
+                element.addEventListener('mousemove', handleMove);
+                element.addEventListener('mouseup', handleEnd);
+                element.addEventListener('mouseleave', handleEnd);
+
+                element.addEventListener('touchstart', handleStart);
+                element.addEventListener('touchmove', handleMove, { passive: false });
+                element.addEventListener('touchend', handleEnd);
+            });
+        }
+
+        function populateColorPalette() {
+    colorPalette.innerHTML = '';
+    colors.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.classList.add('color-swatch');
+        swatch.style.backgroundColor = color;
+        
+        if (selectedColor === color) {
+            swatch.classList.add('active');
+        }
+
+        swatch.addEventListener('click', (e) => {
+            if (isSwiping) return;
+
+            const wasActive = swatch.classList.contains('active');
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            
+           if (!wasActive) {
+    swatch.classList.add('active');
+    selectedColor = color;
+    // ❌ no automatic bucket mode here
+} else {
+    selectedColor = null;
+    // ❌ no need to disable bucket either
+}
+        });
+
+        colorPalette.appendChild(swatch);
+    });
+}
+
+        addSwipeFunctionality();
+        populateColorPalette();
+
+    </script>
+</body>
+</html>
