@@ -58,7 +58,8 @@
 
         .sticker:hover > .delete-btn,
         .sticker:hover > .copy-btn,
-        .sticker:hover > .resize-handle {
+        .sticker:hover > .resize-handle,
+        .sticker:hover > .rotate-handle {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -66,7 +67,8 @@
 
         .sticker.selected > .delete-btn,
         .sticker.selected > .copy-btn,
-        .sticker.selected > .resize-handle {
+        .sticker.selected > .resize-handle,
+        .sticker.selected > .rotate-handle {
             display: flex;
         }
 
@@ -180,21 +182,14 @@
             transform: scale(1.1);
         }
 
-        .copy-btn-icon, .delete-btn-icon {
+        .copy-btn-icon, .delete-btn-icon, .resize-handle-icon, .rotate-handle-icon {
             width: 100%;
             height: 100%;
             fill: white;
             stroke: white;
         }
 
-        .resize-handle-icon {
-            width: 60%;
-            height: 60%;
-            fill: white;
-            stroke: white;
-        }
-
-        .delete-btn, .copy-btn, .resize-handle {
+        .delete-btn, .copy-btn, .resize-handle, .rotate-handle {
             position: absolute;
             width: 20%;
             height: 20%;
@@ -229,8 +224,15 @@
             cursor: pointer;
         }
 
-        .resize-handle:active {
-            cursor: ne-resize;
+        .rotate-handle {
+            bottom: 5%;
+            left: 5%;
+            background-color: #4a86e8;
+            cursor: pointer;
+        }
+
+        .resize-handle:active, .rotate-handle:active {
+            cursor: grabbing;
         }
 
         .copy-btn:hover {
@@ -246,6 +248,12 @@
         }
 
         .resize-handle:hover {
+            background-color: #4a86e8;
+            transform: scale(1.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .rotate-handle:hover {
             background-color: #4a86e8;
             transform: scale(1.1);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
@@ -319,22 +327,22 @@
     <div id="overlay-container"></div>
     
     <script>
-       const stickerGroups = [
-    {
-        name: "Egypt",
-        urls: {
-            "A": ["https://static.wixstatic.com/media/990059_195242b424cb450ea78b93e9de392511~mv2.png"],
-            "B": ["https://static.wixstatic.com/media/990059_e49cdd1403a949019aeafce0185ac178~mv2.png"]
-        }
-    },
-    {
-        name: "Bug",
-        urls: {
-            "A": ["https://static.wixstatic.com/media/990059_896e4ce4fb094112aa5e524b4230f562~mv2.png"],
-            "B": ["https://static.wixstatic.com/media/990059_e49cdd1403a949019aeafce0185ac178~mv2.png"]
-        }
-    },
-];
+        const stickerGroups = [
+            {
+                name: "Asia",
+                urls: {
+                    "A": ["https://static.wixstatic.com/media/990059_efb2e73754a7449f96ad432ecb8de360~mv2.png"],
+                    "B": ["https://static.wixstatic.com/media/990059_05e04c6e35424c098fcf4e971fa3a1be~mv2.png"]
+                }
+            },
+            {
+                name: "Bug",
+                urls: {
+                    "A": ["https://static.wixstatic.com/media/990059_896e4ce4fb094112aa5e524b4230f562~mv2.png"],
+                    "B": ["https://static.wixstatic.com/media/990059_e49cdd1403a949019aeafce0185ac178~mv2.png"]
+                }
+            },
+        ];
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
         const undoBtn = document.getElementById('undo-btn');
@@ -369,7 +377,8 @@
                         x: sticker.offsetLeft,
                         y: sticker.offsetTop,
                         width: sticker.offsetWidth,
-                        height: sticker.offsetHeight
+                        height: sticker.offsetHeight,
+                        rotation: sticker.dataset.rotation || '0'
                     });
                 }
             });
@@ -382,7 +391,7 @@
             isRestoring = true;
             canvas.innerHTML = '';
             state.stickers.forEach(data => {
-                addSticker(data.url, data.x, data.y, data.width, data.height, { suppressSave: true });
+                addSticker(data.url, data.x, data.y, data.width, data.height, { suppressSave: true, rotation: data.rotation });
             });
             isRestoring = false;
             updateUndoRedoButtons();
@@ -401,11 +410,13 @@
         }
 
         function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
-            const { suppressSave = false } = opts;
+            const { suppressSave = false, rotation = 0 } = opts;
             const sticker = document.createElement('div');
             sticker.classList.add('sticker');
             sticker.style.width = `${width}px`;
             sticker.style.height = `${height}px`;
+            sticker.style.transform = `rotate(${rotation}deg)`;
+            sticker.dataset.rotation = rotation;
 
             const stickerImg = document.createElement('img');
             stickerImg.crossOrigin = "Anonymous";
@@ -446,7 +457,7 @@
                     attempts++;
                 }
                 saveState();
-                addSticker(stickerImg.src, newX, newY, sticker.offsetWidth);
+                addSticker(stickerImg.src, newX, newY, sticker.offsetWidth, sticker.offsetHeight, { rotation: sticker.dataset.rotation });
             });
 
             const deleteBtn = document.createElement('div');
@@ -468,13 +479,18 @@
                 <line x1="21" y1="3" x2="14" y2="10"></line>
                 <line x1="3" y1="21" x2="10" y2="14"></line>
             </svg>`;
-
+            
+            const rotateHandle = document.createElement('div');
+            rotateHandle.classList.add('rotate-handle');
+            rotateHandle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9.76V3"/><path d="M3 12h3"/><path d="M12 3v3"/><path d="m3 21 3-3"/><path d="M18 18h.01"/><path d="M21 12h-3"/><path d="m21 21-3-3"/><path d="m3 3 3 3"/><path d="M6 18h.01"/></svg>`;
+            
             sticker.appendChild(deleteBtn);
             sticker.appendChild(copyBtn);
             sticker.appendChild(resizeHandle);
+            sticker.appendChild(rotateHandle);
 
             function startInteraction(e) {
-                if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.resize-handle')) {
+                if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.resize-handle') || e.target.closest('.rotate-handle')) {
                     return;
                 }
                 
@@ -592,6 +608,72 @@
 
             addResizeHandleListeners(resizeHandle, sticker);
 
+            function addRotationHandleListeners(handle, sticker) {
+                let initialAngle = 0;
+                let stickerRotation = 0;
+                let stickerCenter = {};
+                
+                const startRotation = (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    saveState();
+                    
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    const rect = sticker.getBoundingClientRect();
+                    
+                    stickerCenter = {
+                        x: rect.left + rect.width / 2,
+                        y: rect.top + rect.height / 2
+                    };
+                    
+                    initialAngle = Math.atan2(clientY - stickerCenter.y, clientX - stickerCenter.x) * 180 / Math.PI;
+                    stickerRotation = parseFloat(sticker.dataset.rotation) || 0;
+                    
+                    document.addEventListener('mousemove', doRotate);
+                    document.addEventListener('mouseup', endRotation);
+                    document.addEventListener('touchmove', doRotate, { passive: false });
+                    document.addEventListener('touchend', endRotation);
+                };
+
+                const doRotate = (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    
+                    const newAngle = Math.atan2(clientY - stickerCenter.y, clientX - stickerCenter.x) * 180 / Math.PI;
+                    
+                    let angleDifference = newAngle - initialAngle;
+                    
+                    if (angleDifference > 180) {
+                        angleDifference -= 360;
+                    } else if (angleDifference < -180) {
+                        angleDifference += 360;
+                    }
+                    
+                    const newRotation = (stickerRotation + angleDifference);
+                    
+                    sticker.style.transform = `rotate(${newRotation}deg)`;
+                    sticker.dataset.rotation = newRotation;
+                };
+
+                const endRotation = () => {
+                    document.removeEventListener('mousemove', doRotate);
+                    document.removeEventListener('mouseup', endRotation);
+                    document.removeEventListener('touchmove', doRotate);
+                    document.removeEventListener('touchend', endRotation);
+                    saveState();
+                };
+
+                handle.addEventListener('mousedown', startRotation);
+                handle.addEventListener('touchstart', startRotation);
+            }
+            
+            addRotationHandleListeners(rotateHandle, sticker);
+
+
             function addWheelResize(stickerImg) {
                 let lastWheelTime = 0;
                 let timeoutId = null;
@@ -688,13 +770,14 @@
 
             function updateButtonSizes() {
                 const btnSize = sticker.offsetWidth * 0.2;
-                [deleteBtn, copyBtn, resizeHandle].forEach(btn => {
+                [deleteBtn, copyBtn, resizeHandle, rotateHandle].forEach(btn => {
                     btn.style.width = btnSize + 'px';
                     btn.style.height = btnSize + 'px';
                 });
                 deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
                 copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
                 resizeHandle.style.bottom = resizeHandle.style.right = `${btnSize * 0.25}px`;
+                rotateHandle.style.bottom = rotateHandle.style.left = `${btnSize * 0.25}px`;
             }
 
             updateButtonSizes();
