@@ -4,408 +4,391 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sticker Canvas</title>
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+        html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            box-sizing: border-box;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
 
-        #canvas-container {
-            width: 90%;
-            max-width: 600px;
-            height: 80vh;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            position: relative;
-            margin-top: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 16px;
-            touch-action: none;
-        }
+#canvas-container {
+    width: 90%;
+    max-width: 600px;
+    height: 80vh;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    position: relative;
+    margin-top: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    touch-action: none;
+}
 
-        .sticker {
-            position: absolute;
-            height: auto;
-            cursor: grab;
-            user-select: none;
-            
-            box-sizing: border-box;
-            touch-action: none;
-            
-        }
+.sticker {
+    position: absolute;
+    height: auto;
+    cursor: grab;
+    user-select: none;
+    box-sizing: border-box;
+    touch-action: none;
+}
 
-        .sticker img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+.sticker img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
-        .sticker:active {
-            cursor: grabbing;
-            z-index: 100;
-        }
+.sticker:active {
+    cursor: grabbing;
+    z-index: 100;
+}
 
-        .sticker.locked {
-            cursor: grab;
-        }
+.sticker.locked {
+    cursor: grab;
+}
 
-        .sticker.locked:active {
-            cursor: grabbing;
-        }
+.sticker.locked:active {
+    cursor: grabbing;
+}
 
-        .sticker:focus {
-            outline: none;
-        }
+.sticker:focus {
+    outline: none;
+}
 
-        .sticker:hover > .delete-btn,
-        .sticker:hover > .copy-btn,
-        .sticker:hover > .lock-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+/* Base styles for buttons, with transitions for smooth fading */
+.copy-btn,
+.delete-btn,
+.lock-btn {
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: #c2bebeff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 101;
+    padding: 0;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 
-        .sticker.selected > .delete-btn,
-        .sticker.selected > .copy-btn,
-        .sticker.selected > .lock-btn {
-            display: flex;
-        }
+    /* These are the crucial lines for hiding and transitioning */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s, background-color 0.2s;
+}
 
-        .controls {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
+/* Specific button positions */
+.delete-btn {
+    top: 5%;
+    right: 5%;
+}
 
-        .bucket-active .sticker {
-            border: none !important;
-            transition: none !important;
-        }
+.copy-btn {
+    top: 5%;
+    left: 5%;
+}
 
-        .bucket-active .sticker .delete-btn,
-        .bucket-active .sticker .copy-btn,
-        .bucket-active .sticker .lock-btn {
-            display: none !important;
-        }
+.lock-btn {
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
-        .bucket-active .sticker:active,
-        .bucket-active .sticker:hover {
-            cursor: crosshair;
-        }
+/* Show buttons on hover or when the sticker has the 'selected' class */
+.sticker:hover > .delete-btn,
+.sticker:hover > .copy-btn,
+.sticker:hover > .lock-btn,
+.sticker.selected > .delete-btn,
+.sticker.selected > .copy-btn,
+.sticker.selected > .lock-btn {
+    opacity: 1;
+    visibility: visible;
+}
 
-        .ghost-sticker {
-            position: fixed;
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0.7;
-            width: 100px;
-            height: auto;
-            transform: translate(-50%, -50%);
-        }
+/* Hover effects for buttons */
+.copy-btn:hover {
+    background-color: #6aa84fff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
-        button {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            background: none;
-            cursor: pointer;
-            color: #333;
-            transition: transform 0.2s, color 0.2s;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+.delete-btn:hover {
+    background-color: #f26262ff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
-        button:focus, button:active {
-            outline: 0 !important;
-            box-shadow: none !important;
-        }
+.lock-btn:hover {
+    transform: scale(1.1) translateX(-50%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
-        button:hover {
-            color: #000;
-            transform: scale(1.1);
-        }
+/* Locked button state */
+.sticker.locked .lock-btn {
+    background-color: #ff9933;
+    transform: scale(1.1) translateX(-50%);
+}
 
-        button.active {
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            transform: scale(1.05);
-        }
+/* Bucket mode-specific overrides */
+.bucket-active .sticker {
+    border: none !important;
+    transition: none !important;
+}
 
-        .icon {
-            width: 1.4em;
-            height: 1.4em;
-            stroke: currentColor;
-        }
+.bucket-active .sticker .delete-btn,
+.bucket-active .sticker .copy-btn,
+.bucket-active .sticker .lock-btn {
+    display: none !important;
+}
 
-        .color-palette-container {
-            width: 90%;
-            max-width: 600px;
-            overflow-x: scroll;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            touch-action: pan-y;
-        }
+.bucket-active .sticker:active,
+.bucket-active .sticker:hover {
+    cursor: crosshair;
+}
 
-        .color-palette-container::-webkit-scrollbar {
-            display: none;
-        }
+/* ... (rest of your CSS) ... */
 
-        .color-palette {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 8px;
-            margin-top: 5px;
-            margin-bottom: 5px;
-            padding: 3px;
-            width: max-content;
-        }
+/* Remaining CSS from your provided code */
+.controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
 
- .color-swatch {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: transform 0.2s, border-color 0.2s;
-            flex-shrink: 0;
-            outline: 0 !important;
-            box-shadow: none !important;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: none;
-        }
-       
+.ghost-sticker {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.7;
+    width: 100px;
+    height: auto;
+    transform: translate(-50%, -50%);
+}
 
-         .color-swatch.active {
-            transform: scale(1.2);
-              border-color: #000000;
-        }
+button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #333;
+    transition: transform 0.2s, color 0.2s;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
 
+button:focus,
+button:active {
+    outline: 0 !important;
+    box-shadow: none !important;
+}
 
-        #sticker-palette-container {
-            display: none;
-        }
+button:hover {
+    color: #000;
+    transform: scale(1.1);
+}
 
-        /* Overlay box (popup wrapper) */
-        .overlay {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.95);
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            display: none;
-            /* <- start hidden */
-            z-index: 200;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            width: 80%;
-            height: 90%;
-            overflow-y: auto;
+button.active {
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    transform: scale(1.05);
+}
 
-            /* grid layout for children */
-            display: none;
-            /* important: no grid by default */
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
+.icon {
+    width: 1.4em;
+    height: 1.4em;
+    stroke: currentColor;
+}
 
-        .close-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            font-size: 18px;
-            cursor: pointer;
-            z-index: 300;
-        }
+.color-palette-container {
+    width: 90%;
+    max-width: 600px;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: pan-y;
+}
 
-        .close-btn:hover {
-            transform: scale(1.1);
-        }
+.color-palette-container::-webkit-scrollbar {
+    display: none;
+}
 
-        /* Show overlay */
-        .overlay.active {
-            display: block;
-        }
+.color-palette {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 3px;
+    width: max-content;
+}
 
-        /* Content inside overlay (grid of groups or stickers) */
-        .overlay-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            overflow-y: auto;
-            height: calc(100% - 40px);
-            /* leave space for close button */
-        }
+.color-swatch {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+    outline: 0 !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+}
 
-        /* Group icons */
-        .overlay-icon {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: transform 0.2s;
-        }
+.color-swatch.active {
+    transform: scale(1.2);
+    border-color: #000000;
+}
 
-        .overlay-icon:hover {
-            transform: scale(1.05);
-        }
+#sticker-palette-container {
+    display: none;
+}
 
-        /* Stickers */
-        .overlay-sticker {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: transform 0.2s;
-        }
+.overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    display: none;
+    z-index: 200;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    height: 90%;
+    overflow-y: auto;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
 
-        .overlay-sticker:hover {
-            transform: scale(1.1);
-        }
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 300;
+}
 
-        .copy-btn-icon {
-            width: 100%;
-            height: 100%;
-            fill: white;
-            stroke: white;
-        }
+.close-btn:hover {
+    transform: scale(1.1);
+}
 
-        .lock-btn-icon {
-            width: 60%;
-            height: 60%;
-            fill: white;
-            stroke: white;
-        }
+.overlay.active {
+    display: block;
+}
 
-        .delete-btn:focus,
-        .copy-btn:focus,
-        .lock-btn:focus,
-        .delete-btn:active,
-        .copy-btn:active,
-        .lock-btn:active {
-            outline: none;
-            box-shadow: none;
-        }
+.overlay-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    overflow-y: auto;
+    height: calc(100% - 40px);
+}
 
-        .delete-btn-icon {
-            width: 100%;
-            height: 100%;
-            fill: white;
-            stroke: white;
-        }
+.overlay-icon {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
 
-        .delete-btn {
-            position: absolute;
-            top: 5%;
-            right: 5%;
-            width: 20%;
-            height: 20%;
-            border-radius: 50%;
-            background-color: #c2bebeff;
-            color: white;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 101;
-            padding: 0;
-            transition: transform 0.2s, background-color 0.2s;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+.overlay-icon:hover {
+    transform: scale(1.05);
+}
 
-        .copy-btn {
-            position: absolute;
-            top: 5%;
-            left: 5%;
-            width: 20%;
-            height: 20%;
-            border-radius: 50%;
-            background-color: #c2bebeff;
-            color: white;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 101;
-            padding: 0;
-            transition: transform 0.2s, background-color 0.2s;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+.overlay-sticker {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.2s;
+}
 
-        .lock-btn {
-            position: absolute;
-            bottom: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20%;
-            height: 20%;
-            border-radius: 50%;
-            background-color: #c2bebeff;
-            color: white;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 101;
-            padding: 0;
-            transition: transform 0.2s, background-color 0.2s;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+.overlay-sticker:hover {
+    transform: scale(1.1);
+}
 
-        .lock-btn:hover {
-            transform: scale(1.1) translateX(-50%);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
+.copy-btn-icon {
+    width: 100%;
+    height: 100%;
+    fill: white;
+    stroke: white;
+}
 
-        .sticker.locked .lock-btn {
-            background-color: #ff9933; /* Orange when locked */
-            transform: scale(1.1) translateX(-50%);
-        }
+.lock-btn-icon {
+    width: 60%;
+    height: 60%;
+    fill: white;
+    stroke: white;
+}
 
-        .copy-btn:hover {
-            background-color: #6aa84fff;
-            transform: scale(1.1);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
+.delete-btn-icon {
+    width: 100%;
+    height: 100%;
+    fill: white;
+    stroke: white;
+}
 
-        .delete-btn:hover {
-            background-color: #f26262ff;
-            transform: scale(1.1);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
+.lock-btn:hover {
+    transform: scale(1.1) translateX(-50%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.sticker.locked .lock-btn {
+    background-color: #ff9933;
+    transform: scale(1.1) translateX(-50%);
+}
+
+.copy-btn:hover {
+    background-color: #6aa84fff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.delete-btn:hover {
+    background-color: #f26262ff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -1590,11 +1573,24 @@ function handleMove(e) {
 }
 
 function handleEnd() {
+    // Remove event listeners
     document.removeEventListener('mousemove', handleMove);
     document.removeEventListener('mouseup', handleEnd);
-    document.removeEventListener('touchmove', handleMove, { passive: false });
+    document.removeEventListener('touchmove', handleMove);
     document.removeEventListener('touchend', handleEnd);
+
+    // Remove the .selected class from the active sticker
+    if (activeSticker) {
+        activeSticker.classList.remove('selected');
+    }
+
+    // Reset state variables
     activeSticker = null;
+    initialRect = null;
+    initialTouchDistance = 0;
+    initialStickerWidth = 0;
+    initialStickerHeight = 0;
+    
     saveState();
 }
 
@@ -1813,40 +1809,42 @@ function handleEnd() {
             }
         });
 
-        function addOrReplaceSticker(newUrl) {
-            const unlockedSticker = document.querySelector('.sticker:not(.locked)');
-            const stickerSize = 120;
-            const canvasWidth = canvas.offsetWidth;
-            const canvasHeight = canvas.offsetHeight;
-            const centerX = (canvasWidth / 2) - (stickerSize / 2);
-            const centerY = (canvasHeight / 2) - (stickerSize / 2);
+  function addOrReplaceSticker(newUrl) {
+    const unlockedSticker = document.querySelector('.sticker:not(.locked)');
+    const stickerSize = 120;
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
 
-            if (unlockedSticker) {
-                unlockedSticker.querySelector('img').src = newUrl;
-            } else {
-                addSticker(newUrl, centerX, centerY, stickerSize);
-            }
-            saveState();
-        }
+    if (unlockedSticker) {
+        // Hide the sticker temporarily
+        unlockedSticker.style.opacity = '0';
+        
+        // Update the sticker's properties
+        unlockedSticker.querySelector('img').src = newUrl;
+        unlockedSticker.style.width = `${stickerSize}px`;
+        unlockedSticker.style.height = 'auto';
+        unlockedSticker.style.left = `${centerX}px`;
+        unlockedSticker.style.top = `${centerY}px`;
+        
+        // Use an event listener to show the sticker only after the image has loaded
+        unlockedSticker.querySelector('img').onload = () => {
+            unlockedSticker.style.opacity = '1';
+        };
 
+    } else {
+        // Create a brand new sticker if none are unlocked
+        addSticker(newUrl, centerX, centerY, stickerSize);
+    }
+    saveState();
+}
 
-        addStickerBtn.addEventListener('click', () => {
-            const allUrls = stickerGroups.flatMap(group => group.urls);
-            const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
-            const unlockedSticker = document.querySelector('.sticker:not(.locked)');
-
-            if (unlockedSticker) {
-                unlockedSticker.querySelector('img').src = randomUrl;
-            } else {
-                const stickerSize = 120;
-                const canvasWidth = canvas.offsetWidth;
-                const canvasHeight = canvas.offsetHeight;
-                const centerX = (canvasWidth / 2) - (stickerSize / 2);
-                const centerY = (canvasHeight / 2) - (stickerSize / 2);
-                addSticker(randomUrl, centerX, centerY, stickerSize);
-            }
-            saveState();
-        });
+addStickerBtn.addEventListener('click', () => {
+    const allUrls = stickerGroups.flatMap(group => group.urls);
+    const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+    addOrReplaceSticker(randomUrl);
+});
 
         window.addEventListener('load', () => {
             if (window.lucide) {
