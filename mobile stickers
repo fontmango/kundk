@@ -1322,6 +1322,15 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     stickerImg.draggable = false;
     stickerImg.classList.add("protected");
     sticker.appendChild(stickerImg);
+
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth - width) / 2;
+    const centerY = (canvasHeight - height) / 2;
+
+    sticker.style.left = `${centerX}px`;
+    sticker.style.top = `${centerY}px`;
+    
     if (x !== undefined && y !== undefined) {
         sticker.style.left = `${x}px`;
         sticker.style.top = `${y}px`;
@@ -1661,20 +1670,43 @@ function updateUndoRedoButtons() {
 }
 
 // MODIFIED: This function now correctly handles replacing the sticker and centering it
-function addOrReplaceSticker(newUrl) {
-    const existingSticker = document.querySelector('#canvas-container .sticker');
-    if (existingSticker) {
-        existingSticker.querySelector('img').src = newUrl;
+  function addOrReplaceSticker(newUrl) {
+    const unlockedSticker = document.querySelector('.sticker:not(.locked)');
+    const stickerSize = 120;
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
+
+    if (unlockedSticker) {
+        // Hide the sticker temporarily
+        unlockedSticker.style.opacity = '0';
+        
+        // Update the sticker's properties
+        unlockedSticker.querySelector('img').src = newUrl;
+        unlockedSticker.style.width = `${stickerSize}px`;
+        unlockedSticker.style.height = 'auto';
+        unlockedSticker.style.left = `${centerX}px`;
+        unlockedSticker.style.top = `${centerY}px`;
+        
+        // Use an event listener to show the sticker only after the image has loaded
+        unlockedSticker.querySelector('img').onload = () => {
+            unlockedSticker.style.opacity = '1';
+        };
+
     } else {
-        const stickerSize = 120;
-        const canvasWidth = canvas.offsetWidth;
-        const canvasHeight = canvas.offsetHeight;
-        const centerX = (canvasWidth / 2) - (stickerSize / 2);
-        const centerY = (canvasHeight / 2) - (stickerSize / 2);
+        // Create a brand new sticker if none are unlocked
         addSticker(newUrl, centerX, centerY, stickerSize);
     }
     saveState();
 }
+
+addStickerBtn.addEventListener('click', () => {
+    const allUrls = stickerGroups.flatMap(group => group.urls);
+    const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+    addOrReplaceSticker(randomUrl);
+});
+
 
 addStickerBtn.addEventListener('click', () => {
     const allUrls = stickerGroups.flatMap(group => group.urls);
