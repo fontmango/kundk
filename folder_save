@@ -776,6 +776,7 @@ function showSuccessPopup() {
 
 document.getElementById("success-ok-btn").addEventListener("click", () => {
   document.getElementById("success-popup").classList.add("hidden");
+  document.getElementById("folder-overlay").classList.add("hidden");
 });
 
 sendBtn.addEventListener("click", () => {
