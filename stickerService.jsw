@@ -1,0 +1,27 @@
+import wixData from "wix-data";
+
+// Simple UUID generator
+function generateUUID() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0,
+              v = c === "x" ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+export async function saveStickersToFolder(urls) {
+    try {
+        const item = {
+             // change or make dynamic
+            stickerUrls: urls,
+            uuid: generateUUID() 
+        };
+
+        const result = await wixData.insert("stickerFolders", item);
+        console.log("✅ CMS entry created:", result);
+        return result;
+    } catch (err) {
+        console.error("❌ Error saving to CMS:", err);
+        throw err;
+    }
+}
