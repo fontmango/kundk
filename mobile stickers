@@ -777,16 +777,33 @@
 }
 
 
-#folder.pulse {
-  animation: folderPulse 0.5s ease;
+#folder.success.pulse {
+  animation: folderPulseGreen 0.5s ease;
 }
 
-@keyframes folderPulse {
+@keyframes folderPulseGreen {
   0%   { transform: scale(1); box-shadow: 0 0 0px rgba(0, 200, 0, 0.6); }
   50%  { transform: scale(1.1); box-shadow: 0 0 15px rgba(0, 200, 0, 0.8); }
   100% { transform: scale(1); box-shadow: 0 0 0px rgba(0, 200, 0, 0.6); }
 }
 
+/* ❌ Red pulse (full) */
+#folder.full.shake {
+  animation: folderPulseRed 0.5s ease, shake 0.6s ease;
+}
+
+@keyframes folderPulseRed {
+  0%   { transform: scale(1); box-shadow: 0 0 0px rgba(200, 0, 0, 0.6); }
+  50%  { transform: scale(1.1); box-shadow: 0 0 15px rgba(200, 0, 0, 0.8); }
+  100% { transform: scale(1); box-shadow: 0 0 0px rgba(200, 0, 0, 0.6); }
+}
+
+/* Shake effect */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -1567,35 +1584,36 @@ function handleEnd() {
             stickerRect.top < folderRect.bottom;
 
         if (isOverFolder) {
-            const stickerUrl = activeSticker.querySelector("img").src;
+                  if (folderUrls.length >= MAX_FOLDER_IMAGES) {
+    // ❌ Folder full → red glow + shake
+    folder.classList.add("full", "shake");
+    setTimeout(() => folder.classList.remove("full", "shake"), 600);
 
-            // Calculate move vector
-            const dx = folderRect.left + folderRect.width / 2 - (stickerRect.left + stickerRect.width / 2);
-            const dy = folderRect.top + folderRect.height / 2 - (stickerRect.top + stickerRect.height / 2);
+    // Sticker snaps back
+    activeSticker.style.transition = "transform 0.3s ease";
+    activeSticker.style.transform = "translate(0, 0) scale(1)";
+    activeSticker.style.opacity = "1";
 
-            // Animate into folder
-            activeSticker.style.transition = "transform 0.4s ease, opacity 0.4s ease";
-            activeSticker.style.transform = `translate(${dx}px, ${dy}px) scale(0.1)`;
-            activeSticker.style.opacity = "0";
+} else {
+    // ✅ Success → green pulse
+    folder.classList.add("success", "pulse");
+    setTimeout(() => folder.classList.remove("success", "pulse"), 500);
 
-            // Glow effect
-            folder.classList.add("pulse");
-            setTimeout(() => folder.classList.remove("pulse"), 500);
+    const stickerUrl = activeSticker.querySelector("img").src;
 
-            // After animation → handle storage
-            setTimeout(() => {
-                if (folderUrls.length < MAX_FOLDER_IMAGES) {
-                    addToFolder(stickerUrl, activeSticker);  // ✅ delegate here
-                } else {
-                    // ❌ Folder full → reset sticker back
-                    activeSticker.style.transition = "";
-                    activeSticker.style.transform = "";
-                    activeSticker.style.opacity = "1";
+    const dx = folderRect.left + folderRect.width / 2 - (stickerRect.left + stickerRect.width / 2);
+    const dy = folderRect.top + folderRect.height / 2 - (stickerRect.top + stickerRect.height / 2);
 
-                    folder.classList.add("shake");
-                    setTimeout(() => folder.classList.remove("shake"), 500);
-                }
-            }, 400);
+    activeSticker.style.transition = "transform 0.4s ease, opacity 0.4s ease";
+    activeSticker.style.transform = `translate(${dx}px, ${dy}px) scale(0.1)`;
+    activeSticker.style.opacity = "0";
+
+    setTimeout(() => {
+        addToFolder(stickerUrl, activeSticker);
+    }, 400);
+}
+
+
         }
 
         activeSticker.classList.remove("selected");
@@ -1610,6 +1628,9 @@ function handleEnd() {
 
     saveState();
 }
+
+
+
 
 
 
