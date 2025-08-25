@@ -624,6 +624,12 @@ folder.addEventListener("drop", (e) => {
     e.preventDefault();
     e.currentTarget.classList.remove("drag-over");
 
+     if (folderUrls.length >= MAX_FOLDER_IMAGES) {
+        updateFolderUI();  // 🔹 show red full state
+        console.warn("🚫 Folder limit reached");
+        return;
+    }
+
     const jsonData = e.dataTransfer.getData("application/json");
     if (jsonData) {
         try {
