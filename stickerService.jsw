@@ -9,7 +9,7 @@ function generateUUID() {
     });
 }
 
-export async function saveStickersToFolder(urls) {
+export async function saveStickersToFolder(urls,email) {
     try {
         // generate uuid ONCE
         const newUuid = generateUUID();
@@ -17,6 +17,8 @@ export async function saveStickersToFolder(urls) {
         const item = {
             stickerUrls: urls,
             uuid: newUuid,
+            email: email, 
+            url_amount: urls.length,
             createdDate: new Date()
         };
 
@@ -25,7 +27,9 @@ export async function saveStickersToFolder(urls) {
 
         // reuse same uuid for trigger payload
         await runTrigger({
-            uuid: newUuid
+            uuid: newUuid,
+            email: email, 
+            url_amount: urls.length,
         });
 
         return result;
