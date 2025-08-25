@@ -1567,34 +1567,41 @@ function handleEnd() {
             stickerRect.top < folderRect.bottom;
 
         if (isOverFolder) {
-            const stickerUrl = activeSticker.querySelector("img")?.src;
+            const stickerUrl = activeSticker.querySelector("img").src;
 
-            if (stickerUrl) {
-                const dx = folderRect.left + folderRect.width / 2 - (stickerRect.left + stickerRect.width / 2);
-                const dy = folderRect.top + folderRect.height / 2 - (stickerRect.top + stickerRect.height / 2);
+            // Calculate move vector
+            const dx = folderRect.left + folderRect.width / 2 - (stickerRect.left + stickerRect.width / 2);
+            const dy = folderRect.top + folderRect.height / 2 - (stickerRect.top + stickerRect.height / 2);
 
-                // Animate shrink into folder
-                activeSticker.style.transition = "transform 0.4s ease, opacity 0.4s ease";
-                activeSticker.style.transform = `translate(${dx}px, ${dy}px) scale(0.1)`;
-                activeSticker.style.opacity = "0";
+            // Animate into folder
+            activeSticker.style.transition = "transform 0.4s ease, opacity 0.4s ease";
+            activeSticker.style.transform = `translate(${dx}px, ${dy}px) scale(0.1)`;
+            activeSticker.style.opacity = "0";
 
-                folder.classList.add("pulse");
+            // Glow effect
+            folder.classList.add("pulse");
+            setTimeout(() => folder.classList.remove("pulse"), 500);
 
-                setTimeout(() => {
-                    // Use the shared function so count + overlay updates properly
-                    addToFolder(stickerUrl, activeSticker);
+            // After animation → handle storage
+            setTimeout(() => {
+                if (folderUrls.length < MAX_FOLDER_IMAGES) {
+                    addToFolder(stickerUrl, activeSticker);  // ✅ delegate here
+                } else {
+                    // ❌ Folder full → reset sticker back
+                    activeSticker.style.transition = "";
+                    activeSticker.style.transform = "";
+                    activeSticker.style.opacity = "1";
 
-                    folder.classList.remove("pulse");
-                    folder.classList.remove("drag-over");
-                }, 400);
-            }
-        } else {
-            folder.classList.remove("drag-over");
+                    folder.classList.add("shake");
+                    setTimeout(() => folder.classList.remove("shake"), 500);
+                }
+            }, 400);
         }
 
         activeSticker.classList.remove("selected");
     }
 
+    // Reset state
     activeSticker = null;
     initialRect = null;
     initialTouchDistance = 0;
@@ -1603,6 +1610,7 @@ function handleEnd() {
 
     saveState();
 }
+
 
 
 
