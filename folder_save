@@ -113,7 +113,7 @@
             box-shadow: none !important;
         }
 
-        button:hover {
+        .controls button:hover {
             color: #000;
             transform: scale(1.1);
         }
@@ -353,16 +353,21 @@
 #folder-overlay .overlay-sticker {
   width: 100%;
   max-width: 120px;
-  border: 1px solid #ddd;
   border-radius: 8px;
 }
 
+/* Sticker image */
+#folder-overlay .overlay-sticker:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
 /* Delete button inside folder overlay */
 #folder-overlay .delete-sticker-btn {
   position: absolute;
   top: 4px;
   right: 4px;
-  background: red;
+  background: #c2bebeff;
   color: white;
   border: none;
   border-radius: 50%;
@@ -372,6 +377,8 @@
   line-height: 20px;
   text-align: center;
   cursor: pointer;
+  transform: none !important; /* cancel global scaling */
+  box-shadow: none !important;
 }
 
 #folder.full {
