@@ -500,7 +500,7 @@
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  z-index: 9999;
+  z-index: 11001;
   text-align: center;
 }
 
@@ -511,6 +511,43 @@
 .success-box p {
   margin-bottom: 10px;
   font-size: 16px;
+}
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  z-index: 2000;
+ 
+}
+
+#loading-popup {
+  position: fixed;  /* instead of absolute */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  z-index: 11001;   /* higher than folder-overlay */
+}
+
+#loading-popup .popup-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  
+}
+
+.hidden {
+  display: none !important;
 }
 
     </style>
@@ -566,20 +603,18 @@
   </div>
 </div>
 
-<div id="success-popup" class="hidden" style="
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  border: 2px solid black;
-  padding: 20px;
-  border-radius: 8px;
-  z-index: 10000;
-">
-  <p>✅ Success! Your stickers have been saved.</p>
-  <button id="success-ok-btn">OK</button>
+<div id="success-popup" class="hidden">
+  <div class="success-box">
+    <p>✅ Stickers saved successfully!</p>
+    <button id="success-ok-btn">OK</button>
+  </div>
 </div>
 
+<div id="loading-popup" class="hidden">
+  <div class="popup-content">
+    <p>⏳ Saving your stickers...</p>
+  </div>
+</div>
 
     <script>
         const stickerGroups = [
@@ -719,16 +754,25 @@ async function saveFolderDataToWix(urls) {
     }
 }
 
+window.addEventListener("message", (event) => {
+  if (event.data.type === "saveSuccess") {
+    document.getElementById("loading-popup").classList.add("hidden");
+    document.getElementById("success-popup").classList.remove("hidden");
+  }
+  if (event.data.type === "saveError") {
+    document.getElementById("loading-popup").classList.add("hidden");
+    alert("❌ Something went wrong: " + event.data.error);
+  }
+});
+
 // Cancel hides popup
 cancelBtn.addEventListener("click", () => {
   popup.classList.add("hidden");
 });
 
-window.addEventListener("message", (event) => {
-  if (event.data.type === "saveSuccess") {
-    document.getElementById("success-popup").classList.remove("hidden");
-  }
-});
+function showSuccessPopup() {
+  document.getElementById("success-popup").classList.remove("hidden");
+}
 
 document.getElementById("success-ok-btn").addEventListener("click", () => {
   document.getElementById("success-popup").classList.add("hidden");
@@ -741,14 +785,17 @@ sendBtn.addEventListener("click", () => {
     return;
   }
 
-  popup.classList.add("hidden"); // close popup
+  popup.classList.add("hidden"); // hide email popup
+  document.getElementById("loading-popup").classList.remove("hidden"); // show loading
 
+  // Now actually save
   window.parent.postMessage({
     type: "saveStickers",
     urls: folderUrls,
     email: email
   }, "*");
 });
+
 
 // Drag and drop events for the folder
 folder.addEventListener('dragover', (e) => {
@@ -1171,7 +1218,7 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
             return; // block adding
         } else {
             const stickerUrl = activeSticker.querySelector('img').src;
-            activeSticker.remove();findow.parent.postMessa
+            activeSticker.remove();
             folderUrls.push(stickerUrl);
             folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
             saveFolderDataToWix(folderUrls);
