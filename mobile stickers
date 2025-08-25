@@ -1247,45 +1247,56 @@ function setBucketMode(enabled) {
 
 function saveState() {
     if (isRestoring) return;
+
     const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
     const currentState = {
         stickers: []
     };
+
     stickersOnCanvas.forEach(sticker => {
         const stickerImg = sticker.querySelector('img');
         if (stickerImg) {
             currentState.stickers.push({
-                url: stickerImg.src,
-                x: sticker.offsetLeft,
-                y: sticker.offsetTop,
-                width: sticker.offsetWidth,
-                height: sticker.offsetHeight,
-                locked: sticker.classList.contains('locked')
+                url: stickerImg.src
+                // no x, y, width, height, locked anymore
             });
         }
     });
+
     const prevState = history[history.length - 1];
     if (JSON.stringify(prevState) !== JSON.stringify(currentState)) {
         history.push(currentState);
     }
+
     redoStack = [];
     updateUndoButton();
 }
 
 function loadState(state) {
     isRestoring = true;
-    canvas.innerHTML = '';
+
+    // Clear only stickers from canvas
+    document.querySelectorAll('#canvas-container .sticker').forEach(sticker => {
+        canvas.removeChild(sticker);
+    });
+
+    // Recreate stickers centered (or however you prefer)
     state.stickers.forEach(data => {
-        const newSticker = addSticker(data.url, data.x, data.y, data.width, data.height, {
+        const stickerSize = 120;
+        const canvasWidth = canvas.offsetWidth;
+        const canvasHeight = canvas.offsetHeight;
+        const centerX = (canvasWidth / 2) - (stickerSize / 2);
+        const centerY = (canvasHeight / 2) - (stickerSize / 2);
+
+        addSticker(data.url, centerX, centerY, stickerSize, stickerSize, {
             suppressSave: true
         });
-        if (data.locked) {
-            newSticker.classList.add('locked');
-        }
     });
+
     isRestoring = false;
     updateUndoRedoButtons();
 }
+
 
 function deselectAllStickers() {
     document.querySelectorAll('.sticker').forEach(s => {
@@ -1478,7 +1489,7 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
         }
     }
 
-   function handleEnd() {
+ function handleEnd() {
     // Remove event listeners
     document.removeEventListener("mousemove", handleMove);
     document.removeEventListener("mouseup", handleEnd);
@@ -1527,15 +1538,9 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
                 }, 400);
             }
         } else {
-            const stickerSize = 120;
-            const canvasWidth = canvas.offsetWidth;
-            const canvasHeight = canvas.offsetHeight;
-            const centerX = (canvasWidth / 2) - (stickerSize / 2);
-            const centerY = (canvasHeight / 2) - (stickerSize / 2);
-            activeSticker.style.transition = "left 0.3s ease, top 0.3s ease, width 0.3s ease";
-            activeSticker.style.left = `${centerX}px`;
-            activeSticker.style.top = `${centerY}px`;
-            activeSticker.style.width = `${stickerSize}px`;
+            
+          
+           
             activeSticker.style.opacity = "1";
         }
         activeSticker.classList.remove("selected");
