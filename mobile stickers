@@ -1220,9 +1220,13 @@ function updateUndoRedoButtons() {
 
         function updateCanvasDrop() {
             const canvas = document.getElementById('canvas-container');
-            canvas.removeEventListener('drop', handleCanvasDrop); 
-            canvas.addEventListener('drop', handleCanvasDrop); 
+            canvas.removeEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+            canvas.removeEventListener('drop', handleCanvasDrop);
+            canvas.addEventListener('drop', handleCanvasDrop);
         }
+
 
         function handleCanvasDrop(e) {
             e.preventDefault();
