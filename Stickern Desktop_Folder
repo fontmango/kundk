@@ -610,6 +610,27 @@
   100% { content: '...'; }
 }
 
+#success-popup .success-ok-btn {
+  background-color: #28a745;   /* nice green */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#success-popup .success-ok-btn:hover {
+  background-color: #218838;
+}
+
+#success-popup .success-ok-btn:active {
+  transform: scale(0.96);
+}
+
 #error-message {
   color: red;
   font-size: 13px;
@@ -680,7 +701,7 @@
 <div id="success-popup" class="hidden">
   <div class="success-box">
     <p id="success-message">Stickers saved successfully!</p>
-    <button id="success-ok-btn">OK</button>
+     <button id="success-ok-btn" class="success-ok-btn">OK</button>
   </div>
 </div>
 
@@ -867,7 +888,7 @@ window.addEventListener("message", (event) => {
     document.getElementById("loading-popup").classList.add("hidden");
      const count = event.data.urlAmount || 0;
     document.getElementById("success-message").textContent =
-      `✅ Saved ${count} stickers successfully!`;
+      `Saved ${count} stickers successfully!`;
     document.getElementById("success-popup").classList.remove("hidden");
   }
   if (event.data.type === "saveError") {
