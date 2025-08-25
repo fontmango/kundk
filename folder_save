@@ -452,12 +452,54 @@
   opacity: 0.4;
 }
 
+#email-popup {
+  position: fixed; /* use fixed so it’s always on top of the viewport */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  z-index: 11000; /* higher than folder-overlay */
+  width: 280px;
+  text-align: center;
+}
+
+#email-popup.hidden {
+  display: none;
+}
+
+#email-popup input {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+#email-popup .popup-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+#email-popup button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
+
+
+
     <div class="controls">
     <button id="add-sticker-btn" title="Überrasche mich">
         <i data-lucide="shuffle" class="icon"></i>
@@ -491,6 +533,17 @@
 <div id="sticker-palette-container"></div>
 <div id="overlay-container"></div>
 <div id="folder-overlay"></div> 
+
+<!-- Email Popup -->
+<div id="email-popup" class="email-popup hidden">
+  <h3>Enter your email</h3>
+  <input type="email" id="email-input" placeholder="your@email.com" required />
+  <div class="popup-actions">
+    <button id="cancel-btn">Cancel</button>
+    <button id="send-btn">Send</button>
+  </div>
+</div>
+
 
     <script>
         const stickerGroups = [
@@ -547,7 +600,13 @@
         ];
 
 
-      // Add these new variables at the top of your script
+
+const saveBtn = document.getElementById("save-btn");
+const popup = document.getElementById("email-popup");
+const cancelBtn = document.getElementById("cancel-btn");
+const sendBtn = document.getElementById("send-btn");
+const emailInput = document.getElementById("email-input");
+
 const folder = document.getElementById('folder');
 const folderCount = document.getElementById('folder-count');
 let folderUrls = [];
@@ -691,6 +750,7 @@ saveBtn.className = "overlay-save";
 saveBtn.disabled = true; // 🚫 disabled at start
 
 saveBtn.addEventListener("click", () => {
+     popup.classList.remove("hidden");
     if (folderUrls.length === 0) return; // extra safety
     console.log("💾 Save button clicked in HTML");
     window.parent.postMessage({
