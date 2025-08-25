@@ -5,12 +5,13 @@
     <title>Sticker Canvas</title>
     <style>
       
-          
-      img.protected {
-  -webkit-touch-callout: none; /* disable "Save Image" on iOS Safari */
-  -webkit-user-select: none;   /* prevent text/image selection */
-  -webkit-user-drag: none;     /* prevent dragging image to new tab */
+    img.protected {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
+  pointer-events: none; /* <- Optional: makes the image "unclickable" */
 }
       
         html, body {
@@ -1071,26 +1072,7 @@ folder.addEventListener("drop", (e) => {
     }
 });
 
-// --- Mobile Tap-to-Save Fallback ---
-document.addEventListener("touchstart", (e) => {
-    const sticker = e.target.closest(".sticker");
-    if (!sticker) return;
-    let pressTimer = setTimeout(() => {
-        const img = sticker.querySelector("img");
-        if (!img) return;
-        const stickerUrl = img.src;
-        addToFolder(stickerUrl, sticker);
-        folder.classList.add("pulse");
-        setTimeout(() => folder.classList.remove("pulse"), 500);
-    }, 500);
-    folder.classList.add("drag-over");
-    const cancel = () => {
-        clearTimeout(pressTimer);
-        folder.classList.remove("drag-over");
-    };
-    sticker.addEventListener("touchend", cancel, { once: true });
-    sticker.addEventListener("touchmove", cancel, { once: true });
-});
+
 
 
 
@@ -1870,34 +1852,19 @@ addSwipeFunctionality();
 populateColorPalette();
 saveState();
 
+// Block long-press save menu on mobile
+document.addEventListener("touchstart", function(e) {
+    if (e.target.tagName === "IMG" && e.target.classList.contains("protected")) {
+        e.preventDefault();
+    }
+}, { passive: false });
+
 document.addEventListener("contextmenu", function(e) {
     if (e.target.tagName === "IMG" && e.target.classList.contains("protected")) {
         e.preventDefault();
     }
 }, false);
 
-// A new function to update the browser's history without adding a new entry
-function updateState() {
-    const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-    const currentState = {
-        stickers: []
-    };
-    stickersOnCanvas.forEach(sticker => {
-        const stickerImg = sticker.querySelector('img');
-        if (stickerImg) {
-            currentState.stickers.push({
-                url: stickerImg.src,
-                x: sticker.offsetLeft,
-                y: sticker.offsetTop,
-                width: sticker.offsetWidth,
-                height: sticker.offsetHeight,
-                locked: sticker.classList.contains('locked')
-            });
-        }
-    });
-    // Replace the current history state with the new state
-    history.replaceState(currentState, "", window.location.href);
-}
 
       
     </script>
