@@ -961,14 +961,26 @@ function handleMove(e) {
 }
 
 function handleEnd() {
+    // Remove event listeners
     document.removeEventListener('mousemove', handleMove);
     document.removeEventListener('mouseup', handleEnd);
-    document.removeEventListener('touchmove', handleMove, { passive: false });
+    document.removeEventListener('touchmove', handleMove);
     document.removeEventListener('touchend', handleEnd);
+
+    // Remove the .selected class from the active sticker
+    if (activeSticker) {
+        activeSticker.classList.remove('selected');
+    }
+
+    // Reset state variables
     activeSticker = null;
+    initialRect = null;
+    initialTouchDistance = 0;
+    initialStickerWidth = 0;
+    initialStickerHeight = 0;
+    
     saveState();
 }
-
     // --- Event Listeners ---
     sticker.addEventListener('mousedown', startInteraction);
     sticker.addEventListener('touchstart', startInteraction);
