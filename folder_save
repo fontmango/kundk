@@ -491,6 +491,28 @@
   cursor: pointer;
 }
 
+#success-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  z-index: 9999;
+  text-align: center;
+}
+
+#success-popup.hidden {
+  display: none;
+}
+
+.success-box p {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -542,6 +564,20 @@
     <button id="cancel-btn">Cancel</button>
     <button id="send-btn">Send</button>
   </div>
+</div>
+
+<div id="success-popup" class="hidden" style="
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 2px solid black;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 10000;
+">
+  <p>✅ Success! Your stickers have been saved.</p>
+  <button id="success-ok-btn">OK</button>
 </div>
 
 
@@ -688,6 +724,16 @@ cancelBtn.addEventListener("click", () => {
   popup.classList.add("hidden");
 });
 
+window.addEventListener("message", (event) => {
+  if (event.data.type === "saveSuccess") {
+    document.getElementById("success-popup").classList.remove("hidden");
+  }
+});
+
+document.getElementById("success-ok-btn").addEventListener("click", () => {
+  document.getElementById("success-popup").classList.add("hidden");
+});
+
 sendBtn.addEventListener("click", () => {
   const email = emailInput.value.trim();
   if (!email || !email.includes("@")) {
@@ -697,14 +743,12 @@ sendBtn.addEventListener("click", () => {
 
   popup.classList.add("hidden"); // close popup
 
-  // Now actually save
   window.parent.postMessage({
     type: "saveStickers",
     urls: folderUrls,
     email: email
   }, "*");
 });
-
 
 // Drag and drop events for the folder
 folder.addEventListener('dragover', (e) => {
@@ -1127,7 +1171,7 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
             return; // block adding
         } else {
             const stickerUrl = activeSticker.querySelector('img').src;
-            activeSticker.remove();
+            activeSticker.remove();findow.parent.postMessa
             folderUrls.push(stickerUrl);
             folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
             saveFolderDataToWix(folderUrls);
