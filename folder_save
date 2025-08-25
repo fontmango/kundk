@@ -413,19 +413,21 @@
 }
 
 .overlay-save {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #4caf50;
-  color: white;
+  padding: 8px 14px;
   border: none;
   border-radius: 6px;
-  padding: 6px 12px;
-  cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
+  background: black;
+  color: white;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
 }
-.overlay-save:hover {
-  background: #45a049;
+
+.overlay-save:disabled {
+  background: #ccc;   /* grey background */
+  color: #666;        /* faded text */
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 
@@ -585,6 +587,7 @@ const colors = [
 // Your new function to handle saving the data
 // This function will need to be connected to your Wix Velo backend
 async function saveFolderDataToWix(urls) {
+
     try {
         // This is a placeholder. You will need to replace this with your actual
         // Wix Velo backend function call, for example:
@@ -645,19 +648,29 @@ folder.addEventListener('drop', (e) => {
 function renderFolderOverlay() {
     folderOverlay.innerHTML = "";
 
-    // Save button (top-left)
+// Save button (top-left)
 const saveBtn = document.createElement("button");
 saveBtn.textContent = "Save";
 saveBtn.className = "overlay-save";
-// 👉 put the event listener right here:
+saveBtn.disabled = true; // 🚫 disabled at start
+
 saveBtn.addEventListener("click", () => {
+    if (folderUrls.length === 0) return; // extra safety
     console.log("💾 Save button clicked in HTML");
     window.parent.postMessage({
         type: "saveStickers",
-        urls: folderUrls   // this should be the array you’re collecting
+        urls: folderUrls
     }, "*");
 });
+
 folderOverlay.appendChild(saveBtn);
+
+function updateSaveButton() {
+    saveBtn.disabled = folderUrls.length === 0;
+}
+
+// initialize state
+updateSaveButton();
 
     // Close button
     const closeBtn = document.createElement("button");
@@ -703,6 +716,8 @@ folderOverlay.appendChild(saveBtn);
 
     folderOverlay.style.display = "grid";
 }
+
+
 
 // --- CLICK TO OPEN OVERLAY ---
 folder.addEventListener("click", () => {
