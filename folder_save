@@ -176,20 +176,20 @@
         .palette-sticker:hover {
             transform: scale(1.1);
         }
-        #overlay-container {
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.95);
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            display: none;
-            z-index: 200;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            width: 350px;
-        }
 
+#overlay-container {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  display: none;
+  z-index: 200;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  width: 350px;
+}
         .overlay-sticker {
             width: 100%;
             height: auto;
@@ -276,14 +276,14 @@
 
     
 
-        #folder {
+     #folder {
     position: absolute;
     bottom: 20px;
     right: 20px;
     width: 80px;
     height: 80px;
-    background-color: #f0f0f0;
-    border: 2px solid #ccc;
+    
+    border: 2px dotted #ccc;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -296,7 +296,7 @@
 }
 
 #folder:hover {
-    background-color: #e0e0e0;
+    background-color: #d0d0d0;
     transform: scale(1.05);
 }
 
@@ -340,8 +340,8 @@
 
 #folder-overlay .overlay-close {
   position: absolute;
-  top: 3px;   /* move it further up */
-  right: 3px; /* move it further right */
+  top: 8px;   /* move it further up */
+  right: 8px; /* move it further right */
   z-index: 9999;
   background: #444;
   color: white;
@@ -430,7 +430,7 @@
 }
 
 .overlay-save {
-  padding: 8px 14px;
+ 
   border: none;
   border-radius: 6px;
   font-weight: bold;
@@ -779,6 +779,8 @@ function showSuccessPopup() {
 document.getElementById("success-ok-btn").addEventListener("click", () => {
   document.getElementById("success-popup").classList.add("hidden");
   document.getElementById("folder-overlay").classList.add("hidden");
+  folderOverlay.classList.remove("hidden");
+  
 });
 
 sendBtn.addEventListener("click", () => {
@@ -790,6 +792,8 @@ sendBtn.addEventListener("click", () => {
 
   popup.classList.add("hidden"); // hide email popup
   document.getElementById("loading-popup").classList.remove("hidden"); // show loading
+document.querySelector(".controls").classList.remove("disabled");
+         enablePaletteStickers();
 
   // Now actually save
   window.parent.postMessage({
@@ -863,7 +867,12 @@ function renderFolderOverlay() {
 
 // Save button (top-left)
 const saveBtn = document.createElement("button");
-saveBtn.textContent = "Save";
+saveBtn.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7zM12 19a2 2 0 1 1 0-4 
+             2 2 0 0 1 0 4zm3-10H5V5h10z"/>
+  </svg>
+`;
 saveBtn.className = "overlay-save";
 saveBtn.disabled = true; // 🚫 disabled at start
 
@@ -1467,43 +1476,39 @@ let activeGroupURLs = [];
 function showOverlay(e, urls) {
     activeGroupURLs = urls;
     overlayContainer.innerHTML = '';
+
     urls.forEach(url => {
         const overlaySticker = document.createElement('img');
         overlaySticker.src = url;
         overlaySticker.classList.add('overlay-sticker');
         overlaySticker.draggable = true;
+
         overlaySticker.addEventListener('dragstart', (e) => {
             e.stopPropagation();
             e.dataTransfer.setData('application/json', JSON.stringify({
                 url: e.target.src,
                 width: 200
             }));
-             e.dataTransfer.setData("source", "overlay");
+            e.dataTransfer.setData("source", "overlay");
         });
+
         overlaySticker.addEventListener('click', (e) => {
             e.stopPropagation();
             addSticker(url);
-            // saveState() is now in addSticker()
         });
+
         overlayContainer.appendChild(overlaySticker);
     });
 
-    const rect = e.target.getBoundingClientRect();
-    const paletteRect = paletteContainer.getBoundingClientRect();
-    const { right, bottom } = rect;
+    // 🔹 Anchor to canvas instead of target
+    const canvas = document.getElementById("canvas-container");
+    const canvasRect = canvas.getBoundingClientRect();
 
-    if (right + 260 < window.innerWidth) {
-        overlayContainer.style.left = `${rect.right - paletteRect.left + 10}px`;
-    } else {
-        overlayContainer.style.left = `${rect.left - paletteRect.left - 260}px`;
-    }
+    // position overlay to the left of the canvas, vertically aligned to top
+    overlayContainer.style.left = (canvasRect.left - overlayContainer.offsetWidth - 20) + "px"; 
+    overlayContainer.style.top = canvasRect.top + "px";
 
-    if (bottom + overlayContainer.offsetHeight < window.innerHeight) {
-        overlayContainer.style.top = `${rect.top - paletteRect.top}px`;
-    } else {
-        overlayContainer.style.top = `${rect.top - paletteRect.top - overlayContainer.offsetHeight}px`;
-    }
-    overlayContainer.style.display = 'grid';
+    overlayContainer.style.display = "grid";
 }
 
 document.addEventListener('click', (e) => {
