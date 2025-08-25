@@ -1145,36 +1145,54 @@ function setBucketMode(enabled) {
 
 function saveState() {
     if (isRestoring) return;
+
     const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
     const currentState = {
         stickers: []
     };
+
     stickersOnCanvas.forEach(sticker => {
         const stickerImg = sticker.querySelector('img');
         if (stickerImg) {
             currentState.stickers.push({
-                url: stickerImg.src,
-                x: sticker.offsetLeft,
-                y: sticker.offsetTop,
-                width: sticker.offsetWidth,
-                height: sticker.offsetHeight
+                url: stickerImg.src
+                // no x, y, width, height, locked anymore
             });
         }
     });
-    history.push(currentState);
+
+    const prevState = history[history.length - 1];
+    if (JSON.stringify(prevState) !== JSON.stringify(currentState)) {
+        history.push(currentState);
+    }
+
     redoStack = [];
     updateUndoButton();
 }
 
 function loadState(state) {
     isRestoring = true;
-    canvas.innerHTML = '';
-    state.stickers.forEach(data => {
-        // pass suppressSave: true so addSticker doesn't push history while restoring
-        addSticker(data.url, data.x, data.y, data.width, data.height, { suppressSave: true });
+
+    // Clear only stickers from canvas
+    document.querySelectorAll('#canvas-container .sticker').forEach(sticker => {
+        canvas.removeChild(sticker);
     });
+
+    // Recreate stickers centered (or however you prefer)
+    state.stickers.forEach(data => {
+        const stickerSize = 120;
+        const canvasWidth = canvas.offsetWidth;
+        const canvasHeight = canvas.offsetHeight;
+        const centerX = (canvasWidth / 2) - (stickerSize / 2);
+        const centerY = (canvasHeight / 2) - (stickerSize / 2);
+
+        addSticker(data.url, centerX, centerY, stickerSize, stickerSize, {
+            suppressSave: true
+        });
+    });
+
     isRestoring = false;
-    updateUndoButton();
+    updateUndoRedoButtons();
 }
 
 function deselectAllStickers() {
