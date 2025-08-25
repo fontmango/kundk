@@ -350,27 +350,29 @@
   color: #333;      /* style as you like */
 }
 
-/* Sticker wrapper in folder overlay */
+/* Disable any pointer style on the wrapper */
 #folder-overlay .overlay-sticker-wrapper {
   position: relative;
   display: inline-block;
 }
 
-/* Sticker image */
 #folder-overlay .overlay-sticker {
-  width: 100%;
-  max-width: 120px;
-  border-radius: 8px;
+  transform: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  cursor: default !important;
 }
 
-/* Sticker image */
+
 #folder-overlay .overlay-sticker:hover {
   transform: none !important;
   box-shadow: none !important;
   border: none !important;
+  cursor: default !important;
 }
-/* Delete button inside folder overlay */
-#folder-overlay .delete-sticker-btn {
+
+/* delete button inside wrapper */
+#folder-overlay .overlay-sticker-wrapper .delete-sticker-btn {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -384,8 +386,11 @@
   line-height: 20px;
   text-align: center;
   cursor: pointer;
-  transform: none !important; /* cancel global scaling */
-  box-shadow: none !important;
+  display: block;
+}
+
+#folder-overlay .overlay-sticker-wrapper .delete-sticker-btn:hover {
+  background-color: #f26262ff;
 }
 
 #folder.full {
