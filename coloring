@@ -2033,45 +2033,42 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
         let activeGroupURLs = [];
 
         function showOverlay(e, urls) {
-            activeGroupURLs = urls;
-            overlayContainer.innerHTML = '';
-            urls.forEach(url => {
-                const overlaySticker = document.createElement('img');
-                overlaySticker.src = url;
-                overlaySticker.classList.add('overlay-sticker');
-                overlaySticker.draggable = true;
-                overlaySticker.addEventListener('dragstart', (e) => {
-                    e.stopPropagation();
-                    e.dataTransfer.setData('application/json', JSON.stringify({
-                        url: e.target.src,
-                        width: 200
-                    }));
-                });
-                overlaySticker.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    addSticker(url);
-                    // saveState() is now in addSticker()
-                });
-                overlayContainer.appendChild(overlaySticker);
-            });
+    activeGroupURLs = urls;
+    overlayContainer.innerHTML = '';
 
-            const rect = e.target.getBoundingClientRect();
-            const paletteRect = paletteContainer.getBoundingClientRect();
-            const { right, bottom } = rect;
+    urls.forEach(url => {
+        const overlaySticker = document.createElement('img');
+        overlaySticker.src = url;
+        overlaySticker.classList.add('overlay-sticker');
+        overlaySticker.draggable = true;
 
-            if (right + 260 < window.innerWidth) {
-                overlayContainer.style.left = `${rect.right - paletteRect.left + 10}px`;
-            } else {
-                overlayContainer.style.left = `${rect.left - paletteRect.left - 260}px`;
-            }
+        overlaySticker.addEventListener('dragstart', (e) => {
+            e.stopPropagation();
+            e.dataTransfer.setData('application/json', JSON.stringify({
+                url: e.target.src,
+                width: 200
+            }));
+            e.dataTransfer.setData("source", "overlay");
+        });
 
-            if (bottom + overlayContainer.offsetHeight < window.innerHeight) {
-                overlayContainer.style.top = `${rect.top - paletteRect.top}px`;
-            } else {
-                overlayContainer.style.top = `${rect.top - paletteRect.top - overlayContainer.offsetHeight}px`;
-            }
-            overlayContainer.style.display = 'grid';
-        }
+        overlaySticker.addEventListener('click', (e) => {
+            e.stopPropagation();
+            addSticker(url);
+        });
+
+        overlayContainer.appendChild(overlaySticker);
+    });
+
+    // 🔹 Anchor to canvas instead of target
+    const canvas = document.getElementById("canvas-container");
+    const canvasRect = canvas.getBoundingClientRect();
+
+    // position overlay to the left of the canvas, vertically aligned to top
+    overlayContainer.style.left = (canvasRect.left - overlayContainer.offsetWidth - 20) + "px"; 
+    overlayContainer.style.top = canvasRect.top + "px";
+
+    overlayContainer.style.display = "grid";
+}
 
         document.addEventListener('click', (e) => {
             if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target) && !colorPalette.contains(e.target)) {
