@@ -130,7 +130,10 @@
             stroke: currentColor;
         }
 
-       
+    #sticker-palette-container.disabled {
+    pointer-events: none;
+    opacity: 0.5; /* or whatever dimming you want */
+    }
 
     #sticker-palette-container {
     width: 100%;
@@ -270,6 +273,8 @@
             transform: scale(1.1);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
+
+    
 
         #folder {
     position: absolute;
@@ -700,6 +705,7 @@ updateSaveButton();
     closeBtn.addEventListener("click", () => {
         folderOverlay.style.display = "none";
          document.querySelector(".controls").classList.remove("disabled");
+         enablePaletteStickers();
     });
     folderOverlay.appendChild(closeBtn);
 
@@ -737,6 +743,7 @@ updateSaveButton();
     }
 
     folderOverlay.style.display = "grid";
+    disablePaletteStickers();
 }
 
 folderOverlay.addEventListener("dragover", (e) => {
@@ -1343,6 +1350,14 @@ function hexToRgb(hex) {
     hex = hex.replace(/^#/, "");
     const bigint = parseInt(hex, 16);
     return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+}
+
+function disablePaletteStickers() {
+    document.querySelector("#sticker-palette-container").classList.add("disabled");
+}
+
+function enablePaletteStickers() {
+    document.querySelector("#sticker-palette-container").classList.remove("disabled");
 }
 
 function recolorSticker(stickerImg, fillColor, clickX, clickY) {
