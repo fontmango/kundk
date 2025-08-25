@@ -1274,19 +1274,30 @@ canvas.addEventListener('dragover', (e) => {
     e.preventDefault();
 });
 
-canvas.addEventListener('drop', (e) => {
+canvas.addEventListener("drop", (e) => {
     e.preventDefault();
-    const data = e.dataTransfer.getData('text/plain');
-    if (data) {
-        const { url, width } = JSON.parse(data);
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
 
-        // Ensure you are not dropping a sticker from the canvas onto itself
-        const draggedElement = document.querySelector(`.sticker img[src="${url}"]`)?.closest('.sticker');
-        if (!draggedElement || draggedElement.parentElement !== canvas) {
+    // Try to get JSON payload first
+    let jsonData = e.dataTransfer.getData("application/json");
+    if (jsonData) {
+        try {
+            const { url, width } = JSON.parse(jsonData);
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
             addSticker(url, x, y, width);
+            return;
+        } catch (err) {
+            console.error("Invalid JSON drop data", err);
+        }
+    }
+
+    // Otherwise treat as sticker ID (dragging from canvas)
+    const stickerId = e.dataTransfer.getData("text/plain");
+    if (stickerId) {
+        const draggedEl = document.getElementById(stickerId);
+        if (draggedEl) {
+            console.log("Ignoring canvas self-drop");
         }
     }
 });
