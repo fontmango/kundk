@@ -276,7 +276,7 @@
 </head>
 <body>
     <div class="controls">
-        <button id="add-sticker-btn" title="Überrasch mich">
+        <button id="add-sticker-btn" title="Überrasche mich">
             <i data-lucide="shuffle" class="icon"></i>
         </button>
 
@@ -1174,6 +1174,10 @@ function updateUndoRedoButtons() {
 
         addSwipeFunctionality();
         populateColorPalette();
+      
+        document.addEventListener("contextmenu", function(e){
+  e.preventDefault();
+}, false);
     </script>
 </body>
 </html>
