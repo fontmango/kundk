@@ -1427,67 +1427,77 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     }
 
     function handleMove(e) {
-        if (!activeSticker) return;
-        if (e.touches && e.touches.length === 2) {
-            e.preventDefault();
-            const touch1 = e.touches[0];
-            const touch2 = e.touches[1];
-            const currentPinchDistance = Math.hypot(
-                touch2.clientX - touch1.clientX,
-                touch2.clientY - touch1.clientY
-            );
-            const scaleFactor = currentPinchDistance / initialPinchDistance;
-            const newWidth = initialStickerWidth * scaleFactor;
-            const newHeight = initialStickerHeight * scaleFactor;
-            const minSize = 30;
-            if (newWidth >= minSize) {
-                const isShrinking = newWidth < initialStickerWidth;
-                const canvasRect = canvas.getBoundingClientRect();
-                let adjustedLeft = initialRect.left;
-                let adjustedTop = initialRect.top;
-                if (isShrinking) {
-                    const widthDiff = initialStickerWidth - newWidth;
-                    const heightDiff = initialStickerHeight - newHeight;
-                    adjustedLeft = initialRect.left + widthDiff / 2;
-                    adjustedTop = initialRect.top + heightDiff / 2;
-                    if (adjustedLeft < canvasRect.left) adjustedLeft = canvasRect.left;
-                    if (adjustedTop < canvasRect.top) adjustedTop = canvasRect.top;
-                    if (adjustedLeft + newWidth > canvasRect.right) adjustedLeft = canvasRect.right - newWidth;
-                    if (adjustedTop + newHeight > canvasRect.bottom) adjustedTop = canvasRect.bottom - newHeight;
-                } else {
-                    const widthDiff = newWidth - initialStickerWidth;
-                    const heightDiff = newHeight - initialStickerHeight;
-                    adjustedLeft = initialRect.left - widthDiff / 2;
-                    adjustedTop = initialRect.top - heightDiff / 2;
-                }
-                activeSticker.style.width = `${newWidth}px`;
-                activeSticker.style.height = `${newHeight}px`;
-                activeSticker.style.left = `${adjustedLeft - canvasRect.left}px`;
-                activeSticker.style.top = `${adjustedTop - canvasRect.top}px`;
-            }
-        } else if (!bucketMode && (!e.touches || e.touches.length === 1)) {
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const dx = clientX - initialX;
-            const dy = clientY - initialY;
-            activeSticker.style.left = `${offsetX + dx}px`;
-            activeSticker.style.top = `${offsetY + dy}px`;
-        }
-        if (activeSticker) {
-            const folderRect = folder.getBoundingClientRect();
-            const stickerRect = activeSticker.getBoundingClientRect();
-            const isOverFolder =
-                stickerRect.right > folderRect.left &&
-                stickerRect.left < folderRect.right &&
-                stickerRect.bottom > folderRect.top &&
-                stickerRect.top < folderRect.bottom;
-            if (isOverFolder) {
-                folder.classList.add("drag-over");
+    if (!activeSticker) return;
+
+    if (e.touches && e.touches.length === 2) {
+        e.preventDefault();
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        const currentPinchDistance = Math.hypot(
+            touch2.clientX - touch1.clientX,
+            touch2.clientY - touch1.clientY
+        );
+        const scaleFactor = currentPinchDistance / initialPinchDistance;
+        const newWidth = initialStickerWidth * scaleFactor;
+        const newHeight = initialStickerHeight * scaleFactor;
+        const minSize = 30;
+
+        if (newWidth >= minSize) {
+            const isShrinking = newWidth < initialStickerWidth;
+            const canvasRect = canvas.getBoundingClientRect();
+            let adjustedLeft = initialRect.left;
+            let adjustedTop = initialRect.top;
+
+            if (isShrinking) {
+                const widthDiff = initialStickerWidth - newWidth;
+                const heightDiff = initialStickerHeight - newHeight;
+                adjustedLeft = initialRect.left + widthDiff / 2;
+                adjustedTop = initialRect.top + heightDiff / 2;
+
+                if (adjustedLeft < canvasRect.left) adjustedLeft = canvasRect.left;
+                if (adjustedTop < canvasRect.top) adjustedTop = canvasRect.top;
+                if (adjustedLeft + newWidth > canvasRect.right)
+                    adjustedLeft = canvasRect.right - newWidth;
+                if (adjustedTop + newHeight > canvasRect.bottom)
+                    adjustedTop = canvasRect.bottom - newHeight;
             } else {
-                folder.classList.remove("drag-over");
+                const widthDiff = newWidth - initialStickerWidth;
+                const heightDiff = newHeight - initialStickerHeight;
+                adjustedLeft = initialRect.left - widthDiff / 2;
+                adjustedTop = initialRect.top - heightDiff / 2;
             }
+
+            activeSticker.style.width = `${newWidth}px`;
+            activeSticker.style.height = `${newHeight}px`;
+            activeSticker.style.left = `${adjustedLeft - canvasRect.left}px`;
+            activeSticker.style.top = `${adjustedTop - canvasRect.top}px`;
+        }
+    } else if (!bucketMode && (!e.touches || e.touches.length === 1)) {
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const dx = clientX - initialX;
+        const dy = clientY - initialY;
+        activeSticker.style.left = `${offsetX + dx}px`;
+        activeSticker.style.top = `${offsetY + dy}px`;
+    }
+
+    if (activeSticker) {
+        const folderRect = folder.getBoundingClientRect();
+        const stickerRect = activeSticker.getBoundingClientRect();
+        const isOverFolder =
+            stickerRect.right > folderRect.left &&
+            stickerRect.left < folderRect.right &&
+            stickerRect.bottom > folderRect.top &&
+            stickerRect.top < folderRect.bottom;
+
+        // ✅ Only glow if folder not full
+        if (isOverFolder && folderUrls.length < MAX_FOLDER_IMAGES) {
+            folder.classList.add("drag-over");
+        } else {
+            folder.classList.remove("drag-over");
         }
     }
+}
 
  function handleEnd() {
     // Remove event listeners
