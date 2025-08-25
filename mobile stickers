@@ -35,6 +35,7 @@
         }
 
         #canvas-container {
+             position: relative; 
             width: 90%;
             max-width: 600px;
             height: 80vh;  
@@ -404,6 +405,388 @@
             transform: scale(1.1);
             box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
+
+          #folder {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    
+    border: 2px dotted #ccc;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s, border-color 0.3s;
+    z-index: 1000;
+}
+
+#folder:hover {
+    background-color: #d0d0d0;
+    transform: scale(1.05);
+}
+
+#folder.drag-over {
+  background: rgba(0, 200, 0, 0.1);
+  box-shadow: 0 0 12px rgba(0, 200, 0, 0.6);
+  border-radius: 12px;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+.folder-icon {
+    width: 40px;
+    height: 40px;
+    stroke: #888;
+}
+
+#folder-count {
+    font-size: 12px;
+    color: #555;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+#folder-overlay {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  overflow-y: auto;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  z-index: 10000;
+   border: 1px solid #ccc;
+            border-radius: 8px;
+}
+
+#folder-overlay .overlay-close {
+  position: absolute;
+  top: 8px;   /* move it further up */
+  right: 8px; /* move it further right */
+  z-index: 9999;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Disable any pointer style on the wrapper */
+#folder-overlay .overlay-sticker-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+#folder-overlay .overlay-sticker {
+  transform: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  cursor: default !important;
+}
+
+
+#folder-overlay .overlay-sticker:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  cursor: default !important;
+}
+
+/* delete button inside wrapper */
+#folder-overlay .overlay-sticker-wrapper .delete-sticker-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #c2bebeff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+}
+
+#folder-overlay .overlay-sticker-wrapper .delete-sticker-btn:hover {
+  background-color: #f26262ff;
+}
+
+#folder.full {
+  border-color: red;
+}
+
+#folder.full .folder-icon {
+  filter: hue-rotate(-50deg) saturate(5); /* tint to red */
+  /* Or use: color: red; if it's an SVG or font icon */
+}
+
+/* Folder icon inside */
+#folder.full .folder-icon {
+  filter: hue-rotate(-50deg) saturate(5); /* tint to red */
+  /* Or use: color: red; if it's an SVG or font icon */
+}
+
+/* The count */
+#folder.full .folder-count {
+  color: red;
+  font-weight: bold;
+}
+
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+.overlay-save {
+ 
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  background: black;
+  color: white;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.overlay-save:disabled {
+  background: #ccc;   /* grey background */
+  color: #666;        /* faded text */
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.controls.disabled button {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+#email-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  background: #fff;
+  padding: 24px 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  z-index: 11000;
+  width: 320px;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+#email-popup.hidden {
+  display: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+#email-popup h3 {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+#email-popup input {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 12px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box; /* ✅ keeps it inside the popup */
+}
+#email-popup input:focus {
+  border-color: #0078ff;
+  box-shadow: 0 0 0 2px rgba(0, 120, 255, 0.2);
+}
+
+#email-popup .popup-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  gap: 10px;
+}
+
+#email-popup button {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#email-popup #cancel-btn {
+  background: #f2f2f2;
+  color: #333;
+}
+
+#email-popup #cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+#email-popup #send-btn {
+  background: #0078ff;
+  color: white;
+}
+
+#email-popup #send-btn:hover {
+  background: #0063cc;
+}
+
+#email-popup button:active {
+  transform: scale(0.96);
+}
+
+#success-popup {
+  position: fixed; /* make it consistent with loading & email */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  z-index: 11001;
+  text-align: center;
+}
+
+
+#success-popup.hidden {
+  display: none;
+}
+
+.success-box p {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  z-index: 2000;
+ 
+}
+
+/* Loading popup */
+#loading-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  z-index: 11001;
+  text-align: center;
+}
+
+#loading-popup .popup-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  
+}
+
+.hidden {
+  display: none !important;
+}
+
+.dots::after {
+  content: '';
+  animation: dots 1.5s steps(3, end) infinite;
+}
+
+@keyframes dots {
+  0%   { content: ''; }
+  33%  { content: '.'; }
+  66%  { content: '..'; }
+  100% { content: '...'; }
+}
+
+#success-popup .success-ok-btn {
+  background-color: #28a745;   /* nice green */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#success-popup .success-ok-btn:hover {
+  background-color: #218838;
+}
+
+#success-popup .success-ok-btn:active {
+  transform: scale(0.96);
+}
+
+#error-message {
+  color: red;
+  font-size: 13px;
+  margin-top: -5px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+#email-input.error {
+  border: 1px solid red;
+  outline: none;
+}
+
+
+#folder.pulse {
+  animation: folderPulse 0.5s ease;
+}
+
+@keyframes folderPulse {
+  0%   { transform: scale(1); box-shadow: 0 0 0px rgba(0, 200, 0, 0.6); }
+  50%  { transform: scale(1.1); box-shadow: 0 0 15px rgba(0, 200, 0, 0.8); }
+  100% { transform: scale(1); box-shadow: 0 0 0px rgba(0, 200, 0, 0.6); }
+}
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -412,7 +795,26 @@
    
     
 
-    <div id="canvas-container"></div>
+   
+
+   <div id="canvas-container">
+  <div id="sticker-layer"></div>
+
+  <!-- Folder INSIDE canvas -->
+  <div id="folder" title="Drop stickers here to save">
+    <svg xmlns="http://www.w3.org/2000/svg" 
+         width="40" height="40" viewBox="0 0 24 24" fill="none" 
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+         stroke-linejoin="round" class="folder-icon lucide-folder">
+      <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 
+               0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 
+               2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 
+               0 0 0 2 2z"/>
+    </svg>
+    <span id="folder-count">0/35</span>
+  </div>
+</div>
+
      <div class="controls">
         <button id="add-sticker-btn" title="Add Random">
             <i data-lucide="shuffle" class="icon"></i>
@@ -434,6 +836,34 @@
     </div>
     <div id="group-overlay-container" class="overlay"></div>
     <div id="sticker-overlay-container" class="overlay"></div>
+    <div id="folder-overlay"></div> 
+
+    
+
+<!-- Email Popup -->
+<div id="email-popup" class="email-popup hidden">
+  <h3>Enter your email</h3>
+  <input type="email" id="email-input" placeholder="your@email.com" required />
+  <div id="email-error" class="error-message"></div>
+  
+  <div class="popup-actions">
+    <button id="cancel-btn">Cancel</button>
+    <button id="send-btn">Send</button>
+  </div>
+</div>
+
+<div id="success-popup" class="hidden">
+  <div class="success-box">
+    <p id="success-message">Stickers saved successfully!</p>
+     <button id="success-ok-btn" class="success-ok-btn">OK</button>
+  </div>
+</div>
+
+<div id="loading-popup" class="hidden">
+  <div class="popup-content">
+    <p>Sticker werden gespeichert<span class="dots"></span></p>
+  </div>
+</div>
 
     <script>
         const stickerGroups = [
@@ -451,193 +881,27 @@
                     "https://static.wixstatic.com/media/990059_04487087ffd9403184e0562a09da9952~mv2.png",
                     "https://static.wixstatic.com/media/990059_0abecd8111674041bda6a9bc58a0325d~mv2.png",
                     "https://static.wixstatic.com/media/990059_3d5f1cfd966b460a9fc708fbadc23342~mv2.png",
-                    "https://static.wixstatic.com/media/990059_1e7bdf5f8a9c415d940ecabe8aa515f8~mv2.png",
-                    "https://static.wixstatic.com/media/990059_f7bda5bccf6143b59cf118b96fe8d5c3~mv2.png",
-                    "https://static.wixstatic.com/media/990059_17382f604e5240cd9b192d1c408d177c~mv2.png",
-                    "https://static.wixstatic.com/media/990059_8050e711279440069ebb11be47552624~mv2.png",
-                    "https://static.wixstatic.com/media/990059_9280b10abb8f4b439280d80e2d654a00~mv2.png",
-                    "https://static.wixstatic.com/media/990059_e69156957edb46ceb444911d6268d580~mv2.png",
-                    "https://static.wixstatic.com/media/990059_818add1171f44d7b8fb14cc7324bf1ba~mv2.png",
-                    "https://static.wixstatic.com/media/990059_c0876d74524a4a3890c8acc306d6c5b9~mv2.png",
-                    "https://static.wixstatic.com/media/990059_4c2a3c3d1f4d44c88bd245577c12d89e~mv2.png",
-                    "https://static.wixstatic.com/media/990059_6a6b1c7017c242bcb387edf0250492f9~mv2.png",
-                    "https://static.wixstatic.com/media/990059_87363ab578ea485fb48b3ba8865da3c5~mv2.png",
-                    "https://static.wixstatic.com/media/990059_786e79df55c3459680a241c123d7edc8~mv2.png",
-                    "https://static.wixstatic.com/media/990059_75f54e8faf5f49aa9a6f554647c0a942~mv2.png",
-                    "https://static.wixstatic.com/media/990059_70b398a8aea848cf92a090ffae357819~mv2.png",
-                    "https://static.wixstatic.com/media/990059_393bb80861a1442cad28cfc4fd11a3b9~mv2.png",
-                    "https://static.wixstatic.com/media/990059_4c090a4740134396a9d2650a86431677~mv2.png",
-                    "https://static.wixstatic.com/media/990059_1148bbb54d724dc2beb5cebc69c78d04~mv2.png",
-                    "https://static.wixstatic.com/media/990059_74b3de5669834b7e9cd434ee592a38a1~mv2.png",
-                    "https://static.wixstatic.com/media/990059_30092f18c74c4b1e9ebd8c362ab02b31~mv2.png",
-                    "https://static.wixstatic.com/media/990059_033520b5d83f401bbfafd972bb74e29f~mv2.png",
-                    "https://static.wixstatic.com/media/990059_95ffdb66d7d94ad99e0471a5103defec~mv2.png",
-                    "https://static.wixstatic.com/media/990059_2a29f33d7ef34280b86e7786af3971d1~mv2.png",
-                    "https://static.wixstatic.com/media/990059_2f5de7bfb37b4edf9375460f2befe73d~mv2.png",
-                    "https://static.wixstatic.com/media/990059_91c06e8d3bd0444696cf64ff35870d79~mv2.png",
-                    "https://static.wixstatic.com/media/990059_caaa5e6cda52435fbb7c5d44baf532b6~mv2.png"
+             
 
                 ]
             },
-            {
-                name: "2",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png"
-                ]
-            },
-            {
-                name: "3",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png"
-                ]
-            },
-            {
-                name: "4",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-           		 name: "5",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-            	 name: "6",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-            	 name: "7",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-                name: "8",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png"
-                ]
-            },
-            {
-                name: "9",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png"
-                ]
-            },
-            {
-                name: "10",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-           		 name: "11",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-            	 name: "12",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-            	 name: "13",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-                name: "14",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png"
-                ]
-            },
-            {
-                name: "15",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png"
-                ]
-            },
-            {
-                name: "16",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-           		 name: "17",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-            	 name: "18",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-            	 name: "19",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-                name: "20",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_bdb2912772b543748423fcdcd14a5511~mv2.png"
-                ]
-            },
-            {
-                name: "21",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_d6bcc1676fd3430eaf87ee52bd938f3e~mv2.png"
-                ]
-            },
-            {
-                name: "22",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-           		 name: "23",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-            	 name: "24",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-            	 name: "25",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-            	 name: "26",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            },
-            {
-            	 name: "27",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_de40a3950aae4e5c8191652fefdb5495~mv2.png"
-                ]
-            }
+            
             
             
         ];
+
+        const saveBtn = document.getElementById("save-btn");
+const popup = document.getElementById("email-popup");
+const cancelBtn = document.getElementById("cancel-btn");
+const sendBtn = document.getElementById("send-btn");
+const emailInput = document.getElementById("email-input");
+
+
+const folder = document.getElementById('folder');
+const folderCount = document.getElementById('folder-count');
+let folderUrls = [];
+const MAX_FOLDER_IMAGES = 3;
+const folderOverlay = document.getElementById('folder-overlay');
 
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
@@ -667,7 +931,330 @@
         let initialCenter = { x: 0, y: 0 };
         let firstStickerAdded = false;
 
+// Your new function to handle saving the data
+// This function will need to be connected to your Wix Velo backend
+async function saveFolderDataToWix(urls) {
 
+    try {
+        // This is a placeholder. You will need to replace this with your actual
+        // Wix Velo backend function call, for example:
+        // const savedItem = await saveStickersToFolder(urls);
+        // console.log("Stickers saved successfully to Wix CMS:", savedItem);
+        console.log("Saving to Wix CMS:", urls);
+        // You'll need to create the backend module file `stickerService.jsw`
+        // as described in the previous response to make this work.
+    } catch (error) {
+        console.error("Failed to save stickers to Wix CMS:", error);
+    }
+}
+
+function isInsideFolder(x, y) {
+    const rect = folder.getBoundingClientRect();
+    return (
+        x >= rect.left &&
+        x <= rect.right &&
+        y >= rect.top &&
+        y <= rect.bottom
+    );
+}
+
+
+
+window.addEventListener("message", (event) => {
+  if (event.data.type === "saveSuccess") {
+    document.getElementById("loading-popup").classList.add("hidden");
+     const count = event.data.urlAmount || 0;
+    document.getElementById("success-message").textContent =
+      `Saved ${count} stickers successfully!`;
+    document.getElementById("success-popup").classList.remove("hidden");
+  }
+  if (event.data.type === "saveError") {
+    document.getElementById("loading-popup").classList.add("hidden");
+    alert("❌ Something went wrong: " + event.data.error);
+  }
+});
+
+// Cancel hides popup
+cancelBtn.addEventListener("click", () => {
+  popup.classList.add("hidden");
+});
+
+function showSuccessPopup() {
+  document.getElementById("success-popup").classList.remove("hidden");
+}
+
+document.getElementById("success-ok-btn").addEventListener("click", () => {
+  document.getElementById("success-popup").classList.add("hidden");
+  
+  
+  
+});
+
+sendBtn.addEventListener("click", () => {
+  const email = emailInput.value.trim();
+  const errorDiv = document.getElementById("email-error");
+  const popup = document.getElementById("email-popup");
+
+  // Validate email
+  if (!email || !email.includes("@")) {
+    emailInput.classList.add("error");
+    errorDiv.textContent = "Please enter a valid email.";
+    return;
+  }
+
+  // Clear error
+  emailInput.classList.remove("error");
+  errorDiv.textContent = "";
+
+  // Hide popup and show loading
+  popup.classList.add("hidden");
+  document.getElementById("loading-popup").classList.remove("hidden");
+  document.querySelector(".controls").classList.remove("disabled");
+  enablePaletteStickers();
+
+  // Actually save
+  window.parent.postMessage({
+    type: "saveStickers",
+    urls: folderUrls,
+    email: email
+  }, "*");
+});
+
+
+
+// --- Desktop Drag & Drop (keep your existing code) ---
+folder.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    if (folderUrls.length < MAX_FOLDER_IMAGES) {
+        folder.classList.add('drag-over');
+    }
+});
+
+folder.addEventListener('dragleave', () => {
+    folder.classList.remove('drag-over');
+});
+
+folder.addEventListener("drop", (e) => {
+    e.preventDefault();
+    folder.classList.remove("drag-over");
+
+    if (folderUrls.length >= MAX_FOLDER_IMAGES) {
+        updateFolderUI();
+        console.warn("🚫 Folder limit reached");
+        return;
+    }
+
+    const jsonData = e.dataTransfer.getData("application/json");
+    if (jsonData) {
+        try {
+            const { url } = JSON.parse(jsonData);
+            addToFolder(url);
+        } catch (err) {
+            console.error("Invalid JSON drop", err);
+        }
+        return;
+    }
+
+    // fallback for stickers
+    const stickerDivId = e.dataTransfer.getData("text/plain");
+    if (stickerDivId) {
+        const stickerToMove = document.getElementById(stickerDivId);
+        if (stickerToMove && stickerToMove.classList.contains("sticker")) {
+            const stickerUrl = stickerToMove.querySelector("img").src;
+            addToFolder(stickerUrl, stickerToMove);
+        }
+    }
+});
+
+// --- Mobile Tap-to-Save Fallback ---
+document.addEventListener("touchstart", (e) => {
+    const sticker = e.target.closest(".sticker");
+    if (!sticker) return;
+
+    // Long-press (500ms) to "save to folder"
+    let pressTimer = setTimeout(() => {
+        const img = sticker.querySelector("img");
+        if (!img) return;
+
+        const stickerUrl = img.src;
+
+        addToFolder(stickerUrl, sticker);
+
+        folder.classList.add("pulse"); // ✅ quick pulse feedback
+        setTimeout(() => folder.classList.remove("pulse"), 500);
+    }, 500);
+
+    // Show highlight while pressing
+    folder.classList.add("drag-over");
+
+    // Cancel if touch ends early or moves
+    const cancel = () => {
+        clearTimeout(pressTimer);
+        folder.classList.remove("drag-over");
+    };
+    sticker.addEventListener("touchend", cancel, { once: true });
+    sticker.addEventListener("touchmove", cancel, { once: true });
+});
+
+// --- Shared logic ---
+function addToFolder(stickerUrl, stickerEl) {
+    // Kill the DOM element if it’s still around
+    if (stickerEl) {
+        stickerEl.remove();
+    }
+
+    // Save only the URL
+    folderUrls.push(stickerUrl);
+
+    // Update folder UI + count
+    folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
+    saveFolderDataToWix(folderUrls);
+    updateFolderUI();
+}
+
+
+function renderFolderOverlay() {
+    folderOverlay.innerHTML = "";
+
+    document.querySelector(".controls").classList.add("disabled");
+
+// Save button (top-left)
+const saveBtn = document.createElement("button");
+saveBtn.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7zM12 19a2 2 0 1 1 0-4 
+             2 2 0 0 1 0 4zm3-10H5V5h10z"/>
+  </svg>
+`;
+saveBtn.className = "overlay-save";
+saveBtn.disabled = true; // 🚫 disabled at start
+
+saveBtn.addEventListener("click", () => {
+  if (folderUrls.length === 0) return; // extra safety
+
+  console.log("💾 Save button clicked");
+  popup.classList.remove("hidden"); // just open the popup
+});
+
+folderOverlay.appendChild(saveBtn);
+
+function updateSaveButton() {
+    saveBtn.disabled = folderUrls.length === 0;
+}
+
+// initialize state
+updateSaveButton();
+
+    // Close button
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "×";
+    closeBtn.className = "overlay-close";
+    closeBtn.addEventListener("click", () => {
+        folderOverlay.style.display = "none";
+         document.querySelector(".controls").classList.remove("disabled");
+         enablePaletteStickers();
+    });
+    folderOverlay.appendChild(closeBtn);
+
+    if (folderUrls.length === 0) {
+        const emptyMsg = document.createElement("p");
+        
+        emptyMsg.className = "empty-msg";
+        folderOverlay.appendChild(emptyMsg);
+    } else {
+        folderUrls.forEach((url, index) => {
+            const wrapper = document.createElement("div");
+            wrapper.className = "overlay-sticker-wrapper";
+
+            const img = document.createElement("img");
+            img.src = url;
+            img.className = "overlay-sticker";
+
+            
+
+            const delBtn = document.createElement("button");
+            delBtn.textContent = "–";
+            delBtn.className = "delete-sticker-btn";
+            delBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                folderUrls.splice(index, 1);
+                saveFolderDataToWix(folderUrls);
+                updateFolderUI();       // 🔹 update counter + full state
+                renderFolderOverlay();  // 🔹 refresh overlay contents
+            });
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(delBtn);
+            folderOverlay.appendChild(wrapper);
+        });
+    }
+
+    folderOverlay.style.display = "grid";
+    disablePaletteStickers();
+}
+
+folderOverlay.addEventListener("dragover", (e) => {
+    e.preventDefault();
+});
+
+folderOverlay.addEventListener("drop", (e) => {
+    e.preventDefault();
+
+    // Try JSON payload (overlay/palette stickers)
+    let jsonData = e.dataTransfer.getData("application/json");
+    if (jsonData) {
+        try {
+            const { url } = JSON.parse(jsonData);
+            if (url && !folderUrls.includes(url)) {
+                folderUrls.push(url);
+                saveFolderDataToWix(folderUrls);
+                updateFolderUI();
+                renderFolderOverlay();
+            }
+            return; // ✅ handled
+        } catch (err) {
+            console.error("Invalid JSON drop into folder", err);
+        }
+    }
+
+    // Otherwise fallback to text/plain (canvas stickers)
+    const stickerId = e.dataTransfer.getData("text/plain");
+    if (stickerId) {
+        const draggedEl = document.getElementById(stickerId);
+        if (draggedEl && draggedEl.src && !folderUrls.includes(draggedEl.src)) {
+            folderUrls.push(draggedEl.src);
+            saveFolderDataToWix(folderUrls);
+            updateFolderUI();
+            renderFolderOverlay();
+        }
+    }
+});
+
+
+
+// --- CLICK TO OPEN OVERLAY ---
+folder.addEventListener("click", () => {
+    
+    renderFolderOverlay();
+});
+
+function disablePaletteStickers() {
+    document.querySelector("#sticker-palette-container").classList.add("disabled");
+}
+
+function enablePaletteStickers() {
+    document.querySelector("#sticker-palette-container").classList.remove("disabled");
+}
+
+function updateFolderUI() {
+    folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
+
+    if (folderUrls.length >= MAX_FOLDER_IMAGES) {
+        folder.classList.add("full");
+    } else {
+        folder.classList.remove("full");
+    }
+}
         
         function setBucketMode(enabled) {
             bucketMode = enabled;
@@ -686,26 +1273,7 @@
             }
         }
 
-        // NEW: Central function to add or replace a sticker and center it.
-        function addOrReplaceSticker(url) {
-            // Deactivate color picker when adding a new sticker.
-            setBucketMode(false);
-            selectedColor = null;
-        
-            const stickerWidth = 120;
-            const canvasWidth = canvas.offsetWidth;
-            const canvasHeight = canvas.offsetHeight;
-            
-            // Clear the canvas and add the new sticker in the center.
-            canvas.innerHTML = '';
-            const finalX = (canvasWidth / 2) - (stickerWidth / 2);
-            const finalY = (canvasHeight / 2) - (stickerWidth / 2);
-            
-            
-            addSticker(url, finalX, finalY, stickerWidth);
-            saveState();
-        }
-        
+      
         function saveState() {
             if (isRestoring) return;
             const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
@@ -764,7 +1332,7 @@
             return Math.sqrt(dx * dx + dy * dy);
         }
         
-     function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
+function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     const { suppressSave = false } = opts;
     const sticker = document.createElement('div');
     sticker.classList.add('sticker');
@@ -841,7 +1409,6 @@
     });
 
     const lockBtn = document.createElement('div');
-    lockBtn.classList.add('lock-btn');
     lockBtn.innerHTML = `<svg class="lock-btn-icon" data-lucide="lock" viewBox="0 0 24 24">
 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
@@ -912,7 +1479,10 @@ function handleMove(e) {
         
         const touch1 = e.touches[0];
         const touch2 = e.touches[1];
-        const currentPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+        const currentPinchDistance = Math.hypot(
+            touch2.clientX - touch1.clientX,
+            touch2.clientY - touch1.clientY
+        );
         
         const scaleFactor = currentPinchDistance / initialPinchDistance;
         const newWidth = initialStickerWidth * scaleFactor;
@@ -958,7 +1528,26 @@ function handleMove(e) {
         activeSticker.style.left = `${offsetX + dx}px`;
         activeSticker.style.top = `${offsetY + dy}px`;
     }
+
+    // --- 📂 Folder hover detection ---
+    if (activeSticker) {
+        const folderRect = folder.getBoundingClientRect();
+        const stickerRect = activeSticker.getBoundingClientRect();
+
+        const isOverFolder =
+            stickerRect.right > folderRect.left &&
+            stickerRect.left < folderRect.right &&
+            stickerRect.bottom > folderRect.top &&
+            stickerRect.top < folderRect.bottom;
+
+        if (isOverFolder) {
+            folder.classList.add("drag-over");
+        } else {
+            folder.classList.remove("drag-over");
+        }
+    }
 }
+
 
 function handleEnd() {
     // Remove event listeners
@@ -967,20 +1556,56 @@ function handleEnd() {
     document.removeEventListener('touchmove', handleMove);
     document.removeEventListener('touchend', handleEnd);
 
-    // Remove the .selected class from the active sticker
     if (activeSticker) {
-        activeSticker.classList.remove('selected');
+        const folderRect = folder.getBoundingClientRect();
+        const stickerRect = activeSticker.getBoundingClientRect();
+
+        const isOverFolder =
+            stickerRect.right > folderRect.left &&
+            stickerRect.left < folderRect.right &&
+            stickerRect.bottom > folderRect.top &&
+            stickerRect.top < folderRect.bottom;
+
+        if (isOverFolder) {
+            const stickerUrl = activeSticker.querySelector("img")?.src;
+
+            if (stickerUrl) {
+                const dx = folderRect.left + folderRect.width / 2 - (stickerRect.left + stickerRect.width / 2);
+                const dy = folderRect.top + folderRect.height / 2 - (stickerRect.top + stickerRect.height / 2);
+
+                // Animate shrink into folder
+                activeSticker.style.transition = "transform 0.4s ease, opacity 0.4s ease";
+                activeSticker.style.transform = `translate(${dx}px, ${dy}px) scale(0.1)`;
+                activeSticker.style.opacity = "0";
+
+                folder.classList.add("pulse");
+
+                setTimeout(() => {
+                    // Use the shared function so count + overlay updates properly
+                    addToFolder(stickerUrl, activeSticker);
+
+                    folder.classList.remove("pulse");
+                    folder.classList.remove("drag-over");
+                }, 400);
+            }
+        } else {
+            folder.classList.remove("drag-over");
+        }
+
+        activeSticker.classList.remove("selected");
     }
 
-    // Reset state variables
     activeSticker = null;
     initialRect = null;
     initialTouchDistance = 0;
     initialStickerWidth = 0;
     initialStickerHeight = 0;
-    
+
     saveState();
 }
+
+
+
     // --- Event Listeners ---
     sticker.addEventListener('mousedown', startInteraction);
     sticker.addEventListener('touchstart', startInteraction);
@@ -1111,23 +1736,27 @@ function updateUndoRedoButtons() {
 
      
         // MODIFIED: This function now correctly handles replacing the sticker and centering it
-   addStickerBtn.addEventListener('click', () => {
-            const allUrls = stickerGroups.flatMap(group => group.urls);
-            const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
-            const unlockedSticker = document.querySelector('.sticker:not(.locked)');
+addStickerBtn.addEventListener('click', () => {
+    const allUrls = stickerGroups.flatMap(group => group.urls);
+    if (!allUrls.length) {
+        console.warn("⚠️ No sticker URLs available");
+        return;
+    }
 
-            if (unlockedSticker) {
-                unlockedSticker.querySelector('img').src = randomUrl;
-            } else {
-                const stickerSize = 120;
-                const canvasWidth = canvas.offsetWidth;
-                const canvasHeight = canvas.offsetHeight;
-                const centerX = (canvasWidth / 2) - (stickerSize / 2);
-                const centerY = (canvasHeight / 2) - (stickerSize / 2);
-                addSticker(randomUrl, centerX, centerY, stickerSize);
-            }
-            saveState();
-        });
+    const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+
+    // Always add a new sticker, no locking anymore
+    const stickerSize = 120;
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
+
+    addSticker(randomUrl, centerX, centerY, stickerSize);
+
+    saveState();
+});
+
 
         window.addEventListener('load', () => {
             if (window.lucide) {
