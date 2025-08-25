@@ -607,6 +607,7 @@ const cancelBtn = document.getElementById("cancel-btn");
 const sendBtn = document.getElementById("send-btn");
 const emailInput = document.getElementById("email-input");
 
+
 const folder = document.getElementById('folder');
 const folderCount = document.getElementById('folder-count');
 let folderUrls = [];
@@ -682,6 +683,29 @@ async function saveFolderDataToWix(urls) {
     }
 }
 
+// Cancel hides popup
+cancelBtn.addEventListener("click", () => {
+  popup.classList.add("hidden");
+});
+
+sendBtn.addEventListener("click", () => {
+  const email = emailInput.value.trim();
+  if (!email || !email.includes("@")) {
+    alert("Please enter a valid email.");
+    return;
+  }
+
+  popup.classList.add("hidden"); // close popup
+
+  // Now actually save
+  window.parent.postMessage({
+    type: "saveStickers",
+    urls: folderUrls,
+    email: email
+  }, "*");
+});
+
+
 // Drag and drop events for the folder
 folder.addEventListener('dragover', (e) => {
     e.preventDefault();
@@ -750,13 +774,10 @@ saveBtn.className = "overlay-save";
 saveBtn.disabled = true; // 🚫 disabled at start
 
 saveBtn.addEventListener("click", () => {
-     popup.classList.remove("hidden");
-    if (folderUrls.length === 0) return; // extra safety
-    console.log("💾 Save button clicked in HTML");
-    window.parent.postMessage({
-        type: "saveStickers",
-        urls: folderUrls
-    }, "*");
+  if (folderUrls.length === 0) return; // extra safety
+
+  console.log("💾 Save button clicked");
+  popup.classList.remove("hidden"); // just open the popup
 });
 
 folderOverlay.appendChild(saveBtn);
