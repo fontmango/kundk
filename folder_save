@@ -331,6 +331,20 @@
   z-index: 10000;
 }
 
+#folder.full {
+  background-color: red !important; /* or change the icon tint */
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -514,23 +528,31 @@ folder.addEventListener('drop', (e) => {
     e.preventDefault();
     e.currentTarget.classList.remove('drag-over');
 
-    if (folderUrls.length >= MAX_FOLDER_IMAGES) {
-        alert("The folder is full! You can only drop up to 35 stickers.");
-        return;
-    }
-
+   if (folderUrls.length >= MAX_FOLDER_IMAGES) {
+    // Folder is full → shake + red
+    folder.classList.add("full");
+    setTimeout(() => folder.classList.remove("full"), 500); // remove after shake
+    return; // block drop
+}
     const stickerDivId = e.dataTransfer.getData('text/plain');
     const stickerToMove = document.getElementById(stickerDivId);
 
-    if (stickerToMove && stickerToMove.classList.contains('sticker')) {
-        const stickerUrl = stickerToMove.querySelector('img').src;
-        stickerToMove.remove();
-        folderUrls.push(stickerUrl);
-        folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
-
-        saveFolderDataToWix(folderUrls);
-        saveState(); // Save state after a sticker is dropped and removed
+   if (stickerToMove && stickerToMove.classList.contains('sticker')) {
+    if (folderUrls.length >= MAX_FOLDER_IMAGES) {
+        // Folder is full → shake + red
+        folder.classList.add("full");
+        setTimeout(() => folder.classList.remove("full"), 500); // remove after shake
+        return; // don’t allow adding
     }
+
+    const stickerUrl = stickerToMove.querySelector('img').src;
+    stickerToMove.remove();
+    folderUrls.push(stickerUrl);
+    folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
+
+    saveFolderDataToWix(folderUrls);
+    saveState();
+}
 });
 
 
@@ -797,20 +819,22 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     document.removeEventListener('touchend', handleEnd);
 
     if (activeSticker) {
-        // check overlap with folder
-        if (isOverFolder(activeSticker, folder)) {
-            if (folderUrls.length >= MAX_FOLDER_IMAGES) {
-                alert("The folder is full! You can only drop up to 35 stickers.");
-            } else {
-                const stickerUrl = activeSticker.querySelector('img').src;
-                activeSticker.remove();
-                folderUrls.push(stickerUrl);
-                folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
-                saveFolderDataToWix(folderUrls);
-            }
+    // check overlap with folder
+    if (isOverFolder(activeSticker, folder)) {
+        if (folderUrls.length >= MAX_FOLDER_IMAGES) {
+            // Folder is full → shake + red
+            folder.classList.add("full");
+            setTimeout(() => folder.classList.remove("full"), 500); 
+            return; // block adding
+        } else {
+            const stickerUrl = activeSticker.querySelector('img').src;
+            activeSticker.remove();
+            folderUrls.push(stickerUrl);
+            folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
+            saveFolderDataToWix(folderUrls);
         }
     }
-
+}
     activeSticker = null;
     saveState();
 }
