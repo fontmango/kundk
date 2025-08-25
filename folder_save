@@ -453,42 +453,87 @@
 }
 
 #email-popup {
-  position: fixed; /* use fixed so it’s always on top of the viewport */
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-  z-index: 11000; /* higher than folder-overlay */
-  width: 280px;
+  transform: translate(-50%, -50%) scale(1);
+  background: #fff;
+  padding: 24px 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  z-index: 11000;
+  width: 320px;
   text-align: center;
+  font-family: "Inter", sans-serif;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 #email-popup.hidden {
   display: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+#email-popup h3 {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+  color: #333;
 }
 
 #email-popup input {
   width: 100%;
-  padding: 8px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 10px 12px;
+  margin: 12px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box; /* ✅ keeps it inside the popup */
+}
+#email-popup input:focus {
+  border-color: #0078ff;
+  box-shadow: 0 0 0 2px rgba(0, 120, 255, 0.2);
 }
 
 #email-popup .popup-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 14px;
+  gap: 10px;
 }
 
 #email-popup button {
-  padding: 6px 12px;
+  flex: 1;
+  padding: 10px 0;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#email-popup #cancel-btn {
+  background: #f2f2f2;
+  color: #333;
+}
+
+#email-popup #cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+#email-popup #send-btn {
+  background: #0078ff;
+  color: white;
+}
+
+#email-popup #send-btn:hover {
+  background: #0063cc;
+}
+
+#email-popup button:active {
+  transform: scale(0.96);
 }
 
 #success-popup {
@@ -618,55 +663,89 @@
     <script>
         const stickerGroups = [
             {
-                
-                name: "Vikings",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_195242b424cb450ea78b93e9de392511~mv2.png",
-                    "https://static.wixstatic.com/media/990059_e5529716f6f64f77a4d7c250ab6cfb5a~mv2.png",
-                    "https://static.wixstatic.com/media/990059_4636b8e42e674dccbb6117391652f10b~mv2.png",
-                    "https://static.wixstatic.com/media/990059_b4c7121418e14667bfdf79aecfea0524~mv2.png",
-                    "https://static.wixstatic.com/media/990059_c5244cbdc1014a0292d36824ce277bba~mv2.png",
-                    "https://static.wixstatic.com/media/990059_82d1bde23b3f45709690e3b032b39f7a~mv2.png",
-                    "https://static.wixstatic.com/media/990059_63d7cd18bf4245d687839909ceb3671c~mv2.png",
-                    "https://static.wixstatic.com/media/990059_04487087ffd9403184e0562a09da9952~mv2.png",
-                    "https://static.wixstatic.com/media/990059_0abecd8111674041bda6a9bc58a0325d~mv2.png",
-                    "https://static.wixstatic.com/media/990059_3d5f1cfd966b460a9fc708fbadc23342~mv2.png",
-                    "https://static.wixstatic.com/media/990059_1e7bdf5f8a9c415d940ecabe8aa515f8~mv2.png",
-                    "https://static.wixstatic.com/media/990059_f7bda5bccf6143b59cf118b96fe8d5c3~mv2.png",
-                    "https://static.wixstatic.com/media/990059_17382f604e5240cd9b192d1c408d177c~mv2.png",
-                    "https://static.wixstatic.com/media/990059_8050e711279440069ebb11be47552624~mv2.png",
-                    "https://static.wixstatic.com/media/990059_9280b10abb8f4b439280d80e2d654a00~mv2.png",
-                    "https://static.wixstatic.com/media/990059_e69156957edb46ceb444911d6268d580~mv2.png",
-                    "https://static.wixstatic.com/media/990059_818add1171f44d7b8fb14cc7324bf1ba~mv2.png",
-                    "https://static.wixstatic.com/media/990059_c0876d74524a4a3890c8acc306d6c5b9~mv2.png",
-                    "https://static.wixstatic.com/media/990059_4c2a3c3d1f4d44c88bd245577c12d89e~mv2.png",
-                    "https://static.wixstatic.com/media/990059_6a6b1c7017c242bcb387edf0250492f9~mv2.png",
-                    "https://static.wixstatic.com/media/990059_87363ab578ea485fb48b3ba8865da3c5~mv2.png",
-                    "https://static.wixstatic.com/media/990059_786e79df55c3459680a241c123d7edc8~mv2.png",
-                    "https://static.wixstatic.com/media/990059_75f54e8faf5f49aa9a6f554647c0a942~mv2.png",
-                    "https://static.wixstatic.com/media/990059_70b398a8aea848cf92a090ffae357819~mv2.png",
-                    "https://static.wixstatic.com/media/990059_393bb80861a1442cad28cfc4fd11a3b9~mv2.png",
-                    "https://static.wixstatic.com/media/990059_4c090a4740134396a9d2650a86431677~mv2.png",
-                    "https://static.wixstatic.com/media/990059_1148bbb54d724dc2beb5cebc69c78d04~mv2.png",
-                    "https://static.wixstatic.com/media/990059_74b3de5669834b7e9cd434ee592a38a1~mv2.png",
-                    "https://static.wixstatic.com/media/990059_30092f18c74c4b1e9ebd8c362ab02b31~mv2.png",
-                    "https://static.wixstatic.com/media/990059_033520b5d83f401bbfafd972bb74e29f~mv2.png",
-                    "https://static.wixstatic.com/media/990059_95ffdb66d7d94ad99e0471a5103defec~mv2.png",
-                    "https://static.wixstatic.com/media/990059_2a29f33d7ef34280b86e7786af3971d1~mv2.png",
-                    "https://static.wixstatic.com/media/990059_2f5de7bfb37b4edf9375460f2befe73d~mv2.png",
-                    "https://static.wixstatic.com/media/990059_91c06e8d3bd0444696cf64ff35870d79~mv2.png",
-                    "https://static.wixstatic.com/media/990059_caaa5e6cda52435fbb7c5d44baf532b6~mv2.png"
+name: "zulu",
+urls: [
 
-                ]
-            },
+"https://static.wixstatic.com/media/990059_ebcddfd98c1e4dc0b62ae280d13400d4~mv2.png",
+"https://static.wixstatic.com/media/990059_fb28597b3e934901b24ea56c70cd251e~mv2.png",
+"https://static.wixstatic.com/media/990059_4dc9f12ccdc444f6b513c3ef52daee78~mv2.png",
+"https://static.wixstatic.com/media/990059_e40835c13c4a44e0a14736238061a772~mv2.png",
+"https://static.wixstatic.com/media/990059_0a9b16bed516447094cc67917789195d~mv2.png",
+"https://static.wixstatic.com/media/990059_b52f919a40d24c8b9a34ab71888ca857~mv2.png",
+"https://static.wixstatic.com/media/990059_15b6a3bc8e84440d9583d1b83e3d598c~mv2.png",
+"https://static.wixstatic.com/media/990059_0bfcc3bb23bc4c8b9b37acdaf3e6b2d6~mv2.png",
+"https://static.wixstatic.com/media/990059_8ebfac4726aa43f48c2374d7fb6bc70c~mv2.png",
+"https://static.wixstatic.com/media/990059_5e9a398270f24cca981a1b7a98b25e65~mv2.png",
+"https://static.wixstatic.com/media/990059_b6f2f99e235444e98295484404827f3b~mv2.png",
+"https://static.wixstatic.com/media/990059_0376999057424754a2b98167ec6a6f99~mv2.png",
+"https://static.wixstatic.com/media/990059_b5a6a1789b6f4edf80a187e580181b68~mv2.png",
+"https://static.wixstatic.com/media/990059_8f8f53abd6bb49e8977b51ca7a72a6d8~mv2.png",
+"https://static.wixstatic.com/media/990059_5263a42c53764f85810b51e49509a481~mv2.png",
+"https://static.wixstatic.com/media/990059_9626fa28ca104b3981ac427f911bd124~mv2.png",
+"https://static.wixstatic.com/media/990059_c6d1ba9e3e59474d9e4613104727c664~mv2.png",
+"https://static.wixstatic.com/media/990059_02fad7d56aa34422a2f2f5009d79c6ee~mv2.png",
+"https://static.wixstatic.com/media/990059_e5f3629b5b2a4fb58b3fcb6d66db0656~mv2.png",
+"https://static.wixstatic.com/media/990059_ce84e83c7cf64054ab9a3d14a8727eee~mv2.png",
+"https://static.wixstatic.com/media/990059_70703e8f4eb2400bb3a2794a9d2b30a1~mv2.png",
+"https://static.wixstatic.com/media/990059_7bb16089e07b4a87824ee66326eec83d~mv2.png",
+"https://static.wixstatic.com/media/990059_3741222f3ad044869262fc8a3de0f2a9~mv2.png",
+"https://static.wixstatic.com/media/990059_b5ea812823a1417880ed7957c8d869ff~mv2.png",
+"https://static.wixstatic.com/media/990059_c82cda1fbd024e73bf3ebc202ca98f1e~mv2.png",
+"https://static.wixstatic.com/media/990059_dea51e1b23aa4d37961a76d4167be966~mv2.png",
+"https://static.wixstatic.com/media/990059_82ddb672dfca4aaaa506708a8e81136f~mv2.png",
+"https://static.wixstatic.com/media/990059_b9cd82b4f836457e84aaf7bdf6855909~mv2.png",
+"https://static.wixstatic.com/media/990059_b1a74d918acf41c0ba210ea84572f089~mv2.png",
+"https://static.wixstatic.com/media/990059_e7c337369b8f440ca612b1d4092b78e2~mv2.png",
+"https://static.wixstatic.com/media/990059_bf7b64bb50804119ab5b14b9e1c7c6ce~mv2.png",
+"https://static.wixstatic.com/media/990059_5d7ef870b2f4406c8601f64d5b4e2d0c~mv2.png",
+"https://static.wixstatic.com/media/990059_f7d42b9e0fd7488ba09fd62a84a03cbc~mv2.png",
+"https://static.wixstatic.com/media/990059_3580839d05684e54a4ee289c790e30ea~mv2.png",
+"https://static.wixstatic.com/media/990059_a7766ba179fc42728328c6e273d3dcd0~mv2.png"
+
+]
+},
             {
-                name: "2",
-                urls: [
-                    "https://static.wixstatic.com/media/990059_195242b424cb450ea78b93e9de392511~mv2.png",
-                    "https://static.wixstatic.com/media/990059_e5529716f6f64f77a4d7c250ab6cfb5a~mv2.png"
-                    
-            ]
-           }, 
+name: "muerto",
+urls: [
+
+"https://static.wixstatic.com/media/990059_03a221fd165d4a89b5124370626486ad~mv2.png",
+"https://static.wixstatic.com/media/990059_682d393f5d77435da4ab7096708cb8d7~mv2.png",
+"https://static.wixstatic.com/media/990059_4349efbaa2d24be8b017e957daad4a9e~mv2.png",
+"https://static.wixstatic.com/media/990059_49720d322ef24087999ba4d482275662~mv2.png",
+"https://static.wixstatic.com/media/990059_b18489e8975a47d5a487241d0d9f35f0~mv2.png",
+"https://static.wixstatic.com/media/990059_a8d0533c108f494aa845b9ff80c4fc84~mv2.png",
+"https://static.wixstatic.com/media/990059_dba27be6d625437e966be5841737db29~mv2.png",
+"https://static.wixstatic.com/media/990059_e8c8d6ac987448cb8889c4f597c014fb~mv2.png",
+"https://static.wixstatic.com/media/990059_23c7997d627c400da2a4f931d2df4a51~mv2.png",
+"https://static.wixstatic.com/media/990059_e0c4743c307045e9aabf7b57f68b4b7e~mv2.png",
+"https://static.wixstatic.com/media/990059_5adc058fc36e4080b7cee077a0174f59~mv2.png",
+"https://static.wixstatic.com/media/990059_f2b8533239eb42cdaa89579bef97fd42~mv2.png",
+"https://static.wixstatic.com/media/990059_0a066802fe8f4113acf9d74073af28f3~mv2.png",
+"https://static.wixstatic.com/media/990059_46267e59e16f4d6b9b0985f4546c58f0~mv2.png",
+"https://static.wixstatic.com/media/990059_a22468d7506a4094b48e9709f436d886~mv2.png",
+"https://static.wixstatic.com/media/990059_4f26d9e09d3541108934a89f95419ef8~mv2.png",
+"https://static.wixstatic.com/media/990059_ddd1138a462a4214b3f011f6f070e4ff~mv2.png",
+"https://static.wixstatic.com/media/990059_b2e189bef2084da5b2cc54fae201da06~mv2.png",
+"https://static.wixstatic.com/media/990059_f31737e926ba42d48db52abd305e88f8~mv2.png",
+"https://static.wixstatic.com/media/990059_28a8ca536ea84c9c8179e5ef06f8b0ad~mv2.png",
+"https://static.wixstatic.com/media/990059_7ee0ac7365db45ee9fba4bad3bf804dc~mv2.png",
+"https://static.wixstatic.com/media/990059_7190e1e630b34197bee6f5925a073b07~mv2.png",
+"https://static.wixstatic.com/media/990059_d5099b5806d1487eb7f6f37a0dab8ee1~mv2.png",
+"https://static.wixstatic.com/media/990059_7779fdbeca784abf975cdd9c90297fa7~mv2.png",
+"https://static.wixstatic.com/media/990059_45c15098a4cd468bb58cd67bb0ec8ddd~mv2.png",
+"https://static.wixstatic.com/media/990059_079cbe0471204f59bc373fca7ed5bb8a~mv2.png",
+"https://static.wixstatic.com/media/990059_034576676e974d128a6af3b901050979~mv2.png",
+"https://static.wixstatic.com/media/990059_7c98bbc20aab4bccafb8729ce192c67f~mv2.png",
+"https://static.wixstatic.com/media/990059_bc3de2f513594c86917b0e2326efcf8a~mv2.png",
+"https://static.wixstatic.com/media/990059_79a921a872224dc7b6d04de5c55bda2b~mv2.png",
+"https://static.wixstatic.com/media/990059_5f395576e10d4fbf8c7379f7ea89d6d4~mv2.png",
+"https://static.wixstatic.com/media/990059_d0a92839ce0049c1aa89b97943d394d1~mv2.png",
+"https://static.wixstatic.com/media/990059_08ef2737f12c4b31b89ea2a1651eb6e1~mv2.png",
+"https://static.wixstatic.com/media/990059_281fd072e0e04f4e8cf1569188b8a30a~mv2.png",
+"https://static.wixstatic.com/media/990059_395b8ec40a6945579ff1a493ab9483ac~mv2.png"
+
+]
+},
         ];
 
 
