@@ -402,7 +402,13 @@ button.active {
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <div class="controls">
+  
+
+
+    <div id="canvas-container"></div>
+  
+  <div class="controls">
+    
         <button id="add-sticker-btn" title="Add Random">
             <i data-lucide="shuffle" class="icon"></i>
         </button>
@@ -424,13 +430,12 @@ button.active {
         </button>
 
     </div>
-
+  
+  
     <div class="color-palette-container">
         <div class="color-palette" id="color-palette"></div>
     </div>
-
-    <div id="canvas-container"></div>
-
+  
     <div id="group-overlay-container" class="overlay"></div>
     <div id="sticker-overlay-container" class="overlay"></div>
 
