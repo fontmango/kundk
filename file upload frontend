@@ -1,0 +1,18 @@
+import { saveStickersToFolder } from "backend/stickerService";
+
+$w.onReady(() => {
+    // Listen for messages from the HTML component
+    $w("#html1").onMessage(async (event) => {
+        if (event.data.type === "saveStickers") {
+            const urls = event.data.urls;
+            console.log("📥 Got URLs from HTML:", urls);
+
+            try {
+                const savedItem = await saveStickersToFolder(urls);
+                console.log("✅ Stickers saved successfully to Wix CMS:", savedItem);
+            } catch (error) {
+                console.error("❌ Failed to save stickers to Wix CMS:", error);
+            }
+        }
+    });
+});
