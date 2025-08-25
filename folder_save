@@ -605,11 +605,10 @@
 
 <div id="success-popup" class="hidden">
   <div class="success-box">
-    <p>✅ Stickers saved successfully!</p>
+    <p id="success-message">✅ Stickers saved successfully!</p>
     <button id="success-ok-btn">OK</button>
   </div>
 </div>
-
 <div id="loading-popup" class="hidden">
   <div class="popup-content">
     <p>⏳ Saving your stickers...</p>
@@ -757,6 +756,9 @@ async function saveFolderDataToWix(urls) {
 window.addEventListener("message", (event) => {
   if (event.data.type === "saveSuccess") {
     document.getElementById("loading-popup").classList.add("hidden");
+     const count = event.data.urlAmount || 0;
+    document.getElementById("success-message").textContent =
+      `✅ Saved ${count} stickers successfully!`;
     document.getElementById("success-popup").classList.remove("hidden");
   }
   if (event.data.type === "saveError") {
