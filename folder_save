@@ -620,35 +620,41 @@ folder.addEventListener('dragleave', (e) => {
     e.currentTarget.classList.remove('drag-over');
 });
 
-folder.addEventListener('drop', (e) => {
+folder.addEventListener("drop", (e) => {
     e.preventDefault();
-    e.currentTarget.classList.remove('drag-over');
+    e.currentTarget.classList.remove("drag-over");
 
-   if (folderUrls.length >= MAX_FOLDER_IMAGES) {
-    // Folder is full → shake + red
-    folder.classList.add("full");
-    setTimeout(() => folder.classList.remove("full"), 500); // remove after shake
-    return; // block drop
-}
-    const stickerDivId = e.dataTransfer.getData('text/plain');
-    const stickerToMove = document.getElementById(stickerDivId);
-
-   if (stickerToMove && stickerToMove.classList.contains('sticker')) {
-    if (folderUrls.length >= MAX_FOLDER_IMAGES) {
-        // Folder is full → shake + red
-        folder.classList.add("full");
-        setTimeout(() => folder.classList.remove("full"), 500); // remove after shake
-        return; // don’t allow adding
+    const jsonData = e.dataTransfer.getData("application/json");
+    if (jsonData) {
+        try {
+            const { url } = JSON.parse(jsonData);
+            if (url && !folderUrls.includes(url)) {
+                folderUrls.push(url);
+                folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
+                saveFolderDataToWix(folderUrls);
+                updateFolderUI();
+            }
+        } catch (err) {
+            console.error("Invalid JSON drop", err);
+        }
+        return; // ✅ don’t add to canvas
     }
 
-    const stickerUrl = stickerToMove.querySelector('img').src;
-    stickerToMove.remove();
-    folderUrls.push(stickerUrl);
-   folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
-
-    saveFolderDataToWix(folderUrls);
-    saveState();
-}
+    // fallback for canvas stickers
+    const stickerDivId = e.dataTransfer.getData("text/plain");
+    if (stickerDivId) {
+        const stickerToMove = document.getElementById(stickerDivId);
+        if (stickerToMove && stickerToMove.classList.contains("sticker")) {
+            const stickerUrl = stickerToMove.querySelector("img").src;
+            if (!folderUrls.includes(stickerUrl)) {
+                stickerToMove.remove();
+                folderUrls.push(stickerUrl);
+                folderCount.textContent = `${folderUrls.length}/${MAX_FOLDER_IMAGES}`;
+                saveFolderDataToWix(folderUrls);
+                updateFolderUI();
+            }
+        }
+    }
 });
 
 
@@ -726,6 +732,43 @@ updateSaveButton();
 
     folderOverlay.style.display = "grid";
 }
+
+folderOverlay.addEventListener("dragover", (e) => {
+    e.preventDefault();
+});
+
+folderOverlay.addEventListener("drop", (e) => {
+    e.preventDefault();
+
+    // Try JSON payload (overlay/palette stickers)
+    let jsonData = e.dataTransfer.getData("application/json");
+    if (jsonData) {
+        try {
+            const { url } = JSON.parse(jsonData);
+            if (url && !folderUrls.includes(url)) {
+                folderUrls.push(url);
+                saveFolderDataToWix(folderUrls);
+                updateFolderUI();
+                renderFolderOverlay();
+            }
+            return; // ✅ handled
+        } catch (err) {
+            console.error("Invalid JSON drop into folder", err);
+        }
+    }
+
+    // Otherwise fallback to text/plain (canvas stickers)
+    const stickerId = e.dataTransfer.getData("text/plain");
+    if (stickerId) {
+        const draggedEl = document.getElementById(stickerId);
+        if (draggedEl && draggedEl.src && !folderUrls.includes(draggedEl.src)) {
+            folderUrls.push(draggedEl.src);
+            saveFolderDataToWix(folderUrls);
+            updateFolderUI();
+            renderFolderOverlay();
+        }
+    }
+});
 
 
 
@@ -1237,6 +1280,7 @@ function showOverlay(e, urls) {
                 url: e.target.src,
                 width: 200
             }));
+             e.dataTransfer.setData("source", "overlay");
         });
         overlaySticker.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -1276,29 +1320,16 @@ canvas.addEventListener('dragover', (e) => {
 
 canvas.addEventListener("drop", (e) => {
     e.preventDefault();
-
-    // Try to get JSON payload first
-    let jsonData = e.dataTransfer.getData("application/json");
-    if (jsonData) {
-        try {
-            const { url, width } = JSON.parse(jsonData);
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            addSticker(url, x, y, width);
-            return;
-        } catch (err) {
-            console.error("Invalid JSON drop data", err);
-        }
+    const source = e.dataTransfer.getData("source");
+    if (source === "overlay" && e.target.closest("#folder")) {
+        // 🔹 dropped on folder, not canvas → do nothing
+        return;
     }
 
-    // Otherwise treat as sticker ID (dragging from canvas)
-    const stickerId = e.dataTransfer.getData("text/plain");
-    if (stickerId) {
-        const draggedEl = document.getElementById(stickerId);
-        if (draggedEl) {
-            console.log("Ignoring canvas self-drop");
-        }
+    const jsonData = e.dataTransfer.getData("application/json");
+    if (jsonData) {
+        const { url, width } = JSON.parse(jsonData);
+        addSticker(url, e.offsetX, e.offsetY, width);
     }
 });
 
