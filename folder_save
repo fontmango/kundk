@@ -412,6 +412,23 @@
   100% { transform: translateX(0); }
 }
 
+.overlay-save {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.overlay-save:hover {
+  background: #45a049;
+}
+
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -625,6 +642,20 @@ folder.addEventListener('drop', (e) => {
 
 function renderFolderOverlay() {
     folderOverlay.innerHTML = "";
+
+    // Save button (top-left)
+const saveBtn = document.createElement("button");
+saveBtn.textContent = "Save";
+saveBtn.className = "overlay-save";
+// 👉 put the event listener right here:
+saveBtn.addEventListener("click", () => {
+    console.log("💾 Save button clicked in HTML");
+    window.parent.postMessage({
+        type: "saveStickers",
+        urls: folderUrls   // this should be the array you’re collecting
+    }, "*");
+});
+folderOverlay.appendChild(saveBtn);
 
     // Close button
     const closeBtn = document.createElement("button");
