@@ -264,6 +264,22 @@
             align-items: center;
             gap: 5px;
         }
+
+        .pulse-effect {
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -272,7 +288,7 @@
 
     <div class="controls">
         <div class="letter-dropdown-container">
-            <label for="letter-select">Buchstaben:</label>
+        
             <select id="letter-select">
                 <option value="A">A</option>
                 <option value="B">B</option>
@@ -302,6 +318,12 @@
                 <option value="Z">Z</option>
             </select>
         </div>
+
+        
+          
+	<button id="spin-sticker-btn" title="Spin Random">
+  <i data-lucide="dice-6" class="icon"></i>
+</button>
         
         <button id="add-sticker-btn" title="Aufkleber hinzufügen">
             <i data-lucide="plus" class="icon"></i>
@@ -343,6 +365,13 @@
                 }
             },
         ];
+
+
+
+
+
+        const spinBtn = document.getElementById("spin-sticker-btn");
+
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
         const undoBtn = document.getElementById('undo-btn');
@@ -409,7 +438,102 @@
             return Math.sqrt(dx * dx + dy * dy);
         }
 
-        function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
+function getRandomStickerUrlFromGroups() {
+    if (!stickerGroups || stickerGroups.length === 0) {
+        console.log("⚠️ No stickerGroups available");
+        return null;
+    }
+
+    // get current dropdown value
+    const selectedLetter = document.getElementById("letter-select").value;
+
+    // collect all stickers from all groups for the chosen letter
+    const allStickers = stickerGroups.flatMap(group => {
+        const urlsForLetter = group.urls[selectedLetter];
+        return urlsForLetter ? urlsForLetter : [];
+    });
+
+    if (allStickers.length === 0) {
+        console.log(`⚠️ No stickers found for letter ${selectedLetter}`);
+        return null;
+    }
+
+    // pick one randomly
+    const randomIndex = Math.floor(Math.random() * allStickers.length);
+    return allStickers[randomIndex];
+}
+
+spinBtn.addEventListener("click", () => {
+    let sticker = document.querySelector('#canvas-container .sticker img');
+
+    if (!sticker) {
+        const firstUrl = getRandomStickerUrlFromGroups(); 
+        if (firstUrl) {
+            addOrReplaceSticker(firstUrl);
+            sticker = document.querySelector('#canvas-container .sticker img');
+        } else {
+            console.warn("⚠️ No sticker available for selected letter.");
+            return;
+        }
+    }
+
+    let spinCount = 0;
+    const maxSpins = 15 + Math.floor(Math.random() * 10);
+
+    const spinInterval = setInterval(() => {
+        const nextUrl = getRandomStickerUrlFromGroups(); 
+        if (nextUrl) {
+            sticker.src = nextUrl;
+        }
+        
+        spinCount++;
+        if (spinCount >= maxSpins) {
+            clearInterval(spinInterval);
+
+            const stickerDiv = sticker.closest('.sticker');
+            if (stickerDiv) {
+                stickerDiv.classList.add('pulse-effect');
+                setTimeout(() => stickerDiv.classList.remove('pulse-effect'), 3000);
+            }
+
+            saveState();
+        }
+    }, 100);
+});
+
+// MODIFIED: This function now correctly handles replacing the sticker and centering it
+  function addOrReplaceSticker(newUrl) {
+    const unlockedSticker = document.querySelector('.sticker:not(.locked)');
+    const stickerSize = 120;
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
+
+    if (unlockedSticker) {
+        // Hide the sticker temporarily
+        unlockedSticker.style.opacity = '0';
+        
+        // Update the sticker's properties
+        unlockedSticker.querySelector('img').src = newUrl;
+        unlockedSticker.style.width = `${stickerSize}px`;
+        unlockedSticker.style.height = 'auto';
+        unlockedSticker.style.left = `${centerX}px`;
+        unlockedSticker.style.top = `${centerY}px`;
+        
+        // Use an event listener to show the sticker only after the image has loaded
+        unlockedSticker.querySelector('img').onload = () => {
+            unlockedSticker.style.opacity = '1';
+        };
+
+    } else {
+        // Create a brand new sticker if none are unlocked
+        addSticker(newUrl, centerX, centerY, stickerSize);
+    }
+    saveState();
+}
+
+        function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
             const { suppressSave = false, rotation = 0 } = opts;
             const sticker = document.createElement('div');
             sticker.classList.add('sticker');
@@ -608,68 +732,77 @@
 
             addResizeHandleListeners(resizeHandle, sticker);
 
-            function addRotationHandleListeners(handle, sticker) {
-                let initialAngle = 0;
-                let stickerRotation = 0;
-                let stickerCenter = {};
-                
-                const startRotation = (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    saveState();
-                    
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    const rect = sticker.getBoundingClientRect();
-                    
-                    stickerCenter = {
-                        x: rect.left + rect.width / 2,
-                        y: rect.top + rect.height / 2
-                    };
-                    
-                    initialAngle = Math.atan2(clientY - stickerCenter.y, clientX - stickerCenter.x) * 180 / Math.PI;
-                    stickerRotation = parseFloat(sticker.dataset.rotation) || 0;
-                    
-                    document.addEventListener('mousemove', doRotate);
-                    document.addEventListener('mouseup', endRotation);
-                    document.addEventListener('touchmove', doRotate, { passive: false });
-                    document.addEventListener('touchend', endRotation);
-                };
 
-                const doRotate = (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    
-                    const newAngle = Math.atan2(clientY - stickerCenter.y, clientX - stickerCenter.x) * 180 / Math.PI;
-                    
-                    let angleDifference = newAngle - initialAngle;
-                    
-                    if (angleDifference > 180) {
-                        angleDifference -= 360;
-                    } else if (angleDifference < -180) {
-                        angleDifference += 360;
-                    }
-                    
-                    const newRotation = (stickerRotation + angleDifference);
-                    
-                    sticker.style.transform = `rotate(${newRotation}deg)`;
-                    sticker.dataset.rotation = newRotation;
-                };
 
-                const endRotation = () => {
-                    document.removeEventListener('mousemove', doRotate);
-                    document.removeEventListener('mouseup', endRotation);
-                    document.removeEventListener('touchmove', doRotate);
-                    document.removeEventListener('touchend', endRotation);
-                    saveState();
-                };
+function addRotationHandleListeners(handle, sticker) {
+    let startAngle = 0;
+    let startRotation = 0;
+    let stickerCenter = {};
+    let lastAngle = 0;
 
-                handle.addEventListener('mousedown', startRotation);
-                handle.addEventListener('touchstart', startRotation);
-            }
+    const getAngle = (clientX, clientY) => {
+        return Math.atan2(clientY - stickerCenter.y, clientX - stickerCenter.x) * 180 / Math.PI;
+    };
+
+    const startRotationHandler = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        saveState();
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const rect = sticker.getBoundingClientRect();
+
+        stickerCenter = {
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2
+        };
+
+        startAngle = getAngle(clientX, clientY);
+        lastAngle = startAngle;
+        startRotation = parseFloat(sticker.dataset.rotation) || 0;
+
+        document.addEventListener("mousemove", doRotate);
+        document.addEventListener("mouseup", endRotation);
+        document.addEventListener("touchmove", doRotate, { passive: false });
+        document.addEventListener("touchend", endRotation);
+    };
+
+    const doRotate = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        let currentAngle = getAngle(clientX, clientY);
+
+        // --- unwrap the angle so it doesn’t jump at 180° ---
+        let delta = currentAngle - lastAngle;
+        if (delta > 180) delta -= 360;
+        if (delta < -180) delta += 360;
+
+        startRotation += delta; // accumulate
+        lastAngle = currentAngle;
+
+        sticker.style.transform = `rotate(${startRotation}deg)`;
+        sticker.dataset.rotation = startRotation;
+    };
+
+    const endRotation = () => {
+        document.removeEventListener("mousemove", doRotate);
+        document.removeEventListener("mouseup", endRotation);
+        document.removeEventListener("touchmove", doRotate);
+        document.removeEventListener("touchend", endRotation);
+
+        saveState();
+    };
+
+    handle.addEventListener("mousedown", startRotationHandler);
+    handle.addEventListener("touchstart", startRotationHandler);
+}
+
+
             
             addRotationHandleListeners(rotateHandle, sticker);
 
@@ -816,7 +949,7 @@
                     paletteSticker.addEventListener('dragstart', (e) => {
                         e.dataTransfer.setData('application/json', JSON.stringify({
                             url: e.target.src,
-                            width: 200
+                            width: 120
                         }));
                         hideOverlay();
                     });
@@ -845,7 +978,7 @@
                         e.stopPropagation();
                         e.dataTransfer.setData('application/json', JSON.stringify({
                             url: e.target.src,
-                            width: 200
+                            width: 120
                         }));
                     });
                     overlaySticker.addEventListener('click', (e) => {
