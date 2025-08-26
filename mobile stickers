@@ -423,7 +423,7 @@
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, transform 0.3s, border-color 0.3s;
-    z-index: 1000;
+    z-index: 100;
 }
 
 #folder:hover {
@@ -805,6 +805,22 @@
   25% { transform: translateX(-5px); }
   75% { transform: translateX(5px); }
 }
+
+.pulse-effect {
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -834,6 +850,11 @@
 </div>
 
      <div class="controls">
+
+     <button id="spin-sticker-btn" title="Spin Random">
+  <i data-lucide="dice-6" class="icon"></i>
+</button>
+
         <button id="add-sticker-btn" title="Add Random">
             <i data-lucide="shuffle" class="icon"></i>
         </button>
@@ -971,7 +992,7 @@ urls: [
 },            
             
         ];
-
+const spinBtn = document.getElementById("spin-sticker-btn");
 const saveBtn = document.getElementById("save-btn");
 const popup = document.getElementById("email-popup");
 const cancelBtn = document.getElementById("cancel-btn");
@@ -1014,19 +1035,24 @@ let firstStickerAdded = false;
 // This function now correctly handles replacing the sticker and centering it
 function addOrReplaceSticker(newUrl) {
     const existingSticker = document.querySelector('#canvas-container .sticker');
-
     if (existingSticker) {
         existingSticker.querySelector('img').src = newUrl;
+        saveState();
+        return existingSticker; // ✅ return it
     } else {
         const stickerSize = 120;
         const canvasWidth = canvas.offsetWidth;
         const canvasHeight = canvas.offsetHeight;
         const centerX = (canvasWidth / 2) - (stickerSize / 2);
         const centerY = (canvasHeight / 2) - (stickerSize / 2);
-        addSticker(newUrl, centerX, centerY, stickerSize);
+        const newSticker = addSticker(newUrl, centerX, centerY, stickerSize);
+        saveState();
+        return newSticker; // ✅ return the new element
     }
-    saveState();
 }
+
+
+
 
 // Your new function to handle saving the data
 async function saveFolderDataToWix(urls) {
@@ -1156,6 +1182,76 @@ function addToFolder(stickerUrl, stickerEl) {
     redoStack = [];
     updateUndoRedoButtons();
 }
+
+function getRandomStickerUrlFromGroups() {
+    if (!stickerGroups || stickerGroups.length === 0) {
+        console.log("⚠️ No stickerGroups available");
+        return null;
+    }
+
+    const allStickers = stickerGroups.flatMap(group => group.urls);
+
+    if (allStickers.length === 0) {
+        console.log("⚠️ No stickers in groups");
+        return null;
+    }
+
+    const randomIndex = Math.floor(Math.random() * allStickers.length);
+    const chosen = allStickers[randomIndex];
+
+    return chosen;
+}
+
+spinBtn.addEventListener("click", () => {
+   
+
+    let sticker = document.querySelector('#canvas-container .sticker img');
+    if (!sticker) {
+        console.log("ℹ️ No sticker found, adding first one");
+        const firstUrl = getRandomStickerUrlFromGroups(); 
+        if (firstUrl) {
+            addOrReplaceSticker(firstUrl);
+            sticker = document.querySelector('#canvas-container .sticker img');
+        } else {
+            console.warn("⚠️ No valid sticker URL was returned. Cannot add a sticker.");
+            return;
+        }
+    }
+    if (!sticker) {
+        console.warn("⚠️ Still no sticker, aborting spin");
+        return;
+    }
+
+    let spinCount = 0;
+    const maxSpins = 15 + Math.floor(Math.random() * 10);
+
+    const spinInterval = setInterval(() => {
+        const nextUrl = getRandomStickerUrlFromGroups(); 
+        if (nextUrl) {
+          
+            sticker.src = nextUrl;
+        }
+        
+        spinCount++;
+        if (spinCount >= maxSpins) {
+            clearInterval(spinInterval);
+          
+            
+            // Add the pulse effect to the parent sticker div
+            const stickerDiv = sticker.closest('.sticker');
+            if (stickerDiv) {
+                stickerDiv.classList.add('pulse-effect');
+                
+                // OPTIONAL: Remove the class after a few seconds
+                setTimeout(() => {
+                    stickerDiv.classList.remove('pulse-effect');
+                }, 3000); // Removes the effect after 3 seconds
+            }
+
+            saveState();
+        }
+    }, 100);
+});
 
 function renderFolderOverlay() {
     folderOverlay.innerHTML = "";
@@ -1381,6 +1477,8 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
         sticker.style.left = `${x}px`;
         sticker.style.top = `${y}px`;
     }
+
+    
 
     const copyBtn = document.createElement('div');
     copyBtn.classList.add('copy-btn');
