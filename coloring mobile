@@ -1779,51 +1779,50 @@ const spinBtn = document.getElementById("spin-sticker-btn");
 }
 
 spinBtn.addEventListener("click", () => {
-   
+    console.log("🎰 Spin button clicked");
 
-    let sticker = document.querySelector('#canvas-container .sticker img');
-    if (!sticker) {
-        console.log("ℹ️ No sticker found, adding first one");
+    // FIX: Find an unlocked sticker, not just any sticker
+    let stickerImg = document.querySelector('.sticker:not(.locked) img');
+
+    // If there are no unlocked stickers, add a new one.
+    if (!stickerImg) {
+        console.log("ℹ️ No unlocked sticker found, adding first one");
         const firstUrl = getRandomStickerUrlFromGroups(); 
         if (firstUrl) {
             addOrReplaceSticker(firstUrl);
-            sticker = document.querySelector('#canvas-container .sticker img');
         } else {
             console.warn("⚠️ No valid sticker URL was returned. Cannot add a sticker.");
             return;
         }
     }
-    if (!sticker) {
-        console.warn("⚠️ Still no sticker, aborting spin");
+    
+    // Now get the sticker image again, which will exist if a new one was just added.
+    stickerImg = document.querySelector('.sticker:not(.locked) img');
+
+    if (!stickerImg) {
+        console.warn("⚠️ Still no unlocked sticker, aborting spin");
         return;
     }
 
+    // Now, proceed with the spinning logic
     let spinCount = 0;
     const maxSpins = 15 + Math.floor(Math.random() * 10);
-
     const spinInterval = setInterval(() => {
         const nextUrl = getRandomStickerUrlFromGroups(); 
         if (nextUrl) {
-          
-            sticker.src = nextUrl;
+            console.log(`🔄 Spin ${spinCount}: ${nextUrl}`);
+            stickerImg.src = nextUrl;
         }
-        
         spinCount++;
         if (spinCount >= maxSpins) {
             clearInterval(spinInterval);
-          
-            
-            // Add the pulse effect to the parent sticker div
-            const stickerDiv = sticker.closest('.sticker');
+            console.log(`✅ Final sticker: ${stickerImg.src}`);
+            const stickerDiv = stickerImg.closest('.sticker');
             if (stickerDiv) {
+                stickerDiv.classList.remove('pulse-effect');
+                void stickerDiv.offsetWidth;
                 stickerDiv.classList.add('pulse-effect');
-                
-                // OPTIONAL: Remove the class after a few seconds
-                setTimeout(() => {
-                    stickerDiv.classList.remove('pulse-effect');
-                }, 3000); // Removes the effect after 3 seconds
             }
-
             saveState();
         }
     }, 100);
