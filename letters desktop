@@ -182,12 +182,18 @@
             transform: scale(1.1);
         }
 
-        .copy-btn-icon, .delete-btn-icon, .resize-handle-icon, .rotate-handle-icon {
+        .copy-btn-icon, .delete-btn-icon {
             width: 100%;
             height: 100%;
             fill: white;
             stroke: white;
         }
+        
+        .resize-handle-icon ,  .rotate-handle-icon{
+         width: 60%;
+            height: 60%;
+            }
+        
 
         .delete-btn, .copy-btn, .resize-handle, .rotate-handle {
             position: absolute;
@@ -227,7 +233,7 @@
         .rotate-handle {
             bottom: 5%;
             left: 5%;
-            background-color: #4a86e8;
+            background-color: #c2bebeff;
             cursor: pointer;
         }
 
@@ -254,7 +260,7 @@
         }
         
         .rotate-handle:hover {
-            background-color: #4a86e8;
+            background-color: #FF5C00;
             transform: scale(1.1);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
@@ -606,8 +612,13 @@ spinBtn.addEventListener("click", () => {
             
             const rotateHandle = document.createElement('div');
             rotateHandle.classList.add('rotate-handle');
-            rotateHandle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9.76V3"/><path d="M3 12h3"/><path d="M12 3v3"/><path d="m3 21 3-3"/><path d="M18 18h.01"/><path d="M21 12h-3"/><path d="m21 21-3-3"/><path d="m3 3 3 3"/><path d="M6 18h.01"/></svg>`;
-            
+rotateHandle.innerHTML = `<svg class = "rotate-handle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       class="lucide lucide-rotate-ccw">
+    <path d="M3 2v6h6"/>
+    <path d="M3 13a9 9 0 1 0 3-7.7L3 8"/>
+  </svg>
+`;
             sticker.appendChild(deleteBtn);
             sticker.appendChild(copyBtn);
             sticker.appendChild(resizeHandle);
