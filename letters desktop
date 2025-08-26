@@ -126,7 +126,7 @@
             display: flex;
             flex-wrap: nowrap;
             overflow-x: auto;
-            overflow-y: hidden;
+            overflow-y: visible;
             align-items: center;
             justify-content: center;
             gap: 10px;
@@ -149,7 +149,37 @@
             cursor: pointer;
             border: 2px solid transparent;
             transition: border-color 0.2s, transform 0.2s;
+            position: relative;
         }
+
+.palette-sticker-wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 4px;
+  overflow: visible; /* important, allows ::after to render outside */
+}
+
+.palette-sticker-wrapper::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: calc(100% + -15px); /* just a small gap above */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 9999;
+}
+
+.palette-sticker-wrapper:hover::after {
+  opacity: 1;
+}
 
         .palette-sticker:hover {
             transform: scale(1.1);
@@ -438,6 +468,48 @@
     });
     isRestoring = false;
     updateUndoRedoButtons();
+}
+
+function populatePalette() {
+    stickerGroups.forEach(group => {
+        const representativeUrl = group.urls["A"] ? group.urls["A"][0] : null;
+
+        if (representativeUrl) {
+            // ✅ CORRECTION: Create the wrapper div
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('palette-sticker-wrapper');
+            // Set the tooltip text on the wrapper using a data attribute
+            wrapper.dataset.label = group.name;
+
+            const paletteSticker = document.createElement('img');
+            paletteSticker.src = representativeUrl;
+            paletteSticker.classList.add('palette-sticker');
+            paletteSticker.dataset.group = group.name;
+
+            paletteSticker.addEventListener('click', (e) => {
+                if (activePaletteSticker === paletteSticker) {
+                    hideOverlay();
+                } else {
+                    hideOverlay();
+                    showOverlay(e, group.urls);
+                    activePaletteSticker = paletteSticker;
+                }
+            });
+
+            paletteSticker.draggable = true;
+            paletteSticker.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('application/json', JSON.stringify({
+                    url: e.target.src,
+                    width: 120
+                }));
+                hideOverlay();
+            });
+
+            // ✅ CORRECTION: Append the image to the wrapper, then the wrapper to the palette
+            wrapper.appendChild(paletteSticker);
+            paletteContainer.appendChild(wrapper);
+        }
+    });
 }
 
         function deselectAllStickers() {
@@ -908,39 +980,9 @@ spinBtn.addEventListener("click", () => {
     return sticker;
 }
 
-        function populatePalette() {
-            stickerGroups.forEach(group => {
-                const paletteSticker = document.createElement('img');
-                const representativeUrl = group.urls["A"] ? group.urls["A"][0] : null;
 
-                if (representativeUrl) {
-                    paletteSticker.src = representativeUrl;
-                    paletteSticker.classList.add('palette-sticker');
-                    paletteSticker.dataset.group = group.name;
 
-                    paletteSticker.addEventListener('click', (e) => {
-                        if (activePaletteSticker === paletteSticker) {
-                            hideOverlay();
-                        } else {
-                            hideOverlay();
-                            showOverlay(e, group.urls);
-                            activePaletteSticker = paletteSticker;
-                        }
-                    });
-
-                    paletteSticker.draggable = true;
-                    paletteSticker.addEventListener('dragstart', (e) => {
-                        e.dataTransfer.setData('application/json', JSON.stringify({
-                            url: e.target.src,
-                            width: 120
-                        }));
-                        hideOverlay();
-                    });
-                    paletteContainer.appendChild(paletteSticker);
-                }
-            });
-        }
-
+        
         function hideOverlay() {
             overlayContainer.style.display = 'none';
             activePaletteSticker = null;
