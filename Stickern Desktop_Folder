@@ -643,6 +643,22 @@
   border: 1px solid red;
   outline: none;
 }
+
+.pulse-effect {
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -653,6 +669,10 @@
 
 
     <div class="controls">
+	<button id="spin-sticker-btn" title="Spin Random">
+  <i data-lucide="dice-6" class="icon"></i>
+</button>
+
     <button id="add-sticker-btn" title="Überrasche mich">
         <i data-lucide="shuffle" class="icon"></i>
     </button>
@@ -800,6 +820,7 @@ urls: [
         ];
 
 
+const spinBtn = document.getElementById("spin-sticker-btn");
 
 const saveBtn = document.getElementById("save-btn");
 const popup = document.getElementById("email-popup");
@@ -1000,6 +1021,107 @@ folder.addEventListener("drop", (e) => {
     }
 });
 
+function getRandomStickerUrlFromGroups() {
+    if (!stickerGroups || stickerGroups.length === 0) {
+        console.log("⚠️ No stickerGroups available");
+        return null;
+    }
+
+    const allStickers = stickerGroups.flatMap(group => group.urls);
+
+    if (allStickers.length === 0) {
+        console.log("⚠️ No stickers in groups");
+        return null;
+    }
+
+    const randomIndex = Math.floor(Math.random() * allStickers.length);
+    const chosen = allStickers[randomIndex];
+
+    return chosen;
+}
+
+spinBtn.addEventListener("click", () => {
+   
+
+    let sticker = document.querySelector('#canvas-container .sticker img');
+    if (!sticker) {
+        console.log("ℹ️ No sticker found, adding first one");
+        const firstUrl = getRandomStickerUrlFromGroups(); 
+        if (firstUrl) {
+            addOrReplaceSticker(firstUrl);
+            sticker = document.querySelector('#canvas-container .sticker img');
+        } else {
+            console.warn("⚠️ No valid sticker URL was returned. Cannot add a sticker.");
+            return;
+        }
+    }
+    if (!sticker) {
+        console.warn("⚠️ Still no sticker, aborting spin");
+        return;
+    }
+
+    let spinCount = 0;
+    const maxSpins = 15 + Math.floor(Math.random() * 10);
+
+    const spinInterval = setInterval(() => {
+        const nextUrl = getRandomStickerUrlFromGroups(); 
+        if (nextUrl) {
+          
+            sticker.src = nextUrl;
+        }
+        
+        spinCount++;
+        if (spinCount >= maxSpins) {
+            clearInterval(spinInterval);
+          
+            
+            // Add the pulse effect to the parent sticker div
+            const stickerDiv = sticker.closest('.sticker');
+            if (stickerDiv) {
+                stickerDiv.classList.add('pulse-effect');
+                
+                // OPTIONAL: Remove the class after a few seconds
+                setTimeout(() => {
+                    stickerDiv.classList.remove('pulse-effect');
+                }, 3000); // Removes the effect after 3 seconds
+            }
+
+            saveState();
+        }
+    }, 100);
+});
+
+// MODIFIED: This function now correctly handles replacing the sticker and centering it
+  function addOrReplaceSticker(newUrl) {
+    const unlockedSticker = document.querySelector('.sticker:not(.locked)');
+    const stickerSize = 120;
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
+
+    if (unlockedSticker) {
+        // Hide the sticker temporarily
+        unlockedSticker.style.opacity = '0';
+        
+        // Update the sticker's properties
+        unlockedSticker.querySelector('img').src = newUrl;
+        unlockedSticker.style.width = `${stickerSize}px`;
+        unlockedSticker.style.height = 'auto';
+        unlockedSticker.style.left = `${centerX}px`;
+        unlockedSticker.style.top = `${centerY}px`;
+        
+        // Use an event listener to show the sticker only after the image has loaded
+        unlockedSticker.querySelector('img').onload = () => {
+            unlockedSticker.style.opacity = '1';
+        };
+
+    } else {
+        // Create a brand new sticker if none are unlocked
+        addSticker(newUrl, centerX, centerY, stickerSize);
+    }
+    saveState();
+}
 
 function renderFolderOverlay() {
     folderOverlay.innerHTML = "";
