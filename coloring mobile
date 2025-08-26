@@ -1781,13 +1781,13 @@ const spinBtn = document.getElementById("spin-sticker-btn");
 spinBtn.addEventListener("click", () => {
     console.log("🎰 Spin button clicked");
 
-    // FIX: Find an unlocked sticker, not just any sticker
-    let stickerImg = document.querySelector('.sticker:not(.locked) img');
+    // Find the first unlocked sticker
+    const stickerDiv = document.querySelector('.sticker:not(.locked)');
 
-    // If there are no unlocked stickers, add a new one.
-    if (!stickerImg) {
+    // If there's no unlocked sticker, add a new one and then proceed
+    if (!stickerDiv) {
         console.log("ℹ️ No unlocked sticker found, adding first one");
-        const firstUrl = getRandomStickerUrlFromGroups(); 
+        const firstUrl = getRandomStickerUrlFromGroups();
         if (firstUrl) {
             addOrReplaceSticker(firstUrl);
         } else {
@@ -1795,20 +1795,33 @@ spinBtn.addEventListener("click", () => {
             return;
         }
     }
-    
-    // Now get the sticker image again, which will exist if a new one was just added.
-    stickerImg = document.querySelector('.sticker:not(.locked) img');
 
-    if (!stickerImg) {
+    // Now, get the sticker image and its parent div again
+    const stickerImg = document.querySelector('.sticker:not(.locked) img');
+    const targetStickerDiv = stickerImg.closest('.sticker');
+
+    // Make sure we actually found a sticker to work with
+    if (!targetStickerDiv) {
         console.warn("⚠️ Still no unlocked sticker, aborting spin");
         return;
     }
 
-    // Now, proceed with the spinning logic
+    // --- NEW LOGIC: Recenter the sticker ---
+    const stickerSize = 120; // Or whatever your default sticker size is
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
+    
+    // Position the sticker at the center of the canvas
+    targetStickerDiv.style.left = `${centerX}px`;
+    targetStickerDiv.style.top = `${centerY}px`;
+    // --- END NEW LOGIC ---
+
     let spinCount = 0;
     const maxSpins = 15 + Math.floor(Math.random() * 10);
     const spinInterval = setInterval(() => {
-        const nextUrl = getRandomStickerUrlFromGroups(); 
+        const nextUrl = getRandomStickerUrlFromGroups();
         if (nextUrl) {
             console.log(`🔄 Spin ${spinCount}: ${nextUrl}`);
             stickerImg.src = nextUrl;
@@ -1817,17 +1830,16 @@ spinBtn.addEventListener("click", () => {
         if (spinCount >= maxSpins) {
             clearInterval(spinInterval);
             console.log(`✅ Final sticker: ${stickerImg.src}`);
-            const stickerDiv = stickerImg.closest('.sticker');
-            if (stickerDiv) {
-                stickerDiv.classList.remove('pulse-effect');
-                void stickerDiv.offsetWidth;
-                stickerDiv.classList.add('pulse-effect');
-            }
+            
+            // Apply the pulse animation
+            targetStickerDiv.classList.remove('pulse-effect');
+            void targetStickerDiv.offsetWidth;
+            targetStickerDiv.classList.add('pulse-effect');
+
             saveState();
         }
     }, 100);
 });
-   
    function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     const { suppressSave = false } = opts;
     const sticker = document.createElement('div');
