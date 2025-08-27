@@ -550,37 +550,44 @@ function getRandomStickerUrlFromGroups() {
 }
 
 spinBtn.addEventListener("click", () => {
-    let sticker = document.querySelector('#canvas-container .sticker img');
+    const selectedLetter = letterSelect.value;
 
-    if (!sticker) {
-        const firstUrl = getRandomStickerUrlFromGroups(); 
+    // 🔎 find unlocked sticker of same letter
+    let stickerDiv = document.querySelector(`#canvas-container .sticker[data-letter="${selectedLetter}"]:not(.locked)`);
+    let stickerImg;
+
+    if (!stickerDiv) {
+        // ➕ No sticker of this letter, create new one
+        const firstUrl = getRandomStickerByLetter(selectedLetter);
         if (firstUrl) {
-            addOrReplaceSticker(firstUrl);
-            sticker = document.querySelector('#canvas-container .sticker img');
+            addOrReplaceSticker(firstUrl, selectedLetter);
+            stickerDiv = document.querySelector(`#canvas-container .sticker[data-letter="${selectedLetter}"]:not(.locked)`);
+            stickerImg = stickerDiv?.querySelector("img");
         } else {
             console.warn("⚠️ No sticker available for selected letter.");
             return;
         }
+    } else {
+        stickerImg = stickerDiv.querySelector("img");
     }
 
+    // 🎰 Start spinning
     let spinCount = 0;
     const maxSpins = 15 + Math.floor(Math.random() * 10);
 
     const spinInterval = setInterval(() => {
-        const nextUrl = getRandomStickerUrlFromGroups(); 
+        const nextUrl = getRandomStickerByLetter(selectedLetter); 
         if (nextUrl) {
-            sticker.src = nextUrl;
+            stickerImg.src = nextUrl;
         }
-        
+
         spinCount++;
         if (spinCount >= maxSpins) {
             clearInterval(spinInterval);
 
-            const stickerDiv = sticker.closest('.sticker');
-            if (stickerDiv) {
-                stickerDiv.classList.add('pulse-effect');
-                setTimeout(() => stickerDiv.classList.remove('pulse-effect'), 3000);
-            }
+            // 🎉 Add pulse effect at the end
+            stickerDiv.classList.add("pulse-effect");
+            setTimeout(() => stickerDiv.classList.remove("pulse-effect"), 3000);
 
             saveState();
         }
@@ -588,57 +595,78 @@ spinBtn.addEventListener("click", () => {
 });
 
 // MODIFIED: This function now correctly handles replacing the sticker and centering it
-  function addOrReplaceSticker(newUrl) {
-    const unlockedSticker = document.querySelector('.sticker:not(.locked)');
+ function addOrReplaceSticker(newUrl, letter) {
     const stickerSize = 120;
     const canvasWidth = canvas.offsetWidth;
     const canvasHeight = canvas.offsetHeight;
     const centerX = (canvasWidth / 2) - (stickerSize / 2);
     const centerY = (canvasHeight / 2) - (stickerSize / 2);
 
+    // 🔎 Look specifically for unlocked sticker with the same letter
+    const unlockedSticker = document.querySelector(`.sticker[data-letter="${letter}"]:not(.locked)`);
+
     if (unlockedSticker) {
-        // Hide the sticker temporarily
+        // Hide during replacement
         unlockedSticker.style.opacity = '0';
         
-        // Update the sticker's properties
-        unlockedSticker.querySelector('img').src = newUrl;
-        unlockedSticker.style.width = `${stickerSize}px`;
-        unlockedSticker.style.height = 'auto';
-        unlockedSticker.style.left = `${centerX}px`;
-        unlockedSticker.style.top = `${centerY}px`;
-        
-        // Use an event listener to show the sticker only after the image has loaded
-        unlockedSticker.querySelector('img').onload = () => {
+        const img = unlockedSticker.querySelector('img');
+        img.src = newUrl;
+
+       
+        img.onload = () => {
             unlockedSticker.style.opacity = '1';
         };
-
     } else {
-        // Create a brand new sticker if none are unlocked
-        addSticker(newUrl, centerX, centerY, stickerSize);
+        // ➕ Create a new sticker if no unlocked one for this letter
+          addSticker(newUrl, undefined, undefined, stickerSize, stickerSize, { letter });
     }
+
     saveState();
 }
 
-     function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
-    const { suppressSave = false, rotation = 0 } = opts;
+
+function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
+    const { suppressSave = false, rotation = 0, letter = null } = opts;
     const sticker = document.createElement('div');
     sticker.classList.add('sticker');
+    if (letter) sticker.dataset.letter = letter;
 
     let finalX, finalY;
 
-    // Prioritize the provided coordinates from a saved state.
+    // Default placement (center if no coords given)
     if (x !== undefined && y !== undefined) {
         finalX = x;
         finalY = y;
     } else {
-        // If no coordinates are given, center the sticker on the canvas.
         const canvasWidth = canvas.offsetWidth;
         const canvasHeight = canvas.offsetHeight;
         finalX = (canvasWidth / 2) - (width / 2);
         finalY = (canvasHeight / 2) - (height / 2);
     }
-    
-    // Apply the sticker's position, size, and rotation.
+
+    // --- 🚫 Collision avoidance ---
+    function isOverlapping(nx, ny) {
+        const stickers = document.querySelectorAll('#canvas-container .sticker');
+        return Array.from(stickers).some(s => {
+            if (s === sticker) return false; // ignore self
+            const sx = parseInt(s.style.left);
+            const sy = parseInt(s.style.top);
+            const sw = s.offsetWidth;
+            const sh = s.offsetHeight;
+            return !(nx + width <= sx || nx >= sx + sw || ny + height <= sy || ny >= sy + sh);
+        });
+    }
+
+    // Try spiral search for a free spot
+    let attempts = 0;
+    let step = 20;
+    while (isOverlapping(finalX, finalY) && attempts < 200) {
+        finalX = (finalX + step) % (canvas.offsetWidth - width);
+        finalY = (finalY + step) % (canvas.offsetHeight - height);
+        attempts++;
+    }
+
+    // ✅ Now we have a free spot
     sticker.style.left = `${finalX}px`;
     sticker.style.top = `${finalY}px`;
     sticker.style.width = `${width}px`;
@@ -646,6 +674,7 @@ spinBtn.addEventListener("click", () => {
     sticker.style.transform = `rotate(${rotation}deg)`;
     sticker.dataset.rotation = rotation;
 
+    // Image
     const stickerImg = document.createElement('img');
     stickerImg.crossOrigin = "Anonymous";
     stickerImg.src = url;
@@ -665,27 +694,8 @@ spinBtn.addEventListener("click", () => {
         const stickerHeight = sticker.offsetHeight;
         let newX = parseInt(sticker.style.left) + 10;
         let newY = parseInt(sticker.style.top) + 10;
+     
         
-        function isOverlapping(x, y) {
-            const stickers = document.querySelectorAll('.sticker');
-            return Array.from(stickers).some(s => {
-                const sx = parseInt(s.style.left);
-                const sy = parseInt(s.style.top);
-                const sw = s.offsetWidth;
-                const sh = s.offsetHeight;
-                return !(x + stickerWidth < sx || x > sx + sw || y + stickerHeight < sy || y > sy + sh);
-            });
-        }
-        
-        const step = 10;
-        let attempts = 0;
-        while (isOverlapping(newX, newY) && attempts < 100) {
-            newX += step;
-            newY += step;
-            if (newX + stickerWidth > canvas.offsetWidth) newX = step;
-            if (newY + stickerHeight > canvas.offsetHeight) newY = step;
-            attempts++;
-        }
         
         addSticker(stickerImg.src, newX, newY, sticker.offsetWidth, sticker.offsetHeight, { rotation: sticker.dataset.rotation });
         saveState();
@@ -1096,15 +1106,11 @@ spinBtn.addEventListener("click", () => {
             }
         }
 
-        addStickerBtn.addEventListener('click', () => {
-            const selectedLetter = letterSelect.value;
-            const stickerUrl = getRandomStickerByLetter(selectedLetter);
-            if (stickerUrl) {
-                addSticker(stickerUrl);
-            } else {
-                alert(`No stickers found for the letter "${selectedLetter}".`);
-            }
-        });
+     addStickerBtn.addEventListener("click", () => {
+    const selectedLetter = letterSelect.value;
+    const url = getRandomStickerByLetter(selectedLetter);
+    if (url) addOrReplaceSticker(url, selectedLetter);
+});
 
         populatePalette();
         saveState();
