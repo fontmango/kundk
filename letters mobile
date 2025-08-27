@@ -1624,19 +1624,17 @@ function showOverlay(e, urlsByLetter) {
             }
         }
 
- addStickerBtn.addEventListener("click", () => {
-    const selectedLetter = "A"; // ✅ Hardcoded to "A"
+addStickerBtn.addEventListener("click", () => {
+    const selectedLetter = "A"; // Always use Letter 'A'
     const url = getRandomStickerByLetter(selectedLetter);
+
     if (url) {
-        // We also need to find which group this "A" sticker belongs to
-        const groupWithLetter = stickerGroups.find(g => g.urls[selectedLetter]);
-        const groupName = groupWithLetter ? groupWithLetter.name : null;
-        addSticker(url, undefined, undefined, 120, 120, { letter: selectedLetter, group: groupName });
+        // This calls the function you already have
+        addOrReplaceSticker(url, selectedLetter);
     } else {
         alert(`No sticker found for letter "${selectedLetter}"`);
     }
 });
-
   
         saveState();
 
