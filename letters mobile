@@ -102,9 +102,6 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
     background-color: #4a86e8; /* Blue */
 }
 
-.rotate-handle:active {
-    background-color: #FF5C00; /* Orange */
-}
 
 .group-btn:active {
     background-color: rgb(24, 224, 214); /* Teal */
@@ -420,13 +417,13 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
         
-        .rotate-handle:hover {
-            background-color: #FF5C00;
-            transform: scale(1.1);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
-
-
+ .rotate-handle:hover,
+.rotate-handle:active,
+.rotate-handle.active-state {
+    background-color: #FF5C00; /* Orange */
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
         .pulse-effect {
   animation: pulse 0.5s ease-in-out;
@@ -1135,6 +1132,8 @@ sticker.appendChild(groupBtn);
         const startRotationHandler = (e) => {
             e.stopPropagation();
             e.preventDefault();
+
+             handle.classList.add('active-state');
             
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -1176,6 +1175,9 @@ sticker.appendChild(groupBtn);
         };
 
         const endRotation = () => {
+
+            handle.classList.remove('active-state');
+            
             document.removeEventListener("mousemove", doRotate);
             document.removeEventListener("mouseup", endRotation);
             document.removeEventListener("touchmove", doRotate);
