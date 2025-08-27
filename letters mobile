@@ -59,6 +59,7 @@
         .sticker:hover > .delete-btn,
         .sticker:hover > .copy-btn,
         .sticker:hover > .resize-handle,
+        .sticker:hover > .group-btn,
         .sticker:hover > .rotate-handle {
             display: flex;
             align-items: center;
@@ -68,6 +69,7 @@
         .sticker.selected > .delete-btn,
         .sticker.selected > .copy-btn,
         .sticker.selected > .resize-handle,
+         .sticker.selected > .group-btn,
         .sticker.selected > .rotate-handle {
             display: flex;
         }
@@ -77,6 +79,7 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            visibility: hidden;
         }
 
         button {
@@ -99,6 +102,34 @@
             box-shadow: none !important;
         }
 
+.group-btn {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: none; /* show on hover/selected */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 101;
+    padding: 0;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.group-btn:hover {
+    background-color: #6aa84fff; /* match copy-btn hover color */
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.group-btn-icon {
+    width: 60%;
+    height: 60%;
+}
         button:hover {
             color: #000;
             transform: scale(1.1);
@@ -152,52 +183,106 @@
             position: relative;
         }
 
-        .palette-sticker-wrapper {
-            position: relative;
-            display: inline-block;
-            margin: 4px;
-            overflow: visible;
-        }
+.palette-sticker-wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 4px;
+  overflow: visible; /* important, allows ::after to render outside */
+}
 
-        .palette-sticker-wrapper::after {
-            content: attr(data-label);
-            position: absolute;
-            bottom: calc(100% + -15px);
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 4px 8px;
-            background: rgba(0, 0, 0, 0.75);
-            color: #fff;
-            font-size: 12px;
-            white-space: nowrap;
-            border-radius: 4px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-            z-index: 9999;
-        }
+.palette-sticker-wrapper::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: calc(100% + -15px); /* just a small gap above */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 9999;
+}
 
-        .palette-sticker-wrapper:hover::after {
-            opacity: 1;
-        }
+.palette-sticker-wrapper:hover::after {
+  opacity: 1;
+}
 
         .palette-sticker:hover {
             transform: scale(1.1);
         }
 
         #overlay-container {
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.95);
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            display: none;
-            z-index: 200;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            width: 350px;
-        }
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.98); /* Slightly less transparent */
+    border: 1px solid #ccc;
+    border-radius: 12px; /* A bit more rounded */
+    padding: 10px 15px;
+    display: none; /* Keep this */
+    z-index: 200;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 380px;
+    /* ✅ Changed to flex layout */
+    display: none;
+    flex-direction: column;
+    
+}
+
+/* ✅ New styles for the overlay header */
+.overlay-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.overlay-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.overlay-cart-link, .overlay-close-btn {
+    position: absolute;
+   
+    
+    color: #555;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.overlay-cart-link:hover, .overlay-close-btn:hover {
+    color: #000;
+}
+
+.overlay-cart-link {
+    left: 0;
+}
+
+.overlay-close-btn {
+    right: 0;
+}
+
+/* ✅ New grid container for just the stickers */
+.overlay-stickers-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+   
+}
 
         .overlay-sticker {
             width: 100%;
@@ -219,11 +304,12 @@
             stroke: white;
         }
         
-        .resize-handle-icon, .rotate-handle-icon {
-            width: 60%;
+        .resize-handle-icon ,  .rotate-handle-icon{
+         width: 60%;
             height: 60%;
-        }
+            }
         
+
         .delete-btn, .copy-btn, .resize-handle, .rotate-handle {
             position: absolute;
             width: 20%;
@@ -295,26 +381,76 @@
         }
 
         .letter-dropdown-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+    /* Wrapping div can often be kept simple */
+    position: relative;
+}
+
+#letter-select {
+    /* Font and Spacing */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    padding: 8px 30px 8px 12px; /* Extra padding on the right for the arrow */
+
+    /* Appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #f8f9fa; /* Light grey background */
+    border: 1px solid #dee2e6; /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    color: #495057;
+    cursor: pointer;
+
+    /* Custom Arrow Icon (as a background image) */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px 12px;
+
+    /* Effects */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Style for when the dropdown is focused (clicked) */
+#letter-select:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
 
         .pulse-effect {
-            animation: pulse 0.5s ease-in-out;
-        }
+  animation: pulse 0.5s ease-in-out;
+}
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Style for the drag-to-select box */
+#selection-box {
+    position: absolute;
+    border: 1px dashed #4a90e2;
+    background-color: rgba(74, 144, 226, 0.2);
+    z-index: 999;
+    /* This is crucial so the box doesn't interfere with mouse events */
+    pointer-events: none;
+}
+
+/* Add a distinct outline to the existing .selected style */
+.sticker.multi-selected {
+    background-color: rgba(128, 128, 128, 0.2); /* Greyish, slightly transparent background */
+    border-radius: 12px; /* Rounded corners */
+    /* You might need to adjust padding or margin if the background is too tight to the image */
+    padding: 5px; /* Optional: Add some padding to make the background more visible around the image */
+}
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -381,22 +517,52 @@
     <div id="overlay-container"></div>
     
     <script>
-        const stickerGroups = [
+             const stickerGroups = [
             {
-                name: "Asia",
-                urls: {
-                    "A": ["https://static.wixstatic.com/media/990059_efb2e73754a7449f96ad432ecb8de360~mv2.png"],
-                    "B": ["https://static.wixstatic.com/media/990059_05e04c6e35424c098fcf4e971fa3a1be~mv2.png"]
-                }
-            },
+    name: "Asia",
+    purchaseUrl: "https://example.com/shop/asia-pack", 
+    urls: {
+
+"A": ["https://static.wixstatic.com/media/990059_efb2e73754a7449f96ad432ecb8de360~mv2.png"],
+"B": ["https://static.wixstatic.com/media/990059_05e04c6e35424c098fcf4e971fa3a1be~mv2.png"],
+"C": ["https://static.wixstatic.com/media/990059_6d7eedef35d24f648439fdf722a732b2~mv2.png"],
+"D": ["https://static.wixstatic.com/media/990059_ca41a9192e96458abc4083fdc0bad807~mv2.png"],
+"E": ["https://static.wixstatic.com/media/990059_2c58a921b1584864be53f68ff8f717a6~mv2.png"],
+"F": ["https://static.wixstatic.com/media/990059_2f039641ffbf4a99b186d8c72dbc2a63~mv2.png"],
+"G": ["https://static.wixstatic.com/media/990059_e8e79b206c7348619f2b6712a5b2a867~mv2.png"],
+"H": ["https://static.wixstatic.com/media/990059_85dfb8f6c8ac4a9fb2f418f2c1dfbe2c~mv2.png"],
+"I": ["https://static.wixstatic.com/media/990059_a6d3b346123d426b9fbd04d3aa054df6~mv2.png"],
+"J": ["https://static.wixstatic.com/media/990059_6ecb4fd98e23409e82a2cdd64b7e23b9~mv2.png"],
+"K": ["https://static.wixstatic.com/media/990059_e8f19a7c608044239604bf45e24fbfb2~mv2.png"],
+"L": ["https://static.wixstatic.com/media/990059_44c4e23504ac4d60b1268d4bdc8c8265~mv2.png"],
+"M": ["https://static.wixstatic.com/media/990059_7830f0f76785430eb358db2b0dee78fd~mv2.png"],
+"N": ["https://static.wixstatic.com/media/990059_dcc8f1ea7a614d9da288a2701707f1f8~mv2.png"],
+"O": ["https://static.wixstatic.com/media/990059_baa0d5732b77436c9f4656a78ccbb0dd~mv2.png"],
+"P": ["https://static.wixstatic.com/media/990059_0a395f3a8ba140a38405c56991a575c4~mv2.png"],
+"Q": ["https://static.wixstatic.com/media/990059_d0da7b201669407787be1bb6f6f507fa~mv2.png"],
+"R": ["https://static.wixstatic.com/media/990059_a3f067b7ee44430e9274c6adf13ad789~mv2.png"],
+"S": ["https://static.wixstatic.com/media/990059_be4d1512ac54441cba937222e4bf580c~mv2.png"],
+"T": ["https://static.wixstatic.com/media/990059_e23c421e58e24ec1976511d7e73d682d~mv2.png"],
+"U": ["https://static.wixstatic.com/media/990059_a62b2e36988a43d7a94aa4c59c9aa46c~mv2.png"],
+"V": ["https://static.wixstatic.com/media/990059_36b6a48127694e14858bb4bace2f64f0~mv2.png"],
+"W": ["https://static.wixstatic.com/media/990059_600de6c4ceee42c5b7e95739feb67c36~mv2.png"],
+"X": ["https://static.wixstatic.com/media/990059_3e9f503ba0d5413784b9f9cabf740d84~mv2.png"],
+"Y": ["https://static.wixstatic.com/media/990059_0b2b37ac64f545a0b8dbe49bad6f9362~mv2.png"],
+"Z": ["https://static.wixstatic.com/media/990059_45f0a6d4c9c34ef2a895ec08daace75d~mv2.png"]
+
+        }
+     },
             {
                 name: "Bug",
+                purchaseUrl: "https://example.com/shop/bug-pack",
                 urls: {
                     "A": ["https://static.wixstatic.com/media/990059_896e4ce4fb094112aa5e524b4230f562~mv2.png"],
                     "B": ["https://static.wixstatic.com/media/990059_e49cdd1403a949019aeafce0185ac178~mv2.png"]
                 }
             },
         ];
+
+
 
         const spinBtn = document.getElementById("spin-sticker-btn");
         const canvas = document.getElementById('canvas-container');
@@ -418,93 +584,111 @@
         let initialStickerHeight = 0;
         let initialCenter = { x: 0, y: 0 };
         let firstStickerAdded = false;
+        
+        let selectionBox = null;
+let isSelecting = false;
+let selectionStartX, selectionStartY;
+
 
         function saveState() {
-            if (isRestoring) return;
-            const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-            const currentState = {
-                stickers: []
-            };
-            stickersOnCanvas.forEach(sticker => {
-                const stickerImg = sticker.querySelector('img');
-                if (stickerImg) {
-                    const rotation = parseFloat(sticker.dataset.rotation) || 0;
-                    currentState.stickers.push({
-                        url: stickerImg.src,
-                        x: sticker.offsetLeft,
-                        y: sticker.offsetTop,
-                        width: sticker.offsetWidth,
-                        height: sticker.offsetHeight,
-                        rotation: rotation
-                    });
+    if (isRestoring) return;
+    const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+    const currentState = { stickers: [] };
+
+    stickersOnCanvas.forEach(sticker => {
+        const stickerImg = sticker.querySelector('img');
+        if (stickerImg) {
+            const rotation = parseFloat(sticker.dataset.rotation) || 0;
+            currentState.stickers.push({
+                url: stickerImg.src,
+                x: sticker.offsetLeft,
+                y: sticker.offsetTop,
+                width: sticker.offsetWidth,
+                height: sticker.offsetHeight,
+                rotation: rotation,
+                letter: sticker.dataset.letter || null,
+                group: sticker.dataset.group || null
+            });
+        }
+    });
+
+    history.push(currentState);
+    redoStack = [];
+    updateUndoRedoButtons();
+}
+
+function loadState(state) {
+    isRestoring = true;
+    canvas.innerHTML = '';
+
+    state.stickers.forEach(data => {
+        addSticker(
+            data.url,
+            data.x,
+            data.y,
+            data.width,
+            data.height,
+            { 
+                suppressSave: true, 
+                rotation: parseFloat(data.rotation) || 0,
+                letter: data.letter,
+                group: data.group
+            }
+        );
+    });
+
+    isRestoring = false;
+    updateUndoRedoButtons();
+}
+
+function populatePalette() {
+    stickerGroups.forEach(group => {
+        // The representative sticker is always the one for letter "A"
+        const representativeUrl = group.urls["A"] ? group.urls["A"][0] : null;
+
+        if (representativeUrl) {
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('palette-sticker-wrapper');
+            wrapper.dataset.label = group.name;
+
+            const paletteSticker = document.createElement('img');
+            paletteSticker.src = representativeUrl;
+            paletteSticker.classList.add('palette-sticker');
+            paletteSticker.dataset.group = group.name;
+
+            paletteSticker.addEventListener('click', (e) => {
+                if (activePaletteSticker === paletteSticker) {
+                    hideOverlay();
+                } else {
+                    hideOverlay();
+                    showOverlay(e, group.urls);
+                    activePaletteSticker = paletteSticker;
                 }
             });
-            history.push(currentState);
-            redoStack = [];
-            updateUndoRedoButtons();
-        }
 
-        function loadState(state) {
-            isRestoring = true;
-            canvas.innerHTML = '';
-            state.stickers.forEach(data => {
-                addSticker(
-                    data.url,
-                    data.x,
-                    data.y,
-                    data.width,
-                    data.height,
-                    { suppressSave: true, rotation: parseFloat(data.rotation) || 0 }
-                );
+            paletteSticker.draggable = true;
+            paletteSticker.addEventListener('dragstart', (e) => {
+                // ✅ Add the missing letter and group data to the payload
+                e.dataTransfer.setData('application/json', JSON.stringify({
+                    url: e.target.src,
+                    width: 120,
+                    letter: "A", // Palette stickers represent letter "A"
+                    group: group.name
+                }));
+                hideOverlay();
             });
-            isRestoring = false;
-            updateUndoRedoButtons();
+
+            wrapper.appendChild(paletteSticker);
+            paletteContainer.appendChild(wrapper);
         }
-
-        function populatePalette() {
-            stickerGroups.forEach(group => {
-                const representativeUrl = group.urls["A"] ? group.urls["A"][0] : null;
-
-                if (representativeUrl) {
-                    const wrapper = document.createElement('div');
-                    wrapper.classList.add('palette-sticker-wrapper');
-                    wrapper.dataset.label = group.name;
-
-                    const paletteSticker = document.createElement('img');
-                    paletteSticker.src = representativeUrl;
-                    paletteSticker.classList.add('palette-sticker');
-                    paletteSticker.dataset.group = group.name;
-
-                    paletteSticker.addEventListener('click', (e) => {
-                        if (activePaletteSticker === paletteSticker) {
-                            hideOverlay();
-                        } else {
-                            hideOverlay();
-                            showOverlay(e, group.urls);
-                            activePaletteSticker = paletteSticker;
-                        }
-                    });
-
-                    paletteSticker.draggable = true;
-                    paletteSticker.addEventListener('dragstart', (e) => {
-                        e.dataTransfer.setData('application/json', JSON.stringify({
-                            url: e.target.src,
-                            width: 120
-                        }));
-                        hideOverlay();
-                    });
-
-                    wrapper.appendChild(paletteSticker);
-                    paletteContainer.appendChild(wrapper);
-                }
-            });
-        }
-
-        function deselectAllStickers() {
-            document.querySelectorAll('.sticker').forEach(s => {
-                s.classList.remove('selected');
-            });
-        }
+    });
+}
+          function deselectAllStickers() {
+    document.querySelectorAll('.sticker').forEach(s => {
+        s.classList.remove('selected');
+    });
+    updateSelectionStyles(); // ✅ Add this line
+}
 
         function getTouchDistance(touches) {
             const dx = touches[0].clientX - touches[1].clientX;
@@ -571,392 +755,564 @@
             }, 100);
         });
 
-        function addOrReplaceSticker(newUrl) {
-            const unlockedSticker = document.querySelector('.sticker:not(.locked)');
-            const stickerSize = 120;
-            const canvasWidth = canvas.offsetWidth;
-            const canvasHeight = canvas.offsetHeight;
-            const centerX = (canvasWidth / 2) - (stickerSize / 2);
-            const centerY = (canvasHeight / 2) - (stickerSize / 2);
+        // MODIFIED: This function now correctly handles replacing the sticker and centering it
+function addOrReplaceSticker(newUrl, letter) {
+    const stickerSize = 120;
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
 
-            if (unlockedSticker) {
-                unlockedSticker.style.opacity = '0';
-                
-                unlockedSticker.querySelector('img').src = newUrl;
-                unlockedSticker.style.width = `${stickerSize}px`;
-                unlockedSticker.style.height = 'auto';
-                unlockedSticker.style.left = `${centerX}px`;
-                unlockedSticker.style.top = `${centerY}px`;
-                
-                unlockedSticker.querySelector('img').onload = () => {
-                    unlockedSticker.style.opacity = '1';
-                };
-            } else {
-                addSticker(newUrl, centerX, centerY, stickerSize);
-            }
+    // Find the group for this letter
+    const groupObj = stickerGroups.find(g => g.urls[letter]);
+    const groupName = groupObj ? groupObj.name : null;
+
+    // Look for an unlocked sticker with the same letter
+    const unlockedSticker = document.querySelector(`.sticker[data-letter="${letter}"]:not(.locked)`);
+
+    if (unlockedSticker) {
+        // Replace the image
+        unlockedSticker.style.opacity = '0';
+        const img = unlockedSticker.querySelector('img');
+        img.src = newUrl;
+        img.onload = () => {
+            unlockedSticker.style.opacity = '1';
+        };
+        unlockedSticker.dataset.group = groupName;
+    } else {
+        // Create a new sticker in the center
+        addSticker(newUrl, centerX, centerY, stickerSize, stickerSize, { 
+            letter, 
+            group: groupName 
+        });
+    }
+
+    saveState();
+}
+
+      function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
+    const { suppressSave = false, rotation = 0, letter = null , group = null} = opts;
+    const sticker = document.createElement('div');
+    sticker.classList.add('sticker');
+    if (letter) sticker.dataset.letter = letter;
+    if (group) sticker.dataset.group = group;
+
+    let finalX, finalY;
+
+    // Default placement (center if no coords given)
+    if (x !== undefined && y !== undefined) {
+        finalX = x;
+        finalY = y;
+    } else {
+        const canvasWidth = canvas.offsetWidth;
+        const canvasHeight = canvas.offsetHeight;
+        finalX = (canvasWidth / 2) - (width / 2);
+        finalY = (canvasHeight / 2) - (height / 2);
+    }
+
+ 
+
+    // ✅ Now we have a free spot
+    sticker.style.left = `${finalX}px`;
+    sticker.style.top = `${finalY}px`;
+    sticker.style.width = `${width}px`;
+    sticker.style.height = `${height}px`;
+    sticker.style.transform = `rotate(${rotation}deg)`;
+    sticker.dataset.rotation = rotation;
+
+    // Image
+    const stickerImg = document.createElement('img');
+    stickerImg.crossOrigin = "Anonymous";
+    stickerImg.src = url;
+    stickerImg.draggable = false;
+    sticker.appendChild(stickerImg);
+
+const groupBtn = document.createElement('div');
+groupBtn.classList.add('sticker-btn', 'group-btn');
+groupBtn.innerHTML = `
+<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 6h16M4 12h16M4 18h16"/>
+</svg>`;
+
+
+
+
+groupBtn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+
+    const letter = sticker.dataset.letter;
+    const url = sticker.querySelector('img').src;
+
+    // Find the group that actually contains this URL under this letter
+    const group = stickerGroups.find(g => g.urls[letter]?.includes(url));
+
+    if (group) {
+        console.log('Found correct group:', group.name);
+        showOverlay(ev, group.urls);
+    } else {
+        console.warn('⚠️ No matching group found for this sticker!');
+    }
+});
+
+sticker.appendChild(groupBtn);
+
+
+
+    const copyBtn = document.createElement('div');
+    copyBtn.classList.add('copy-btn');
+    copyBtn.innerHTML = `<svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="8" x2="12" y2="16" />
+        <line x1="8" y1="12" x2="16" y2="12" />
+    </svg>`;
+
+    copyBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    
+    const stickerWidth = sticker.offsetWidth;
+    const stickerHeight = sticker.offsetHeight;
+    const newX = parseInt(sticker.style.left) + 10;
+    const newY = parseInt(sticker.style.top) + 10;
+
+    const letter = sticker.dataset.letter || null;
+    const groupName = sticker.dataset.group || null;
+    const rotation = parseFloat(sticker.dataset.rotation) || 0;
+
+    addSticker(
+    stickerImg.src,
+    newX,
+    newY,
+    stickerWidth,
+    stickerHeight,
+    { 
+        letter: sticker.dataset.letter, 
+        group: sticker.dataset.group, 
+        rotation: parseFloat(sticker.dataset.rotation) || 0 
+    }
+);
+
+    saveState();
+});
+
+    const deleteBtn = document.createElement('div');
+    deleteBtn.classList.add('delete-btn');
+    deleteBtn.innerHTML = `<svg class="delete-btn-icon" viewBox="0 0 24 24">
+        <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
+    </svg>`;
+    deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sticker.remove();
+        saveState();
+    });
+
+    const resizeHandle = document.createElement('div');
+    resizeHandle.classList.add('resize-handle');
+    resizeHandle.innerHTML = `<svg class="resize-handle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <polyline points="9 21 3 21 3 15"></polyline>
+        <line x1="21" y1="3" x2="14" y2="10"></line>
+        <line x1="3" y1="21" x2="10" y2="14"></line>
+    </svg>`;
+
+    
+    
+    const rotateHandle = document.createElement('div');
+    rotateHandle.classList.add('rotate-handle');
+    rotateHandle.innerHTML = `<svg class = "rotate-handle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-rotate-ccw">
+        <path d="M3 2v6h6"/>
+        <path d="M3 13a9 9 0 1 0 3-7.7L3 8"/>
+    </svg>`;
+    sticker.appendChild(deleteBtn);
+    sticker.appendChild(copyBtn);
+    
+    sticker.appendChild(rotateHandle);
+    sticker.appendChild(groupBtn);
+
+    function startInteraction(e) {
+    // This part prevents clicks on buttons from starting a drag
+    if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.group-btn') || e.target.closest('.rotate-handle') || e.target.closest('.resize-handle')) {
+        return;
+    }
+    
+    // If you start dragging a sticker that isn't selected, deselect everything else.
+    if (!sticker.classList.contains('selected')) {
+        deselectAllStickers();
+        sticker.classList.add('selected');
+    }
+
+     updateSelectionStyles();
+    
+    e.preventDefault();
+    activeSticker = sticker;
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    initialX = clientX;
+    initialY = clientY;
+    
+    // ✅ Record the starting position for EVERY selected sticker
+    const selectedStickers = document.querySelectorAll('.sticker.selected');
+    selectedStickers.forEach(s => {
+        s.dataset.startLeft = s.offsetLeft;
+        s.dataset.startTop = s.offsetTop;
+    });
+
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchmove', handleMove, { passive: false });
+    document.addEventListener('touchend', handleEnd);
+}
+
+   function handleMove(e) {
+    if (!activeSticker) return;
+    e.preventDefault();
+
+    // Disable pinch-to-zoom when dragging multiple stickers
+    if (e.touches && e.touches.length > 1) {
+        return;
+    }
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    // ✅ Calculate the total distance the mouse has moved from the start
+    const deltaX = clientX - initialX;
+    const deltaY = clientY - initialY;
+
+    // ✅ Apply this delta to all selected stickers
+    const selectedStickers = document.querySelectorAll('.sticker.selected');
+    selectedStickers.forEach(s => {
+        const newX = parseFloat(s.dataset.startLeft) + deltaX;
+        const newY = parseFloat(s.dataset.startTop) + deltaY;
+        s.style.left = `${newX}px`;
+        s.style.top = `${newY}px`;
+    });
+}
+
+  function handleEnd() {
+    document.removeEventListener('mousemove', handleMove);
+    document.removeEventListener('mouseup', handleEnd);
+    document.removeEventListener('touchmove', handleMove);
+    document.removeEventListener('touchend', handleEnd);
+
+    // ✅ Clean up the temporary data from all selected stickers
+    const selectedStickers = document.querySelectorAll('.sticker.selected');
+    selectedStickers.forEach(s => {
+        s.removeAttribute('data-start-left');
+        s.removeAttribute('data-start-top');
+    });
+
+    activeSticker = null;
+    saveState();
+}
+
+    function addResizeHandleListeners(handle, sticker) {
+        let startX, startY, startWidth, startHeight, startLeft, startTop;
+
+        const startResize = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            startX = clientX;
+            startY = clientY;
+            startWidth = sticker.offsetWidth;
+            startHeight = sticker.offsetHeight;
+            startLeft = sticker.offsetLeft;
+            startTop = sticker.offsetTop;
+            document.addEventListener('mousemove', doResize);
+            document.addEventListener('mouseup', endResize);
+            document.addEventListener('touchmove', doResize, { passive: false });
+            document.addEventListener('touchend', endResize);
+        };
+
+        const doResize = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const deltaX = clientX - startX;
+            const newWidth = Math.max(startWidth + deltaX, 30);
+            const aspectRatio = startWidth / startHeight;
+            const newHeight = newWidth / aspectRatio;
+            sticker.style.width = `${newWidth}px`;
+            sticker.style.height = `${newHeight}px`;
+            sticker.style.left = `${startLeft + (startWidth - newWidth) / 2}px`;
+            sticker.style.top = `${startTop + (startHeight - newHeight) / 2}px`;
+        };
+
+        const endResize = () => {
+            document.removeEventListener('mousemove', doResize);
+            document.removeEventListener('mouseup', endResize);
+            document.removeEventListener('touchmove', doResize);
+            document.removeEventListener('touchend', endResize);
             saveState();
+        };
+
+        handle.addEventListener('mousedown', startResize);
+        handle.addEventListener('touchstart', startResize);
+    }
+
+    addResizeHandleListeners(resizeHandle, sticker);
+
+    function addRotationHandleListeners(handle, sticker) {
+        let startAngle = 0;
+        let startRotation = 0;
+        let stickerCenter = {};
+        let lastAngle = 0;
+
+        const getAngle = (clientX, clientY) => {
+            return Math.atan2(clientY - stickerCenter.y, clientX - stickerCenter.x) * 180 / Math.PI;
+        };
+
+        const startRotationHandler = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const rect = sticker.getBoundingClientRect();
+
+            stickerCenter = {
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2
+            };
+
+            startAngle = getAngle(clientX, clientY);
+            lastAngle = startAngle;
+            startRotation = parseFloat(sticker.dataset.rotation) || 0;
+
+            document.addEventListener("mousemove", doRotate);
+            document.addEventListener("mouseup", endRotation);
+            document.addEventListener("touchmove", doRotate, { passive: false });
+            document.addEventListener("touchend", endRotation);
+        };
+
+        const doRotate = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            let currentAngle = getAngle(clientX, clientY);
+
+            let delta = currentAngle - lastAngle;
+            if (delta > 180) delta -= 360;
+            if (delta < -180) delta += 360;
+
+            startRotation += delta;
+            lastAngle = currentAngle;
+
+            sticker.style.transform = `rotate(${startRotation}deg)`;
+            sticker.dataset.rotation = startRotation;
+        };
+
+        const endRotation = () => {
+            document.removeEventListener("mousemove", doRotate);
+            document.removeEventListener("mouseup", endRotation);
+            document.removeEventListener("touchmove", doRotate);
+            document.removeEventListener("touchend", endRotation);
+
+            sticker.dataset.rotation = parseFloat(sticker.dataset.rotation) || 0;
+            saveState();
+        };
+
+        handle.addEventListener("mousedown", startRotationHandler);
+        handle.addEventListener("touchstart", startRotationHandler);
+    }
+
+    addRotationHandleListeners(rotateHandle, sticker);
+
+    function addWheelResize(stickerImg) {
+        let lastWheelTime = 0;
+        let timeoutId = null;
+        stickerImg.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (Date.now() - lastWheelTime > 200 || history.length === 0) {
+                saveState();
+            }
+            const parent = stickerImg.parentElement;
+            const delta = Math.sign(e.deltaY);
+            const initialWidth = parent.offsetWidth;
+            const initialHeight = parent.offsetHeight;
+            const initialLeft = parent.offsetLeft;
+            const initialTop = parent.offsetTop;
+            const newSize = initialWidth + (delta * 10);
+            const minSize = 30;
+            if (newSize >= minSize) {
+                const newHeight = newSize / (initialWidth / initialHeight);
+                parent.style.width = `${newSize}px`;
+                parent.style.height = `${newHeight}px`;
+                parent.style.left = `${initialLeft + (initialWidth - newSize) / 2}px`;
+                parent.style.top = `${initialTop + (initialHeight - newHeight) / 2}px`;
+            }
+            lastWheelTime = Date.now();
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                saveState();
+            }, 200);
+        });
+    }
+
+    addWheelResize(stickerImg);
+    sticker.addEventListener('mousedown', startInteraction);
+    sticker.addEventListener('touchstart', startInteraction);
+
+
+
+   // ✅ Add this entire new event listener
+canvas.addEventListener('mousedown', (e) => {
+    // Only start selection if clicking on the canvas backdrop, not on a sticker
+    if (e.target !== canvas) {
+        return;
+    }
+
+    // If you're not holding the Shift key, clear any previous selection
+    if (!e.shiftKey) {
+        deselectAllStickers();
+    }
+
+    isSelecting = true;
+    const canvasRect = canvas.getBoundingClientRect();
+    selectionStartX = e.clientX - canvasRect.left;
+    selectionStartY = e.clientY - canvasRect.top;
+
+    // Create the selection box element
+    selectionBox = document.createElement('div');
+    selectionBox.id = 'selection-box';
+    canvas.appendChild(selectionBox);
+
+    // Attach listeners to the whole document to track the drag anywhere on the page
+    document.addEventListener('mousemove', handleSelectionMove);
+    document.addEventListener('mouseup', handleSelectionEnd);
+});
+
+
+
+    canvas.addEventListener('touchstart', (e) => {
+        if (!e.target.closest('.sticker')) {
+            deselectAllStickers();
         }
+    });
 
-        function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
-            const { suppressSave = false, rotation = 0 } = opts;
-            const sticker = document.createElement('div');
-            sticker.classList.add('sticker');
+    function updateButtonSizes() {
+        const btnSize = sticker.offsetWidth * 0.2;
+        [deleteBtn, copyBtn, resizeHandle, rotateHandle, groupBtn].forEach(btn => {
+            btn.style.width = btnSize + 'px';
+            btn.style.height = btnSize + 'px';
+        });
+        deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
+        copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
+        resizeHandle.style.bottom = resizeHandle.style.right = `${btnSize * 0.25}px`;
+        rotateHandle.style.bottom = rotateHandle.style.left = `${btnSize * 0.25}px`;
+       groupBtn.style.bottom = groupBtn.style.right = `${btnSize * 0.25}px`;
 
-            let finalX, finalY;
+    }
 
-            if (x !== undefined && y !== undefined) {
-                finalX = x;
-                finalY = y;
-            } else {
-                const canvasWidth = canvas.offsetWidth;
-                const canvasHeight = canvas.offsetHeight;
-                finalX = (canvasWidth / 2) - (width / 2);
-                finalY = (canvasHeight / 2) - (height / 2);
+    updateButtonSizes();
+    const observer = new ResizeObserver(updateButtonSizes);
+    observer.observe(sticker);
+    canvas.appendChild(sticker);
+    
+    if (!suppressSave && !isRestoring) {
+        saveState();
+    }
+    
+    return sticker;
+}
+
+       // ✅ Add this new function to your script
+function updateSelectionStyles() {
+    const allStickers = document.querySelectorAll('.sticker');
+    const selectedStickers = document.querySelectorAll('.sticker.selected');
+
+    if (selectedStickers.length > 1) {
+        // If more than one sticker is selected, apply the multi-select style
+        selectedStickers.forEach(s => s.classList.add('multi-selected'));
+    } else {
+        // Otherwise, remove the multi-select style from all stickers
+        allStickers.forEach(s => s.classList.remove('multi-selected'));
+    }
+}
+
+// ✅ Add these three new functions to your script
+
+/**
+ * Handles resizing the selection box and checking for collisions as the mouse moves.
+ */
+function handleSelectionMove(e) {
+    if (!isSelecting) return;
+
+    const canvasRect = canvas.getBoundingClientRect();
+    let currentX = e.clientX - canvasRect.left;
+    let currentY = e.clientY - canvasRect.top;
+
+    // Calculate the box position and dimensions
+    const left = Math.min(selectionStartX, currentX);
+    const top = Math.min(selectionStartY, currentY);
+    const width = Math.abs(selectionStartX - currentX);
+    const height = Math.abs(selectionStartY - currentY);
+
+    // Update the selection box style
+    selectionBox.style.left = `${left}px`;
+    selectionBox.style.top = `${top}px`;
+    selectionBox.style.width = `${width}px`;
+    selectionBox.style.height = `${height}px`;
+
+    checkSelectionCollision(e.shiftKey);
+    updateSelectionStyles();
+}
+
+/**
+ * Finalizes the selection when the mouse is released.
+ */
+function handleSelectionEnd() {
+    isSelecting = false;
+     updateSelectionStyles();
+    // Remove the selection box from the canvas
+    if (selectionBox) {
+        selectionBox.remove();
+        selectionBox = null;
+    }
+
+    // IMPORTANT: Clean up the global event listeners
+    document.removeEventListener('mousemove', handleSelectionMove);
+    document.removeEventListener('mouseup', handleSelectionEnd);
+}
+
+/**
+ * Checks which stickers are inside the selection box and updates their style.
+ */
+function checkSelectionCollision(isShiftPressed) {
+    const boxRect = selectionBox.getBoundingClientRect();
+    const stickers = document.querySelectorAll('#canvas-container .sticker');
+
+    stickers.forEach(sticker => {
+        const stickerRect = sticker.getBoundingClientRect();
+
+        // Check if the sticker's rectangle intersects with the selection box's rectangle
+        const isIntersecting = !(
+            stickerRect.right < boxRect.left ||
+            stickerRect.left > boxRect.right ||
+            stickerRect.bottom < boxRect.top ||
+            stickerRect.top > boxRect.bottom
+        );
+
+        if (isIntersecting) {
+            sticker.classList.add('selected');
+        } else {
+            // Only deselect if the Shift key is NOT pressed
+            if (!isShiftPressed) {
+                sticker.classList.remove('selected');
             }
-            
-            sticker.style.left = `${finalX}px`;
-            sticker.style.top = `${finalY}px`;
-            sticker.style.width = `${width}px`;
-            sticker.style.height = `${height}px`;
-            sticker.style.transform = `rotate(${rotation}deg)`;
-            sticker.dataset.rotation = rotation;
-
-            const stickerImg = document.createElement('img');
-            stickerImg.crossOrigin = "Anonymous";
-            stickerImg.src = url;
-            stickerImg.draggable = false;
-            sticker.appendChild(stickerImg);
-
-            const copyBtn = document.createElement('div');
-            copyBtn.classList.add('copy-btn');
-            copyBtn.innerHTML = `<svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="8" x2="12" y2="16" />
-                <line x1="8" y1="12" x2="16" y2="12" />
-            </svg>`;
-
-            copyBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const stickerWidth = sticker.offsetWidth;
-                const stickerHeight = sticker.offsetHeight;
-                let newX = parseInt(sticker.style.left) + 10;
-                let newY = parseInt(sticker.style.top) + 10;
-                
-                function isOverlapping(x, y) {
-                    const stickers = document.querySelectorAll('.sticker');
-                    return Array.from(stickers).some(s => {
-                        const sx = parseInt(s.style.left);
-                        const sy = parseInt(s.style.top);
-                        const sw = s.offsetWidth;
-                        const sh = s.offsetHeight;
-                        return !(x + stickerWidth < sx || x > sx + sw || y + stickerHeight < sy || y > sy + sh);
-                    });
-                }
-                
-                const step = 10;
-                let attempts = 0;
-                while (isOverlapping(newX, newY) && attempts < 100) {
-                    newX += step;
-                    newY += step;
-                    if (newX + stickerWidth > canvas.offsetWidth) newX = step;
-                    if (newY + stickerHeight > canvas.offsetHeight) newY = step;
-                    attempts++;
-                }
-                
-                addSticker(stickerImg.src, newX, newY, sticker.offsetWidth, sticker.offsetHeight, { rotation: sticker.dataset.rotation });
-                saveState();
-            });
-
-            const deleteBtn = document.createElement('div');
-            deleteBtn.classList.add('delete-btn');
-            deleteBtn.innerHTML = `<svg class="delete-btn-icon" viewBox="0 0 24 24">
-                <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
-            </svg>`;
-            deleteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                sticker.remove();
-                saveState();
-            });
-
-            const resizeHandle = document.createElement('div');
-            resizeHandle.classList.add('resize-handle');
-            resizeHandle.innerHTML = `<svg class="resize-handle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <polyline points="9 21 3 21 3 15"></polyline>
-                <line x1="21" y1="3" x2="14" y2="10"></line>
-                <line x1="3" y1="21" x2="10" y2="14"></line>
-            </svg>`;
-            
-            const rotateHandle = document.createElement('div');
-            rotateHandle.classList.add('rotate-handle');
-            rotateHandle.innerHTML = `<svg class = "rotate-handle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-rotate-ccw">
-                <path d="M3 2v6h6"/>
-                <path d="M3 13a9 9 0 1 0 3-7.7L3 8"/>
-            </svg>`;
-            sticker.appendChild(deleteBtn);
-            sticker.appendChild(copyBtn);
-            sticker.appendChild(resizeHandle);
-            sticker.appendChild(rotateHandle);
-
-            function startInteraction(e) {
-                if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.resize-handle') || e.target.closest('.rotate-handle')) {
-                    return;
-                }
-                
-                deselectAllStickers();
-                sticker.classList.add('selected');
-                e.preventDefault();
-                activeSticker = sticker;
-
-                initialCenter.x = sticker.offsetLeft + sticker.offsetWidth / 2;
-                initialCenter.y = sticker.offsetTop + sticker.offsetHeight / 2;
-
-                if (e.touches && e.touches.length === 2) {
-                    initialTouchDistance = getTouchDistance(e.touches);
-                    initialStickerWidth = sticker.offsetWidth;
-                    initialStickerHeight = sticker.offsetHeight;
-                } else if (e.touches && e.touches.length === 1) {
-                    const touch = e.touches[0];
-                    initialX = touch.clientX;
-                    initialY = touch.clientY;
-                    offsetX = sticker.offsetLeft;
-                    offsetY = sticker.offsetTop;
-                } else {
-                    initialX = e.clientX;
-                    initialY = e.clientY;
-                    offsetX = sticker.offsetLeft;
-                    offsetY = sticker.offsetTop;
-                }
-                document.addEventListener('mousemove', handleMove);
-                document.addEventListener('mouseup', handleEnd);
-                document.addEventListener('touchmove', handleMove, { passive: false });
-                document.addEventListener('touchend', handleEnd);
-            }
-
-            function handleMove(e) {
-                if (!activeSticker) return;
-                e.preventDefault();
-
-                if (e.touches && e.touches.length === 2) {
-                    const newTouchDistance = getTouchDistance(e.touches);
-                    const scaleChange = newTouchDistance / initialTouchDistance;
-                    const newWidth = Math.max(initialStickerWidth * scaleChange, 30);
-                    const aspectRatio = initialStickerWidth / initialStickerHeight;
-                    const newHeight = newWidth / aspectRatio;
-                    activeSticker.style.width = `${newWidth}px`;
-                    activeSticker.style.height = `${newHeight}px`;
-                    activeSticker.style.left = `${initialCenter.x - newWidth / 2}px`;
-                    activeSticker.style.top = `${initialCenter.y - newHeight / 2}px`;
-                } else {
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    const newX = offsetX + (clientX - initialX);
-                    const newY = offsetY + (clientY - initialY);
-                    activeSticker.style.left = `${newX}px`;
-                    activeSticker.style.top = `${newY}px`;
-                }
-            }
-
-            function handleEnd() {
-                document.removeEventListener('mousemove', handleMove);
-                document.removeEventListener('mouseup', handleEnd);
-                document.removeEventListener('touchmove', handleMove);
-                document.removeEventListener('touchend', handleEnd);
-                activeSticker = null;
-                saveState();
-            }
-
-            function addResizeHandleListeners(handle, sticker) {
-                let startX, startY, startWidth, startHeight, startLeft, startTop;
-
-                const startResize = (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    startX = clientX;
-                    startY = clientY;
-                    startWidth = sticker.offsetWidth;
-                    startHeight = sticker.offsetHeight;
-                    startLeft = sticker.offsetLeft;
-                    startTop = sticker.offsetTop;
-                    document.addEventListener('mousemove', doResize);
-                    document.addEventListener('mouseup', endResize);
-                    document.addEventListener('touchmove', doResize, { passive: false });
-                    document.addEventListener('touchend', endResize);
-                };
-
-                const doResize = (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    const deltaX = clientX - startX;
-                    const newWidth = Math.max(startWidth + deltaX, 30);
-                    const aspectRatio = startWidth / startHeight;
-                    const newHeight = newWidth / aspectRatio;
-                    sticker.style.width = `${newWidth}px`;
-                    sticker.style.height = `${newHeight}px`;
-                    sticker.style.left = `${startLeft + (startWidth - newWidth) / 2}px`;
-                    sticker.style.top = `${startTop + (startHeight - newHeight) / 2}px`;
-                };
-
-                const endResize = () => {
-                    document.removeEventListener('mousemove', doResize);
-                    document.removeEventListener('mouseup', endResize);
-                    document.removeEventListener('touchmove', doResize);
-                    document.removeEventListener('touchend', endResize);
-                    saveState();
-                };
-
-                handle.addEventListener('mousedown', startResize);
-                handle.addEventListener('touchstart', startResize);
-            }
-
-            addResizeHandleListeners(resizeHandle, sticker);
-
-            function addRotationHandleListeners(handle, sticker) {
-                let startAngle = 0;
-                let startRotation = 0;
-                let stickerCenter = {};
-                let lastAngle = 0;
-
-                const getAngle = (clientX, clientY) => {
-                    return Math.atan2(clientY - stickerCenter.y, clientX - stickerCenter.x) * 180 / Math.PI;
-                };
-
-                const startRotationHandler = (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    const rect = sticker.getBoundingClientRect();
-
-                    stickerCenter = {
-                        x: rect.left + rect.width / 2,
-                        y: rect.top + rect.height / 2
-                    };
-
-                    startAngle = getAngle(clientX, clientY);
-                    lastAngle = startAngle;
-                    startRotation = parseFloat(sticker.dataset.rotation) || 0;
-
-                    document.addEventListener("mousemove", doRotate);
-                    document.addEventListener("mouseup", endRotation);
-                    document.addEventListener("touchmove", doRotate, { passive: false });
-                    document.addEventListener("touchend", endRotation);
-                };
-
-                const doRotate = (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-                    let currentAngle = getAngle(clientX, clientY);
-
-                    let delta = currentAngle - lastAngle;
-                    if (delta > 180) delta -= 360;
-                    if (delta < -180) delta += 360;
-
-                    startRotation += delta;
-                    lastAngle = currentAngle;
-
-                    sticker.style.transform = `rotate(${startRotation}deg)`;
-                    sticker.dataset.rotation = startRotation;
-                };
-
-                const endRotation = () => {
-                    document.removeEventListener("mousemove", doRotate);
-                    document.removeEventListener("mouseup", endRotation);
-                    document.removeEventListener("touchmove", doRotate);
-                    document.removeEventListener("touchend", endRotation);
-
-                    sticker.dataset.rotation = parseFloat(sticker.dataset.rotation) || 0;
-                    saveState();
-                };
-
-                handle.addEventListener("mousedown", startRotationHandler);
-                handle.addEventListener("touchstart", startRotationHandler);
-            }
-
-            addRotationHandleListeners(rotateHandle, sticker);
-
-            function addWheelResize(stickerImg) {
-                let lastWheelTime = 0;
-                let timeoutId = null;
-                stickerImg.addEventListener('wheel', (e) => {
-                    e.preventDefault();
-                    if (Date.now() - lastWheelTime > 200 || history.length === 0) {
-                        saveState();
-                    }
-                    const parent = stickerImg.parentElement;
-                    const delta = Math.sign(e.deltaY);
-                    const initialWidth = parent.offsetWidth;
-                    const initialHeight = parent.offsetHeight;
-                    const initialLeft = parent.offsetLeft;
-                    const initialTop = parent.offsetTop;
-                    const newSize = initialWidth + (delta * 10);
-                    const minSize = 30;
-                    if (newSize >= minSize) {
-                        const newHeight = newSize / (initialWidth / initialHeight);
-                        parent.style.width = `${newSize}px`;
-                        parent.style.height = `${newHeight}px`;
-                        parent.style.left = `${initialLeft + (initialWidth - newSize) / 2}px`;
-                        parent.style.top = `${initialTop + (initialHeight - newHeight) / 2}px`;
-                    }
-                    lastWheelTime = Date.now();
-                    clearTimeout(timeoutId);
-                    timeoutId = setTimeout(() => {
-                        saveState();
-                    }, 200);
-                });
-            }
-
-            addWheelResize(stickerImg);
-
-            // Updated event listeners to correctly handle both mouse and touch
-            sticker.addEventListener('mousedown', startInteraction);
-            sticker.addEventListener('touchstart', startInteraction);
-            canvas.addEventListener('mousedown', (e) => {
-                if (!e.target.closest('.sticker')) {
-                    deselectAllStickers();
-                }
-            });
-            canvas.addEventListener('touchstart', (e) => {
-                if (!e.target.closest('.sticker')) {
-                    deselectAllStickers();
-                }
-            });
-
-            function updateButtonSizes() {
-                const btnSize = sticker.offsetWidth * 0.2;
-                [deleteBtn, copyBtn, resizeHandle, rotateHandle].forEach(btn => {
-                    btn.style.width = btnSize + 'px';
-                    btn.style.height = btnSize + 'px';
-                });
-                deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
-                copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
-                resizeHandle.style.bottom = resizeHandle.style.right = `${btnSize * 0.25}px`;
-                rotateHandle.style.bottom = rotateHandle.style.left = `${btnSize * 0.25}px`;
-            }
-
-            updateButtonSizes();
-            const observer = new ResizeObserver(updateButtonSizes);
-            observer.observe(sticker);
-            canvas.appendChild(sticker);
-            
-            if (!suppressSave && !isRestoring) {
-                saveState();
-            }
-            
-            return sticker;
         }
+    });
+}
 
+        
         function hideOverlay() {
             overlayContainer.style.display = 'none';
             activePaletteSticker = null;
@@ -964,46 +1320,145 @@
 
         let activeGroupURLs = [];
 
-        function showOverlay(e, urlsByLetter) {
-            overlayContainer.innerHTML = '';
-            for (const letter in urlsByLetter) {
-                const letterUrls = urlsByLetter[letter];
-                letterUrls.forEach(url => {
-                    const overlaySticker = document.createElement('img');
-                    overlaySticker.src = url;
-                    overlaySticker.classList.add('overlay-sticker');
-                    overlaySticker.draggable = true;
-                    overlaySticker.addEventListener('dragstart', (e) => {
-                        e.stopPropagation();
-                        e.dataTransfer.setData('application/json', JSON.stringify({
-                            url: e.target.src,
-                            width: 120
-                        }));
-                    });
-                    overlaySticker.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        addSticker(url);
-                        hideOverlay(); // Close overlay after adding a sticker
-                    });
-                    overlayContainer.appendChild(overlaySticker);
+function showOverlay(e, urlsByLetter) {
+    overlayContainer.innerHTML = ''; // Clear previous content
+
+    const group = stickerGroups.find(g => g.urls === urlsByLetter);
+    if (!group) return;
+
+    // --- 1. Create Header & Content (No Changes Here) ---
+    const header = document.createElement('div');
+    header.className = 'overlay-header';
+    const cartLink = document.createElement('a');
+    cartLink.className = 'overlay-cart-link';
+    cartLink.href = group.purchaseUrl;
+    cartLink.target = '_blank';
+    cartLink.title = 'Purchase this sticker pack';
+    cartLink.innerHTML = `<i data-lucide="shopping-cart" class="icon"></i>`;
+    const title = document.createElement('h2');
+    title.className = 'overlay-title';
+    title.textContent = group.name;
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'overlay-close-btn';
+    closeBtn.title = 'Close';
+    closeBtn.innerHTML = `<i data-lucide="x" class="icon"></i>`;
+    closeBtn.onclick = hideOverlay;
+    header.appendChild(cartLink);
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+    overlayContainer.appendChild(header);
+    const stickersGrid = document.createElement('div');
+    stickersGrid.className = 'overlay-stickers-grid';
+    for (const letter in urlsByLetter) {
+        urlsByLetter[letter].forEach(url => {
+            const overlaySticker = document.createElement('img');
+            overlaySticker.src = url;
+            overlaySticker.classList.add('overlay-sticker');
+            overlaySticker.draggable = true;
+            overlaySticker.dataset.letter = letter;
+            overlaySticker.dataset.group = group.name;
+            overlaySticker.addEventListener('click', (ev) => {
+                ev.stopPropagation();
+                addSticker(url, undefined, undefined, 120, 120, {
+                    letter: letter,
+                    group: group.name
                 });
-            }
-            
-            const rect = e.target.getBoundingClientRect();
-            const paletteRect = paletteContainer.getBoundingClientRect();
-            const { right, bottom } = rect;
-            if (right + 260 < window.innerWidth) {
-                overlayContainer.style.left = `${rect.right - paletteRect.left + 10}px`;
-            } else {
-                overlayContainer.style.left = `${rect.left - paletteRect.left - 260}px`;
-            }
-            if (bottom + overlayContainer.offsetHeight < window.innerHeight) {
-                overlayContainer.style.top = `${rect.top - paletteRect.top}px`;
-            } else {
-                overlayContainer.style.top = `${rect.top - paletteRect.top - overlayContainer.offsetHeight}px`;
-            }
-            overlayContainer.style.display = 'grid';
+            });
+            overlaySticker.addEventListener('dragstart', (dragStartEvent) => {
+                dragStartEvent.stopPropagation();
+                dragStartEvent.dataTransfer.setData('application/json', JSON.stringify({
+                    url: dragStartEvent.target.src,
+                    width: 120,
+                    letter: dragStartEvent.target.dataset.letter,
+                    group: dragStartEvent.target.dataset.group
+                }));
+                const overlay = overlayContainer;
+                const offsetX = dragStartEvent.clientX - overlay.offsetLeft;
+                const offsetY = dragStartEvent.clientY - overlay.offsetTop;
+                function followMouse(mouseMoveEvent) {
+                    overlay.style.left = `${mouseMoveEvent.clientX - offsetX}px`;
+                    overlay.style.top = `${mouseMoveEvent.clientY - offsetY}px`;
+                }
+                function stopFollowing() {
+                    document.removeEventListener('mousemove', followMouse);
+                    overlay.style.transition = 'top 0.3s ease-out, left 0.3s ease-out';
+                    overlay.style.left = overlay.dataset.originalLeft;
+                    overlay.style.top = overlay.dataset.originalTop;
+                    setTimeout(() => {
+                        overlay.style.transition = '';
+                    }, 300);
+                    dragStartEvent.target.removeEventListener('dragend', stopFollowing);
+                }
+                document.addEventListener('mousemove', followMouse);
+                dragStartEvent.target.addEventListener('dragend', stopFollowing);
+            });
+            stickersGrid.appendChild(overlaySticker);
+        });
+    }
+    overlayContainer.appendChild(stickersGrid);
+
+    // --- 6. Position Overlay ---
+    const isFromPalette = e.target.closest('#sticker-palette-container');
+
+    if (isFromPalette) {
+        // Logic for palette trigger (no change)
+        const canvasRect = canvas.getBoundingClientRect();
+        const margin = 10;
+        overlayContainer.style.left = `${canvasRect.left + margin}px`;
+        overlayContainer.style.top = `${canvasRect.top + margin}px`;
+    } else {
+        // ✅ NEW, ROBUST LOGIC for on-canvas trigger
+        
+        // Step 1: Temporarily show the overlay to measure it
+        overlayContainer.style.visibility = 'hidden';
+        overlayContainer.style.display = 'flex';
+        const overlayWidth = overlayContainer.offsetWidth;
+        const overlayHeight = overlayContainer.offsetHeight;
+        overlayContainer.style.display = 'none';
+        overlayContainer.style.visibility = 'visible';
+
+        // Step 2: Calculate the best position
+        const rect = e.target.getBoundingClientRect();
+        const margin = 15; // A comfortable margin from the window edge
+
+        // Default position: Below the button
+        let top = rect.bottom + margin;
+        // Default position: Horizontally centered with the button
+        let left = rect.left + (rect.width / 2) - (overlayWidth / 2);
+
+        // Step 3: Check and correct for screen edges
+        // If it goes off the bottom, flip it to the top
+        if (top + overlayHeight > window.innerHeight) {
+            top = rect.top - overlayHeight - margin;
         }
+        // If it goes off the right, align to the right edge
+        if (left + overlayWidth > window.innerWidth) {
+            left = window.innerWidth - overlayWidth - margin;
+        }
+        // If it goes off the left, align to the left edge
+        if (left < 0) {
+            left = margin;
+        }
+        // If it (now) goes off the top, align to the top edge
+        if (top < 0) {
+            top = margin;
+        }
+
+        // Step 4: Apply the final, safe position
+        overlayContainer.style.left = `${left}px`;
+        overlayContainer.style.top = `${top}px`;
+    }
+    
+    overlayContainer.dataset.originalLeft = overlayContainer.style.left;
+    overlayContainer.dataset.originalTop = overlayContainer.style.top;
+    
+    overlayContainer.style.display = 'flex';
+
+    // --- 7. Render Lucide Icons ---
+    lucide.createIcons();
+    
+    document.addEventListener('mousedown', handleCloseOverlayOnOutsideClick);
+}
 
         document.addEventListener('click', (e) => {
             if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target)) {
@@ -1015,17 +1470,22 @@
             e.preventDefault();
         });
 
-        canvas.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const data = e.dataTransfer.getData('application/json');
-            if (data) {
-                const { url, width } = JSON.parse(data);
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                addSticker(url, x, y, width);
-            }
-        });
+       canvas.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const data = e.dataTransfer.getData('application/json');
+    if (data) {
+        // ✅ Unpack the new letter and group data
+        const { url, width, letter, group } = JSON.parse(data);
+        const rect = canvas.getBoundingClientRect();
+
+        // Center the sticker on the drop location
+        const x = e.clientX - rect.left - (width / 2);
+        const y = e.clientY - rect.top - (width / 2);
+        
+        // ✅ Pass the letter and group into the options object
+        addSticker(url, x, y, width, width, { letter, group });
+    }
+});
 
         function updateUndoRedoButtons() {
             undoBtn.disabled = history.length <= 1;
@@ -1089,6 +1549,11 @@
                 lucide.createIcons();
             }
         });
+        
+          const controls = document.querySelector('.controls');
+        if (controls) {
+            controls.style.visibility = 'visible';
+        }
     </script>
 </body>
 </html>
