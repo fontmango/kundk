@@ -697,63 +697,74 @@ function populatePalette() {
         }
 
         function getRandomStickerUrlFromGroups() {
-            if (!stickerGroups || stickerGroups.length === 0) {
-                console.log("⚠️ No stickerGroups available");
-                return null;
-            }
+    if (!stickerGroups || stickerGroups.length === 0) {
+        console.log("⚠️ No stickerGroups available");
+        return null;
+    }
 
-            const selectedLetter = document.getElementById("letter-select").value;
-            const allStickers = stickerGroups.flatMap(group => {
-                const urlsForLetter = group.urls[selectedLetter];
-                return urlsForLetter ? urlsForLetter : [];
-            });
+    // get current dropdown value
+    const selectedLetter = document.getElementById("letter-select").value;
 
-            if (allStickers.length === 0) {
-                console.log(`⚠️ No stickers found for letter ${selectedLetter}`);
-                return null;
-            }
+    // collect all stickers from all groups for the chosen letter
+    const allStickers = stickerGroups.flatMap(group => {
+        const urlsForLetter = group.urls[selectedLetter];
+        return urlsForLetter ? urlsForLetter : [];
+    });
 
-            const randomIndex = Math.floor(Math.random() * allStickers.length);
-            return allStickers[randomIndex];
-        }
+    if (allStickers.length === 0) {
+        console.log(`⚠️ No stickers found for letter ${selectedLetter}`);
+        return null;
+    }
+
+    // pick one randomly
+    const randomIndex = Math.floor(Math.random() * allStickers.length);
+    return allStickers[randomIndex];
+}
 
         spinBtn.addEventListener("click", () => {
-            let sticker = document.querySelector('#canvas-container .sticker img');
+    const selectedLetter = letterSelect.value;
 
-            if (!sticker) {
-                const firstUrl = getRandomStickerUrlFromGroups(); 
-                if (firstUrl) {
-                    addOrReplaceSticker(firstUrl);
-                    sticker = document.querySelector('#canvas-container .sticker img');
-                } else {
-                    console.warn("⚠️ No sticker available for selected letter.");
-                    return;
-                }
-            }
+    // 🔎 find unlocked sticker of same letter
+    let stickerDiv = document.querySelector(`#canvas-container .sticker[data-letter="${selectedLetter}"]:not(.locked)`);
+    let stickerImg;
 
-            let spinCount = 0;
-            const maxSpins = 15 + Math.floor(Math.random() * 10);
+    if (!stickerDiv) {
+        // ➕ No sticker of this letter, create new one
+        const firstUrl = getRandomStickerByLetter(selectedLetter);
+        if (firstUrl) {
+            addOrReplaceSticker(firstUrl, selectedLetter);
+            stickerDiv = document.querySelector(`#canvas-container .sticker[data-letter="${selectedLetter}"]:not(.locked)`);
+            stickerImg = stickerDiv?.querySelector("img");
+        } else {
+            console.warn("⚠️ No sticker available for selected letter.");
+            return;
+        }
+    } else {
+        stickerImg = stickerDiv.querySelector("img");
+    }
 
-            const spinInterval = setInterval(() => {
-                const nextUrl = getRandomStickerUrlFromGroups(); 
-                if (nextUrl) {
-                    sticker.src = nextUrl;
-                }
-                
-                spinCount++;
-                if (spinCount >= maxSpins) {
-                    clearInterval(spinInterval);
+    // 🎰 Start spinning
+    let spinCount = 0;
+    const maxSpins = 15 + Math.floor(Math.random() * 10);
 
-                    const stickerDiv = sticker.closest('.sticker');
-                    if (stickerDiv) {
-                        stickerDiv.classList.add('pulse-effect');
-                        setTimeout(() => stickerDiv.classList.remove('pulse-effect'), 3000);
-                    }
+    const spinInterval = setInterval(() => {
+        const nextUrl = getRandomStickerByLetter(selectedLetter); 
+        if (nextUrl) {
+            stickerImg.src = nextUrl;
+        }
 
-                    saveState();
-                }
-            }, 100);
-        });
+        spinCount++;
+        if (spinCount >= maxSpins) {
+            clearInterval(spinInterval);
+
+            // 🎉 Add pulse effect at the end
+            stickerDiv.classList.add("pulse-effect");
+            setTimeout(() => stickerDiv.classList.remove("pulse-effect"), 3000);
+
+            saveState();
+        }
+    }, 100);
+});
 
         // MODIFIED: This function now correctly handles replacing the sticker and centering it
 function addOrReplaceSticker(newUrl, letter) {
@@ -1531,15 +1542,11 @@ function showOverlay(e, urlsByLetter) {
             }
         }
 
-        addStickerBtn.addEventListener('click', () => {
-            const selectedLetter = letterSelect.value;
-            const stickerUrl = getRandomStickerByLetter(selectedLetter);
-            if (stickerUrl) {
-                addSticker(stickerUrl);
-            } else {
-                alert(`No stickers found for the letter "${selectedLetter}".`);
-            }
-        });
+            addStickerBtn.addEventListener("click", () => {
+    const selectedLetter = letterSelect.value;
+    const url = getRandomStickerByLetter(selectedLetter);
+    if (url) addOrReplaceSticker(url, selectedLetter);
+});
 
         populatePalette();
         saveState();
