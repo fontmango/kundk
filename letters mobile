@@ -84,6 +84,11 @@
             justify-content: center;
         }
 
+        /* 1. Disable the blue tap highlight on all buttons and controls */
+button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
+    -webkit-tap-highlight-color: transparent;
+}
+
         /* Add active states for touch feedback on mobile */
 .copy-btn:active {
     background-color: #6aa84fff; /* Green */
