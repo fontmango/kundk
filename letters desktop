@@ -1538,6 +1538,10 @@ function showOverlay(e, urlsByLetter) {
         }
     }
 });
+      
+          document.addEventListener("contextmenu", function(e){
+  e.preventDefault();
+}, false);
     </script>
 </body>
 </html>
