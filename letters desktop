@@ -711,9 +711,8 @@ groupBtn.addEventListener('click', (ev) => {
     const letter = sticker.dataset.letter;
     const url = sticker.querySelector('img').src;
 
-    console.log('📌 Group button clicked');
-    console.log('Sticker letter:', letter);
-    console.log('Sticker URL:', url);
+
+    
 
     // Find the group that actually contains this URL under this letter
     const group = stickerGroups.find(g => g.urls[letter]?.includes(url));
