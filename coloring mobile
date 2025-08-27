@@ -12,12 +12,7 @@
   user-select: none;
 }
       
-        html,
-body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
+  
 
 body {
     margin: 0;
@@ -26,7 +21,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
+  
     box-sizing: border-box;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -45,6 +40,15 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 16px;
     touch-action: none;
+}
+      
+      @media (max-width: 768px) {
+    #canvas-container {
+        /* On mobile, make the height 50% of the screen's height */
+  
+        /* You can also make it take the full width for more space */
+        width: 100%;
+    }
 }
 
 .sticker {
