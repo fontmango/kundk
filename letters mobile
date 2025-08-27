@@ -4,32 +4,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sticker Canvas</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 1vh;
-            box-sizing: border-box;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+      body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    box-sizing: border-box;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
 
-        #canvas-container {
-            width: 90%;
-            height: 500px;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            position: relative;
-            margin-top: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 16px;
-            touch-action: none;
-        }
+#canvas-container {
+    width: 90%;
+    max-width: 600px;
+    height: 80vh;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    position: relative;
+    margin-top: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    touch-action: none;
+}
+      
+      @media (max-width: 768px) {
+    #canvas-container {
+        /* On mobile, make the height 50% of the screen's height */
+  
+        /* You can also make it take the full width for more space */
+        width: 100%;
+    }
+}
 
         .sticker {
             position: absolute;
@@ -77,7 +87,7 @@
         .controls {
             margin-top: 10px;
             display: flex;
-            gap: 15px;
+            gap: 8px;
             align-items: center;
             visibility: hidden;
         }
@@ -380,43 +390,7 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
 
-        .letter-dropdown-container {
-    /* Wrapping div can often be kept simple */
-    position: relative;
-}
 
-#letter-select {
-    /* Font and Spacing */
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    padding: 8px 30px 8px 12px; /* Extra padding on the right for the arrow */
-
-    /* Appearance */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: #f8f9fa; /* Light grey background */
-    border: 1px solid #dee2e6; /* Subtle border */
-    border-radius: 8px; /* Rounded corners */
-    color: #495057;
-    cursor: pointer;
-
-    /* Custom Arrow Icon (as a background image) */
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 16px 12px;
-
-    /* Effects */
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-/* Style for when the dropdown is focused (clicked) */
-#letter-select:focus {
-    border-color: #86b7fe;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
 
         .pulse-effect {
   animation: pulse 0.5s ease-in-out;
@@ -436,11 +410,8 @@
 
 @media (max-width: 768px) {
     #overlay-container {
-        /* Make it a centered modal on small screens */
-        width: 90vw; /* Set width to 90% of the viewport width */
-        max-height: 80vh; /* Set max height to 80% of the viewport height */
-        
-        /* The !important tag ensures these CSS rules override the JavaScript positioning */
+        width: 90vw; 
+        max-height: 70vh;
         top: 50% !important;
         left: 50% !important;
         transform: translate(-50%, -50%);
@@ -464,43 +435,88 @@
     /* You might need to adjust padding or margin if the background is too tight to the image */
     padding: 5px; /* Optional: Add some padding to make the background more visible around the image */
 }
+
+#sticker-selection-overlay {
+    position: fixed; /* ✅ This ensures it's centered on the screen */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 500px;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    padding: 20px;
+    z-index: 300;
+    display: none;
+    flex-direction: column;
+}
+
+#sticker-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 15px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.centered-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 500px;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    padding: 20px;
+    z-index: 300;
+    display: none;
+    flex-direction: column;
+}
+
+.selection-sticker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.selection-sticker:hover {
+    background-color: #f0f0f0;
+}
+
+.selection-sticker img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.selection-sticker span {
+    font-size: 12px;
+    color: #333;
+    text-align: center;
+}
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
+    
+
+    <div id="canvas-container"></div>
+
+   
+    <div id="overlay-container"></div>
+
     <div class="controls">
-        <div class="letter-dropdown-container">
-            <select id="letter-select">
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-                <option value="E">E</option>
-                <option value="F">F</option>
-                <option value="G">G</option>
-                <option value="H">H</option>
-                <option value="I">I</option>
-                <option value="J">J</option>
-                <option value="K">K</option>
-                <option value="L">L</option>
-                <option value="M">M</option>
-                <option value="N">N</option>
-                <option value="O">O</option>
-                <option value="P">P</option>
-                <option value="Q">Q</option>
-                <option value="R">R</option>
-                <option value="S">S</option>
-                <option value="T">T</option>
-                <option value="U">U</option>
-                <option value="V">V</option>
-                <option value="W">W</option>
-                <option value="X">X</option>
-                <option value="Y">Y</option>
-                <option value="Z">Z</option>
-            </select>
-        </div>
+       
         
         <button id="spin-sticker-btn" title="Spin Random">
             <i data-lucide="dice-6" class="icon"></i>
@@ -509,6 +525,9 @@
         <button id="add-sticker-btn" title="Aufkleber hinzufügen">
             <i data-lucide="plus" class="icon"></i>
         </button>
+
+            <button id="open-stickers-btn" title="Choose Sticker"><i data-lucide="smile-plus" class="icon"></i></button>
+
 
         <button id="undo-btn" title="Zurück">
             <i data-lucide="undo-2" class="icon"></i>
@@ -522,12 +541,6 @@
             <i data-lucide="file-plus-2" class="icon"></i>
         </button>
     </div>
-
-    <div id="canvas-container"></div>
-
-    <div id="sticker-palette-container"></div>
-
-    <div id="overlay-container"></div>
     
     <script>
              const stickerGroups = [
@@ -576,7 +589,7 @@
         ];
 
 
-
+const openStickersBtn = document.getElementById('open-stickers-btn');
         const spinBtn = document.getElementById("spin-sticker-btn");
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
@@ -656,48 +669,7 @@ function loadState(state) {
     updateUndoRedoButtons();
 }
 
-function populatePalette() {
-    stickerGroups.forEach(group => {
-        // The representative sticker is always the one for letter "A"
-        const representativeUrl = group.urls["A"] ? group.urls["A"][0] : null;
 
-        if (representativeUrl) {
-            const wrapper = document.createElement('div');
-            wrapper.classList.add('palette-sticker-wrapper');
-            wrapper.dataset.label = group.name;
-
-            const paletteSticker = document.createElement('img');
-            paletteSticker.src = representativeUrl;
-            paletteSticker.classList.add('palette-sticker');
-            paletteSticker.dataset.group = group.name;
-
-            paletteSticker.addEventListener('click', (e) => {
-                if (activePaletteSticker === paletteSticker) {
-                    hideOverlay();
-                } else {
-                    hideOverlay();
-                    showOverlay(e, group.urls);
-                    activePaletteSticker = paletteSticker;
-                }
-            });
-
-            paletteSticker.draggable = true;
-            paletteSticker.addEventListener('dragstart', (e) => {
-                // ✅ Add the missing letter and group data to the payload
-                e.dataTransfer.setData('application/json', JSON.stringify({
-                    url: e.target.src,
-                    width: 120,
-                    letter: "A", // Palette stickers represent letter "A"
-                    group: group.name
-                }));
-                hideOverlay();
-            });
-
-            wrapper.appendChild(paletteSticker);
-            paletteContainer.appendChild(wrapper);
-        }
-    });
-}
           function deselectAllStickers() {
     document.querySelectorAll('.sticker').forEach(s => {
         s.classList.remove('selected');
@@ -736,46 +708,38 @@ function populatePalette() {
     return allStickers[randomIndex];
 }
 
-        spinBtn.addEventListener("click", () => {
-    const selectedLetter = letterSelect.value;
+  spinBtn.addEventListener("click", () => {
+    const selectedLetter = "A"; // ✅ Hardcoded to "A"
 
-    // 🔎 find unlocked sticker of same letter
-    let stickerDiv = document.querySelector(`#canvas-container .sticker[data-letter="${selectedLetter}"]:not(.locked)`);
-    let stickerImg;
-
+    let stickerDiv = document.querySelector(`#canvas-container .sticker[data-letter="${selectedLetter}"]`);
+    
+    // If no "A" sticker exists on the canvas, add one first.
     if (!stickerDiv) {
-        // ➕ No sticker of this letter, create new one
-        const firstUrl = getRandomStickerByLetter(selectedLetter);
-        if (firstUrl) {
-            addOrReplaceSticker(firstUrl, selectedLetter);
-            stickerDiv = document.querySelector(`#canvas-container .sticker[data-letter="${selectedLetter}"]:not(.locked)`);
-            stickerImg = stickerDiv?.querySelector("img");
+        const url = getRandomStickerByLetter(selectedLetter);
+        if (url) {
+            const groupWithLetter = stickerGroups.find(g => g.urls[selectedLetter]);
+            const groupName = groupWithLetter ? groupWithLetter.name : null;
+            stickerDiv = addSticker(url, undefined, undefined, 120, 120, { letter: selectedLetter, group: groupName });
         } else {
-            console.warn("⚠️ No sticker available for selected letter.");
+            console.warn("⚠️ No sticker available for letter A.");
             return;
         }
-    } else {
-        stickerImg = stickerDiv.querySelector("img");
     }
 
-    // 🎰 Start spinning
+    const stickerImg = stickerDiv.querySelector("img");
     let spinCount = 0;
     const maxSpins = 15 + Math.floor(Math.random() * 10);
 
     const spinInterval = setInterval(() => {
-        const nextUrl = getRandomStickerByLetter(selectedLetter); 
+        const nextUrl = getRandomStickerByLetter(selectedLetter);
         if (nextUrl) {
             stickerImg.src = nextUrl;
         }
-
         spinCount++;
         if (spinCount >= maxSpins) {
             clearInterval(spinInterval);
-
-            // 🎉 Add pulse effect at the end
             stickerDiv.classList.add("pulse-effect");
             setTimeout(() => stickerDiv.classList.remove("pulse-effect"), 3000);
-
             saveState();
         }
     }, 100);
@@ -1367,11 +1331,68 @@ function checkSelectionCollision(isShiftPressed) {
     });
 }
 
-        
-        function hideOverlay() {
-            overlayContainer.style.display = 'none';
-            activePaletteSticker = null;
+function showStickerSelectionOverlay() {
+    // We reuse the overlay container for this
+    overlayContainer.innerHTML = '';
+    overlayContainer.style.display = 'flex';
+
+    // Create a title and close button for this primary overlay
+    const header = document.createElement('div');
+    header.className = 'overlay-header';
+    header.innerHTML = `
+        <h2 class="overlay-title">Choose a Sticker Pack</h2>
+        <button class="overlay-close-btn" title="Close"><i data-lucide="x" class="icon"></i></button>
+    `;
+    overlayContainer.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.id = 'sticker-selection-grid';
+    
+    // Populate the grid with sticker groups
+    stickerGroups.forEach(group => {
+        const representativeUrl = group.urls["A"]?.[0];
+        if (representativeUrl) {
+            const stickerEl = document.createElement('div');
+            stickerEl.className = 'selection-sticker';
+            
+            stickerEl.innerHTML = `
+                <img src="${representativeUrl}" alt="${group.name}">
+                <span>${group.name}</span>
+            `;
+            
+            // When a group is clicked, open the *second* overlay with its stickers
+            stickerEl.addEventListener('click', (e) => {
+                showOverlay(e, group.urls); // This is your existing function
+            });
+
+            grid.appendChild(stickerEl);
         }
+    });
+    
+    overlayContainer.appendChild(grid);
+     overlayContainer.addEventListener('click', (e) => {
+        // If the click happened on the close button, hide the overlay
+        if (e.target.closest('.overlay-close-btn')) {
+            hideOverlay();
+        }
+    });
+    lucide.createIcons();
+    
+    // Add the "click outside to close" logic
+    document.addEventListener('mousedown', handleCloseOverlayOnOutsideClick);
+}
+
+// --- Update the main button listener ---
+openStickersBtn.addEventListener('click', showStickerSelectionOverlay);
+
+
+function hideOverlay() {
+    document.removeEventListener('mousedown', handleCloseOverlayOnOutsideClick);
+    overlayContainer.style.display = 'none';
+    
+    // Reset the ID so it doesn't conflict next time
+    activePaletteSticker = null;
+}
 
         let activeGroupURLs = [];
 
@@ -1587,13 +1608,20 @@ function showOverlay(e, urlsByLetter) {
             }
         }
 
-            addStickerBtn.addEventListener("click", () => {
-    const selectedLetter = letterSelect.value;
+ addStickerBtn.addEventListener("click", () => {
+    const selectedLetter = "A"; // ✅ Hardcoded to "A"
     const url = getRandomStickerByLetter(selectedLetter);
-    if (url) addOrReplaceSticker(url, selectedLetter);
+    if (url) {
+        // We also need to find which group this "A" sticker belongs to
+        const groupWithLetter = stickerGroups.find(g => g.urls[selectedLetter]);
+        const groupName = groupWithLetter ? groupWithLetter.name : null;
+        addSticker(url, undefined, undefined, 120, 120, { letter: selectedLetter, group: groupName });
+    } else {
+        alert(`No sticker found for letter "${selectedLetter}"`);
+    }
 });
 
-        populatePalette();
+  
         saveState();
 
         window.addEventListener('load', () => {
