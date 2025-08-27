@@ -2222,7 +2222,7 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
             return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
         }
 
- async function recolorSticker(stickerImg, fillColor, clickX, clickY) {
+ function recolorSticker(stickerImg, fillColor, clickX, clickY) {
     const canvasEl = document.createElement("canvas");
     const ctx = canvasEl.getContext("2d", { willReadFrequently: true });
     canvasEl.width = stickerImg.naturalWidth;
@@ -2231,113 +2231,118 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
 
     const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
     const data = imgData.data;
+    const { width, height } = canvasEl;
 
     const isEraser = fillColor && fillColor.type === 'erase';
-    const [r, g, b] = isEraser ? [0, 0, 0] : hexToRgb(fillColor);
+    const [r, g, b] = isEraser ? [0, 0, 0] : hexToRgb(fillColor); // Assuming you have a hexToRgb function
 
-    // --- border detection ---
+    // --- Inlined helper functions for performance ---
     const blackThreshold = 30;
-    function isBorderPixel(pxR, pxG, pxB, pxA) {
-        return (pxA > 0 && pxR < blackThreshold && pxG < blackThreshold && pxB < blackThreshold);
-    }
+    const tolerance = 30;
 
-    function colorsMatch(data, i, target, tolerance = 30) {
-        return (
-            Math.abs(data[i] - target[0]) <= tolerance &&
-            Math.abs(data[i + 1] - target[1]) <= tolerance &&
-            Math.abs(data[i + 2] - target[2]) <= tolerance &&
-            Math.abs(data[i + 3] - target[3]) <= tolerance
-        );
-    }
-
-    const startIndex = ((clickY * canvasEl.width) + clickX) * 4;
+    const startIndex = (clickY * width + clickX) * 4;
     const targetColor = [
         data[startIndex],
         data[startIndex + 1],
         data[startIndex + 2],
         data[startIndex + 3]
     ];
+    
+    // Early exit if the clicked pixel is a border
+    if (targetColor[3] > 0 && targetColor[0] < blackThreshold && targetColor[1] < blackThreshold && targetColor[2] < blackThreshold) {
+        return; 
+    }
 
-    const visited = new Uint8Array(canvasEl.width * canvasEl.height);
+    const visited = new Uint8Array(width * height);
     let touchesEdge = false;
 
-    // --- Scanline Flood Fill ---
     const stack = [[clickX, clickY]];
 
+    // --- OPTIMIZATION 1: Run synchronously in a single loop ---
     while (stack.length) {
         let [x, y] = stack.pop();
 
-        // move left until border
         let left = x;
-        while (left >= 0) {
-            const idx = (y * canvasEl.width + left) * 4;
-            if (visited[y * canvasEl.width + left] ||
-                isBorderPixel(data[idx], data[idx + 1], data[idx + 2], data[idx + 3]) ||
-                !colorsMatch(data, idx, targetColor, 30)) {
-                break;
-            }
+        while (left >= 0 && !visited[y * width + left] && isFillable(left, y)) {
             left--;
         }
         left++;
 
-        // move right until border
         let right = x;
-        while (right < canvasEl.width) {
-            const idx = (y * canvasEl.width + right) * 4;
-            if (visited[y * canvasEl.width + right] ||
-                isBorderPixel(data[idx], data[idx + 1], data[idx + 2], data[idx + 3]) ||
-                !colorsMatch(data, idx, targetColor, 30)) {
-                break;
-            }
+        while (right < width && !visited[y * width + right] && isFillable(right, y)) {
             right++;
         }
         right--;
 
-        // fill the horizontal span
-        for (let xi = left; xi <= right; xi++) {
-            const idx = y * canvasEl.width + xi;
-            const i = idx * 4;
+        // Fill the span
+        for (let i = left; i <= right; i++) {
+            const idx = y * width + i;
             visited[idx] = 1;
+            const dataIndex = idx * 4;
 
             if (isEraser) {
-                data[i + 3] = 0;
+                data[dataIndex + 3] = 0;
             } else {
-                data[i] = r;
-                data[i + 1] = g;
-                data[i + 2] = b;
-                data[i + 3] = 255;
+                data[dataIndex] = r;
+                data[dataIndex + 1] = g;
+                data[dataIndex + 2] = b;
+                data[dataIndex + 3] = 255;
             }
 
-            // check if region touches canvas edge
-            if (xi === 0 || xi === canvasEl.width - 1 || y === 0 || y === canvasEl.height - 1) {
+            if (i === 0 || i === width - 1 || y === 0 || y === height - 1) {
                 touchesEdge = true;
             }
         }
 
-        // enqueue spans above & below
-        for (let xi = left; xi <= right; xi++) {
-            const upIdx = (y - 1) * canvasEl.width + xi;
-            const downIdx = (y + 1) * canvasEl.width + xi;
+        // --- OPTIMIZATION 2: Efficiently find and add new scanlines ---
+        scan(y - 1, left, right); // Scan row above
+        scan(y + 1, left, right); // Scan row below
+    }
 
-            if (y > 0 && !visited[upIdx]) stack.push([xi, y - 1]);
-            if (y < canvasEl.height - 1 && !visited[downIdx]) stack.push([xi, y + 1]);
+    // Helper to check if a pixel should be filled
+    function isFillable(px, py) {
+        if (px < 0 || px >= width || py < 0 || py >= height) return false;
+        
+        const idx = (py * width + px) * 4;
+        const R = data[idx];
+        const G = data[idx + 1];
+        const B = data[idx + 2];
+        const A = data[idx + 3];
+
+        // Check if it's a border pixel
+        if (A > 0 && R < blackThreshold && G < blackThreshold && B < blackThreshold) {
+            return false;
+        }
+
+        // Check if it matches the target color
+        return (
+            Math.abs(R - targetColor[0]) <= tolerance &&
+            Math.abs(G - targetColor[1]) <= tolerance &&
+            Math.abs(B - targetColor[2]) <= tolerance &&
+            Math.abs(A - targetColor[3]) <= tolerance
+        );
+    }
+    
+    // Helper to find new spans to add to the stack
+    function scan(y, lx, rx) {
+        if (y < 0 || y >= height) return;
+        for (let x = lx; x <= rx; x++) {
+            if (!visited[y * width + x] && isFillable(x, y)) {
+                // We found a new, uncolored span. Push it and skip the rest of this span.
+                stack.push([x, y]);
+                // Fast-forward past the rest of this colored span
+                while (x <= rx && isFillable(x, y)) {
+                    x++;
+                }
+            }
         }
     }
 
-    // apply changes only if not leaking
     if (!touchesEdge) {
         ctx.putImageData(imgData, 0, 0);
-
-        // much faster than toDataURL
-        const bitmap = await createImageBitmap(canvasEl);
-        const offscreen = document.createElement("canvas");
-        offscreen.width = bitmap.width;
-        offscreen.height = bitmap.height;
-        offscreen.getContext("2d").drawImage(bitmap, 0, 0);
-        stickerImg.src = offscreen.toDataURL();
+        stickerImg.src = canvasEl.toDataURL();
+        // saveState(); // Call your state saving function
     }
-
-    saveState();
 }
 
 
