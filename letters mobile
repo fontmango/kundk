@@ -1418,6 +1418,7 @@ function showOverlay(e, urlsByLetter) {
                     letter: letter,
                     group: group.name
                 });
+                 hideOverlay(); // ✅ Correct placement
             });
             overlaySticker.addEventListener('dragstart', (dragStartEvent) => {
                 dragStartEvent.stopPropagation();
