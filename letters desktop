@@ -253,7 +253,7 @@
 
 .overlay-cart-link, .overlay-close-btn {
     position: absolute;
-    top: 50%;
+   
     
     color: #555;
     background: none;
