@@ -510,13 +510,12 @@ function loadState(state) {
 
 function populatePalette() {
     stickerGroups.forEach(group => {
+        // The representative sticker is always the one for letter "A"
         const representativeUrl = group.urls["A"] ? group.urls["A"][0] : null;
 
         if (representativeUrl) {
-            // ✅ CORRECTION: Create the wrapper div
             const wrapper = document.createElement('div');
             wrapper.classList.add('palette-sticker-wrapper');
-            // Set the tooltip text on the wrapper using a data attribute
             wrapper.dataset.label = group.name;
 
             const paletteSticker = document.createElement('img');
@@ -536,14 +535,16 @@ function populatePalette() {
 
             paletteSticker.draggable = true;
             paletteSticker.addEventListener('dragstart', (e) => {
+                // ✅ Add the missing letter and group data to the payload
                 e.dataTransfer.setData('application/json', JSON.stringify({
                     url: e.target.src,
-                    width: 120
+                    width: 120,
+                    letter: "A", // Palette stickers represent letter "A"
+                    group: group.name
                 }));
                 hideOverlay();
             });
 
-            // ✅ CORRECTION: Append the image to the wrapper, then the wrapper to the palette
             wrapper.appendChild(paletteSticker);
             paletteContainer.appendChild(wrapper);
         }
@@ -1095,8 +1096,12 @@ sticker.appendChild(groupBtn);
 
         let activeGroupURLs = [];
 
-        function showOverlay(e, urlsByLetter) {
+ function showOverlay(e, urlsByLetter) {
     overlayContainer.innerHTML = '';
+
+    // Find the group name associated with these URLs
+    const group = stickerGroups.find(g => g.urls === urlsByLetter);
+    const groupName = group ? group.name : null;
 
     // fill overlay
     for (const letter in urlsByLetter) {
@@ -1105,31 +1110,45 @@ sticker.appendChild(groupBtn);
             overlaySticker.src = url;
             overlaySticker.classList.add('overlay-sticker');
             overlaySticker.draggable = true;
+
+            // ✅ Add letter and group data to the element itself
+            overlaySticker.dataset.letter = letter;
+            if (groupName) {
+                overlaySticker.dataset.group = groupName;
+            }
+
             overlaySticker.addEventListener('dragstart', (e) => {
                 e.stopPropagation();
+                // ✅ Pack the new data for the drop event
                 e.dataTransfer.setData('application/json', JSON.stringify({
                     url: e.target.src,
-                    width: 120
+                    width: 120,
+                    letter: e.target.dataset.letter,
+                    group: e.target.dataset.group
                 }));
             });
+
             overlaySticker.addEventListener('click', (e) => {
                 e.stopPropagation();
-                addSticker(url);
+                // ✅ Pass the letter and group when clicking to add, too
+                addSticker(url, undefined, undefined, 120, 120, {
+                    letter: letter,
+                    group: groupName
+                });
             });
+
             overlayContainer.appendChild(overlaySticker);
         });
     }
 
-    // Position overlay
+    // Position overlay (no changes here)
     const rect = e.target.getBoundingClientRect();
     let left = rect.right + 10;
     let top = rect.top;
 
-    // if it would go off screen, flip to left
     if (left + overlayContainer.offsetWidth > window.innerWidth) {
         left = rect.left - overlayContainer.offsetWidth - 10;
     }
-    // if it would go off bottom, shift up
     if (top + overlayContainer.offsetHeight > window.innerHeight) {
         top = window.innerHeight - overlayContainer.offsetHeight - 20;
     }
@@ -1149,17 +1168,22 @@ sticker.appendChild(groupBtn);
             e.preventDefault();
         });
 
-        canvas.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const data = e.dataTransfer.getData('application/json');
-            if (data) {
-                const { url, width } = JSON.parse(data);
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                addSticker(url, x, y, width);
-            }
-        });
+       canvas.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const data = e.dataTransfer.getData('application/json');
+    if (data) {
+        // ✅ Unpack the new letter and group data
+        const { url, width, letter, group } = JSON.parse(data);
+        const rect = canvas.getBoundingClientRect();
+
+        // Center the sticker on the drop location
+        const x = e.clientX - rect.left - (width / 2);
+        const y = e.clientY - rect.top - (width / 2);
+        
+        // ✅ Pass the letter and group into the options object
+        addSticker(url, x, y, width, width, { letter, group });
+    }
+});
 
         function updateUndoRedoButtons() {
             undoBtn.disabled = history.length <= 1;
