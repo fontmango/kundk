@@ -709,7 +709,7 @@ function loadState(state) {
 }
 
   spinBtn.addEventListener("click", () => {
-    const selectedLetter = "A"; // ✅ Hardcoded to "A"
+    const selectedLetter = "A"; // Always use Letter 'A'
 
     let stickerDiv = document.querySelector(`#canvas-container .sticker[data-letter="${selectedLetter}"]`);
     
@@ -725,6 +725,15 @@ function loadState(state) {
             return;
         }
     }
+
+    // ✅ ADD THESE LINES to re-center and resize the sticker before spinning
+    const stickerSize = 120;
+    const centerX = (canvas.offsetWidth / 2) - (stickerSize / 2);
+    const centerY = (canvas.offsetHeight / 2) - (stickerSize / 2);
+    stickerDiv.style.width = `${stickerSize}px`;
+    stickerDiv.style.height = `${stickerSize}px`;
+    stickerDiv.style.left = `${centerX}px`;
+    stickerDiv.style.top = `${centerY}px`;
 
     const stickerImg = stickerDiv.querySelector("img");
     let spinCount = 0;
@@ -753,24 +762,25 @@ function addOrReplaceSticker(newUrl, letter) {
     const centerX = (canvasWidth / 2) - (stickerSize / 2);
     const centerY = (canvasHeight / 2) - (stickerSize / 2);
 
-    // Find the group for this letter
     const groupObj = stickerGroups.find(g => g.urls[letter]);
     const groupName = groupObj ? groupObj.name : null;
 
-    // Look for an unlocked sticker with the same letter
     const unlockedSticker = document.querySelector(`.sticker[data-letter="${letter}"]:not(.locked)`);
 
     if (unlockedSticker) {
         // Replace the image
-        unlockedSticker.style.opacity = '0';
         const img = unlockedSticker.querySelector('img');
         img.src = newUrl;
-        img.onload = () => {
-            unlockedSticker.style.opacity = '1';
-        };
+        
+        // ✅ ADD THESE LINES to re-center and resize the existing sticker
+        unlockedSticker.style.width = `${stickerSize}px`;
+        unlockedSticker.style.height = `${stickerSize}px`;
+        unlockedSticker.style.left = `${centerX}px`;
+        unlockedSticker.style.top = `${centerY}px`;
         unlockedSticker.dataset.group = groupName;
+
     } else {
-        // Create a new sticker in the center
+        // Create a new sticker in the center (this part is already correct)
         addSticker(newUrl, centerX, centerY, stickerSize, stickerSize, { 
             letter, 
             group: groupName 
