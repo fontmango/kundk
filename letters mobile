@@ -434,6 +434,19 @@
   }
 }
 
+@media (max-width: 768px) {
+    #overlay-container {
+        /* Make it a centered modal on small screens */
+        width: 90vw; /* Set width to 90% of the viewport width */
+        max-height: 80vh; /* Set max height to 80% of the viewport height */
+        
+        /* The !important tag ensures these CSS rules override the JavaScript positioning */
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%);
+    }
+}
+
 /* Style for the drag-to-select box */
 #selection-box {
     position: absolute;
