@@ -79,6 +79,7 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            visibility: hidden;
         }
 
         button {
@@ -216,18 +217,72 @@
         }
 
         #overlay-container {
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.95);
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            display: none;
-            z-index: 200;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            width: 350px;
-        }
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.98); /* Slightly less transparent */
+    border: 1px solid #ccc;
+    border-radius: 12px; /* A bit more rounded */
+    padding: 10px 15px;
+    display: none; /* Keep this */
+    z-index: 200;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 380px;
+    /* ✅ Changed to flex layout */
+    display: none;
+    flex-direction: column;
+    
+}
+
+/* ✅ New styles for the overlay header */
+.overlay-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.overlay-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.overlay-cart-link, .overlay-close-btn {
+    position: absolute;
+    top: 50%;
+    
+    color: #555;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.overlay-cart-link:hover, .overlay-close-btn:hover {
+    color: #000;
+}
+
+.overlay-cart-link {
+    left: 0;
+}
+
+.overlay-close-btn {
+    right: 0;
+}
+
+/* ✅ New grid container for just the stickers */
+.overlay-stickers-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+   
+}
 
         .overlay-sticker {
             width: 100%;
@@ -417,14 +472,42 @@
     <script>
         const stickerGroups = [
             {
-                name: "Asia",
-                urls: {
-                    "A": ["https://static.wixstatic.com/media/990059_efb2e73754a7449f96ad432ecb8de360~mv2.png"],
-                    "B": ["https://static.wixstatic.com/media/990059_05e04c6e35424c098fcf4e971fa3a1be~mv2.png"]
-                }
-            },
+    name: "Asia",
+    purchaseUrl: "https://example.com/shop/asia-pack", 
+    urls: {
+
+"A": ["https://static.wixstatic.com/media/990059_efb2e73754a7449f96ad432ecb8de360~mv2.png"],
+"B": ["https://static.wixstatic.com/media/990059_05e04c6e35424c098fcf4e971fa3a1be~mv2.png"],
+"C": ["https://static.wixstatic.com/media/990059_6d7eedef35d24f648439fdf722a732b2~mv2.png"],
+"D": ["https://static.wixstatic.com/media/990059_ca41a9192e96458abc4083fdc0bad807~mv2.png"],
+"E": ["https://static.wixstatic.com/media/990059_2c58a921b1584864be53f68ff8f717a6~mv2.png"],
+"F": ["https://static.wixstatic.com/media/990059_2f039641ffbf4a99b186d8c72dbc2a63~mv2.png"],
+"G": ["https://static.wixstatic.com/media/990059_e8e79b206c7348619f2b6712a5b2a867~mv2.png"],
+"H": ["https://static.wixstatic.com/media/990059_85dfb8f6c8ac4a9fb2f418f2c1dfbe2c~mv2.png"],
+"I": ["https://static.wixstatic.com/media/990059_a6d3b346123d426b9fbd04d3aa054df6~mv2.png"],
+"J": ["https://static.wixstatic.com/media/990059_6ecb4fd98e23409e82a2cdd64b7e23b9~mv2.png"],
+"K": ["https://static.wixstatic.com/media/990059_e8f19a7c608044239604bf45e24fbfb2~mv2.png"],
+"L": ["https://static.wixstatic.com/media/990059_44c4e23504ac4d60b1268d4bdc8c8265~mv2.png"],
+"M": ["https://static.wixstatic.com/media/990059_7830f0f76785430eb358db2b0dee78fd~mv2.png"],
+"N": ["https://static.wixstatic.com/media/990059_dcc8f1ea7a614d9da288a2701707f1f8~mv2.png"],
+"O": ["https://static.wixstatic.com/media/990059_baa0d5732b77436c9f4656a78ccbb0dd~mv2.png"],
+"P": ["https://static.wixstatic.com/media/990059_0a395f3a8ba140a38405c56991a575c4~mv2.png"],
+"Q": ["https://static.wixstatic.com/media/990059_d0da7b201669407787be1bb6f6f507fa~mv2.png"],
+"R": ["https://static.wixstatic.com/media/990059_a3f067b7ee44430e9274c6adf13ad789~mv2.png"],
+"S": ["https://static.wixstatic.com/media/990059_be4d1512ac54441cba937222e4bf580c~mv2.png"],
+"T": ["https://static.wixstatic.com/media/990059_e23c421e58e24ec1976511d7e73d682d~mv2.png"],
+"U": ["https://static.wixstatic.com/media/990059_a62b2e36988a43d7a94aa4c59c9aa46c~mv2.png"],
+"V": ["https://static.wixstatic.com/media/990059_36b6a48127694e14858bb4bace2f64f0~mv2.png"],
+"W": ["https://static.wixstatic.com/media/990059_600de6c4ceee42c5b7e95739feb67c36~mv2.png"],
+"X": ["https://static.wixstatic.com/media/990059_3e9f503ba0d5413784b9f9cabf740d84~mv2.png"],
+"Y": ["https://static.wixstatic.com/media/990059_0b2b37ac64f545a0b8dbe49bad6f9362~mv2.png"],
+"Z": ["https://static.wixstatic.com/media/990059_45f0a6d4c9c34ef2a895ec08daace75d~mv2.png"]
+
+        }
+     },
             {
                 name: "Bug",
+                purchaseUrl: "https://example.com/shop/bug-pack",
                 urls: {
                     "A": ["https://static.wixstatic.com/media/990059_896e4ce4fb094112aa5e524b4230f562~mv2.png"],
                     "B": ["https://static.wixstatic.com/media/990059_e49cdd1403a949019aeafce0185ac178~mv2.png"]
@@ -689,27 +772,7 @@ function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
         finalY = (canvasHeight / 2) - (height / 2);
     }
 
-    // --- 🚫 Collision avoidance ---
-    function isOverlapping(nx, ny) {
-        const stickers = document.querySelectorAll('#canvas-container .sticker');
-        return Array.from(stickers).some(s => {
-            if (s === sticker) return false; // ignore self
-            const sx = parseInt(s.style.left);
-            const sy = parseInt(s.style.top);
-            const sw = s.offsetWidth;
-            const sh = s.offsetHeight;
-            return !(nx + width <= sx || nx >= sx + sw || ny + height <= sy || ny >= sy + sh);
-        });
-    }
-
-    // Try spiral search for a free spot
-    let attempts = 0;
-    let step = 20;
-    while (isOverlapping(finalX, finalY) && attempts < 200) {
-        finalX = (finalX + step) % (canvas.offsetWidth - width);
-        finalY = (finalY + step) % (canvas.offsetHeight - height);
-        attempts++;
-    }
+ 
 
     // ✅ Now we have a free spot
     sticker.style.left = `${finalX}px`;
@@ -1096,66 +1159,144 @@ sticker.appendChild(groupBtn);
 
         let activeGroupURLs = [];
 
- function showOverlay(e, urlsByLetter) {
-    overlayContainer.innerHTML = '';
+function showOverlay(e, urlsByLetter) {
+    overlayContainer.innerHTML = ''; // Clear previous content
 
-    // Find the group name associated with these URLs
     const group = stickerGroups.find(g => g.urls === urlsByLetter);
-    const groupName = group ? group.name : null;
+    if (!group) return;
 
-    // fill overlay
+    // --- 1. Create Header & Content (No Changes Here) ---
+    const header = document.createElement('div');
+    header.className = 'overlay-header';
+    const cartLink = document.createElement('a');
+    cartLink.className = 'overlay-cart-link';
+    cartLink.href = group.purchaseUrl;
+    cartLink.target = '_blank';
+    cartLink.title = 'Purchase this sticker pack';
+    cartLink.innerHTML = `<i data-lucide="shopping-cart" class="icon"></i>`;
+    const title = document.createElement('h2');
+    title.className = 'overlay-title';
+    title.textContent = group.name;
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'overlay-close-btn';
+    closeBtn.title = 'Close';
+    closeBtn.innerHTML = `<i data-lucide="x" class="icon"></i>`;
+    closeBtn.onclick = hideOverlay;
+    header.appendChild(cartLink);
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+    overlayContainer.appendChild(header);
+    const stickersGrid = document.createElement('div');
+    stickersGrid.className = 'overlay-stickers-grid';
     for (const letter in urlsByLetter) {
         urlsByLetter[letter].forEach(url => {
             const overlaySticker = document.createElement('img');
             overlaySticker.src = url;
             overlaySticker.classList.add('overlay-sticker');
             overlaySticker.draggable = true;
-
-            // ✅ Add letter and group data to the element itself
             overlaySticker.dataset.letter = letter;
-            if (groupName) {
-                overlaySticker.dataset.group = groupName;
-            }
-
-            overlaySticker.addEventListener('dragstart', (e) => {
-                e.stopPropagation();
-                // ✅ Pack the new data for the drop event
-                e.dataTransfer.setData('application/json', JSON.stringify({
-                    url: e.target.src,
-                    width: 120,
-                    letter: e.target.dataset.letter,
-                    group: e.target.dataset.group
-                }));
-            });
-
-            overlaySticker.addEventListener('click', (e) => {
-                e.stopPropagation();
-                // ✅ Pass the letter and group when clicking to add, too
+            overlaySticker.dataset.group = group.name;
+            overlaySticker.addEventListener('click', (ev) => {
+                ev.stopPropagation();
                 addSticker(url, undefined, undefined, 120, 120, {
                     letter: letter,
-                    group: groupName
+                    group: group.name
                 });
             });
-
-            overlayContainer.appendChild(overlaySticker);
+            overlaySticker.addEventListener('dragstart', (dragStartEvent) => {
+                dragStartEvent.stopPropagation();
+                dragStartEvent.dataTransfer.setData('application/json', JSON.stringify({
+                    url: dragStartEvent.target.src,
+                    width: 120,
+                    letter: dragStartEvent.target.dataset.letter,
+                    group: dragStartEvent.target.dataset.group
+                }));
+                const overlay = overlayContainer;
+                const offsetX = dragStartEvent.clientX - overlay.offsetLeft;
+                const offsetY = dragStartEvent.clientY - overlay.offsetTop;
+                function followMouse(mouseMoveEvent) {
+                    overlay.style.left = `${mouseMoveEvent.clientX - offsetX}px`;
+                    overlay.style.top = `${mouseMoveEvent.clientY - offsetY}px`;
+                }
+                function stopFollowing() {
+                    document.removeEventListener('mousemove', followMouse);
+                    overlay.style.transition = 'top 0.3s ease-out, left 0.3s ease-out';
+                    overlay.style.left = overlay.dataset.originalLeft;
+                    overlay.style.top = overlay.dataset.originalTop;
+                    setTimeout(() => {
+                        overlay.style.transition = '';
+                    }, 300);
+                    dragStartEvent.target.removeEventListener('dragend', stopFollowing);
+                }
+                document.addEventListener('mousemove', followMouse);
+                dragStartEvent.target.addEventListener('dragend', stopFollowing);
+            });
+            stickersGrid.appendChild(overlaySticker);
         });
     }
+    overlayContainer.appendChild(stickersGrid);
 
-    // Position overlay (no changes here)
-    const rect = e.target.getBoundingClientRect();
-    let left = rect.right + 10;
-    let top = rect.top;
+    // --- 6. Position Overlay ---
+    const isFromPalette = e.target.closest('#sticker-palette-container');
 
-    if (left + overlayContainer.offsetWidth > window.innerWidth) {
-        left = rect.left - overlayContainer.offsetWidth - 10;
+    if (isFromPalette) {
+        // Logic for palette trigger (no change)
+        const canvasRect = canvas.getBoundingClientRect();
+        const margin = 10;
+        overlayContainer.style.left = `${canvasRect.left + margin}px`;
+        overlayContainer.style.top = `${canvasRect.top + margin}px`;
+    } else {
+        // ✅ NEW, ROBUST LOGIC for on-canvas trigger
+        
+        // Step 1: Temporarily show the overlay to measure it
+        overlayContainer.style.visibility = 'hidden';
+        overlayContainer.style.display = 'flex';
+        const overlayWidth = overlayContainer.offsetWidth;
+        const overlayHeight = overlayContainer.offsetHeight;
+        overlayContainer.style.display = 'none';
+        overlayContainer.style.visibility = 'visible';
+
+        // Step 2: Calculate the best position
+        const rect = e.target.getBoundingClientRect();
+        const margin = 15; // A comfortable margin from the window edge
+
+        // Default position: Below the button
+        let top = rect.bottom + margin;
+        // Default position: Horizontally centered with the button
+        let left = rect.left + (rect.width / 2) - (overlayWidth / 2);
+
+        // Step 3: Check and correct for screen edges
+        // If it goes off the bottom, flip it to the top
+        if (top + overlayHeight > window.innerHeight) {
+            top = rect.top - overlayHeight - margin;
+        }
+        // If it goes off the right, align to the right edge
+        if (left + overlayWidth > window.innerWidth) {
+            left = window.innerWidth - overlayWidth - margin;
+        }
+        // If it goes off the left, align to the left edge
+        if (left < 0) {
+            left = margin;
+        }
+        // If it (now) goes off the top, align to the top edge
+        if (top < 0) {
+            top = margin;
+        }
+
+        // Step 4: Apply the final, safe position
+        overlayContainer.style.left = `${left}px`;
+        overlayContainer.style.top = `${top}px`;
     }
-    if (top + overlayContainer.offsetHeight > window.innerHeight) {
-        top = window.innerHeight - overlayContainer.offsetHeight - 20;
-    }
+    
+    overlayContainer.dataset.originalLeft = overlayContainer.style.left;
+    overlayContainer.dataset.originalTop = overlayContainer.style.top;
+    
+    overlayContainer.style.display = 'flex';
 
-    overlayContainer.style.left = `${left}px`;
-    overlayContainer.style.top = `${top}px`;
-    overlayContainer.style.display = 'grid';
+    // --- 7. Render Lucide Icons ---
+    lucide.createIcons();
+    
+    document.addEventListener('mousedown', handleCloseOverlayOnOutsideClick);
 }
 
         document.addEventListener('click', (e) => {
@@ -1239,10 +1380,16 @@ sticker.appendChild(groupBtn);
         saveState();
 
         window.addEventListener('load', () => {
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-        });
+    if (window.lucide) {
+        lucide.createIcons();
+        
+        // ✅ Make controls visible after icons are rendered
+        const controls = document.querySelector('.controls');
+        if (controls) {
+            controls.style.visibility = 'visible';
+        }
+    }
+});
     </script>
 </body>
 </html>
