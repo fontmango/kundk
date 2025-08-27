@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sticker Canvas</title>
     <style>
+
       body {
     margin: 0;
     padding: 0;
@@ -16,6 +17,13 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+       -webkit-touch-callout: none; /* Disables the long-press menu on iOS */
+    -webkit-user-select: none;   /* Prevents text selection, which can trigger the menu */
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #canvas-container {
@@ -75,6 +83,27 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* Add active states for touch feedback on mobile */
+.copy-btn:active {
+    background-color: #6aa84fff; /* Green */
+}
+
+.delete-btn:active {
+    background-color: #f26262ff; /* Red */
+}
+
+.resize-handle:active {
+    background-color: #4a86e8; /* Blue */
+}
+
+.rotate-handle:active {
+    background-color: #FF5C00; /* Orange */
+}
+
+.group-btn:active {
+    background-color: rgb(24, 224, 214); /* Teal */
+}
 
         .sticker.selected > .delete-btn,
         .sticker.selected > .copy-btn,
@@ -1660,6 +1689,12 @@ addStickerBtn.addEventListener("click", () => {
         if (controls) {
             controls.style.visibility = 'visible';
         }
+
+
+        // This prevents the context menu from appearing on long-press
+window.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+});
     </script>
 </body>
 </html>
