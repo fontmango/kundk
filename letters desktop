@@ -99,6 +99,20 @@
             box-shadow: none !important;
         }
 
+        .group-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 50%;
+  padding: 4px;
+  cursor: pointer;
+}
+.group-btn-icon {
+  width: 16px;
+  height: 16px;
+}
+
         button:hover {
             color: #000;
             transform: scale(1.1);
@@ -595,30 +609,35 @@ spinBtn.addEventListener("click", () => {
 });
 
 // MODIFIED: This function now correctly handles replacing the sticker and centering it
- function addOrReplaceSticker(newUrl, letter) {
+function addOrReplaceSticker(newUrl, letter) {
     const stickerSize = 120;
     const canvasWidth = canvas.offsetWidth;
     const canvasHeight = canvas.offsetHeight;
     const centerX = (canvasWidth / 2) - (stickerSize / 2);
     const centerY = (canvasHeight / 2) - (stickerSize / 2);
 
-    // 🔎 Look specifically for unlocked sticker with the same letter
+    // Find the group for this letter
+    const groupObj = stickerGroups.find(g => g.urls[letter]);
+    const groupName = groupObj ? groupObj.name : null;
+
+    // Look for an unlocked sticker with the same letter
     const unlockedSticker = document.querySelector(`.sticker[data-letter="${letter}"]:not(.locked)`);
 
     if (unlockedSticker) {
-        // Hide during replacement
+        // Replace the image
         unlockedSticker.style.opacity = '0';
-        
         const img = unlockedSticker.querySelector('img');
         img.src = newUrl;
-
-       
         img.onload = () => {
             unlockedSticker.style.opacity = '1';
         };
+        unlockedSticker.dataset.group = groupName;
     } else {
-        // ➕ Create a new sticker if no unlocked one for this letter
-          addSticker(newUrl, undefined, undefined, stickerSize, stickerSize, { letter });
+        // Create a new sticker in the center
+        addSticker(newUrl, centerX, centerY, stickerSize, stickerSize, { 
+            letter, 
+            group: groupName 
+        });
     }
 
     saveState();
@@ -626,10 +645,11 @@ spinBtn.addEventListener("click", () => {
 
 
 function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
-    const { suppressSave = false, rotation = 0, letter = null } = opts;
+    const { suppressSave = false, rotation = 0, letter = null , group = null} = opts;
     const sticker = document.createElement('div');
     sticker.classList.add('sticker');
     if (letter) sticker.dataset.letter = letter;
+    if (group) sticker.dataset.group = group;
 
     let finalX, finalY;
 
@@ -681,6 +701,34 @@ function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
     stickerImg.draggable = false;
     sticker.appendChild(stickerImg);
 
+ const groupBtn = document.createElement('div');
+groupBtn.classList.add('sticker-btn', 'group-btn');
+groupBtn.innerHTML = '<i data-lucide="layers"></i>';
+
+groupBtn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+
+    const letter = sticker.dataset.letter;
+    const url = sticker.querySelector('img').src;
+
+    console.log('📌 Group button clicked');
+    console.log('Sticker letter:', letter);
+    console.log('Sticker URL:', url);
+
+    // Find the group that actually contains this URL under this letter
+    const group = stickerGroups.find(g => g.urls[letter]?.includes(url));
+
+    if (group) {
+        console.log('Found correct group:', group.name);
+        showOverlay(ev, group.urls);
+    } else {
+        console.warn('⚠️ No matching group found for this sticker!');
+    }
+});
+
+sticker.appendChild(groupBtn);
+
+
     const copyBtn = document.createElement('div');
     copyBtn.classList.add('copy-btn');
     copyBtn.innerHTML = `<svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -689,17 +737,32 @@ function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
     </svg>`;
 
     copyBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const stickerWidth = sticker.offsetWidth;
-        const stickerHeight = sticker.offsetHeight;
-        let newX = parseInt(sticker.style.left) + 10;
-        let newY = parseInt(sticker.style.top) + 10;
-     
-        
-        
-        addSticker(stickerImg.src, newX, newY, sticker.offsetWidth, sticker.offsetHeight, { rotation: sticker.dataset.rotation });
-        saveState();
-    });
+    e.stopPropagation();
+    
+    const stickerWidth = sticker.offsetWidth;
+    const stickerHeight = sticker.offsetHeight;
+    const newX = parseInt(sticker.style.left) + 10;
+    const newY = parseInt(sticker.style.top) + 10;
+
+    const letter = sticker.dataset.letter || null;
+    const groupName = sticker.dataset.group || null;
+    const rotation = parseFloat(sticker.dataset.rotation) || 0;
+
+    addSticker(
+    stickerImg.src,
+    newX,
+    newY,
+    stickerWidth,
+    stickerHeight,
+    { 
+        letter: sticker.dataset.letter, 
+        group: sticker.dataset.group, 
+        rotation: parseFloat(sticker.dataset.rotation) || 0 
+    }
+);
+
+    saveState();
+});
 
     const deleteBtn = document.createElement('div');
     deleteBtn.classList.add('delete-btn');
@@ -720,6 +783,8 @@ function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
         <line x1="21" y1="3" x2="14" y2="10"></line>
         <line x1="3" y1="21" x2="10" y2="14"></line>
     </svg>`;
+
+    
     
     const rotateHandle = document.createElement('div');
     rotateHandle.classList.add('rotate-handle');
@@ -731,11 +796,12 @@ function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
     </svg>`;
     sticker.appendChild(deleteBtn);
     sticker.appendChild(copyBtn);
-    sticker.appendChild(resizeHandle);
+    
     sticker.appendChild(rotateHandle);
+    sticker.appendChild(groupBtn);
 
     function startInteraction(e) {
-        if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.resize-handle') || e.target.closest('.rotate-handle')) {
+        if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.group-btn') || e.target.closest('.rotate-handle')) {
             return;
         }
         
@@ -1001,44 +1067,48 @@ function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
         let activeGroupURLs = [];
 
         function showOverlay(e, urlsByLetter) {
-            overlayContainer.innerHTML = '';
-            for (const letter in urlsByLetter) {
-                const letterUrls = urlsByLetter[letter];
-                letterUrls.forEach(url => {
-                    const overlaySticker = document.createElement('img');
-                    overlaySticker.src = url;
-                    overlaySticker.classList.add('overlay-sticker');
-                    overlaySticker.draggable = true;
-                    overlaySticker.addEventListener('dragstart', (e) => {
-                        e.stopPropagation();
-                        e.dataTransfer.setData('application/json', JSON.stringify({
-                            url: e.target.src,
-                            width: 120
-                        }));
-                    });
-                    overlaySticker.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        addSticker(url);
-                    });
-                    overlayContainer.appendChild(overlaySticker);
-                });
-            }
+    overlayContainer.innerHTML = '';
 
-            const rect = e.target.getBoundingClientRect();
-            const paletteRect = paletteContainer.getBoundingClientRect();
-            const { right, bottom } = rect;
-            if (right + 260 < window.innerWidth) {
-                overlayContainer.style.left = `${rect.right - paletteRect.left + 10}px`;
-            } else {
-                overlayContainer.style.left = `${rect.left - paletteRect.left - 260}px`;
-            }
-            if (bottom + overlayContainer.offsetHeight < window.innerHeight) {
-                overlayContainer.style.top = `${rect.top - paletteRect.top}px`;
-            } else {
-                overlayContainer.style.top = `${rect.top - paletteRect.top - overlayContainer.offsetHeight}px`;
-            }
-            overlayContainer.style.display = 'grid';
-        }
+    // fill overlay
+    for (const letter in urlsByLetter) {
+        urlsByLetter[letter].forEach(url => {
+            const overlaySticker = document.createElement('img');
+            overlaySticker.src = url;
+            overlaySticker.classList.add('overlay-sticker');
+            overlaySticker.draggable = true;
+            overlaySticker.addEventListener('dragstart', (e) => {
+                e.stopPropagation();
+                e.dataTransfer.setData('application/json', JSON.stringify({
+                    url: e.target.src,
+                    width: 120
+                }));
+            });
+            overlaySticker.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addSticker(url);
+            });
+            overlayContainer.appendChild(overlaySticker);
+        });
+    }
+
+    // Position overlay
+    const rect = e.target.getBoundingClientRect();
+    let left = rect.right + 10;
+    let top = rect.top;
+
+    // if it would go off screen, flip to left
+    if (left + overlayContainer.offsetWidth > window.innerWidth) {
+        left = rect.left - overlayContainer.offsetWidth - 10;
+    }
+    // if it would go off bottom, shift up
+    if (top + overlayContainer.offsetHeight > window.innerHeight) {
+        top = window.innerHeight - overlayContainer.offsetHeight - 20;
+    }
+
+    overlayContainer.style.left = `${left}px`;
+    overlayContainer.style.top = `${top}px`;
+    overlayContainer.style.display = 'grid';
+}
 
         document.addEventListener('click', (e) => {
             if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target)) {
