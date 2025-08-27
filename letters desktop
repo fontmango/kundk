@@ -401,6 +401,25 @@
     transform: scale(1);
   }
 }
+
+/* Style for the drag-to-select box */
+#selection-box {
+    position: absolute;
+    border: 1px dashed #4a90e2;
+    background-color: rgba(74, 144, 226, 0.2);
+    z-index: 999;
+    /* This is crucial so the box doesn't interfere with mouse events */
+    pointer-events: none;
+}
+
+/* Add a distinct outline to the existing .selected style */
+.sticker.multi-selected {
+    background-color: rgba(128, 128, 128, 0.2); /* Greyish, slightly transparent background */
+    border-radius: 12px; /* Rounded corners */
+    /* You might need to adjust padding or margin if the background is too tight to the image */
+    padding: 5px; /* Optional: Add some padding to make the background more visible around the image */
+}
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -540,6 +559,12 @@
         let initialStickerHeight = 0;
         let initialCenter = { x: 0, y: 0 };
         let firstStickerAdded = false;
+
+let selectionBox = null;
+let isSelecting = false;
+let selectionStartX, selectionStartY;
+
+
 function saveState() {
     if (isRestoring) return;
     const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
@@ -635,11 +660,11 @@ function populatePalette() {
 }
 
         function deselectAllStickers() {
-            document.querySelectorAll('.sticker').forEach(s => {
-                s.classList.remove('selected');
-            });
-        }
-
+    document.querySelectorAll('.sticker').forEach(s => {
+        s.classList.remove('selected');
+    });
+    updateSelectionStyles(); // ✅ Add this line
+}
         function getTouchDistance(touches) {
             const dx = touches[0].clientX - touches[1].clientX;
             const dy = touches[0].clientY - touches[1].clientY;
@@ -892,72 +917,82 @@ sticker.appendChild(groupBtn);
     sticker.appendChild(groupBtn);
 
     function startInteraction(e) {
-        if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.group-btn') || e.target.closest('.rotate-handle')) {
-            return;
-        }
-        
+    // This part prevents clicks on buttons from starting a drag
+    if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.group-btn') || e.target.closest('.rotate-handle') || e.target.closest('.resize-handle')) {
+        return;
+    }
+    
+    // If you start dragging a sticker that isn't selected, deselect everything else.
+    if (!sticker.classList.contains('selected')) {
         deselectAllStickers();
         sticker.classList.add('selected');
-        e.preventDefault();
-        activeSticker = sticker;
-
-        initialCenter.x = sticker.offsetLeft + sticker.offsetWidth / 2;
-        initialCenter.y = sticker.offsetTop + sticker.offsetHeight / 2;
-
-        if (e.touches && e.touches.length === 2) {
-            initialTouchDistance = getTouchDistance(e.touches);
-            initialStickerWidth = sticker.offsetWidth;
-            initialStickerHeight = sticker.offsetHeight;
-        } else if (e.touches && e.touches.length === 1) {
-            const touch = e.touches[0];
-            initialX = touch.clientX;
-            initialY = touch.clientY;
-            offsetX = sticker.offsetLeft;
-            offsetY = sticker.offsetTop;
-        } else {
-            initialX = e.clientX;
-            initialY = e.clientY;
-            offsetX = sticker.offsetLeft;
-            offsetY = sticker.offsetTop;
-        }
-        document.addEventListener('mousemove', handleMove);
-        document.addEventListener('mouseup', handleEnd);
-        document.addEventListener('touchmove', handleMove, { passive: false });
-        document.addEventListener('touchend', handleEnd);
     }
 
-    function handleMove(e) {
-        if (!activeSticker) return;
-        e.preventDefault();
+     updateSelectionStyles();
+    
+    e.preventDefault();
+    activeSticker = sticker;
 
-        if (e.touches && e.touches.length === 2) {
-            const newTouchDistance = getTouchDistance(e.touches);
-            const scaleChange = newTouchDistance / initialTouchDistance;
-            const newWidth = Math.max(initialStickerWidth * scaleChange, 30);
-            const aspectRatio = initialStickerWidth / initialStickerHeight;
-            const newHeight = newWidth / aspectRatio;
-            activeSticker.style.width = `${newWidth}px`;
-            activeSticker.style.height = `${newHeight}px`;
-            activeSticker.style.left = `${initialCenter.x - newWidth / 2}px`;
-            activeSticker.style.top = `${initialCenter.y - newHeight / 2}px`;
-        } else {
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const newX = offsetX + (clientX - initialX);
-            const newY = offsetY + (clientY - initialY);
-            activeSticker.style.left = `${newX}px`;
-            activeSticker.style.top = `${newY}px`;
-        }
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    initialX = clientX;
+    initialY = clientY;
+    
+    // ✅ Record the starting position for EVERY selected sticker
+    const selectedStickers = document.querySelectorAll('.sticker.selected');
+    selectedStickers.forEach(s => {
+        s.dataset.startLeft = s.offsetLeft;
+        s.dataset.startTop = s.offsetTop;
+    });
+
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchmove', handleMove, { passive: false });
+    document.addEventListener('touchend', handleEnd);
+}
+
+   function handleMove(e) {
+    if (!activeSticker) return;
+    e.preventDefault();
+
+    // Disable pinch-to-zoom when dragging multiple stickers
+    if (e.touches && e.touches.length > 1) {
+        return;
     }
 
-    function handleEnd() {
-        document.removeEventListener('mousemove', handleMove);
-        document.removeEventListener('mouseup', handleEnd);
-        document.removeEventListener('touchmove', handleMove);
-        document.removeEventListener('touchend', handleEnd);
-        activeSticker = null;
-        saveState();
-    }
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    // ✅ Calculate the total distance the mouse has moved from the start
+    const deltaX = clientX - initialX;
+    const deltaY = clientY - initialY;
+
+    // ✅ Apply this delta to all selected stickers
+    const selectedStickers = document.querySelectorAll('.sticker.selected');
+    selectedStickers.forEach(s => {
+        const newX = parseFloat(s.dataset.startLeft) + deltaX;
+        const newY = parseFloat(s.dataset.startTop) + deltaY;
+        s.style.left = `${newX}px`;
+        s.style.top = `${newY}px`;
+    });
+}
+
+  function handleEnd() {
+    document.removeEventListener('mousemove', handleMove);
+    document.removeEventListener('mouseup', handleEnd);
+    document.removeEventListener('touchmove', handleMove);
+    document.removeEventListener('touchend', handleEnd);
+
+    // ✅ Clean up the temporary data from all selected stickers
+    const selectedStickers = document.querySelectorAll('.sticker.selected');
+    selectedStickers.forEach(s => {
+        s.removeAttribute('data-start-left');
+        s.removeAttribute('data-start-top');
+    });
+
+    activeSticker = null;
+    saveState();
+}
 
     function addResizeHandleListeners(handle, sticker) {
         let startX, startY, startWidth, startHeight, startLeft, startTop;
@@ -1112,11 +1147,38 @@ sticker.appendChild(groupBtn);
     addWheelResize(stickerImg);
     sticker.addEventListener('mousedown', startInteraction);
     sticker.addEventListener('touchstart', startInteraction);
-    canvas.addEventListener('mousedown', (e) => {
-        if (!e.target.closest('.sticker')) {
-            deselectAllStickers();
-        }
-    });
+
+
+
+   // ✅ Add this entire new event listener
+canvas.addEventListener('mousedown', (e) => {
+    // Only start selection if clicking on the canvas backdrop, not on a sticker
+    if (e.target !== canvas) {
+        return;
+    }
+
+    // If you're not holding the Shift key, clear any previous selection
+    if (!e.shiftKey) {
+        deselectAllStickers();
+    }
+
+    isSelecting = true;
+    const canvasRect = canvas.getBoundingClientRect();
+    selectionStartX = e.clientX - canvasRect.left;
+    selectionStartY = e.clientY - canvasRect.top;
+
+    // Create the selection box element
+    selectionBox = document.createElement('div');
+    selectionBox.id = 'selection-box';
+    canvas.appendChild(selectionBox);
+
+    // Attach listeners to the whole document to track the drag anywhere on the page
+    document.addEventListener('mousemove', handleSelectionMove);
+    document.addEventListener('mouseup', handleSelectionEnd);
+});
+
+
+
     canvas.addEventListener('touchstart', (e) => {
         if (!e.target.closest('.sticker')) {
             deselectAllStickers();
@@ -1149,7 +1211,93 @@ sticker.appendChild(groupBtn);
     return sticker;
 }
 
+// ✅ Add this new function to your script
+function updateSelectionStyles() {
+    const allStickers = document.querySelectorAll('.sticker');
+    const selectedStickers = document.querySelectorAll('.sticker.selected');
 
+    if (selectedStickers.length > 1) {
+        // If more than one sticker is selected, apply the multi-select style
+        selectedStickers.forEach(s => s.classList.add('multi-selected'));
+    } else {
+        // Otherwise, remove the multi-select style from all stickers
+        allStickers.forEach(s => s.classList.remove('multi-selected'));
+    }
+}
+
+// ✅ Add these three new functions to your script
+
+/**
+ * Handles resizing the selection box and checking for collisions as the mouse moves.
+ */
+function handleSelectionMove(e) {
+    if (!isSelecting) return;
+
+    const canvasRect = canvas.getBoundingClientRect();
+    let currentX = e.clientX - canvasRect.left;
+    let currentY = e.clientY - canvasRect.top;
+
+    // Calculate the box position and dimensions
+    const left = Math.min(selectionStartX, currentX);
+    const top = Math.min(selectionStartY, currentY);
+    const width = Math.abs(selectionStartX - currentX);
+    const height = Math.abs(selectionStartY - currentY);
+
+    // Update the selection box style
+    selectionBox.style.left = `${left}px`;
+    selectionBox.style.top = `${top}px`;
+    selectionBox.style.width = `${width}px`;
+    selectionBox.style.height = `${height}px`;
+
+    checkSelectionCollision(e.shiftKey);
+    updateSelectionStyles();
+}
+
+/**
+ * Finalizes the selection when the mouse is released.
+ */
+function handleSelectionEnd() {
+    isSelecting = false;
+     updateSelectionStyles();
+    // Remove the selection box from the canvas
+    if (selectionBox) {
+        selectionBox.remove();
+        selectionBox = null;
+    }
+
+    // IMPORTANT: Clean up the global event listeners
+    document.removeEventListener('mousemove', handleSelectionMove);
+    document.removeEventListener('mouseup', handleSelectionEnd);
+}
+
+/**
+ * Checks which stickers are inside the selection box and updates their style.
+ */
+function checkSelectionCollision(isShiftPressed) {
+    const boxRect = selectionBox.getBoundingClientRect();
+    const stickers = document.querySelectorAll('#canvas-container .sticker');
+
+    stickers.forEach(sticker => {
+        const stickerRect = sticker.getBoundingClientRect();
+
+        // Check if the sticker's rectangle intersects with the selection box's rectangle
+        const isIntersecting = !(
+            stickerRect.right < boxRect.left ||
+            stickerRect.left > boxRect.right ||
+            stickerRect.bottom < boxRect.top ||
+            stickerRect.top > boxRect.bottom
+        );
+
+        if (isIntersecting) {
+            sticker.classList.add('selected');
+        } else {
+            // Only deselect if the Shift key is NOT pressed
+            if (!isShiftPressed) {
+                sticker.classList.remove('selected');
+            }
+        }
+    });
+}
 
         
         function hideOverlay() {
