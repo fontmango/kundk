@@ -441,13 +441,11 @@
         let initialStickerHeight = 0;
         let initialCenter = { x: 0, y: 0 };
         let firstStickerAdded = false;
-
-       function saveState() {
+function saveState() {
     if (isRestoring) return;
     const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-    const currentState = {
-        stickers: []
-    };
+    const currentState = { stickers: [] };
+
     stickersOnCanvas.forEach(sticker => {
         const stickerImg = sticker.querySelector('img');
         if (stickerImg) {
@@ -458,18 +456,22 @@
                 y: sticker.offsetTop,
                 width: sticker.offsetWidth,
                 height: sticker.offsetHeight,
-                rotation: rotation
+                rotation: rotation,
+                letter: sticker.dataset.letter || null,
+                group: sticker.dataset.group || null
             });
         }
     });
+
     history.push(currentState);
     redoStack = [];
     updateUndoRedoButtons();
 }
 
-        function loadState(state) {
+function loadState(state) {
     isRestoring = true;
     canvas.innerHTML = '';
+
     state.stickers.forEach(data => {
         addSticker(
             data.url,
@@ -477,9 +479,15 @@
             data.y,
             data.width,
             data.height,
-            { suppressSave: true, rotation: parseFloat(data.rotation) || 0 }
+            { 
+                suppressSave: true, 
+                rotation: parseFloat(data.rotation) || 0,
+                letter: data.letter,
+                group: data.group
+            }
         );
     });
+
     isRestoring = false;
     updateUndoRedoButtons();
 }
