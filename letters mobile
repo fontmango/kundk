@@ -1385,13 +1385,23 @@ function showStickerSelectionOverlay() {
 // --- Update the main button listener ---
 openStickersBtn.addEventListener('click', showStickerSelectionOverlay);
 
+// ✅ Add this function to your script
+function handleCloseOverlayOnOutsideClick(e) {
+    // If the click is inside the overlay, do nothing
+    if (overlayContainer.contains(e.target)) {
+        return;
+    }
+    // Otherwise, hide the overlay
+    hideOverlay();
+}
+
 
 function hideOverlay() {
+    // Always remove the listener when the overlay is hidden
     document.removeEventListener('mousedown', handleCloseOverlayOnOutsideClick);
-    overlayContainer.style.display = 'none';
     
-    // Reset the ID so it doesn't conflict next time
-    activePaletteSticker = null;
+    overlayContainer.style.display = 'none';
+    overlayContainer.classList.remove('centered-modal');
 }
 
         let activeGroupURLs = [];
@@ -1473,6 +1483,12 @@ function showOverlay(e, urlsByLetter) {
         });
     }
     overlayContainer.appendChild(stickersGrid);
+     // ✅ ADD this event listener to the overlay
+    overlayContainer.addEventListener('click', (ev) => {
+        if (ev.target.closest('.overlay-close-btn')) {
+            hideOverlay();
+        }
+    });
 
     // --- 6. Position Overlay ---
     const isFromPalette = e.target.closest('#sticker-palette-container');
