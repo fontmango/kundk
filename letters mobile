@@ -584,6 +584,8 @@
         let initialStickerHeight = 0;
         let initialCenter = { x: 0, y: 0 };
         let firstStickerAdded = false;
+        let isPinching = false;
+        
         
         let selectionBox = null;
 let isSelecting = false;
@@ -941,65 +943,94 @@ sticker.appendChild(groupBtn);
     sticker.appendChild(groupBtn);
 
     function startInteraction(e) {
-    // This part prevents clicks on buttons from starting a drag
     if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.group-btn') || e.target.closest('.rotate-handle') || e.target.closest('.resize-handle')) {
-        return;
-    }
-    
-    // If you start dragging a sticker that isn't selected, deselect everything else.
-    if (!sticker.classList.contains('selected')) {
-        deselectAllStickers();
-        sticker.classList.add('selected');
-    }
+                return;
+            }
 
-     updateSelectionStyles();
-    
-    e.preventDefault();
-    activeSticker = sticker;
+            e.preventDefault();
+            activeSticker = sticker;
 
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    initialX = clientX;
-    initialY = clientY;
-    
-    // ✅ Record the starting position for EVERY selected sticker
-    const selectedStickers = document.querySelectorAll('.sticker.selected');
-    selectedStickers.forEach(s => {
-        s.dataset.startLeft = s.offsetLeft;
-        s.dataset.startTop = s.offsetTop;
-    });
+            if (!sticker.classList.contains('selected')) {
+                deselectAllStickers();
+                sticker.classList.add('selected');
+            }
+            updateSelectionStyles();
 
-    document.addEventListener('mousemove', handleMove);
-    document.addEventListener('mouseup', handleEnd);
-    document.addEventListener('touchmove', handleMove, { passive: false });
-    document.addEventListener('touchend', handleEnd);
-}
+            // Check for pinch gesture (2 fingers)
+            if (e.touches && e.touches.length === 2) {
+                isPinching = true;
+                initialTouchDistance = getTouchDistance(e.touches);
+                initialStickerWidth = sticker.offsetWidth;
+                initialStickerHeight = sticker.offsetHeight;
+                initialStickerLeft = sticker.offsetLeft;
+                initialStickerTop = sticker.offsetTop;
+            } 
+            // Handle regular drag (1 finger or mouse)
+            else {
+                isPinching = false;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                initialX = clientX;
+                initialY = clientY;
+                
+                const selectedStickers = document.querySelectorAll('.sticker.selected');
+                selectedStickers.forEach(s => {
+                    s.dataset.startLeft = s.offsetLeft;
+                    s.dataset.startTop = s.offsetTop;
+                });
+            }
 
-   function handleMove(e) {
-    if (!activeSticker) return;
-    e.preventDefault();
+            document.addEventListener('mousemove', handleMove);
+            document.addEventListener('mouseup', handleEnd);
+            document.addEventListener('touchmove', handleMove, { passive: false });
+            document.addEventListener('touchend', handleEnd);
+        }
 
-    // Disable pinch-to-zoom when dragging multiple stickers
-    if (e.touches && e.touches.length > 1) {
-        return;
-    }
+        // ✅ MODIFIED: handleMove now directs traffic to the correct handler
+        function handleMove(e) {
+            if (!activeSticker) return;
+            e.preventDefault();
 
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            if (isPinching && e.touches && e.touches.length === 2) {
+                handlePinchMove(e);
+            } else if (!isPinching) {
+                handleDragMove(e);
+            }
+        }
 
-    // ✅ Calculate the total distance the mouse has moved from the start
-    const deltaX = clientX - initialX;
-    const deltaY = clientY - initialY;
+        // ✅ RESTORED: The missing function for single-finger dragging
+        function handleDragMove(e) {
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-    // ✅ Apply this delta to all selected stickers
-    const selectedStickers = document.querySelectorAll('.sticker.selected');
-    selectedStickers.forEach(s => {
-        const newX = parseFloat(s.dataset.startLeft) + deltaX;
-        const newY = parseFloat(s.dataset.startTop) + deltaY;
-        s.style.left = `${newX}px`;
-        s.style.top = `${newY}px`;
-    });
-}
+            const deltaX = clientX - initialX;
+            const deltaY = clientY - initialY;
+
+            const selectedStickers = document.querySelectorAll('.sticker.selected');
+            selectedStickers.forEach(s => {
+                const newX = parseFloat(s.dataset.startLeft) + deltaX;
+                const newY = parseFloat(s.dataset.startTop) + deltaY;
+                s.style.left = `${newX}px`;
+                s.style.top = `${newY}px`;
+            });
+        }
+
+ function handlePinchMove(e) {
+            const currentDistance = getTouchDistance(e.touches);
+            const scale = currentDistance / initialTouchDistance;
+
+            const newWidth = Math.max(30, initialStickerWidth * scale); // min width 30px
+            const newHeight = Math.max(30, initialStickerHeight * scale);
+
+            // Calculate new position to keep the sticker centered
+            const newLeft = initialStickerLeft - (newWidth - initialStickerWidth) / 2;
+            const newTop = initialStickerTop - (newHeight - initialStickerHeight) / 2;
+
+            activeSticker.style.width = `${newWidth}px`;
+            activeSticker.style.height = `${newHeight}px`;
+            activeSticker.style.left = `${newLeft}px`;
+            activeSticker.style.top = `${newTop}px`;
+        }
 
   function handleEnd() {
     document.removeEventListener('mousemove', handleMove);
