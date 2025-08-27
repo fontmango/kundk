@@ -112,34 +112,7 @@
             box-shadow: none !important;
         }
 
-.group-btn {
-    position: absolute;
-    bottom: 5%;
-    right: 5%;
-    width: 20%;
-    height: 20%;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    display: none; /* show on hover/selected */
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 101;
-    padding: 0;
-    transition: transform 0.2s, background-color 0.2s;
-}
 
-.group-btn:hover {
-    background-color: #6aa84fff; /* match copy-btn hover color */
-    transform: scale(1.1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.group-btn-icon {
-    width: 60%;
-    height: 60%;
-}
         button:hover {
             color: #000;
             transform: scale(1.1);
@@ -313,6 +286,35 @@
             fill: white;
             stroke: white;
         }
+
+   .group-btn {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: #c2bebeff; /* ✅ Changed to match other buttons */
+    color: white;
+    display: none; /* show on hover/selected */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 101;
+    padding: 0;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.group-btn:hover {
+    background-color: rgb(24, 224, 214); /* match copy-btn hover color */
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.group-btn-icon {
+    width: 60%;
+    height: 60%;
+}
         
         .resize-handle-icon ,  .rotate-handle-icon{
          width: 60%;
@@ -325,7 +327,7 @@
             width: 20%;
             height: 20%;
             border-radius: 50%;
-            background-color: rgba(0, 0, 0, 0.5);
+            
             color: white;
             display: none;
             align-items: center;
