@@ -1880,7 +1880,14 @@ function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
                     attempts++;
                 }
                 saveState();
-                addSticker(stickerImg.src, newX, newY, sticker.offsetWidth);
+                addSticker(
+    sticker.querySelector('img').src, 
+    newX, 
+    newY, 
+    sticker.offsetWidth, 
+    sticker.offsetHeight, 
+    { group: sticker.dataset.group }
+);
             });
 
             const deleteBtn = document.createElement('div');
@@ -1927,7 +1934,7 @@ groupBtn.addEventListener('click', (e) => {
     const stickerGroup = sticker.dataset.group; // This is the intended logic
     const group = stickerGroups.find(g => g.name === stickerGroup);
     if (group) {
-        showStickerOverlay(group.urls);
+        showOverlay(e, group.urls);
     }
 });
 
