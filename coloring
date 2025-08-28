@@ -115,7 +115,9 @@
 
         .bucket-active .sticker .delete-btn,
         .bucket-active .sticker .copy-btn,
+        .bucket-active .sticker .group-btn ,
         .bucket-active .sticker .resize-handle {
+           
             display: none !important;
         }
 
