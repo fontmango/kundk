@@ -1716,7 +1716,10 @@ function getRandomStickerUrlFromGroups() {
         return null;
     }
 
-    const allStickers = stickerGroups.flatMap(group => group.urls);
+    // Flatten into objects with url + group
+    const allStickers = stickerGroups.flatMap(group =>
+        group.urls.map(url => ({ url, group: group.name }))
+    );
 
     if (allStickers.length === 0) {
         console.log("⚠️ No stickers in groups");
@@ -1724,27 +1727,23 @@ function getRandomStickerUrlFromGroups() {
     }
 
     const randomIndex = Math.floor(Math.random() * allStickers.length);
-    const chosen = allStickers[randomIndex];
-
-    return chosen;
+    return allStickers[randomIndex]; // { url, group }
 }
 
 spinBtn.addEventListener("click", () => {
-   
-
-    let sticker = document.querySelector('#canvas-container .sticker img');
-    if (!sticker) {
+    let stickerImg = document.querySelector('#canvas-container .sticker img');
+    if (!stickerImg) {
         console.log("ℹ️ No sticker found, adding first one");
-        const firstUrl = getRandomStickerUrlFromGroups(); 
-        if (firstUrl) {
-            addOrReplaceSticker(firstUrl);
-            sticker = document.querySelector('#canvas-container .sticker img');
+        const firstObj = getRandomStickerUrlFromGroups(); 
+        if (firstObj) {
+            addOrReplaceSticker(firstObj.url, { group: firstObj.group });
+            stickerImg = document.querySelector('#canvas-container .sticker img');
         } else {
             console.warn("⚠️ No valid sticker URL was returned. Cannot add a sticker.");
             return;
         }
     }
-    if (!sticker) {
+    if (!stickerImg) {
         console.warn("⚠️ Still no sticker, aborting spin");
         return;
     }
@@ -1753,32 +1752,33 @@ spinBtn.addEventListener("click", () => {
     const maxSpins = 15 + Math.floor(Math.random() * 10);
 
     const spinInterval = setInterval(() => {
-        const nextUrl = getRandomStickerUrlFromGroups(); 
-        if (nextUrl) {
-          
-            sticker.src = nextUrl;
+        const nextObj = getRandomStickerUrlFromGroups(); // { url, group }
+        if (nextObj) {
+            stickerImg.src = nextObj.url;  // ✅ correct reference
+            const stickerDiv = stickerImg.closest('.sticker');
+            if (stickerDiv) {
+                stickerDiv.dataset.group = nextObj.group;
+            }
         }
         
         spinCount++;
         if (spinCount >= maxSpins) {
             clearInterval(spinInterval);
-          
-            
-            // Add the pulse effect to the parent sticker div
-            const stickerDiv = sticker.closest('.sticker');
+
+            // Add the pulse effect
+            const stickerDiv = stickerImg.closest('.sticker');
             if (stickerDiv) {
                 stickerDiv.classList.add('pulse-effect');
-                
-                // OPTIONAL: Remove the class after a few seconds
                 setTimeout(() => {
                     stickerDiv.classList.remove('pulse-effect');
-                }, 3000); // Removes the effect after 3 seconds
+                }, 3000);
             }
 
             saveState();
         }
     }, 100);
 });
+
 
 function addOrReplaceSticker(newUrl, groupName = null) {
     const unlockedSticker = document.querySelector('.sticker:not(.locked)');
