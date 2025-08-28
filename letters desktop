@@ -109,7 +109,7 @@
     width: 20%;
     height: 20%;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #c2bebeff;
     color: white;
     display: none; /* show on hover/selected */
     align-items: center;
@@ -121,7 +121,7 @@
 }
 
 .group-btn:hover {
-    background-color: #6aa84fff; /* match copy-btn hover color */
+    background-color: #2be7d8; /* match copy-btn hover color */
     transform: scale(1.1);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
@@ -354,6 +354,7 @@
 
         .resize-handle:active, .rotate-handle:active {
             cursor: grabbing;
+            background-color: #FF5C00;
         }
 
         .copy-btn:hover {
