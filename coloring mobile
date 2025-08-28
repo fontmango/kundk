@@ -215,7 +215,7 @@ body {
 }
 
 .lock-btn:hover {
-    transform: scale(1.1)
+    transform: scale(1.1);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     background-color: #ff9933;
 }
@@ -223,7 +223,7 @@ body {
 /* Locked button state */
 .sticker.locked .lock-btn {
     background-color: #ff9933;
-    transform: scale(1.1) 
+    transform: scale(1.1) ;
 }
 
 /* Bucket mode-specific overrides */
