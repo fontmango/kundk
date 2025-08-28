@@ -1259,17 +1259,20 @@ sticker.appendChild(groupBtn);
             e.preventDefault();
         });
 
-  canvas.addEventListener('drop', (e) => {
-    e.preventDefault();   // <--- Fixed
-    const data = e.dataTransfer.getData('application/json');
-    if (data) {
-        const { url, width, group } = JSON.parse(data);
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left - (width / 2);
-        const y = e.clientY - rect.top - (width / 2);
-        addSticker(url, x, y, width, width, { group });
-        hideOverlay();
-    }
+ canvas.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const data = e.dataTransfer.getData('application/json');
+    if (data) {
+        const { url, width, group } = JSON.parse(data);
+        const rect = canvas.getBoundingClientRect();
+
+        // MODIFIED: Sticker's top-left corner will now be at the cursor
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        addSticker(url, x, y, width, width, { group });
+        hideOverlay();
+    }
 });
 
         function hexToRgb(hex) {
@@ -1452,15 +1455,16 @@ function updateUndoRedoButtons() {
             }
         });
 
-        addStickerBtn.addEventListener('click', () => {
-    // Find a random group first
-    const randomGroup = stickerGroups[Math.floor(Math.random() * stickerGroups.length)];
-    // Find a random URL from that group
-    const randomUrl = randomGroup.urls[Math.floor(Math.random() * randomGroup.urls.length)];
-
-    // Pass both the URL AND the group name to the function
-    addOrReplaceSticker(randomUrl, randomGroup.name);
-});
+    addStickerBtn.addEventListener('click', () => {
+        const randomSticker = getRandomStickerUrlFromGroups();
+        if (randomSticker) {
+            addSticker(
+                randomSticker.url, 
+                undefined, undefined, 120, 120, 
+                { group: randomSticker.group }
+            );
+        }
+    });
 
         populatePalette();
         populateColorPalette();
