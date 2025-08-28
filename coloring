@@ -1610,37 +1610,58 @@ const spinBtn = document.getElementById("spin-sticker-btn");
         }
 
       function saveState() {
-        if (isRestoring) return; 
-            const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-            const currentState = {
-                stickers: []
-            };
-            stickersOnCanvas.forEach(sticker => {
-                const stickerImg = sticker.querySelector('img');
-                if (stickerImg) {
-                    currentState.stickers.push({
-                        url: stickerImg.src,
-                        x: sticker.offsetLeft,
-                        y: sticker.offsetTop,
-                        width: sticker.offsetWidth,
-                        height: sticker.offsetHeight
-                    });
-                }
-            });
-            history.push(currentState);
-             redoStack = []; 
-            updateUndoButton();
-        }
+    if (isRestoring) return;
+    const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+    const currentState = { stickers: [] };
 
-        function loadState(state) {
+    stickersOnCanvas.forEach(sticker => {
+        const stickerImg = sticker.querySelector('img');
+        
+        if (stickerImg) {
+            currentState.stickers.push({
+                // ✅ Save the current `src`, which could be a URL or base64 data
+                url: stickerImg.src, 
+                x: sticker.offsetLeft,
+                y: sticker.offsetTop,
+                width: sticker.offsetWidth,
+                height: sticker.offsetHeight,
+                locked: sticker.classList.contains('locked')
+            });
+        }
+    });
+
+    const prevState = history[history.length - 1];
+    if (JSON.stringify(prevState) !== JSON.stringify(currentState)) {
+        history.push(currentState);
+    }
+
+    redoStack = [];
+    updateUndoRedoButtons();
+}
+
+  function loadState(state) {
     isRestoring = true;
     canvas.innerHTML = '';
+    
     state.stickers.forEach(data => {
-        // pass suppressSave: true so addSticker doesn't push history while restoring
-        addSticker(data.url, data.x, data.y, data.width, data.height, { suppressSave: true });
+        // Create the sticker first
+        const newSticker = addSticker(
+            data.url, 
+            data.x, 
+            data.y, 
+            data.width, 
+            data.height, 
+            { suppressSave: true }
+        );
+
+        // ✅ ADD THIS CHECK: If the sticker was saved as locked, re-apply the class
+        if (data.locked) {
+            newSticker.classList.add('locked');
+        }
     });
+    
     isRestoring = false;
-    updateUndoButton();
+    updateUndoRedoButtons(); // Also, ensure this matches the function name from saveState
 }
 
         function deselectAllStickers() {
@@ -2341,7 +2362,7 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     if (!touchesEdge) {
         ctx.putImageData(imgData, 0, 0);
         stickerImg.src = canvasEl.toDataURL();
-        // saveState(); // Call your state saving function
+        saveState(); // Call your state saving function
     }
 }
 
