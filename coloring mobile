@@ -49,7 +49,11 @@
     left: 5%;
 }
 
-
+.group-btn:hover {
+    background-color: #2be7d8; /* A subtle hover color */
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
 
 .group-btn {
     bottom: 5%;
@@ -65,6 +69,8 @@
 .locked .lock-btn {
     background-color: #ff9933;
 }
+
+
 
 /* SVG sizing inside buttons */
 .sticker-btn svg {
@@ -143,6 +149,7 @@ body {
 
 /* Base styles for buttons, with transitions for smooth fading */
 .copy-btn,
+.group-btn,
 .delete-btn,
 .lock-btn {
     position: absolute;
@@ -178,19 +185,6 @@ body {
 }
 
 
-.group-btn {
-    position: absolute;
-    bottom: 2px;
-    right: 2px; /* place wherever you like */
-    width: 24px;
-    height: 24px;
-    background-color: rgba(0,0,0,0.5);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 .group-btn svg {
     width: 16px;
     height: 16px;
@@ -223,6 +217,7 @@ body {
 .lock-btn:hover {
     transform: scale(1.1)
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background-color: #ff9933;
 }
 
 /* Locked button state */
@@ -239,7 +234,8 @@ body {
 
 .bucket-active .sticker .delete-btn,
 .bucket-active .sticker .copy-btn,
-.bucket-active .sticker .lock-btn {
+.bucket-active .sticker .lock-btn,
+.bucket-active .sticker .group-btn {
     display: none !important;
 }
 
@@ -451,10 +447,6 @@ button.active {
     stroke: white;
 }
 
-.lock-btn:hover {
-    transform: scale(1.1) 
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
 
 .sticker.locked .lock-btn {
     background-color: #ff9933;
