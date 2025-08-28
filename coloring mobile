@@ -12,7 +12,65 @@
   user-select: none;
 }
       
-  
+  .sticker-btn {
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: #c2bebeff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 101;
+    padding: 0;
+    outline: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s, background-color 0.2s;
+}
+
+/* Show buttons on hover or selected sticker */
+.sticker:hover > .sticker-btn,
+.sticker.selected > .sticker-btn {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Specific button positions */
+.delete-btn {
+    top: 5%;
+    right: 5%;
+}
+
+.copy-btn {
+    top: 5%;
+    left: 5%;
+}
+
+
+
+.group-btn {
+    bottom: 5%;
+    right: 5%;
+}
+
+/* Hover effects */
+.sticker-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.locked .lock-btn {
+    background-color: #ff9933;
+}
+
+/* SVG sizing inside buttons */
+.sticker-btn svg {
+    width: 60%;
+    height: 60%;
+}
 
 body {
     margin: 0;
@@ -119,10 +177,23 @@ body {
     left: 5%;
 }
 
-.lock-btn {
-    bottom: 5%;
-    left: 50%;
-    transform: translateX(-50%);
+
+.group-btn {
+    position: absolute;
+    bottom: 2px;
+    right: 2px; /* place wherever you like */
+    width: 24px;
+    height: 24px;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.group-btn svg {
+    width: 16px;
+    height: 16px;
 }
 
 /* Show buttons on hover or when the sticker has the 'selected' class */
@@ -150,14 +221,14 @@ body {
 }
 
 .lock-btn:hover {
-    transform: scale(1.1) translateX(-50%);
+    transform: scale(1.1)
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* Locked button state */
 .sticker.locked .lock-btn {
     background-color: #ff9933;
-    transform: scale(1.1) translateX(-50%);
+    transform: scale(1.1) 
 }
 
 /* Bucket mode-specific overrides */
@@ -381,13 +452,13 @@ button.active {
 }
 
 .lock-btn:hover {
-    transform: scale(1.1) translateX(-50%);
+    transform: scale(1.1) 
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .sticker.locked .lock-btn {
     background-color: #ff9933;
-    transform: scale(1.1) translateX(-50%);
+    transform: scale(1.1) 
 }
 
 .copy-btn:hover {
@@ -464,7 +535,7 @@ button.active {
     <div id="sticker-overlay-container" class="overlay"></div>
 
     <script>
-          const stickerGroups = [
+           const stickerGroups = [
 
              {
                     name: "dumpling",
@@ -507,8 +578,8 @@ button.active {
                     "https://static.wixstatic.com/media/990059_6cc416fa35ac4c7aacd1ebde07e3ca27~mv2.png"
                     ]
                     },
-
-            {
+          
+                     {
 name: "sumo",
 urls: [
   "https://static.wixstatic.com/media/990059_96ddf89243ed4836a3f6f4718f9e83fd~mv2.png",
@@ -1705,35 +1776,33 @@ const spinBtn = document.getElementById("spin-sticker-btn");
         }
 
         function saveState() {
-            if (isRestoring) return;
-            const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-            const currentState = {
-                stickers: []
-            };
+    if (isRestoring) return;
+    const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+    const currentState = { stickers: [] };
 
-            stickersOnCanvas.forEach(sticker => {
-                const stickerImg = sticker.querySelector('img');
-                if (stickerImg) {
-                    currentState.stickers.push({
-                        url: stickerImg.src,
-                        x: sticker.offsetLeft,
-                        y: sticker.offsetTop,
-                        width: sticker.offsetWidth,
-                        height: sticker.offsetHeight,
-                        locked: sticker.classList.contains('locked')
-                    });
-                }
+    stickersOnCanvas.forEach(sticker => {
+        const stickerImg = sticker.querySelector('img');
+        if (stickerImg) {
+            currentState.stickers.push({
+                // ✅ Save the current `src`, which could be a URL or base64 data
+                url: stickerImg.src, 
+                x: sticker.offsetLeft,
+                y: sticker.offsetTop,
+                width: sticker.offsetWidth,
+                height: sticker.offsetHeight,
+                locked: sticker.classList.contains('locked')
             });
-
-            const prevState = history[history.length - 1];
-            if (JSON.stringify(prevState) !== JSON.stringify(currentState)) {
-                history.push(currentState);
-            }
-
-            redoStack = [];
-            updateUndoRedoButtons();
-
         }
+    });
+
+    const prevState = history[history.length - 1];
+    if (JSON.stringify(prevState) !== JSON.stringify(currentState)) {
+        history.push(currentState);
+    }
+
+    redoStack = [];
+    updateUndoRedoButtons();
+}
 
         function loadState(state) {
             isRestoring = true;
@@ -1748,6 +1817,7 @@ const spinBtn = document.getElementById("spin-sticker-btn");
             });
             isRestoring = false;
             updateUndoRedoButtons();
+
         }
 
         function deselectAllStickers() {
@@ -1785,57 +1855,57 @@ const spinBtn = document.getElementById("spin-sticker-btn");
 spinBtn.addEventListener("click", () => {
     console.log("🎰 Spin button clicked");
 
-    // Find the first unlocked sticker
     const stickerDiv = document.querySelector('.sticker:not(.locked)');
 
-    // If there's no unlocked sticker, add a new one and then proceed
     if (!stickerDiv) {
         console.log("ℹ️ No unlocked sticker found, adding first one");
-        const firstUrl = getRandomStickerUrlFromGroups();
-        if (firstUrl) {
-            addOrReplaceSticker(firstUrl);
-        } else {
-            console.warn("⚠️ No valid sticker URL was returned. Cannot add a sticker.");
-            return;
-        }
+        const randomGroup = stickerGroups[Math.floor(Math.random() * stickerGroups.length)];
+        const randomUrl = randomGroup.urls[Math.floor(Math.random() * randomGroup.urls.length)];
+
+        addOrReplaceSticker(randomUrl, randomGroup.name);
+        return; // Exit after adding a new sticker
     }
 
-    // Now, get the sticker image and its parent div again
-    const stickerImg = document.querySelector('.sticker:not(.locked) img');
+    const stickerImg = stickerDiv.querySelector('img');
     const targetStickerDiv = stickerImg.closest('.sticker');
 
-    // Make sure we actually found a sticker to work with
     if (!targetStickerDiv) {
         console.warn("⚠️ Still no unlocked sticker, aborting spin");
         return;
     }
 
-    // --- NEW LOGIC: Recenter the sticker ---
-    const stickerSize = 120; // Or whatever your default sticker size is
+    const stickerSize = 120;
     const canvasWidth = canvas.offsetWidth;
     const canvasHeight = canvas.offsetHeight;
     const centerX = (canvasWidth / 2) - (stickerSize / 2);
     const centerY = (canvasHeight / 2) - (stickerSize / 2);
     
-    // Position the sticker at the center of the canvas
     targetStickerDiv.style.left = `${centerX}px`;
     targetStickerDiv.style.top = `${centerY}px`;
-    // --- END NEW LOGIC ---
 
     let spinCount = 0;
     const maxSpins = 15 + Math.floor(Math.random() * 10);
     const spinInterval = setInterval(() => {
         const nextUrl = getRandomStickerUrlFromGroups();
+        
         if (nextUrl) {
             console.log(`🔄 Spin ${spinCount}: ${nextUrl}`);
             stickerImg.src = nextUrl;
+            
+            // --- NEW: Update the sticker's group data attribute ---
+            // Find the group name for the new URL
+            const nextGroup = stickerGroups.find(group => group.urls.includes(nextUrl));
+            if (nextGroup) {
+                targetStickerDiv.dataset.group = nextGroup.name;
+            }
         }
+
         spinCount++;
         if (spinCount >= maxSpins) {
             clearInterval(spinInterval);
             console.log(`✅ Final sticker: ${stickerImg.src}`);
-            
-            // Apply the pulse animation
+            console.log(`✅ Final sticker group: ${targetStickerDiv.dataset.group}`);
+
             targetStickerDiv.classList.remove('pulse-effect');
             void targetStickerDiv.offsetWidth;
             targetStickerDiv.classList.add('pulse-effect');
@@ -1844,9 +1914,15 @@ spinBtn.addEventListener("click", () => {
         }
     }, 100);
 });
-   function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
-    const { suppressSave = false } = opts;
+
+function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
+    const { suppressSave = false, group } = opts;
+
     const sticker = document.createElement('div');
+    const groupName = group || 'default';
+    sticker.dataset.group = groupName;
+    console.log('[addSticker] Creating sticker with group:', groupName);
+
     sticker.classList.add('sticker');
     sticker.style.width = width + 'px';
     sticker.style.height = 'auto';
@@ -1858,7 +1934,6 @@ spinBtn.addEventListener("click", () => {
     stickerImg.classList.add("protected");
     sticker.appendChild(stickerImg);
 
-    // Initial position for new stickers
     if (x !== undefined && y !== undefined) {
         sticker.style.left = `${x}px`;
         sticker.style.top = `${y}px`;
@@ -1906,8 +1981,15 @@ spinBtn.addEventListener("click", () => {
             attempts++;
         }
         saveState();
-        addSticker(stickerImg.src, newX, newY, sticker.offsetWidth);
-    });
+addSticker(
+    stickerImg.src,
+    newX,
+    newY,
+    sticker.offsetWidth,
+    sticker.offsetHeight,
+    { group: sticker.dataset.group }
+);   
+ });
 
     const deleteBtn = document.createElement('div');
     deleteBtn.classList.add('delete-btn');
@@ -1936,10 +2018,29 @@ spinBtn.addEventListener("click", () => {
     sticker.appendChild(copyBtn);
     sticker.appendChild(lockBtn);
 
-   function startInteraction(e) {
-    if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.lock-btn')) {
-        return;
+const groupBtn = document.createElement('div');
+groupBtn.classList.add('sticker-btn', 'group-btn');
+groupBtn.innerHTML = `
+<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 6h16M4 12h16M4 18h16"/>
+</svg>`;
+
+
+
+// On click, open overlay with this sticker's group
+groupBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const stickerGroup = sticker.dataset.group; // This is the intended logic
+    const group = stickerGroups.find(g => g.name === stickerGroup);
+    if (group) {
+        showStickerOverlay(group.urls);
     }
+});
+
+sticker.appendChild(groupBtn);
+
+   function startInteraction(e) {
+ if (e.target.closest('.delete-btn, .copy-btn, .lock-btn, .group-btn')) return;
 
     if (bucketMode && (!e.touches || e.touches.length < 2)) {
         return;
@@ -2118,12 +2219,14 @@ function handleEnd() {
 
     const updateButtonSizes = () => {
         const btnSize = sticker.offsetWidth * 0.2;
-        [deleteBtn, copyBtn, lockBtn].forEach(btn => {
+        [deleteBtn, copyBtn, lockBtn, groupBtn].forEach(btn => {
             btn.style.width = btnSize + 'px';
             btn.style.height = btnSize + 'px';
         });
         deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
         copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
+         lockBtn.style.bottom = lockBtn.style.left = `${btnSize * 0.25}px`;
+        groupBtn.style.bottom = groupBtn.style.right = `${btnSize * 0.25}px`;
     };
 
     updateButtonSizes();
@@ -2270,7 +2373,7 @@ function handleEnd() {
     if (!touchesEdge) {
         ctx.putImageData(imgData, 0, 0);
         stickerImg.src = canvasEl.toDataURL();
-        // saveState(); // Call your state saving function
+       saveState(); 
     }
 }
 
@@ -2314,7 +2417,7 @@ function handleEnd() {
             }
         });
 
-  function addOrReplaceSticker(newUrl) {
+function addOrReplaceSticker(newUrl, groupName = null) {
     const unlockedSticker = document.querySelector('.sticker:not(.locked)');
     const stickerSize = 120;
     const canvasWidth = canvas.offsetWidth;
@@ -2323,34 +2426,44 @@ function handleEnd() {
     const centerY = (canvasHeight / 2) - (stickerSize / 2);
 
     if (unlockedSticker) {
-        // Hide the sticker temporarily
-        unlockedSticker.style.opacity = '0';
-        
-        // Update the sticker's properties
-        unlockedSticker.querySelector('img').src = newUrl;
+        const stickerImg = unlockedSticker.querySelector('img');
+        stickerImg.src = newUrl;
+
         unlockedSticker.style.width = `${stickerSize}px`;
-        unlockedSticker.style.height = 'auto';
+        unlockedSticker.style.height = `${stickerSize}px`;
         unlockedSticker.style.left = `${centerX}px`;
         unlockedSticker.style.top = `${centerY}px`;
-        
-        // Use an event listener to show the sticker only after the image has loaded
-        unlockedSticker.querySelector('img').onload = () => {
+
+        // ✅ Keep existing group or assign new one
+        if (groupName) {
+            unlockedSticker.dataset.group = groupName;
+        } else if (!unlockedSticker.dataset.group) {
+            unlockedSticker.dataset.group = stickerGroups[0]?.name || 'default';
+        }
+
+        stickerImg.onload = () => {
             unlockedSticker.style.opacity = '1';
         };
 
+        console.log('[addOrReplaceSticker] Replaced sticker group:', unlockedSticker.dataset.group);
     } else {
-        // Create a brand new sticker if none are unlocked
-        addSticker(newUrl, centerX, centerY, stickerSize);
+        const newGroup = groupName || stickerGroups[0]?.name || 'default';
+        addSticker(newUrl, centerX, centerY, stickerSize, stickerSize, { group: newGroup });
+        console.log('[addOrReplaceSticker] Created new sticker with group:', newGroup);
     }
+
     saveState();
 }
 
 addStickerBtn.addEventListener('click', () => {
-    const allUrls = stickerGroups.flatMap(group => group.urls);
-    const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
-    addOrReplaceSticker(randomUrl);
-});
+    // Find a random group first
+    const randomGroup = stickerGroups[Math.floor(Math.random() * stickerGroups.length)];
+    // Find a random URL from that group
+    const randomUrl = randomGroup.urls[Math.floor(Math.random() * randomGroup.urls.length)];
 
+    // Pass both the URL AND the group name to the function
+    addOrReplaceSticker(randomUrl, randomGroup.name);
+});
         window.addEventListener('load', () => {
             if (window.lucide) {
                 lucide.createIcons();
@@ -2520,16 +2633,17 @@ addStickerBtn.addEventListener('click', () => {
             stickerOverlayContainer.appendChild(closeBtn);
 
             // add stickers
-            urls.forEach(url => {
-                const sticker = document.createElement('img');
-                sticker.src = url;
-                sticker.classList.add('overlay-sticker');
-                sticker.addEventListener('click', () => {
-                    addOrReplaceSticker(url);
-                    hideOverlays();
-                });
-                stickerOverlayContainer.appendChild(sticker);
-            });
+     urls.forEach(url => {
+        const sticker = document.createElement('img');
+        sticker.src = url;
+        sticker.classList.add('overlay-sticker');
+        sticker.addEventListener('click', () => {
+            const group = stickerGroups.find(g => g.urls.includes(url));
+            addOrReplaceSticker(url, group ? group.name : null); // ✅ pass group dynamically
+            hideOverlays();
+        });
+        stickerOverlayContainer.appendChild(sticker);
+    });
 
             // finally: show the overlay
             stickerOverlayContainer.style.display = 'grid';
