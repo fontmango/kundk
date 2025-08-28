@@ -2229,12 +2229,14 @@ sticker.appendChild(groupBtn);
                 });
 
                 paletteSticker.draggable = true;
-                paletteSticker.addEventListener('dragstart', (e) => {
-                    e.dataTransfer.setData('application/json', JSON.stringify({
-                        url: e.target.src,
-                        width: 120
-                    }));
-                    hideOverlay();
+
+               paletteSticker.addEventListener('dragstart', (e) => {
+    e.dataTransfer.setData('application/json', JSON.stringify({
+        url: e.target.src,
+        width: 120,
+        group: e.target.dataset.group // ✅ include group
+    }));
+    hideOverlay();
                 });
                 paletteContainer.appendChild(paletteSticker);
             });
@@ -2296,18 +2298,17 @@ sticker.appendChild(groupBtn);
             e.preventDefault();
         });
 
-        canvas.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const data = e.dataTransfer.getData('application/json');
-            if (data) {
-                const { url, width } = JSON.parse(data);
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                // saveState() is now in addSticker()
-                addSticker(url, x, y, width);
-            }
-        });
+      canvas.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const data = e.dataTransfer.getData('application/json');
+    if (data) {
+        const { url, width, group } = JSON.parse(data); // include group
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        addSticker(url, x, y, width, width, { group }); // pass group explicitly
+    }
+});
 
         function hexToRgb(hex) {
             hex = hex.replace(/^#/, "");
