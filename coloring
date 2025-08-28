@@ -1778,7 +1778,7 @@ spinBtn.addEventListener("click", () => {
 }
 
 
-function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
+function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
     const { suppressSave = false } = opts;
                 const sticker = document.createElement('div');
             sticker.classList.add('sticker');
@@ -2161,7 +2161,7 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
                 paletteSticker.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('application/json', JSON.stringify({
                         url: e.target.src,
-                        width: 200
+                        width: 120
                     }));
                     hideOverlay();
                 });
