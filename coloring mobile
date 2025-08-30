@@ -486,7 +486,7 @@ button.active {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 10px;
     background: white;
     border-bottom: 1px solid #ccc;
     flex-shrink: 0;
@@ -514,6 +514,15 @@ button.active {
 
 .overlay-close-btn:hover {
     transform: scale(1.1);
+}
+
+.overlay-title {
+    flex-grow: 1;
+    text-align: center;
+    /* This is the key change: remove the default margin from the title */
+    margin: 0;
+    font-size: 16px; /* Adjust font size as needed */
+    font-weight: 600;
 }
 
     </style>
@@ -2129,14 +2138,14 @@ groupBtn.innerHTML = `
 </svg>`;
 
 
-
 // On click, open overlay with this sticker's group
 groupBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    const stickerGroup = sticker.dataset.group; // This is the intended logic
+    const stickerGroup = sticker.dataset.group;
     const group = stickerGroups.find(g => g.name === stickerGroup);
     if (group) {
-        showStickerOverlay(group.urls);
+        // Pass both the URLs and the group name
+        showStickerOverlay(group.urls, group.name); 
     }
 });
 
