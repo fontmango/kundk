@@ -1871,7 +1871,7 @@ const spinBtn = document.getElementById("spin-sticker-btn");
             }
         }
 
-        function saveState() {
+function saveState() {
     if (isRestoring) return;
     const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
     const currentState = { stickers: [] };
@@ -1880,13 +1880,14 @@ const spinBtn = document.getElementById("spin-sticker-btn");
         const stickerImg = sticker.querySelector('img');
         if (stickerImg) {
             currentState.stickers.push({
-                // ✅ Save the current `src`, which could be a URL or base64 data
-                url: stickerImg.src, 
+                url: stickerImg.src,
                 x: sticker.offsetLeft,
                 y: sticker.offsetTop,
                 width: sticker.offsetWidth,
                 height: sticker.offsetHeight,
-                locked: sticker.classList.contains('locked')
+                locked: sticker.classList.contains('locked'),
+                // ✅ Add the group name here
+                groupName: sticker.dataset.group 
             });
         }
     });
@@ -1900,22 +1901,22 @@ const spinBtn = document.getElementById("spin-sticker-btn");
     updateUndoRedoButtons();
 }
 
-        function loadState(state) {
-            isRestoring = true;
-            canvas.innerHTML = '';
-            state.stickers.forEach(data => {
-                const newSticker = addSticker(data.url, data.x, data.y, data.width, data.height, {
-                    suppressSave: true
-                });
-                if (data.locked) {
-                    newSticker.classList.add('locked');
-                }
-            });
-            isRestoring = false;
-            updateUndoRedoButtons();
-
+function loadState(state) {
+    isRestoring = true;
+    canvas.innerHTML = '';
+    state.stickers.forEach(data => {
+        // ✅ Change 'groupName' to 'group' to match the addSticker function's parameter name
+        const newSticker = addSticker(data.url, data.x, data.y, data.width, data.height, {
+            suppressSave: true,
+            group: data.groupName 
+        });
+        if (data.locked) {
+            newSticker.classList.add('locked');
         }
-
+    });
+    isRestoring = false;
+    updateUndoRedoButtons();
+}
         function deselectAllStickers() {
             document.querySelectorAll('.sticker').forEach(s => {
                 s.classList.remove('selected');
