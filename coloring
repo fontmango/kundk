@@ -171,10 +171,16 @@
             scrollbar-width: none;
             -ms-overflow-style: none;
             touch-action: pan-y;
-            display: flex;
             align-items: center;
         
         }
+
+        /* NEW WRAPPER ELEMENT FOR CENTERING */
+.color-palette-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
         .color-palette-container::-webkit-scrollbar {
             display: none;
@@ -459,9 +465,11 @@
         </button>
     </div>
 
+    <div class="color-palette-wrapper">
     <div class="color-palette-container">
         <div class="color-palette" id="color-palette"></div>
     </div>
+        </div>
 
     <div id="canvas-container"></div>
 
