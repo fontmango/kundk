@@ -382,10 +382,16 @@ button.active {
     object-fit: contain;
     cursor: pointer;
     border-radius: 8px;
-    transition: transform 0.2s;
-     -webkit-tap-highlight-color: transparent; /* iOS/Android WebKit */
-  -webkit-focus-ring-color: transparent;    /* iOS Safari */
-  outline: none;    
+    
+    /* Remove the problematic transition property */
+    transition: none !important; 
+    
+    /* Ensure a default transform value */
+    transform: scale(1); 
+    
+    -webkit-tap-highlight-color: transparent;
+    -webkit-focus-ring-color: transparent;
+    outline: none;    
 }
 
 .overlay-icon:hover {
@@ -425,17 +431,11 @@ button.active {
 }
 
 @keyframes pulse {
-  0% {
+  0%, 100% {
     transform: scale(1);
-    opacity: 1;
   }
-  70% {
-    transform: scale(1.2);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0;
+  50% {
+    transform: scale(1.15);
   }
 }
 
@@ -3015,16 +3015,13 @@ function showGroupOverlay() {
         groupIcon.classList.add('overlay-icon');
         groupIcon.title = group.name;
 
-        // ✅ Add the contextmenu event listener here
+        // Add contextmenu listener
         groupIcon.addEventListener('contextmenu', (e) => {
             e.preventDefault();
         });
 
-        // The click event listener should still preload the full group's stickers
-        groupIcon.addEventListener('click', async () => {
-            console.log(`⏳ Preloading stickers for group: ${group.name}`);
-            await preloadStickers(group.urls);
-            console.log("✅ Preloading complete. Showing stickers.");
+        // ✅ The crucial change: call showStickerOverlay directly without preloading
+        groupIcon.addEventListener('click', () => {
             showStickerOverlay(group.urls, group.name);
         });
 
@@ -3086,11 +3083,9 @@ stickerPickerBtn.addEventListener('click', (e) => {
         let touchOffsetY = 0;
 
 function showStickerOverlay(urls, groupName) {
-    // Hide any other overlays that might be open
-    hideOverlays(); 
+    hideOverlays();
     stickerOverlayContainer.innerHTML = '';
     
-    // Create the header with the group name
     const header = document.createElement('div');
     header.classList.add('overlay-header');
     
@@ -3105,40 +3100,47 @@ function showStickerOverlay(urls, groupName) {
     closeBtn.addEventListener('click', hideOverlays);
     header.appendChild(closeBtn);
     
-    // Create the sticker grid wrapper
     const contentWrapper = document.createElement('div');
     contentWrapper.classList.add('overlay-stickers-grid');
+    stickerOverlayContainer.appendChild(header);
+    stickerOverlayContainer.appendChild(contentWrapper);
     
-    urls.forEach(url => {
+    // ✅ Show the container immediately for instant feedback
+    stickerOverlayContainer.style.display = 'flex';
+    
+    // ✅ Load and add stickers one-by-one
+    urls.forEach((url, index) => {
         const sticker = document.createElement('img');
-        sticker.src = url;
         sticker.classList.add('overlay-sticker');
         sticker.draggable = true;
         sticker.dataset.url = url;
+        
+        // Initially hide the sticker to prevent a blank box
+        sticker.style.opacity = '0'; 
+        sticker.style.transition = 'opacity 0.5s ease-in-out';
 
-        // ✅ Add the contextmenu event listener here
-        sticker.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-        });
-
-        // Add event listeners for dragging and clicking
+        sticker.addEventListener('contextmenu', (e) => e.preventDefault());
         sticker.addEventListener('dragstart', (e) => {
             const stickerData = { url: url, width: 120 };
             e.dataTransfer.setData('application/json', JSON.stringify(stickerData));
         });
-
+        
         sticker.addEventListener('click', () => {
              const group = stickerGroups.find(g => g.urls.includes(url));
-             addOrReplaceSticker(url, group ? group.name : null);
-             hideOverlays();
+             addSticker(url, group ? group.name : null);
         });
         
+        sticker.onload = () => {
+            sticker.style.opacity = '1';
+        };
+
         contentWrapper.appendChild(sticker);
+        
+        // Use a short delay before setting the src for each sticker
+        setTimeout(() => {
+            sticker.src = url;
+        }, index * 50); // 50ms delay for each sticker
     });
-    
-    stickerOverlayContainer.appendChild(header);
-    stickerOverlayContainer.appendChild(contentWrapper);
-    stickerOverlayContainer.style.display = 'flex';
 }
 
         stickerPickerBtn.addEventListener('click', (e) => {
