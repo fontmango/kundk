@@ -16,6 +16,8 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+             height: 100vh; /* Set the height to 100% of the viewport height */
+    overflow-y: hidden; /* Hide vertical overflow */
         }
 
         #canvas-container {
