@@ -213,7 +213,7 @@
             border-color: #000000;
         }
 
-    #sticker-palette-container {
+  #sticker-palette-container {
     width: 100%;
     margin-top: 20px;
     padding: 5px;
@@ -223,12 +223,13 @@
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 
     display: flex;
-    flex-wrap: nowrap;     /* single row */
-    overflow-x: auto;      /* horizontal scroll */
+    flex-wrap: nowrap;      /* single row */
+    overflow-x: auto;       /* horizontal scroll */
     overflow-y: hidden;
 
     align-items: center;    /* vertical centering */
-    justify-content: center;  /* horizontal centering */
+    /* REMOVE or comment out the line below */
+    /* justify-content: center; */
     gap: 10px;              /* space between items */
     scrollbar-width: thin;
 }
@@ -437,7 +438,7 @@
 </button>
 
         <button id="add-sticker-btn" title="Überrasche mich">
-            <i data-lucide="shuffle" class="icon"></i>
+            <i data-lucide="plus" class="icon"></i>
         </button>
 
         <button id="undo-btn" title="Zurück">
