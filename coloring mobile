@@ -358,28 +358,10 @@ button.active {
     width: 80%;
     height: 90%;
     overflow-y: auto;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
 }
 
-.close-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
-    cursor: pointer;
-    z-index: 300;
-}
-
-.close-btn:hover {
-    transform: scale(1.1);
-}
 
 .overlay.active {
     display: block;
@@ -470,6 +452,70 @@ button.active {
     transform: scale(1);
   }
 }
+#sticker-overlay-container {
+    /* Main overlay styles */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 500px;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    padding: 0; /* Remove padding here, add it to the content wrapper */
+    z-index: 300;
+    
+    /* Crucial for centering and stacking header/content */
+    display: none; /* Hide by default */
+    flex-direction: column; 
+    overflow: hidden; /* Contains the scrolling content */
+}
+
+/* Other CSS remains the same */
+
+.overlay-stickers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 15px;
+    padding: 10px;
+    max-height: 60vh;
+}
+
+.overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: white;
+    border-bottom: 1px solid #ccc;
+    flex-shrink: 0;
+}
+
+
+.close-btn {
+    position: absolute;
+   
+    
+    color: #555;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.close-btn {
+    right: 0;
+}
+
+.overlay-close-btn:hover {
+    transform: scale(1.1);
+}
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -479,7 +525,8 @@ button.active {
 
 
     <div id="canvas-container"></div>
-  
+    <div id="overlay-container"></div>
+
   <div class="controls">
   
    <button id="spin-sticker-btn" title="Spin Random">
@@ -512,9 +559,9 @@ button.active {
     <div class="color-palette-container">
         <div class="color-palette" id="color-palette"></div>
     </div>
-  
+        <div id="sticker-overlay-container"></div>
+
     <div id="group-overlay-container" class="overlay"></div>
-    <div id="sticker-overlay-container" class="overlay"></div>
 
     <script>
            const stickerGroups = [
@@ -2622,38 +2669,40 @@ window.addEventListener('load', () => {
         }
 
         function hideOverlays() {
+
             groupOverlayContainer.style.display = 'none';
             stickerOverlayContainer.style.display = 'none';
         }
 
-        function showGroupOverlay() {
-            hideOverlays();
-            groupOverlayContainer.innerHTML = '';
+       function showGroupOverlay() {
+    hideOverlays();
+    groupOverlayContainer.innerHTML = '';
 
-            // add close button
-            const closeBtn = document.createElement('button');
-            closeBtn.textContent = '✕';
-            closeBtn.classList.add('close-btn');
-            closeBtn.addEventListener('click', hideOverlays);
-            groupOverlayContainer.appendChild(closeBtn);
+    // add close button
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.classList.add('close-btn');
+    closeBtn.addEventListener('click', hideOverlays);
+    groupOverlayContainer.appendChild(closeBtn);
 
-            // add group icons
-            stickerGroups.forEach(group => {
-                const groupIcon = document.createElement('img');
-                groupIcon.src = group.urls[0];
-                groupIcon.classList.add('overlay-icon');
-                groupIcon.title = group.name;
+    // add group icons
+    stickerGroups.forEach(group => {
+        const groupIcon = document.createElement('img');
+        groupIcon.src = group.urls[0];
+        groupIcon.classList.add('overlay-icon');
+        groupIcon.title = group.name;
 
-                groupIcon.addEventListener('click', () => {
-                    showStickerOverlay(group.urls);
-                });
+        groupIcon.addEventListener('click', () => {
+            // ✅ Pass both the URLs and the group name to the next function
+            showStickerOverlay(group.urls, group.name);
+        });
 
-                groupOverlayContainer.appendChild(groupIcon);
-            });
+        groupOverlayContainer.appendChild(groupIcon);
+    });
 
-            // finally: show overlay
-            groupOverlayContainer.style.display = 'grid';
-        }
+    // finally: show overlay
+    groupOverlayContainer.style.display = 'grid';
+}
 
         function updateCanvasDrop() {
             const canvas = document.getElementById('canvas-container');
@@ -2684,33 +2733,48 @@ window.addEventListener('load', () => {
         let touchOffsetX = 0;
         let touchOffsetY = 0;
 
-        function showStickerOverlay(urls) {
-            hideOverlays();
-            stickerOverlayContainer.innerHTML = '';
-
-            // add close button
-            const closeBtn = document.createElement('button');
-            closeBtn.textContent = '✕';
-            closeBtn.classList.add('close-btn');
-            closeBtn.addEventListener('click', hideOverlays);
-            stickerOverlayContainer.appendChild(closeBtn);
-
-            // add stickers
-     urls.forEach(url => {
+function showStickerOverlay(urls, groupName) {
+    hideOverlays();
+    stickerOverlayContainer.innerHTML = '';
+ 
+    // Create the header
+    const header = document.createElement('div');
+    header.classList.add('overlay-header');
+    
+    const title = document.createElement('h2');
+    title.textContent = groupName;
+    title.classList.add('overlay-title');
+    header.appendChild(title);
+ 
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.classList.add('close-btn');
+    closeBtn.addEventListener('click', hideOverlays);
+    header.appendChild(closeBtn);
+ 
+    // Create the sticker grid wrapper
+    const contentWrapper = document.createElement('div');
+    contentWrapper.classList.add('overlay-stickers-grid');
+ 
+    urls.forEach(url => {
         const sticker = document.createElement('img');
         sticker.src = url;
         sticker.classList.add('overlay-sticker');
         sticker.addEventListener('click', () => {
             const group = stickerGroups.find(g => g.urls.includes(url));
-            addOrReplaceSticker(url, group ? group.name : null); // ✅ pass group dynamically
+            addOrReplaceSticker(url, group ? group.name : null);
             hideOverlays();
         });
-        stickerOverlayContainer.appendChild(sticker);
+        contentWrapper.appendChild(sticker);
     });
-
-            // finally: show the overlay
-            stickerOverlayContainer.style.display = 'grid';
-        }
+ 
+    // Append children to the main container
+    stickerOverlayContainer.appendChild(header);
+    stickerOverlayContainer.appendChild(contentWrapper);
+ 
+    // Finally: show the overlay with a flex display
+    stickerOverlayContainer.style.display = 'flex'; // <-- This is the fix!
+}
 
         stickerPickerBtn.addEventListener('click', (e) => {
             e.stopPropagation();
