@@ -1003,49 +1003,55 @@ sticker.appendChild(groupBtn);
     sticker.appendChild(rotateHandle);
     sticker.appendChild(groupBtn);
 
-    function startInteraction(e) {
+   function startInteraction(e) {
     if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.group-btn') || e.target.closest('.rotate-handle') || e.target.closest('.resize-handle')) {
-                return;
-            }
+        return;
+    }
 
-            e.preventDefault();
-            activeSticker = sticker;
+    activeSticker = sticker;
 
-            if (!sticker.classList.contains('selected')) {
-                deselectAllStickers();
-                sticker.classList.add('selected');
-            }
-            updateSelectionStyles();
+    if (!sticker.classList.contains('selected')) {
+        deselectAllStickers();
+        sticker.classList.add('selected');
+    }
+    updateSelectionStyles();
 
-            // Check for pinch gesture (2 fingers)
-            if (e.touches && e.touches.length === 2) {
-                isPinching = true;
-                initialTouchDistance = getTouchDistance(e.touches);
-                initialStickerWidth = sticker.offsetWidth;
-                initialStickerHeight = sticker.offsetHeight;
-                initialStickerLeft = sticker.offsetLeft;
-                initialStickerTop = sticker.offsetTop;
-            } 
-            // Handle regular drag (1 finger or mouse)
-            else {
-                isPinching = false;
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                initialX = clientX;
-                initialY = clientY;
-                
-                const selectedStickers = document.querySelectorAll('.sticker.selected');
-                selectedStickers.forEach(s => {
-                    s.dataset.startLeft = s.offsetLeft;
-                    s.dataset.startTop = s.offsetTop;
-                });
-            }
-
-            document.addEventListener('mousemove', handleMove);
-            document.addEventListener('mouseup', handleEnd);
-            document.addEventListener('touchmove', handleMove, { passive: false });
-            document.addEventListener('touchend', handleEnd);
+    // Check for pinch gesture (2 fingers)
+    if (e.touches && e.touches.length === 2) {
+        // ✅ Only prevent default behavior for multi-touch gestures
+        e.preventDefault();
+        isPinching = true;
+        initialTouchDistance = getTouchDistance(e.touches);
+        initialStickerWidth = sticker.offsetWidth;
+        initialStickerHeight = sticker.offsetHeight;
+        initialStickerLeft = sticker.offsetLeft;
+        initialStickerTop = sticker.offsetTop;
+    } 
+    // Handle regular drag (1 finger or mouse)
+   else {
+        // ✅ ADD this line to enable single-touch dragging
+        if (e.touches && e.touches.length === 1) {
+            e.preventDefault(); 
         }
+
+        isPinching = false;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        initialX = clientX;
+        initialY = clientY;
+        
+        const selectedStickers = document.querySelectorAll('.sticker.selected');
+        selectedStickers.forEach(s => {
+            s.dataset.startLeft = s.offsetLeft;
+            s.dataset.startTop = s.offsetTop;
+        });
+    }
+
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchmove', handleMove, { passive: false });
+    document.addEventListener('touchend', handleEnd);
+}
 
         // ✅ MODIFIED: handleMove now directs traffic to the correct handler
         function handleMove(e) {
@@ -1716,6 +1722,28 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
             }
         }
 
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Select a random 'A' sticker from any available group
+    const url = getRandomStickerByLetter("A");
+    
+    // Find the correct group and letter to pass to addSticker
+    let groupName = null;
+    if (url) {
+        stickerGroups.forEach(group => {
+            if (group.urls["A"] && group.urls["A"].includes(url)) {
+                groupName = group.name;
+            }
+        });
+
+        // Add the sticker to the canvas
+        addSticker(url, undefined, undefined, 120, 120, {
+            letter: "A",
+            group: groupName
+        });
+    }
+});
 addStickerBtn.addEventListener("click", () => {
     const selectedLetter = "A"; // Always use Letter 'A'
     const url = getRandomStickerByLetter(selectedLetter);
