@@ -557,6 +557,10 @@ button.active {
         <button id="redo-btn" title="Redo">
             <i data-lucide="redo-2" class="icon"></i>
         </button>
+        
+         <button id="new-btn" title="Neu">
+            <i data-lucide="file-plus-2" class="icon"></i>
+        </button>
 
      
 
@@ -1954,6 +1958,8 @@ const spinBtn = document.getElementById("spin-sticker-btn");
         const redoBtn = document.getElementById('redo-btn');
         const swatch = document.querySelector('.color-swatch');
         const colorPicker = document.getElementById('color-picker');
+                const newBtn = document.getElementById('new-btn');
+
 
         const colorPalette = document.getElementById('color-palette');
         const history = [];
@@ -2127,58 +2133,71 @@ function loadState(state) {
 spinBtn.addEventListener("click", () => {
     console.log("🎰 Spin button clicked");
 
-    const stickerDiv = document.querySelector('.sticker:not(.locked)');
+    const allStickers = document.querySelectorAll('.sticker');
+    let targetStickerDiv = null;
 
-    if (!stickerDiv) {
-        console.log("ℹ️ No unlocked sticker found, adding first one");
-        const randomStickerData = getRandomStickerUrlFromGroups(); // Get the object
+    // Check if there are any stickers on the canvas
+    if (allStickers.length === 0) {
+        // If the canvas is empty, add a new random sticker
+        console.log("ℹ️ Canvas is empty, adding a new sticker.");
+        const randomStickerData = getRandomStickerUrlFromGroups();
         if (randomStickerData) {
-            addOrReplaceSticker(randomStickerData.url, randomStickerData.group); // Pass url and group
+            addSticker(randomStickerData.url, 120, 120, 120, 120, { 
+                group: randomStickerData.group, 
+                letter: randomStickerData.letter 
+            });
+            targetStickerDiv = document.querySelector('.sticker'); // Select the newly added sticker
         }
-        return; // Exit after adding a new sticker
+    } else {
+        // If stickers exist, find the first unlocked one
+        targetStickerDiv = document.querySelector('.sticker:not(.locked)');
+        
+        // If all stickers are locked, add a new unlocked one
+        if (!targetStickerDiv) {
+            console.log("ℹ️ All stickers are locked, adding a new one.");
+            const randomStickerData = getRandomStickerUrlFromGroups();
+            if (randomStickerData) {
+                addSticker(randomStickerData.url, 120, 120, 120, 120, { 
+                    group: randomStickerData.group, 
+                    letter: randomStickerData.letter 
+                });
+                targetStickerDiv = document.querySelector('.sticker:not(.locked)');
+            }
+        }
     }
-
-    const stickerImg = stickerDiv.querySelector('img');
-    const targetStickerDiv = stickerImg.closest('.sticker');
-
+    
+    // Check one more time to ensure a target sticker exists before spinning
     if (!targetStickerDiv) {
-        console.warn("⚠️ Still no unlocked sticker, aborting spin");
+        console.warn("⚠️ No unlocked sticker found and couldn't create one. Aborting spin.");
         return;
     }
-
-    const stickerSize = 120;
+    
+    // Now perform the spin logic on the 'targetStickerDiv'
+    const stickerImg = targetStickerDiv.querySelector('img');
+    const stickerSize = targetStickerDiv.offsetWidth;
     const canvasWidth = canvas.offsetWidth;
     const canvasHeight = canvas.offsetHeight;
     const centerX = (canvasWidth / 2) - (stickerSize / 2);
     const centerY = (canvasHeight / 2) - (stickerSize / 2);
     
+    // Move the sticker to the center of the canvas before spinning
     targetStickerDiv.style.left = `${centerX}px`;
     targetStickerDiv.style.top = `${centerY}px`;
-
+    
     let spinCount = 0;
     const maxSpins = 15 + Math.floor(Math.random() * 10);
     const spinInterval = setInterval(() => {
-        // --- FIX IS HERE ---
-        const nextStickerData = getRandomStickerUrlFromGroups(); // Now returns an object
-        
+        const nextStickerData = getRandomStickerUrlFromGroups();
         if (nextStickerData) {
-            console.log(`🔄 Spin ${spinCount}: ${nextStickerData.url}`);
             stickerImg.src = nextStickerData.url;
-            
-            // Update the sticker's group data attribute directly from the object
             targetStickerDiv.dataset.group = nextStickerData.group;
+            targetStickerDiv.dataset.letter = nextStickerData.letter;
         }
 
         spinCount++;
         if (spinCount >= maxSpins) {
             clearInterval(spinInterval);
-            console.log(`✅ Final sticker: ${stickerImg.src}`);
-            console.log(`✅ Final sticker group: ${targetStickerDiv.dataset.group}`);
-
-            targetStickerDiv.classList.remove('pulse-effect');
-            void targetStickerDiv.offsetWidth;
             targetStickerDiv.classList.add('pulse-effect');
-
             saveState();
         }
     }, 100);
@@ -2731,7 +2750,18 @@ addStickerBtn.addEventListener('click', () => {
     addOrReplaceSticker(randomUrl, randomGroup.name);
 });
 
-
+    newBtn.addEventListener('click', () => {
+    // Clear the canvas
+    canvas.innerHTML = '';
+    
+    // Add the empty state to the history
+    // This allows the user to undo the "new" action.
+    saveState();
+    
+    // Reset any other relevant flags
+    firstStickerAdded = false;
+});
+        
 
 window.addEventListener('load', () => {
     if (window.lucide) {
