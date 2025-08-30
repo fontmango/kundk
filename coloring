@@ -170,7 +170,6 @@
             -ms-overflow-style: none;
             touch-action: pan-y;
             display: flex;
-            justify-content: center;
             align-items: center;
         
         }
@@ -1636,6 +1635,8 @@ const spinBtn = document.getElementById("spin-sticker-btn");
         const overlayContainer = document.getElementById('overlay-container');
         const colorPalette = document.getElementById('color-palette');
         const history = [];
+        const colorPaletteContainer = document.querySelector('.color-palette-container');
+
 
         let bucketMode = false;
         let activeSticker = null;
@@ -2642,6 +2643,16 @@ function updateUndoRedoButtons() {
                 element.addEventListener('touchend', handleEnd);
             });
         }
+
+   colorPaletteContainer.addEventListener('wheel', (event) => {
+    // Prevent the default vertical scrolling behavior
+    event.preventDefault();
+
+    // Scroll the container horizontally
+    // event.deltaY is the vertical scroll amount,
+    // so we use it to scroll the horizontal axis
+    colorPaletteContainer.scrollLeft += event.deltaY;
+});
 
         function populateColorPalette() {
             colorPalette.innerHTML = '';
