@@ -3009,7 +3009,6 @@ function showStickerOverlay(urls, groupName) {
         });
 
         addSwipeFunctionality();
-        populateColorPalette();
         saveState();
       
 document.addEventListener("contextmenu", function(e) {
