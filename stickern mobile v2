@@ -483,17 +483,7 @@ button.active {
   animation: pulse 0.5s ease-in-out;
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
+
 #sticker-overlay-container {
     /* Main overlay styles */
     position: absolute;
