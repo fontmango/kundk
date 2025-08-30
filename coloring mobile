@@ -356,7 +356,7 @@ button.active {
     z-index: 200;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     width: 80%;
-    height: 90%;
+   
     overflow-y: auto;
     grid-template-columns: repeat(5, 1fr);
     gap: 10px;
@@ -454,7 +454,7 @@ button.active {
 }
 #sticker-overlay-container {
     /* Main overlay styles */
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -469,7 +469,7 @@ button.active {
     /* Crucial for centering and stacking header/content */
     display: none; /* Hide by default */
     flex-direction: column; 
-    overflow: hidden; /* Contains the scrolling content */
+  
 }
 
 /* Other CSS remains the same */
@@ -479,7 +479,7 @@ button.active {
     grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
     gap: 15px;
     padding: 10px;
-    max-height: 60vh;
+      overflow-y: auto;
 }
 
 .overlay-header {
@@ -573,7 +573,49 @@ button.active {
     <div id="group-overlay-container" class="overlay"></div>
 
     <script>
-           const stickerGroups = [
+             const stickerGroups = [
+            {
+name: "Alpaca",
+urls: [
+
+"https://static.wixstatic.com/shapes/990059_f821ecb6a4664447ba20b9bedb102772.svg",
+"https://static.wixstatic.com/shapes/990059_1df2496a1ba4418f9f7aec90d026adcd.svg",
+"https://static.wixstatic.com/shapes/990059_7ba5dc6d8cfb4539911d13586e97f2a4.svg",
+"https://static.wixstatic.com/shapes/990059_cc36032e144f427989976f74c5357bab.svg",
+"https://static.wixstatic.com/shapes/990059_a7b545ee7a6548ef9347f6c02c4d9720.svg",
+"https://static.wixstatic.com/shapes/990059_a3e46083e1e24e968dee3f31a1476307.svg",
+"https://static.wixstatic.com/shapes/990059_e67fc5bd049944ff9c3588bc426fd3c8.svg",
+"https://static.wixstatic.com/shapes/990059_5ba9c824bcd34e5e85a98516599a36c1.svg",
+"https://static.wixstatic.com/shapes/990059_6b280bb9a61c4a6493a248fde7ab72d4.svg",
+"https://static.wixstatic.com/shapes/990059_529a4d3eac5a4f1cb3badc17a421d1df.svg",
+"https://static.wixstatic.com/shapes/990059_fa5b9cfc89b940ec84889bed7598cc83.svg",
+"https://static.wixstatic.com/shapes/990059_0abc61897938433a9cb1cd68a148d3e9.svg",
+"https://static.wixstatic.com/shapes/990059_0dc02245b8414f19b8823977a4fd2e33.svg",
+"https://static.wixstatic.com/shapes/990059_7e8c090a897c498c940511fc23e4de82.svg",
+"https://static.wixstatic.com/shapes/990059_37ac13e637254a97878660231ec72369.svg",
+"https://static.wixstatic.com/shapes/990059_130b433af88e44bbb8d3f06a0e26bb48.svg",
+"https://static.wixstatic.com/shapes/990059_873156a1195241fea3a95ce32fcd74a7.svg",
+"https://static.wixstatic.com/shapes/990059_f1a68a26b2d343ea8a8165eacac9f269.svg",
+"https://static.wixstatic.com/shapes/990059_e66a82db1d7648559f943649ff4a1a3e.svg",
+"https://static.wixstatic.com/shapes/990059_d72281d8f93342be994697d7a519a3a4.svg",
+"https://static.wixstatic.com/shapes/990059_4f86803d0f6346fc9aded7ca09379d62.svg",
+"https://static.wixstatic.com/shapes/990059_7ac90228e96b48efbe8b1d9127fe3613.svg",
+"https://static.wixstatic.com/shapes/990059_3a495a301c554e09b754122f44a0b202.svg",
+"https://static.wixstatic.com/shapes/990059_247844de05da402684ad160297e4c34b.svg",
+"https://static.wixstatic.com/shapes/990059_9f22530fc5734f36a14908193e585ad4.svg",
+"https://static.wixstatic.com/shapes/990059_8e6e5e4646424ef9b9225276ca5addf6.svg",
+"https://static.wixstatic.com/shapes/990059_0c892bd4d9fc427dbc6d03a5ef4c651b.svg",
+"https://static.wixstatic.com/shapes/990059_c7b0f2b9312f4872a039c4e4fec08802.svg",
+"https://static.wixstatic.com/shapes/990059_45468a7b03b4419a8bbeaa7a96ee8479.svg",
+"https://static.wixstatic.com/shapes/990059_e96405decf79406c8adece0aa8013803.svg",
+"https://static.wixstatic.com/shapes/990059_c0a405a9732d4700a20fdf78038f3579.svg",
+"https://static.wixstatic.com/shapes/990059_e0a2b0578b5f4f9fa365718a43e27390.svg",
+"https://static.wixstatic.com/shapes/990059_ab3e7cfcf97547449bdd924fdf08193d.svg",
+"https://static.wixstatic.com/shapes/990059_604d0c8b7f9b490aae4d0a39ebc97ef0.svg",
+"https://static.wixstatic.com/shapes/990059_6b2f6d02807a49c7ba25e09c44e733fe.svg"
+
+]
+},
             
  {        
             name: "Axolotl",
@@ -617,7 +659,48 @@ button.active {
 
                     ]
             },
-            
+            {
+name: "Banane",
+urls: [
+
+"https://static.wixstatic.com/shapes/990059_34b518b8a1114c1f8f6c92e302faaffb.svg",
+"https://static.wixstatic.com/shapes/990059_4821fa0787a84b4a96316b1d8b329109.svg",
+"https://static.wixstatic.com/shapes/990059_adbb570b52b94dd0bc980ffc55f8a20c.svg",
+"https://static.wixstatic.com/shapes/990059_48e01454c41349b5a87fee4dcfdf9363.svg",
+"https://static.wixstatic.com/shapes/990059_8e1b6b1e15124681ab56d69233075a99.svg",
+"https://static.wixstatic.com/shapes/990059_2011db88f2c744afb0ac452a2592222b.svg",
+"https://static.wixstatic.com/shapes/990059_5f88575004f2449d884c7ff9545d7240.svg",
+"https://static.wixstatic.com/shapes/990059_c00ddc9609e640978abff29f373f2e61.svg",
+"https://static.wixstatic.com/shapes/990059_13be911b4fea49408aac3a3e98ce5bb4.svg",
+"https://static.wixstatic.com/shapes/990059_f4424ba62c1d458dbdfcedc3b046ec9e.svg",
+"https://static.wixstatic.com/shapes/990059_c9e3e2112efd4bdea681138fa263bc31.svg",
+"https://static.wixstatic.com/shapes/990059_3d23fcf17c73401cb2bf118e268fddf1.svg",
+"https://static.wixstatic.com/shapes/990059_5bc9307377ac47188b281ab43c756c7c.svg",
+"https://static.wixstatic.com/shapes/990059_ad818be126204a6f9c64a00fe95837bf.svg",
+"https://static.wixstatic.com/shapes/990059_86e3840f43be4c3f927dd1f135364d96.svg",
+"https://static.wixstatic.com/shapes/990059_1ee19d9afd5a40649e2f60a7bf1eadad.svg",
+"https://static.wixstatic.com/shapes/990059_e89f33acb604455d960e7e6cd4a51f8d.svg",
+"https://static.wixstatic.com/shapes/990059_dd06e12d30174c4cbdd66fd437fa171b.svg",
+"https://static.wixstatic.com/shapes/990059_046ec335d69e49369df569c2a4824a31.svg",
+"https://static.wixstatic.com/shapes/990059_6e185c6cf88e45aeab28eb7c83bf6c2b.svg",
+"https://static.wixstatic.com/shapes/990059_6936a14cbe5a4c6a9de75169cb0ecc5c.svg",
+"https://static.wixstatic.com/shapes/990059_fed08251352842bf91e5329954fe2fe1.svg",
+"https://static.wixstatic.com/shapes/990059_89b12039cbcb4315a01fff91958c8773.svg",
+"https://static.wixstatic.com/shapes/990059_e165589453304aa1a711ae676d5a2e61.svg",
+"https://static.wixstatic.com/shapes/990059_b7e9be36ddf443548060e1890c3a45ce.svg",
+"https://static.wixstatic.com/shapes/990059_b28ee76be182425593b87242a159f5d9.svg",
+"https://static.wixstatic.com/shapes/990059_6cf8d7575dd4479fba40ea202e4c278e.svg",
+"https://static.wixstatic.com/shapes/990059_67982800ef5b491095f6b60295597f61.svg",
+"https://static.wixstatic.com/shapes/990059_5687e3486ffa4de1921a413cd1caf55f.svg",
+"https://static.wixstatic.com/shapes/990059_a4d94004ffe14913bb10595defe41287.svg",
+"https://static.wixstatic.com/shapes/990059_f629a421102f4b9e98363b64ab80d0aa.svg",
+"https://static.wixstatic.com/shapes/990059_676102c45d65485cb110385547f69ccc.svg",
+"https://static.wixstatic.com/shapes/990059_c51abf816dcf4440a1cdc0bcf1545fae.svg",
+"https://static.wixstatic.com/shapes/990059_73e641b464e547f4b2bdc6faece344a0.svg",
+"https://static.wixstatic.com/shapes/990059_67a7366a6dbb429aa9904dbf8cdafca6.svg"
+
+]
+},
 {
 name: "Faultier",
 urls: [
@@ -657,6 +740,48 @@ urls: [
 "https://static.wixstatic.com/media/990059_385aa02ea33b447d9e0edd896c6190ab~mv2.png",
 "https://static.wixstatic.com/media/990059_9c57123d69aa47c99e1fe34109cc5803~mv2.png",
 "https://static.wixstatic.com/media/990059_cf924f3b32384da38e0ffd03d57a1cc6~mv2.png"
+
+]
+},
+{
+name: "Fledermaus",
+urls: [
+
+"https://static.wixstatic.com/shapes/990059_41d657a8fdb74d3e90f2f38327e44049.svg",
+"https://static.wixstatic.com/shapes/990059_6c8825d4c66642cb82364de1b2af8d46.svg",
+"https://static.wixstatic.com/shapes/990059_87027fe983b14fabb9181cf9017efbaa.svg",
+"https://static.wixstatic.com/shapes/990059_0169838afbbf4e3e891d28605ae684b4.svg",
+"https://static.wixstatic.com/shapes/990059_e6ba691032d84175a631f513250ec993.svg",
+"https://static.wixstatic.com/shapes/990059_4552b75c4f2142329b2ed6ec0c6b285a.svg",
+"https://static.wixstatic.com/shapes/990059_8e5ed57bb4e64f4d8a4639cb48e6485c.svg",
+"https://static.wixstatic.com/shapes/990059_ef8890fa57554111a7949d079034ef25.svg",
+"https://static.wixstatic.com/shapes/990059_5e7270b07cb94353adcee3a65cd6e75c.svg",
+"https://static.wixstatic.com/shapes/990059_0d923946865e4002819a27cbd84b9e7c.svg",
+"https://static.wixstatic.com/shapes/990059_4db4aed742ed4178b99fccafa67a1018.svg",
+"https://static.wixstatic.com/shapes/990059_84d5398a871b4be1be635ce94fced129.svg",
+"https://static.wixstatic.com/shapes/990059_0b952c12919e48979b25c6e586badd55.svg",
+"https://static.wixstatic.com/shapes/990059_4eb4c660a2164d85990d80180e0b7483.svg",
+"https://static.wixstatic.com/shapes/990059_266f313ef607457185e87f28b877e304.svg",
+"https://static.wixstatic.com/shapes/990059_9123b3aed7fb45cda79eea80711aa07d.svg",
+"https://static.wixstatic.com/shapes/990059_26ce40d1fc9846dea12dfa91140ef901.svg",
+"https://static.wixstatic.com/shapes/990059_2d1d5000bed445e6b89a6ce4b7d705b4.svg",
+"https://static.wixstatic.com/shapes/990059_f1fc04181a2b4b619babfaa858fa5cb4.svg",
+"https://static.wixstatic.com/shapes/990059_efe16bf4be884f4fb7b6faa722bae175.svg",
+"https://static.wixstatic.com/shapes/990059_ec9919f346db4cb6b2839d0564e663eb.svg",
+"https://static.wixstatic.com/shapes/990059_1d2dcdd9a9f74f329cf64b530e61c8d3.svg",
+"https://static.wixstatic.com/shapes/990059_52385164fd6f4d7bbc261be594756a80.svg",
+"https://static.wixstatic.com/shapes/990059_b743d4c42b6345c19dbf32686f25c1cc.svg",
+"https://static.wixstatic.com/shapes/990059_656dbda582b14470b99a3e4118e40101.svg",
+"https://static.wixstatic.com/shapes/990059_6a898aa576fc4487a26d42a71838ec64.svg",
+"https://static.wixstatic.com/shapes/990059_eb9b6d6fb37b4c0c986b40c6a3de1a7a.svg",
+"https://static.wixstatic.com/shapes/990059_161a4eb25c994accb431a1038fd81410.svg",
+"https://static.wixstatic.com/shapes/990059_81c30e03ef134f32a92d9236df31fcb2.svg",
+"https://static.wixstatic.com/shapes/990059_db5b16cb12fc40918ceb3bd1dbfc9e8b.svg",
+"https://static.wixstatic.com/shapes/990059_78aeb529d34e40acb9b5df4a2ddca63a.svg",
+"https://static.wixstatic.com/shapes/990059_9736e32fb1c6477ca787f870c6c71aee.svg",
+"https://static.wixstatic.com/shapes/990059_1f06030788bf4bcc89ea88f75c49557f.svg",
+"https://static.wixstatic.com/shapes/990059_edb45e1a5fda44478c646b37b3319894.svg",
+"https://static.wixstatic.com/shapes/990059_9988c3f4bdbc4aeb8e0c7d6a49adf6d5.svg"
 
 ]
 },
@@ -826,6 +951,48 @@ urls: [
 "https://static.wixstatic.com/media/990059_3d39d834be8545b3b546e6a034ad9bd4~mv2.png",
 "https://static.wixstatic.com/media/990059_eb7ee98d4cee4adf8c167cba00b16216~mv2.png",
 "https://static.wixstatic.com/media/990059_3448cf82d7b249e8b6e74c51ea5bbfd6~mv2.png"
+
+]
+},
+{
+name: "Hühnchen",
+urls: [
+
+"https://static.wixstatic.com/shapes/990059_154556a2f6784785b0be1a1bf8512909.svg",
+"https://static.wixstatic.com/shapes/990059_5d41d90caa8b4dc5918bfd66b4d8d17d.svg",
+"https://static.wixstatic.com/shapes/990059_b87f6570fa094736b3069f3b7f8b3f2f.svg",
+"https://static.wixstatic.com/shapes/990059_9612ea3959e04c8db1ff72bc87952de8.svg",
+"https://static.wixstatic.com/shapes/990059_c6d95fd9570d473f931f17629758a57a.svg",
+"https://static.wixstatic.com/shapes/990059_4e206a07296a4afbb4560533b4c0bccb.svg",
+"https://static.wixstatic.com/shapes/990059_154d5e9e95b44c1c895c1d51e9d5954e.svg",
+"https://static.wixstatic.com/shapes/990059_aa1444182f5a498eb50349dbbf8fd86f.svg",
+"https://static.wixstatic.com/shapes/990059_27b2f9a4293c45119f98b197dbe14634.svg",
+"https://static.wixstatic.com/shapes/990059_3576e79698f8486db1c91fcecbefbea3.svg",
+"https://static.wixstatic.com/shapes/990059_745086df48904513915e10086e924a47.svg",
+"https://static.wixstatic.com/shapes/990059_78b82419704141e381c19391290d7710.svg",
+"https://static.wixstatic.com/shapes/990059_9d9e9d75562d4c46968d9850cfec8303.svg",
+"https://static.wixstatic.com/shapes/990059_20f8bcc9367c419498985e61adcf0ae1.svg",
+"https://static.wixstatic.com/shapes/990059_6c231d6d3f324deeb0d5a471afd75969.svg",
+"https://static.wixstatic.com/shapes/990059_e5a6cb0f30b445f797305a62a3b8aa92.svg",
+"https://static.wixstatic.com/shapes/990059_0f499c6cd46143c1b12bd119bf49ca6f.svg",
+"https://static.wixstatic.com/shapes/990059_a711b618af564534b396a70f13abfda6.svg",
+"https://static.wixstatic.com/shapes/990059_000dc126b3bb409aa57e8b3f739369f7.svg",
+"https://static.wixstatic.com/shapes/990059_bededdbe9f6c4144a9eb4f7c63fb06a8.svg",
+"https://static.wixstatic.com/shapes/990059_36c1681a6cc74ebebe1c27b581c77bb2.svg",
+"https://static.wixstatic.com/shapes/990059_2f6051562fc64e0e9c20ab0909ce73b1.svg",
+"https://static.wixstatic.com/shapes/990059_bd88a38c1c6949f9b44035a3d4b77ca0.svg",
+"https://static.wixstatic.com/shapes/990059_67743ef987ce4ee0ba7cf17f20b9e1ea.svg",
+"https://static.wixstatic.com/shapes/990059_707c3b5080de4a01a5d6bb1174ae65de.svg",
+"https://static.wixstatic.com/shapes/990059_9865ae0dfa4643c2879a93d7361ac60c.svg",
+"https://static.wixstatic.com/shapes/990059_981b8181b4b8482ca7253e5992025c8c.svg",
+"https://static.wixstatic.com/shapes/990059_8c728b80c8b9409a8c7dddff8d0c2c79.svg",
+"https://static.wixstatic.com/shapes/990059_5440c55fd62a4b3e8535249ef2aed1bf.svg",
+"https://static.wixstatic.com/shapes/990059_ed29998de9c642c39151c4215d8ac954.svg",
+"https://static.wixstatic.com/shapes/990059_e4f84df320914fa2a46bbd3c9031083e.svg",
+"https://static.wixstatic.com/shapes/990059_d7eab42129cc498bae96184717f2ce8f.svg",
+"https://static.wixstatic.com/shapes/990059_7e04ead929e64d31bafa3683e067bb07.svg",
+"https://static.wixstatic.com/shapes/990059_1485e1cb13e34cbc939c7bfe8304bab5.svg",
+"https://static.wixstatic.com/shapes/990059_c4d36af1e1314b7bbbb2a11c1c3a8a79.svg"
 
 ]
 },
