@@ -1813,6 +1813,33 @@ function getRandomStickerUrlFromGroups() {
     return allStickers[randomIndex]; // { url, group }
 }
 
+function addRandomStickerOnLoad() {
+    const randomStickerData = getRandomStickerUrlFromGroups();
+    
+    if (randomStickerData) {
+        // Calculate the center position of the canvas
+        const canvas = document.getElementById('canvas-container');
+        const x = (canvas.offsetWidth / 2) - 50; // Center it horizontally
+        const y = (canvas.offsetHeight / 2) - 50; // Center it vertically
+        
+        // Add the sticker to the canvas
+        addSticker(
+            randomStickerData.url, 
+            x, 
+            y, 
+            100, // A default width for the sticker
+            null, // Let height auto-adjust
+            { group: randomStickerData.group, suppressSave: true }
+        );
+        
+        // Save the initial state to the history
+        saveState();
+    }
+}
+
+// Call the function on page load
+document.addEventListener('DOMContentLoaded', addRandomStickerOnLoad);
+
 spinBtn.addEventListener("click", () => {
     let stickerImg = document.querySelector('#canvas-container .sticker img');
     if (!stickerImg) {
