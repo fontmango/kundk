@@ -1873,23 +1873,28 @@ const spinBtn = document.getElementById("spin-sticker-btn");
         }
 
    
-   function getRandomStickerUrlFromGroups() {
+ function getRandomStickerUrlFromGroups() {
     if (!stickerGroups || stickerGroups.length === 0) {
         console.log("⚠️ No stickerGroups available");
         return null;
     }
 
-    const allStickers = stickerGroups.flatMap(group => group.urls);
+    // First, flatten the groups into a single array of objects
+    const allStickersWithGroups = stickerGroups.flatMap(group =>
+        group.urls.map(url => ({ url: url, group: group.name }))
+    );
 
-    if (allStickers.length === 0) {
+    if (allStickersWithGroups.length === 0) {
         console.log("⚠️ No stickers in groups");
         return null;
     }
 
-    const randomIndex = Math.floor(Math.random() * allStickers.length);
-    const chosen = allStickers[randomIndex];
+    // Now, select a random object from the new flattened array
+    const randomIndex = Math.floor(Math.random() * allStickersWithGroups.length);
+    const chosenSticker = allStickersWithGroups[randomIndex];
 
-    return chosen;
+    // Return the object containing both url and group
+    return chosenSticker;
 }
 
 spinBtn.addEventListener("click", () => {
@@ -1899,10 +1904,10 @@ spinBtn.addEventListener("click", () => {
 
     if (!stickerDiv) {
         console.log("ℹ️ No unlocked sticker found, adding first one");
-        const randomGroup = stickerGroups[Math.floor(Math.random() * stickerGroups.length)];
-        const randomUrl = randomGroup.urls[Math.floor(Math.random() * randomGroup.urls.length)];
-
-        addOrReplaceSticker(randomUrl, randomGroup.name);
+        const randomStickerData = getRandomStickerUrlFromGroups(); // Get the object
+        if (randomStickerData) {
+            addOrReplaceSticker(randomStickerData.url, randomStickerData.group); // Pass url and group
+        }
         return; // Exit after adding a new sticker
     }
 
@@ -1926,18 +1931,15 @@ spinBtn.addEventListener("click", () => {
     let spinCount = 0;
     const maxSpins = 15 + Math.floor(Math.random() * 10);
     const spinInterval = setInterval(() => {
-        const nextUrl = getRandomStickerUrlFromGroups();
+        // --- FIX IS HERE ---
+        const nextStickerData = getRandomStickerUrlFromGroups(); // Now returns an object
         
-        if (nextUrl) {
-            console.log(`🔄 Spin ${spinCount}: ${nextUrl}`);
-            stickerImg.src = nextUrl;
+        if (nextStickerData) {
+            console.log(`🔄 Spin ${spinCount}: ${nextStickerData.url}`);
+            stickerImg.src = nextStickerData.url;
             
-            // --- NEW: Update the sticker's group data attribute ---
-            // Find the group name for the new URL
-            const nextGroup = stickerGroups.find(group => group.urls.includes(nextUrl));
-            if (nextGroup) {
-                targetStickerDiv.dataset.group = nextGroup.name;
-            }
+            // Update the sticker's group data attribute directly from the object
+            targetStickerDiv.dataset.group = nextStickerData.group;
         }
 
         spinCount++;
@@ -2518,16 +2520,23 @@ addStickerBtn.addEventListener('click', () => {
     // Pass both the URL AND the group name to the function
     addOrReplaceSticker(randomUrl, randomGroup.name);
 });
-        window.addEventListener('load', () => {
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-            updateCanvasDrop();
-            const allStickers = document.querySelectorAll('.sticker');
-            if (allStickers.length === 0) {
-                addOrReplaceSticker(stickerGroups.flatMap(g => g.urls)[0]);
-            }
-        });
+
+
+
+window.addEventListener('load', () => {
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+    updateCanvasDrop();
+    const allStickers = document.querySelectorAll('.sticker');
+    if (allStickers.length === 0) {
+        const randomStickerData = getRandomStickerUrlFromGroups();
+        if (randomStickerData) {
+            // Pass the URL from the object to the function
+            addOrReplaceSticker(randomStickerData.url, randomStickerData.group);
+        }
+    }
+});
 
         let isDragging = false;
         let startX;
