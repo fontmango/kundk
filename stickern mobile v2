@@ -3020,7 +3020,7 @@ function showGroupOverlay() {
             e.preventDefault();
         });
 
-        // ✅ The crucial change: call showStickerOverlay directly without preloading
+        // The crucial change: call showStickerOverlay directly without preloading
         groupIcon.addEventListener('click', () => {
             showStickerOverlay(group.urls, group.name);
         });
@@ -3042,16 +3042,7 @@ stickerPickerBtn.addEventListener('click', (e) => {
     }
 });
 
-// Update the main event listener to call the async function
-stickerPickerBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (groupOverlayContainer.style.display === 'grid') {
-        hideOverlays();
-    } else {
-        // Call the async function without an await here
-        showGroupOverlay();
-    }
-});
+
 
         function updateCanvasDrop() {
             const canvas = document.getElementById('canvas-container');
@@ -3082,6 +3073,7 @@ stickerPickerBtn.addEventListener('click', (e) => {
         let touchOffsetX = 0;
         let touchOffsetY = 0;
 
+// This function is now responsible for opening the overlay and handling the loading effect.
 function showStickerOverlay(urls, groupName) {
     hideOverlays();
     stickerOverlayContainer.innerHTML = '';
@@ -3105,17 +3097,16 @@ function showStickerOverlay(urls, groupName) {
     stickerOverlayContainer.appendChild(header);
     stickerOverlayContainer.appendChild(contentWrapper);
     
-    // ✅ Show the container immediately for instant feedback
+    // Show the container immediately for instant feedback
     stickerOverlayContainer.style.display = 'flex';
     
-    // ✅ Load and add stickers one-by-one
+    // Load and add stickers one-by-one
     urls.forEach((url, index) => {
         const sticker = document.createElement('img');
         sticker.classList.add('overlay-sticker');
         sticker.draggable = true;
         sticker.dataset.url = url;
         
-        // Initially hide the sticker to prevent a blank box
         sticker.style.opacity = '0'; 
         sticker.style.transition = 'opacity 0.5s ease-in-out';
 
@@ -3125,32 +3116,26 @@ function showStickerOverlay(urls, groupName) {
             e.dataTransfer.setData('application/json', JSON.stringify(stickerData));
         });
         
-        sticker.addEventListener('click', () => {
-             const group = stickerGroups.find(g => g.urls.includes(url));
-             addSticker(url, group ? group.name : null);
-        });
-        
+    sticker.addEventListener('click', () => {
+    const group = stickerGroups.find(g => g.urls.includes(url));
+    addOrReplaceSticker(url, group ? group.name : null);
+    hideOverlays();
+});
+
+
         sticker.onload = () => {
             sticker.style.opacity = '1';
         };
 
         contentWrapper.appendChild(sticker);
         
-        // Use a short delay before setting the src for each sticker
         setTimeout(() => {
             sticker.src = url;
-        }, index * 50); // 50ms delay for each sticker
+        }, index * 50);
     });
 }
 
-        stickerPickerBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (groupOverlayContainer.style.display === 'grid') {
-                hideOverlays();
-            } else {
-                showGroupOverlay();
-            }
-        });
+       
 
         document.addEventListener('click', (e) => {
             if (!groupOverlayContainer.contains(e.target) && !stickerOverlayContainer.contains(e.target) && !stickerPickerBtn.contains(e.target)) {
