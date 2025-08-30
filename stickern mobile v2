@@ -1417,6 +1417,566 @@ button.active {
         ]
     },
     {
+        "name": "Flamingo",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_00ea1390-2d8f-4770-972c-944463c8dc1a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_14ca6aa8-83ea-4091-bd97-76abf8cc0c2e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_1599eebb-ef25-4cd6-9e30-246659cc0d4e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_1d4ed7e6-6b4d-4fc4-bcda-6b94bb8ee7d4.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_21812824-3db2-4b73-aa96-58ec7973e79c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_399860a1-4637-4cfb-add0-1ae549e1171b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_5583ff4c-1d12-47b8-9852-a07de2339e47.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_594703c1-d2fe-44d5-b721-f52ae6f44654.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_5c43ca9d-cc04-434e-9418-8a95395ba587.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_5f30ada1-5ec3-4fd2-86f0-49e2856c0390.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_5f6137e3-295a-475a-8852-294527822a3a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_70f9213f-548b-49d6-83b6-e5fcbc7e5535.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_7126352b-65d4-4aca-a457-73b0c20ea790.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_754262ae-0ac6-4db3-aa1f-0346353d8747.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_7b23a185-843d-4518-91c0-d7e900b2a7c9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_7bdd5507-1110-4183-a557-c42b30547f88.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_80c3710e-54c6-4466-bcf9-acfab31f8734.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_8d005a7b-4179-4485-ad4a-1cedbf1df3c0.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_8d34516a-e9a3-4664-839e-e04a341faea8.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_8d44ebb0-1b9b-4063-b902-f2d8e2bc5b28.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_8deed423-86b1-401c-adae-8431c4cfc0cf.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_93817b6e-0a8d-47d5-ad65-12ff97397026.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_9ad30def-6246-45e4-86ba-b7d33cad1995.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_9d495a4b-6a8d-4eed-9a80-21c85a90e612.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_a34247f6-589c-4594-bd6f-373d0796cd9f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_ad322203-c3f2-4cc1-8753-19a705643351.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_b33a573e-f2ea-40cb-ae6c-e12b4de4c3a0.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_b7b79a76-d804-4d7d-b893-0d9c2633418d.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_b9646a17-0f89-4d48-9f61-26f39967f867.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_c0dc5a5b-4606-4436-a255-27f2062fb9a7.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_c64bc0ee-c9a1-4c16-b1eb-903f3be2e6de.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_c6c7a82b-cced-47a7-9e1d-1f1fd21e9589.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_ca6b074d-199f-4846-992e-08e244073789.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_eb0eb715-7648-429d-ab35-e313af33023f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_fe028c8a-0ba1-4af4-a1d4-262a2e3efb1d.png"
+        ]
+    },
+    {
+        "name": "Fox",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_0170d101-f010-4ac3-8713-e12926f2fa87.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_072165bf-9582-4fc2-a9df-83fd2cad8e2c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_08684489-246c-4ffb-ac58-a957cded8c35.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_1050a872-834d-4d43-af20-ecf26cbd8652.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_194d88e9-6f16-41f0-916a-c9a5fbc60d4a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_319b200a-2c3d-4a07-9337-ab42f96608bb.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_3477075d-bd23-4898-a43b-13f443ad8651.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_3d39cf1f-1d75-434c-aea3-3a7edf605ec4.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_46193909-a26d-4331-9843-3f8dcd7be8d1.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_46e14242-d268-41bb-b47c-0d67c765860a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_49482b51-6b9b-40c7-9811-6052d5807008.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_4fa64a6f-4cff-4e34-a71f-3a26aafdb2c7.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_50d0a3f0-eba3-4b53-b765-81260867718c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_5c369de4-3a49-426b-8ab0-e8be5afc8db2.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_6619811f-86cb-405d-b866-7558908f5b0c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_66acfbe0-1db8-4b8d-a236-e4e9707646fb.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_7247aea7-7247-428d-9bbb-b9f8255411d8.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_74a42042-6651-4eef-b4ba-ce046d91c4bd.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_74e5a76c-a75b-4621-b78d-507cd1511bbc.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_75194e28-b08a-4e0d-9b71-d4fcc76d97bf.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_7f419c9b-438e-4185-98cb-6ea3ba627f4e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_8412d004-3019-4c4d-a656-2f4eac260ceb.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_848b259e-bdb7-46a3-ab15-1abdf68f652a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_9a4d4522-36a6-4770-8c50-869aeabdd725.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_9c1d339c-c076-4b8d-86f1-4672460aa055.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_9c3d972a-9fd5-4d92-a86c-74cdf616cac3.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_b3da232c-9710-40d0-ba7a-40c378d9f390.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_b56da00f-293c-4020-b804-e74dd2e06d3d.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_b7b43ede-ee54-4494-bc0d-23dc10b38467.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_bf4edc71-6599-4a5f-89f9-4ac10a88b423.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_d56b4b78-ea36-4d1d-8216-ef70e5015617.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_d5c89d5f-dc25-4c65-824b-2eafd3b57716.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_d6fc9f72-70c2-44f3-9bfe-2dc3a482cb16.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_e712d47e-7e99-4afa-a90d-01855d852f2f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_f6e7b51d-1909-4383-a770-5da218c27f4a.png"
+        ]
+    },
+    {
+        "name": "Fries",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (1).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (10).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (11).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (12).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (13).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (14).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (15).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (16).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (17).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (18).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (19).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (2).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (20).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (21).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (22).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (23).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (24).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (25).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (26).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (27).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (28).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (29).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (3).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (30).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (31).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (32).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (33).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (34).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (35).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (4).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (5).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (6).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (7).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (8).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (9).png"
+        ]
+    },
+    {
+        "name": "Galapagos Turtle",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_010ac7e9-3a94-408b-adaa-3205f880a4cd.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_07b02460-5302-4413-ac78-3ff5a741bb37.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_08b56c34-aaa7-4a76-af2b-808dc393e649.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_1081e66a-7807-4a84-af21-cb88b3445e46.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_11728aaf-9109-4963-97d8-8fe3f83b908a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_18384f36-1e34-43dc-9110-2400d1f5d29f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_226fbc0e-34ba-4e88-a2b3-640f263b1b40.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_255d4681-811d-4ffc-beaf-e812e66d4f9c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_2e666bd8-b09f-4aef-a265-fbe11d0c238e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_3374e588-a3e2-4a6b-bd14-b8ec271c4a3f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_39b657cb-9716-407b-bcdf-bca8f913ae2d.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_508e89b5-7fca-4f7f-a190-7bba40c16f00.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_51619129-9492-4220-ad28-cba9be257beb.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_53373f87-404a-4f89-b97c-9ee4223bfa1a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_53ed6077-e5ab-4f45-812b-e8ef702f6398.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_558f32e7-aadf-45a6-8cbf-0fc395c37418.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_5c913a4e-19ce-46ce-8f3e-3cfcfb798bbe.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_5f20d38f-9242-4879-b6c3-d56269c33fac.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_6d6582fb-e5bb-4fd7-9de2-e0ffcc40d3a9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_7913cc03-10a5-4229-ac49-7af93420bb7f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_79920bda-992c-47fe-9d2c-32f47dde7a95.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_82053dd6-374a-4d2c-8d65-669d115da6aa.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_8b0c6951-55ed-4f3e-b393-f8dae8691f31.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_8d67971f-7d6a-415e-909c-a3140d1da2a7.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_96ca78d0-03a3-4260-a2c3-701164496060.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_9851aff0-d353-4099-b653-ede625daba78.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_9b93a49a-dbd9-4016-946b-a5b8076be474.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_be8ec800-4c41-453d-9b12-9fa98347bffe.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_c41fdb2a-d864-469d-b3ff-3fe5f996097c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_cbcfc7d9-f321-4b5c-94ce-11c39593bfcc.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_cf2241b0-0ef3-4f6e-833e-7eac2c0fcc7b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_d7970b7d-af78-47c4-b19a-077f599aa36f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_dab5b3e3-a2b6-4c8f-9324-edac9a6de81b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_ee11b5cf-7ec9-4ced-94c2-4ce445fdcf02.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_f96be5a4-4301-4632-b286-db7617d3d75c.png"
+        ]
+    },
+    {
+        "name": "Ghost",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_08dbf8b7-dddd-411b-a4a0-073d5f952ca5.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_0e6df3a1-8293-4019-907f-04d2283cc976.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_1539c6e2-c1de-4f83-a280-b6e2e38e27b6.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_2ed8c73b-b6f9-42be-bbee-7549018e8d77.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_340b2b27-b312-4181-a8f1-f41444c2d406.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_36611622-4902-44db-b72e-ecabe7201059.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_3a575a63-48ad-403d-890a-5ad743c1e102.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_3ae0d932-9990-4a18-be50-fea5c1ad6c7a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_3cbe91ee-e5f1-4b9b-b5ef-8c437cee08c8.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_3f825fc9-08e1-41a6-9490-f946655fe812.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_424e8af5-528b-43c5-b467-c861d702273b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_47cf02ba-4b01-4fd7-8058-72a461c4169f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_519e8aa0-9deb-4827-ab92-0888af035af7.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_57ee8a54-cac4-4254-9089-6d5fe8e4d7db.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_5a79c826-05ae-4e3c-bc0a-6ffacaa45c23.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_63f55d5c-74ed-45be-8781-f3154fddfad8.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_7c424265-8348-4cdb-a086-94f8828be357.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_7dd85bb9-6398-4211-ae8b-ae5a53d34eef.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_7e510b5f-d2be-40f1-b3f0-837707c7508b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_84b45940-e0d8-4131-9458-7ef15c64d067.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_8cdd475d-fa0b-423d-8fd4-855869a4a06b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_a17fd94b-d2ff-48e0-801d-a6473040f2cd.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_a69705ea-4b1d-4f91-9ae4-82cc78e1509b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_aab48e94-9aaf-4f11-904d-b1886668c12e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_ade6229d-7359-4c97-be3a-7b868a79fa81.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_b84bf237-47f1-49d0-a8af-1b2e7acee8e9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_b9fad123-ea3c-4575-9e0c-8ce83a0b90c2.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_bae3d0e1-b250-4adc-9b12-a9def2545e9c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_be68b495-5ab7-4254-98f7-761cb7410096.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_c26bfe2e-e67b-4e46-bc47-9cd4a441ade9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_d0b490cc-7408-4b80-bf0f-6fe9463d8988.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_d29c7730-2f28-4ee7-bbda-e5536b76b48c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_da172fdd-b4b0-41fd-9378-e306fd93b4b4.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_e4537b6b-ee5d-4caf-9801-c55b9910c661.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_f52f4e1b-77e6-46a9-8958-2d4cec907647.png"
+        ]
+    },
+    {
+        "name": "Giraffe",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_02899d4a-98fd-43e9-b83f-5a2426c82c72.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_04e8105e-d565-4750-9eb0-4f611858200d.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_08814338-9f14-4b92-866c-57ce29b1eec1.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_0f65143c-7cfb-4979-b692-e714165b548a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_1963eb1c-9c91-4c46-b010-4d8d98f6a8ff.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_22a90560-4c21-4f27-9593-bc08d06704c2.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_2d1d13f1-0015-461c-b5ba-002ba5fa6de8.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_2e9c505d-d4f3-40d9-8dcf-87219a02fd2b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_33f97675-fcdd-41ca-a576-476264d931af.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_40b044d2-0277-49ef-888b-7c126a11f545.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_425f70d5-6b86-4640-b482-63b9cc4b6bb4.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_45f022a3-0f6e-4505-9ed9-4749e19a633b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_505f7198-f9fe-49af-aff2-d4c5c3aa9fa9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_508a68ff-8972-4c89-b4d3-f328cd84ed08.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_5d32fa62-0512-4594-a8c0-cb395e5f07a6.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_5f893b43-a207-44c5-8cb4-f859912c26ad.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_63fbb5ab-e6f8-4d2a-b3b1-f353db2b4aa3.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_64d1cc2a-9cc5-45eb-8829-1874fbbcfda0.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_651a55ab-f2a1-4c0d-9682-82ec1f40fb74.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_67ddff54-7ad0-40fe-8803-cd1be90c3ffe.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_7038696c-4130-44be-8408-1d47688e0921.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_81cec7fb-6c85-4bf8-87c3-f4b4e8635ebd.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_945d247a-765a-4781-adeb-9035cbd9b613.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_9a7651e0-8211-4219-a8c0-d9362538411f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_b25b3039-0d7e-4c20-8e3d-d8f153836722.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_b2e1e497-079e-47ac-9f66-71a7314d8a6b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_bf1ef6a6-c8cf-4ef6-a221-d42530ba5522.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_c4e99c22-1415-4255-8b0f-220a3de7e422.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_c5b8c8c3-edd7-4286-81c9-a7cf021d6261.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_ca217490-2b4c-4d26-8e4b-e69e8d0fdd56.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_cf5a5f25-dbd5-48f9-99b6-587877348b82.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_d15435f8-2f1a-41f6-8824-bacc27b26c13.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_ee58a837-3089-494a-bcc7-a46d4119873f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_fbae750a-30c5-46ed-a78a-d1e5d17dbd47.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_ffae7e90-bcf1-4c4f-983d-ec257ea4dcb1.png"
+        ]
+    },
+    {
+        "name": "Grim Reaper",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (1).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (10).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (11).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (12).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (13).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (14).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (15).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (16).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (17).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (18).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (19).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (2).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (20).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (21).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (22).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (23).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (24).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (25).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (26).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (27).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (28).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (29).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (3).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (30).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (31).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (32).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (33).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (34).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (35).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (4).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (5).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (6).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (7).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (8).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (9).png"
+        ]
+    },
+    {
+        "name": "Guinea Pig",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_05cd163e-d843-4336-8868-f07698fff3ea.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_0770f92a-ecd1-4b8e-8871-7c265c38a763.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_0e613773-777b-408a-aef3-6aeab2632477.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_10ede5e3-8d73-4183-868c-bd84dc99dc27.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_12835930-616a-465a-9bf3-17b54086b205.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_144b89ca-095b-4664-805e-3c4d27f69871.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_14dc1b8f-7acb-4528-bc71-f9348c31bec3.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_23fb86ac-f2f5-4f2c-ab9b-210fe745023b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_2bdc3d31-f563-4f46-8e6f-f8aee2aac443.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_30c11100-b6e8-43f2-860f-85c410a887fe.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_4405ce44-c224-4924-be2b-12c2496a9c3b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_4848849e-ab8e-48a9-8e59-1969bb79f318.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_54336420-4160-4168-a797-82720bc07889.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_5aaf0559-c999-4a6a-bfe3-a0ca6c986c2f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_63baa836-03a4-40a1-a8c9-f0dbb3bf7db3.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_7417889e-f3e7-4027-a797-9fa8d902243a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_8e36054e-56ed-49af-bacd-b65141799c77.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_8f784148-248e-4dab-9d1b-239e27d2421b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_90936bf7-9169-431a-82af-5991ff4fdde5.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_94bd72bd-156d-4359-8213-2f57e343a776.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_956932f1-b7a9-4872-ab47-ee59302bb6a1.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_a330f5e9-ef98-4f26-8c2a-b51b1ba67e55.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_a3f86c1c-a7ad-4598-a3d7-41b78032c7f0.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_ae40c1e2-1fdd-4de0-8c6c-fe4d3967b267.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_b961bf60-5c38-41ef-bb23-f5d259546aeb.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_bb1c54f9-ed88-4f14-b8f1-09d7d21475ac.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_cf6b52a5-5f7d-468c-b470-598c4141a574.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_d08ac368-9e36-4ffb-91d4-03ef20605f22.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_d4872a31-d583-411d-8743-c54bfe53bb82.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_dea7879e-f0fb-41ec-adef-04c8b931cdc4.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_e30d5047-aff2-47c0-ba1d-176f708ca8e8.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_e4787fad-28e8-4da0-a7a0-ca3575a93bf2.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_e4e50c4d-7099-4dde-945c-921cfd52b11b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_f005783a-8bd9-4676-8ec0-dbf6d98d072c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_f7dfdf95-ed71-467e-82e6-75ebad8835d5.png"
+        ]
+    },
+    {
+        "name": "Halloween Sticker",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_00fdf3ae-22f1-4411-8017-3b015a04437d.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_0e1fff31-43ae-4788-b06a-3fef6dbc1913.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_20fe690a-4e0b-4e45-9475-d6fb2fc49a49.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_236e7f4f-ea99-4159-ab31-fb2bcf471835.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_32af37a3-9e8e-4a85-a07c-83c9d3298596.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_374059c9-8675-4207-af43-f8fab68a41d9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_3e10f734-6398-4aac-916d-2716d478334c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_43d950cc-b215-4326-9eda-d83b88827a5d.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_477dd968-bf14-45f5-b55d-433464a49f35.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_4abddf2a-6bba-4f52-b839-4194da6b42f2.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_4d0eb1b4-d5c3-4853-82ee-33034ad48306.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_518a8128-424f-42e8-af9a-6840b4169fc6.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_6f91208c-1bcd-4d35-a078-fbefc70878c5.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_7080170b-8d0f-4811-9c03-e08805bc7c7b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_7eec1940-cbd9-4c20-8a79-0dc4b8ccf2df.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_8244990b-8eaa-4629-bcea-8122df61f164.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_87501974-23bf-4c3a-8b31-58f22b5f3e61.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_9adf720b-53e9-45e5-b634-22552aec08a5.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_9c5a9f23-06fd-4aa0-b26f-a3d0702589d8.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_a3ade5fb-0d5d-4709-aef8-c9ec94de896d.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_ae193742-fa1f-4484-a73e-e4d1b82501d9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_b2a94431-8eac-4a56-972d-9f745f5410b3.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_b4dbf193-62f0-492f-b92f-23fb2dc846fa.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_c6d0d5d5-8a29-4244-81ae-17e35b906e75.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_d008b009-094b-468c-978f-5e45ea7f37ec.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_d7fad8a6-7ed8-4242-8bcf-75f0d876640b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_d80adcfe-7e9f-44ad-bcf6-db4c8b3ef71c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_e2a9bced-a742-4fde-af32-074a49904d27.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_e4a4d342-5aaa-4d88-97a2-f1e0dcc96d61.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_ebeb2409-00e2-4728-8c81-6cb4e88a3cd8.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_f156c2b8-b672-40ae-8b6b-bbf36b732f7b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_f18de872-c91b-4fbc-a20e-c9281907843b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_f23830a4-461e-48f1-a3bb-11d7e11e3b84.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_f6d87e3a-0c06-4abf-86ea-4208fe473da4.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_fc26954c-5af7-4eb6-816a-02241e774513.png"
+        ]
+    },
+    {
+        "name": "Hamburger",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (1).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (10).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (11).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (12).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (13).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (14).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (15).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (16).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (17).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (18).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (19).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (2).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (20).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (21).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (22).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (23).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (24).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (25).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (26).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (27).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (28).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (29).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (3).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (30).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (31).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (32).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (33).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (34).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (35).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (4).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (5).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (6).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (7).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (8).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (9).png"
+        ]
+    },
+    {
+        "name": "Hamster",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (1).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (10).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (11).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (12).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (13).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (14).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (15).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (16).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (17).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (18).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (19).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (2).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (20).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (21).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (22).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (23).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (24).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (25).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (26).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (27).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (28).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (29).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (3).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (30).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (31).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (32).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (33).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (34).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (35).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (4).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (5).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (6).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (7).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (8).png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (9).png"
+        ]
+    },
+    {
+        "name": "Hedgehog",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_02a76faf-8d3e-40d5-854e-a148b732e7ac.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_0bf073d4-074d-4950-a4b1-98641c7893a6.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_1f775748-97d3-493c-83b5-4bd86ae3491f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_254b6fff-9e98-47a1-a9a9-fea394f7b08e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_293f3070-6957-48e8-a5aa-142cdddca365.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_2f6f8b00-a967-48e5-9dd9-d0353d224a47.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_37d3d74d-d21f-4ca2-9958-b49e13865474.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_5b1a3181-cbf8-4425-b36f-2e2dbd0a7307.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_7a27fdf1-fe9e-47b6-a63f-dc58cef7c698.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_8b392d65-6ff3-4e8d-b28e-aeaaa9d60782.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_9375fbad-3e9e-4252-b889-4dcc17f72a83.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_9cd27721-610d-47f3-8a6f-117f5dbcb9f9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_a374c4f8-2f9d-451a-944a-50a1d5244ce7.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_a3e93f0a-0596-42e1-9a82-a00bd00557e4.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_a757669e-6c50-4c5e-b182-d1b1a9d8f083.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_ae3db679-66c4-43d6-8545-2c6bf547b9ac.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_ae82e9b0-817c-45a2-9c35-e80f90fb988a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_aff765d8-f709-45d4-ba75-43c172206db1.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_b86b90d3-ccfd-4c96-a22b-e93d5df52b8e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_ba5d747f-b76b-4e32-9289-283f9780f304.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_bb1fb831-dbd1-4590-bb01-0b06b0092563.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_bd50101a-a650-4353-95dc-37a5cc33c52e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_c5c36e2b-adca-4841-bfeb-a362c5a2fedc.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_d05352bf-5a7f-402d-8aad-fde5eb5e401b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_d3d0015e-9571-4ab0-b21c-cb515e684ca8.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_d5e26f1b-6cff-4135-a8a0-e7fe3f5370e9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_d8d774b7-96ae-4e7c-a8ee-0d5e37412685.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_e21ba0bb-75a2-4d56-8951-96ed8939f5bf.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_e21e1fbd-6ca1-44d8-8457-90aaa7dd3a14.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_e89ce528-e293-4e2d-86aa-2550b425cf1d.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_e96569d4-5d15-4317-b5d0-5d66e93544c6.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_e9c8ce11-ce63-4f05-aded-91e4cbc408b4.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_f2440276-051e-4ca0-89fb-dbba4e6a69ff.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_fab50852-c881-4b79-8ba8-dba6ba76b71e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_fda04b81-5c2e-410d-935e-26c73bf05bb4.png"
+        ]
+    },
+    {
+        "name": "Historic Figures",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Abraham Lincoln.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Albert Einstein.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Aristotle.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Attila the Hun.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Charles Darwin.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Che Guevara.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Cleopatra.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Confucius.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Francis of Assisi.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Frida Kahlo.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Galileo Galilei.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Genghis Khan.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/George Washington.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Ghandi.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Guru Nanak.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Isaac Newton.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Jane Austen.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Joan of Arc.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Julius Caesar.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Karl Marx.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Leonardo da Vonci.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Ludwig van Beethoven.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Marie Antoinette.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Montesquieu.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Mother Teresa.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Napoleon.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Rene Descartes.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Shakespeare.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Siddhartha Gautama.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Sigmund Freud.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Simone de Beauvoir.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Sim\u00f3n Bol\u00edvar.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Socrates.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Voltaire.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Wolfgang Amadeus Mozart.png"
+        ]
+    },
+    {
+        "name": "Honey Jar",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_1460b305-81f2-4cce-8d23-ae874f215872.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_179a007d-b5e1-454b-92be-98aa2db2111e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_1bdf5f39-9f83-4259-8c73-80f1b421fef1.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_1ea21d68-4831-41dc-b85f-e53cc89034f3.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_22ad06af-06e7-4759-93b7-0463da8c499d.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_25e0e028-65e3-40f9-9a35-32fb2eaf6d54.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_2927a7ff-8cf1-4484-ba9f-244997a37d1f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_2d5edf97-a3cc-41a9-a6ef-d92d47932822.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_489b6bb5-7e31-42e3-bd15-c382908b9499.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_4ba99683-9752-4996-aa1f-cad5a2441164.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_541a119a-f818-4c3c-a2de-b63dde9de817.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_569ebf4f-ea53-40f4-ab1d-a2e0f75ecbc0.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_61d479e8-ee99-41dd-a5b7-2cf479b223f5.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_62762bfa-5c7d-4a42-b1d8-0b424d171b1f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_77219810-2e94-4a4f-be79-1663826a770a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_7b7051fc-aa37-4f01-9ea7-d3c6641778e8.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_7de6eebe-de8e-4130-827d-efc004036da4.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_8d7e02de-444e-4ebb-b8cc-dd6a490ab1c9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_8db6533f-930d-4b2e-a397-465766ebe655.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_9ae061fe-3b11-4c14-b044-8af1e71e3ed9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_a3c2e9a1-8be3-43ae-a189-34e3f444396e.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_a80fea24-587e-446f-ba77-5de8bc96932a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_a978aa6c-2618-4a52-8b88-3ff63b3c3119.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_b862deaa-6018-443c-888d-8012d7d70d98.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_bd1dbd67-d869-4eb4-b1f6-21132844b362.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_c31f1ee1-3188-44af-974c-2b816f2c1332.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_d15dec9a-890c-4128-aabd-6997b6023e47.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_d8ea3f9c-ae9c-4162-848b-47e71f6a5a12.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_da3dda59-41b8-423f-af93-d07edb1cbe72.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_dc23a5d3-b2a0-4a6d-8ff8-32182ed4227f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_e1a2c538-3cab-4c1c-ac4a-ca4bcd5342ab.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_f360448c-9cbe-4ab2-bdd8-9bd6664720e9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_fa5d9a4f-cde0-4b12-b124-ab095ca13eda.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_fad62ea7-1f6b-4619-90ab-47297d1bee5c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_fb204b68-9b5a-4c28-a04a-58c50a5ffe5f.png"
+        ]
+    },
+    {
         "name": "dia de los muerstos sticker",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_018f7140-17fb-427f-8d4e-e9d937d35912.png",
@@ -1456,11 +2016,7 @@ button.active {
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_f9c72608-0033-4d63-8a3f-99a80ecefc7c.png"
         ]
     }
-
-               
-
-            
-        ];
+]
 
 const spinBtn = document.getElementById("spin-sticker-btn");
 
@@ -2241,6 +2797,12 @@ function handleEnd() {
         });
 
 function addOrReplaceSticker(newUrl, groupName = null) {
+    // Deselect any previously selected sticker
+    const currentlySelected = document.querySelector('.sticker.selected');
+    if (currentlySelected) {
+        currentlySelected.classList.remove('selected');
+    }
+
     const unlockedSticker = document.querySelector('.sticker:not(.locked)');
     const stickerSize = 120;
     const canvasWidth = canvas.offsetWidth;
@@ -2257,7 +2819,6 @@ function addOrReplaceSticker(newUrl, groupName = null) {
         unlockedSticker.style.left = `${centerX}px`;
         unlockedSticker.style.top = `${centerY}px`;
 
-        // ✅ Keep existing group or assign new one
         if (groupName) {
             unlockedSticker.dataset.group = groupName;
         } else if (!unlockedSticker.dataset.group) {
@@ -2274,7 +2835,7 @@ function addOrReplaceSticker(newUrl, groupName = null) {
         addSticker(newUrl, centerX, centerY, stickerSize, stickerSize, { group: newGroup });
         console.log('[addOrReplaceSticker] Created new sticker with group:', newGroup);
     }
-
+    
     saveState();
 }
 
@@ -2403,7 +2964,8 @@ window.addEventListener('load', () => {
             stickerOverlayContainer.style.display = 'none';
         }
 
-       function showGroupOverlay() {
+  // Function to show the initial group selection overlay
+function showGroupOverlay() {
     hideOverlays();
     groupOverlayContainer.innerHTML = '';
 
@@ -2421,8 +2983,16 @@ window.addEventListener('load', () => {
         groupIcon.classList.add('overlay-icon');
         groupIcon.title = group.name;
 
-        groupIcon.addEventListener('click', () => {
-            // ✅ Pass both the URLs and the group name to the next function
+        // ✅ Add the contextmenu event listener here
+        groupIcon.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // The click event listener should still preload the full group's stickers
+        groupIcon.addEventListener('click', async () => {
+            console.log(`⏳ Preloading stickers for group: ${group.name}`);
+            await preloadStickers(group.urls);
+            console.log("✅ Preloading complete. Showing stickers.");
             showStickerOverlay(group.urls, group.name);
         });
 
@@ -2432,6 +3002,27 @@ window.addEventListener('load', () => {
     // finally: show overlay
     groupOverlayContainer.style.display = 'grid';
 }
+
+// Ensure the main event listener is also not async
+stickerPickerBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (groupOverlayContainer.style.display === 'grid') {
+        hideOverlays();
+    } else {
+        showGroupOverlay();
+    }
+});
+
+// Update the main event listener to call the async function
+stickerPickerBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (groupOverlayContainer.style.display === 'grid') {
+        hideOverlays();
+    } else {
+        // Call the async function without an await here
+        showGroupOverlay();
+    }
+});
 
         function updateCanvasDrop() {
             const canvas = document.getElementById('canvas-container');
@@ -2463,10 +3054,11 @@ window.addEventListener('load', () => {
         let touchOffsetY = 0;
 
 function showStickerOverlay(urls, groupName) {
-    hideOverlays();
+    // Hide any other overlays that might be open
+    hideOverlays(); 
     stickerOverlayContainer.innerHTML = '';
- 
-    // Create the header
+    
+    // Create the header with the group name
     const header = document.createElement('div');
     header.classList.add('overlay-header');
     
@@ -2474,41 +3066,47 @@ function showStickerOverlay(urls, groupName) {
     title.textContent = groupName;
     title.classList.add('overlay-title');
     header.appendChild(title);
- 
+    
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '✕';
     closeBtn.classList.add('close-btn');
     closeBtn.addEventListener('click', hideOverlays);
     header.appendChild(closeBtn);
- 
+    
     // Create the sticker grid wrapper
     const contentWrapper = document.createElement('div');
     contentWrapper.classList.add('overlay-stickers-grid');
- 
+    
     urls.forEach(url => {
         const sticker = document.createElement('img');
         sticker.src = url;
         sticker.classList.add('overlay-sticker');
+        sticker.draggable = true;
+        sticker.dataset.url = url;
 
-  // ✅ Add the contextmenu event listener here
-    sticker.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-    });
+        // ✅ Add the contextmenu event listener here
+        sticker.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // Add event listeners for dragging and clicking
+        sticker.addEventListener('dragstart', (e) => {
+            const stickerData = { url: url, width: 120 };
+            e.dataTransfer.setData('application/json', JSON.stringify(stickerData));
+        });
 
         sticker.addEventListener('click', () => {
-            const group = stickerGroups.find(g => g.urls.includes(url));
-            addOrReplaceSticker(url, group ? group.name : null);
-            hideOverlays();
+             const group = stickerGroups.find(g => g.urls.includes(url));
+             addOrReplaceSticker(url, group ? group.name : null);
+             hideOverlays();
         });
+        
         contentWrapper.appendChild(sticker);
     });
- 
-    // Append children to the main container
+    
     stickerOverlayContainer.appendChild(header);
     stickerOverlayContainer.appendChild(contentWrapper);
- 
-    // Finally: show the overlay with a flex display
-    stickerOverlayContainer.style.display = 'flex'; // <-- This is the fix!
+    stickerOverlayContainer.style.display = 'flex';
 }
 
         stickerPickerBtn.addEventListener('click', (e) => {
