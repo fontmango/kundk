@@ -382,11 +382,20 @@ button.active {
     object-fit: contain;
     cursor: pointer;
     border-radius: 8px;
-    transition: transform 0.2s;
+    
+    /* Remove the problematic transition property */
+    transition: none !important; 
+    
+    /* Ensure a default transform value */
+    transform: scale(1); 
+    
+    -webkit-tap-highlight-color: transparent;
+    -webkit-focus-ring-color: transparent;
+    outline: none;    
 }
 
 .overlay-icon:hover {
-    transform: scale(1.05);
+    animation: pulse 1.5s infinite;
 }
 
 .overlay-sticker {
@@ -397,7 +406,37 @@ button.active {
     cursor: pointer;
     border: 1px solid transparent;
     transition: transform 0.2s;
+ -webkit-tap-highlight-color: transparent; /* iOS/Android WebKit */
+  -webkit-focus-ring-color: transparent;    /* iOS Safari */
+  outline: none;      
+  
 }
+
+.overlay-sticker.active {
+  position: relative;
+}
+
+.overlay-sticker.active::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 12px; /* adjust to match sticker shape */
+  border: 2px solid #00bfff; /* pulse color */
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
 
 .overlay-sticker:hover {
     transform: scale(1.1);
@@ -2048,6 +2087,20 @@ const spinBtn = document.getElementById("spin-sticker-btn");
             }
         }
 
+        // A function to preload images
+function preloadStickers(urls) {
+    const promises = urls.map(url => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = resolve;
+            img.onerror = reject;
+        });
+    });
+    return Promise.all(promises);
+}
+
+
 function saveState() {
     if (isRestoring) return;
     const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
@@ -2131,15 +2184,13 @@ function loadState(state) {
     return chosenSticker;
 }
 
-spinBtn.addEventListener("click", () => {
+spinBtn.addEventListener("click", async () => {
     console.log("🎰 Spin button clicked");
 
     const allStickers = document.querySelectorAll('.sticker');
     let targetStickerDiv = null;
 
-    // Check if there are any stickers on the canvas
     if (allStickers.length === 0) {
-        // If the canvas is empty, add a new random sticker
         console.log("ℹ️ Canvas is empty, adding a new sticker.");
         const randomStickerData = getRandomStickerUrlFromGroups();
         if (randomStickerData) {
@@ -2147,13 +2198,11 @@ spinBtn.addEventListener("click", () => {
                 group: randomStickerData.group, 
                 letter: randomStickerData.letter 
             });
-            targetStickerDiv = document.querySelector('.sticker'); // Select the newly added sticker
+            targetStickerDiv = document.querySelector('.sticker');
         }
     } else {
-        // If stickers exist, find the first unlocked one
         targetStickerDiv = document.querySelector('.sticker:not(.locked)');
         
-        // If all stickers are locked, add a new unlocked one
         if (!targetStickerDiv) {
             console.log("ℹ️ All stickers are locked, adding a new one.");
             const randomStickerData = getRandomStickerUrlFromGroups();
@@ -2167,13 +2216,29 @@ spinBtn.addEventListener("click", () => {
         }
     }
     
-    // Check one more time to ensure a target sticker exists before spinning
     if (!targetStickerDiv) {
-        console.warn("⚠️ No unlocked sticker found and couldn't create one. Aborting spin.");
+        console.warn("⚠️ No unlocked sticker found. Aborting spin.");
         return;
     }
     
-    // Now perform the spin logic on the 'targetStickerDiv'
+    // --- UPDATED LOGIC HERE ---
+    const stickerPool = [];
+    stickerGroups.forEach(group => {
+        // Now, take the first URL from the `urls` array directly
+        if (group.urls && group.urls.length > 0) {
+            stickerPool.push({
+                url: group.urls[0], // Access the first element of the array
+                group: group.name
+            });
+        }
+    });
+
+    console.log(`⏳ Preloading a small subset of stickers (${stickerPool.length})...`);
+    await preloadStickers(stickerPool.map(s => s.url));
+    console.log("✅ Preloading complete. Starting spin.");
+    
+    // --- END UPDATED LOGIC ---
+
     const stickerImg = targetStickerDiv.querySelector('img');
     const stickerSize = targetStickerDiv.offsetWidth;
     const canvasWidth = canvas.offsetWidth;
@@ -2181,18 +2246,18 @@ spinBtn.addEventListener("click", () => {
     const centerX = (canvasWidth / 2) - (stickerSize / 2);
     const centerY = (canvasHeight / 2) - (stickerSize / 2);
     
-    // Move the sticker to the center of the canvas before spinning
     targetStickerDiv.style.left = `${centerX}px`;
     targetStickerDiv.style.top = `${centerY}px`;
     
     let spinCount = 0;
     const maxSpins = 15 + Math.floor(Math.random() * 10);
     const spinInterval = setInterval(() => {
-        const nextStickerData = getRandomStickerUrlFromGroups();
+        const randomIndex = Math.floor(Math.random() * stickerPool.length);
+        const nextStickerData = stickerPool[randomIndex];
+
         if (nextStickerData) {
             stickerImg.src = nextStickerData.url;
             targetStickerDiv.dataset.group = nextStickerData.group;
-            targetStickerDiv.dataset.letter = nextStickerData.letter;
         }
 
         spinCount++;
@@ -2874,7 +2939,7 @@ window.addEventListener('load', () => {
             stickerOverlayContainer.style.display = 'none';
         }
 
-       function showGroupOverlay() {
+   function showGroupOverlay() {
     hideOverlays();
     groupOverlayContainer.innerHTML = '';
 
@@ -2892,8 +2957,13 @@ window.addEventListener('load', () => {
         groupIcon.classList.add('overlay-icon');
         groupIcon.title = group.name;
 
+        // Add contextmenu listener
+        groupIcon.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // ✅ The crucial change: call showStickerOverlay directly without preloading
         groupIcon.addEventListener('click', () => {
-            // ✅ Pass both the URLs and the group name to the next function
             showStickerOverlay(group.urls, group.name);
         });
 
@@ -2936,8 +3006,7 @@ window.addEventListener('load', () => {
 function showStickerOverlay(urls, groupName) {
     hideOverlays();
     stickerOverlayContainer.innerHTML = '';
- 
-    // Create the header
+    
     const header = document.createElement('div');
     header.classList.add('overlay-header');
     
@@ -2945,41 +3014,54 @@ function showStickerOverlay(urls, groupName) {
     title.textContent = groupName;
     title.classList.add('overlay-title');
     header.appendChild(title);
- 
+    
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '✕';
     closeBtn.classList.add('close-btn');
     closeBtn.addEventListener('click', hideOverlays);
     header.appendChild(closeBtn);
- 
-    // Create the sticker grid wrapper
+    
     const contentWrapper = document.createElement('div');
     contentWrapper.classList.add('overlay-stickers-grid');
- 
-    urls.forEach(url => {
-        const sticker = document.createElement('img');
-        sticker.src = url;
-        sticker.classList.add('overlay-sticker');
-
-  // ✅ Add the contextmenu event listener here
-    sticker.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-    });
-
-        sticker.addEventListener('click', () => {
-            const group = stickerGroups.find(g => g.urls.includes(url));
-            addOrReplaceSticker(url, group ? group.name : null);
-            hideOverlays();
-        });
-        contentWrapper.appendChild(sticker);
-    });
- 
-    // Append children to the main container
     stickerOverlayContainer.appendChild(header);
     stickerOverlayContainer.appendChild(contentWrapper);
- 
-    // Finally: show the overlay with a flex display
-    stickerOverlayContainer.style.display = 'flex'; // <-- This is the fix!
+    
+    // ✅ Show the container immediately for instant feedback
+    stickerOverlayContainer.style.display = 'flex';
+    
+    // ✅ Load and add stickers one-by-one
+    urls.forEach((url, index) => {
+        const sticker = document.createElement('img');
+        sticker.classList.add('overlay-sticker');
+        sticker.draggable = true;
+        sticker.dataset.url = url;
+        
+        // Initially hide the sticker to prevent a blank box
+        sticker.style.opacity = '0'; 
+        sticker.style.transition = 'opacity 0.5s ease-in-out';
+
+        sticker.addEventListener('contextmenu', (e) => e.preventDefault());
+        sticker.addEventListener('dragstart', (e) => {
+            const stickerData = { url: url, width: 120 };
+            e.dataTransfer.setData('application/json', JSON.stringify(stickerData));
+        });
+        
+        sticker.addEventListener('click', () => {
+             const group = stickerGroups.find(g => g.urls.includes(url));
+             addSticker(url, group ? group.name : null);
+        });
+        
+        sticker.onload = () => {
+            sticker.style.opacity = '1';
+        };
+
+        contentWrapper.appendChild(sticker);
+        
+        // Use a short delay before setting the src for each sticker
+        setTimeout(() => {
+            sticker.src = url;
+        }, index * 50); // 50ms delay for each sticker
+    });
 }
 
         stickerPickerBtn.addEventListener('click', (e) => {
