@@ -2770,6 +2770,12 @@ function showStickerOverlay(urls, groupName) {
         const sticker = document.createElement('img');
         sticker.src = url;
         sticker.classList.add('overlay-sticker');
+
+  // ✅ Add the contextmenu event listener here
+    sticker.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+    });
+
         sticker.addEventListener('click', () => {
             const group = stickerGroups.find(g => g.urls.includes(url));
             addOrReplaceSticker(url, group ? group.name : null);
