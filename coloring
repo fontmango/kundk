@@ -2576,12 +2576,17 @@ function updateUndoRedoButtons() {
     redoBtn.disabled = redoStack.length === 0;
 }
 
-        newBtn.addEventListener('click', () => {
-            canvas.innerHTML = '';
-            history.splice(0);
-            saveState();
-            firstStickerAdded = false;
-        });
+       newBtn.addEventListener('click', () => {
+    // Clear the canvas
+    canvas.innerHTML = '';
+    
+    // Add the empty state to the history
+    // This allows the user to undo the "new" action.
+    saveState();
+    
+    // Reset any other relevant flags
+    firstStickerAdded = false;
+});
         
         eraserBtn.addEventListener('click', () => {
             setBucketMode(true);
