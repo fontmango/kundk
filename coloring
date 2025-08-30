@@ -1663,34 +1663,47 @@ const spinBtn = document.getElementById("spin-sticker-btn");
         let initialCenter = { x: 0, y: 0 };
         let firstStickerAdded = false;
 
-        const colors = [
-            '#8d5524', '#c68642', '#e0ac69', '#f1c27d', '#ffdbac',
-            // Reds
-            '#FF0000', '#FF6347', '#D2691E', '#CD5C5C',
+      const colors = [
+    // Skin tones
+    '#8d5524', '#c68642', '#e0ac69', '#f1c27d', '#ffdbac',
 
-            // Oranges & Yellows
-            '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
+    // Reds
+    '#FF0000', '#FF6347', '#D2691E', '#CD5C5C', '#800020', // burgundy added
 
-            // Greens
-            '#008000', '#3CB371', '#9ACD32', '#ADFF2F',
+    // Oranges & Yellows
+    '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C', '#a67c00', 
+    '#FF7F50', // coral
+    '#DAA520', // goldenrod
+    '#C2B280', // sand beige
 
-            // Blues
-            '#0000FF', '#4169E1', '#1E90FF', '#87CEFA',
+    // Greens
+    '#008000', '#3CB371', '#9ACD32', '#ADFF2F',
+    '#013220', // deep forest green
+    '#808000', // olive green
 
-            // Purples
-            '#800080', '#4B0082','#BA55D3', '#DA70D6',
+    // Blues
+    '#0000FF', '#4169E1', '#1E90FF', '#87CEFA',
+    '#000080', // navy
+    '#008080', // teal
+    '#40E0D0', // turquoise
 
-            // Pinks & Browns
-            '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
+    // Purples
+    '#800080', '#4B0082', '#BA55D3', '#DA70D6',
 
-            '#C0C0C0', '#808080',
-        
-        '#ff71ce','#01cdfe','#05ffa1','#b967ff','#fffb96',
+    // Pinks & Browns
+    '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
 
-            '#ffb3ba','#ffdfba','#ffffba','#baffc9','#bae1ff',
-            
-            '#ffdef2','#f2e2ff','#e2eeff','#ddfffc','#ffffe3'
-        ];
+    // Grays & Neutrals
+    '#C0C0C0', '#808080', 
+    '#A9A9A9', // dark gray / stone gray
+
+    // Brights
+    '#ff71ce', '#01cdfe', '#05ffa1', '#b967ff', '#fffb96',
+
+    // Pastels
+    '#ffb3ba', '#ffdfba', '#ffffba', '#baffc9', '#bae1ff',
+    '#ffdef2', '#f2e2ff', '#e2eeff', '#ddfffc', '#ffffe3'
+];
         
         // This is the special "erase" object that will be used by the eraser button.
         const transparentColor = { type: 'erase' };
