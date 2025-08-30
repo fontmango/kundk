@@ -559,7 +559,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             <i data-lucide="plus" class="icon"></i>
         </button>
 
-            <button id="open-stickers-btn" title="Choose Sticker"><i data-lucide="smile-plus" class="icon"></i></button>
+            <button id="open-stickers-btn" title="Choose Sticker"><i data-lucide="case-sensitive" class="icon"></i></button>
 
 
         <button id="undo-btn" title="Zurück">
@@ -577,6 +577,52 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
     
     <script>
              const stickerGroups = [
+               
+                {
+    name: "Adventure",
+    purchaseUrl: "https://example.com/shop/asia-pack", 
+    urls: {
+
+"A": ["https://static.wixstatic.com/media/990059_96159bb434034ce6baf0f6c280db0a44~mv2.png"],
+"B": ["https://static.wixstatic.com/media/990059_f94ca4fa77424977a853578d363f858c~mv2.png"],
+"C": ["https://static.wixstatic.com/media/990059_4ae3fafd9e1a4b53bd474bbcdfa25d1a~mv2.png"],
+"D": ["https://static.wixstatic.com/media/990059_1a9d39ff92c141e8b5365eaf014f96f0~mv2.png"],
+"E": ["https://static.wixstatic.com/media/990059_d8f3cc9011654da58c4a62412ceb98d4~mv2.png"],
+"F": ["https://static.wixstatic.com/media/990059_0cdeff72959e45c9aed43a6526b7db9d~mv2.png"],
+"G": ["https://static.wixstatic.com/media/990059_995dd4060bc54bbf955acb740c48b819~mv2.png"],
+"H": ["https://static.wixstatic.com/media/990059_b31dc6de439b4dd4bffc695848407c49~mv2.png"],
+"I": ["https://static.wixstatic.com/media/990059_b5f08343b97540408897d2767e34489a~mv2.png"],
+"J": ["https://static.wixstatic.com/media/990059_0c40f64ff2a94478ba5960a2e9255ccb~mv2.png"],
+"K": ["https://static.wixstatic.com/media/990059_9b953f95242341279cdad5af18c900fc~mv2.png"],
+"L": ["https://static.wixstatic.com/media/990059_0e78431e2bb141dca9bf0f187bb3381b~mv2.png"],
+"M": ["https://static.wixstatic.com/media/990059_e51f17baa1b343b2aa100fa0e7985744~mv2.png"],
+"N": ["https://static.wixstatic.com/media/990059_652d1d2aeb7a46eb8ffce7bc32ddbc9c~mv2.png"],
+"O": ["https://static.wixstatic.com/media/990059_79eca30757804a3b8a8fcec349929061~mv2.png"],
+"P": ["https://static.wixstatic.com/media/990059_3818ebb3a04d413c8c676bc676fed5fd~mv2.png"],
+"Q": ["https://static.wixstatic.com/media/990059_617550b7bf464779b06effceec424ff2~mv2.png"],
+"R": ["https://static.wixstatic.com/media/990059_4cb3612b647f40d186b4514d205c1b81~mv2.png"],
+"S": ["https://static.wixstatic.com/media/990059_a675cf6bc1a34055bfcee1e9b06a25db~mv2.png"],
+"T": ["https://static.wixstatic.com/media/990059_1c141d8efbb9480f89751600d10394f0~mv2.png"],
+"U": ["https://static.wixstatic.com/media/990059_e7c1230002fa48f1922232f85e8ca5e4~mv2.png"],
+"V": ["https://static.wixstatic.com/media/990059_72f75a4844a247fb9a841a547718b9a4~mv2.png"],
+"W": ["https://static.wixstatic.com/media/990059_b51911ab69a149678d1f6f00d83d9608~mv2.png"],
+"X": ["https://static.wixstatic.com/media/990059_12a4907c6ed4444abe6c9576b1fd736f~mv2.png"],
+"Y": ["https://static.wixstatic.com/media/990059_8ef8de91ba664a6cb35d82b412cb6cf7~mv2.png"],
+"Z": ["https://static.wixstatic.com/media/990059_d1420411d4664df48ffa6754762dd214~mv2.png"],
+"0": ["https://static.wixstatic.com/media/990059_09155757985a4cddaca1ceffc033dc1d~mv2.png"],
+"1": ["https://static.wixstatic.com/media/990059_c71b957eb1c947baa25ae6eee20e695a~mv2.png"],
+"2": ["https://static.wixstatic.com/media/990059_e787847e579746e9a2536272c910955f~mv2.png"],
+"3": ["https://static.wixstatic.com/media/990059_7a132be597974dcaaf0b5adc2e8f6519~mv2.png"],
+"4": ["https://static.wixstatic.com/media/990059_fcec449f89164809a137d8e9e99cc10c~mv2.png"],
+"5": ["https://static.wixstatic.com/media/990059_e7310d3f3abe4b9d8b22f631f5609fd4~mv2.png"],
+"6": ["https://static.wixstatic.com/media/990059_3f474f37ace14af99fdbcd675666262f~mv2.png"],
+"7": ["https://static.wixstatic.com/media/990059_49f627bdabae4fae8930eca79897f22e~mv2.png"],
+"8": ["https://static.wixstatic.com/media/990059_a741b811be0a4ced81840c67325f9dc6~mv2.png"],
+"9": ["https://static.wixstatic.com/media/990059_cf405bf98ae64663a89c8b177d46c49b~mv2.png"]
+
+
+        }
+     },
             {
     name: "Asia",
     purchaseUrl: "https://example.com/shop/asia-pack", 
@@ -872,18 +918,13 @@ groupBtn.innerHTML = `
 
 groupBtn.addEventListener('click', (ev) => {
     ev.stopPropagation();
-
     const letter = sticker.dataset.letter;
     const url = sticker.querySelector('img').src;
-
-    // Find the group that actually contains this URL under this letter
     const group = stickerGroups.find(g => g.urls[letter]?.includes(url));
 
     if (group) {
-        console.log('Found correct group:', group.name);
-        showOverlay(ev, group.urls);
-    } else {
-        console.warn('⚠️ No matching group found for this sticker!');
+        // ✅ Pass the sticker's dimensions here
+        showOverlay(ev, group.urls, sticker.offsetWidth, sticker.offsetHeight);
     }
 });
 
@@ -1454,7 +1495,7 @@ function hideOverlay() {
 
         let activeGroupURLs = [];
 
-function showOverlay(e, urlsByLetter) {
+function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
     overlayContainer.innerHTML = ''; // Clear previous content
 
     const group = stickerGroups.find(g => g.urls === urlsByLetter);
@@ -1493,20 +1534,23 @@ function showOverlay(e, urlsByLetter) {
             overlaySticker.dataset.group = group.name;
             overlaySticker.addEventListener('click', (ev) => {
                 ev.stopPropagation();
-                addSticker(url, undefined, undefined, 120, 120, {
-                    letter: letter,
-                    group: group.name
-                });
+                addSticker(url, undefined, undefined, stickerWidth, stickerHeight, {
+                letter: letter,
+                group: group.name
+            });
                  hideOverlay(); // ✅ Correct placement
             });
             overlaySticker.addEventListener('dragstart', (dragStartEvent) => {
                 dragStartEvent.stopPropagation();
+
                 dragStartEvent.dataTransfer.setData('application/json', JSON.stringify({
-                    url: dragStartEvent.target.src,
-                    width: 120,
-                    letter: dragStartEvent.target.dataset.letter,
-                    group: dragStartEvent.target.dataset.group
-                }));
+                url: dragStartEvent.target.src,
+                width: stickerWidth,
+                height: stickerHeight,
+                letter: dragStartEvent.target.dataset.letter,
+                group: dragStartEvent.target.dataset.group
+            }));
+
                 const overlay = overlayContainer;
                 const offsetX = dragStartEvent.clientX - overlay.offsetLeft;
                 const offsetY = dragStartEvent.clientY - overlay.offsetTop;
@@ -1611,20 +1655,20 @@ function showOverlay(e, urlsByLetter) {
             e.preventDefault();
         });
 
-       canvas.addEventListener('drop', (e) => {
+  canvas.addEventListener('drop', (e) => {
     e.preventDefault();
     const data = e.dataTransfer.getData('application/json');
     if (data) {
-        // ✅ Unpack the new letter and group data
-        const { url, width, letter, group } = JSON.parse(data);
+        // ✅ Unpack the width AND height
+        const { url, width, height, letter, group } = JSON.parse(data);
         const rect = canvas.getBoundingClientRect();
 
         // Center the sticker on the drop location
         const x = e.clientX - rect.left - (width / 2);
-        const y = e.clientY - rect.top - (width / 2);
-        
-        // ✅ Pass the letter and group into the options object
-        addSticker(url, x, y, width, width, { letter, group });
+        const y = e.clientY - rect.top - (height / 2); // ✅ Use height for y calculation
+
+        // ✅ Pass the correct width AND height
+        addSticker(url, x, y, width, height, { letter, group });
     }
 });
 
