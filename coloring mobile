@@ -2024,7 +2024,7 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
 
     sticker.classList.add('sticker');
     sticker.style.width = width + 'px';
-    sticker.style.height = 'auto';
+    sticker.style.height = height + 'px';
 
     const stickerImg = document.createElement('img');
     stickerImg.crossOrigin = "Anonymous";
