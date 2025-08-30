@@ -1,0 +1,61 @@
+import requests
+import json
+from urllib.parse import quote
+
+# ==== CONFIGURATION ====
+USERNAME = "phoneticgenius"       # <-- your GitHub username
+REPO = "wix_assets"              # <-- your repo name
+BRANCH = "main"                  # <-- your branch
+OUTPUT_FILE = "wix_urls_grouped.json"
+
+# ==== PERSONAL ACCESS TOKEN ====
+# Generate a PAT in GitHub settings -> Access Tokens (classic)
+# Keep it private and replace YOUR_PERSONAL_ACCESS_TOKEN below
+HEADERS = {"Authorization": "token xxx"}
+
+# GitHub API endpoint
+API_URL = f"https://api.github.com/repos/{USERNAME}/{REPO}/contents"
+
+def fetch_files_grouped(path=""):
+    """
+    Recursively fetch files grouped by folder.
+    Returns a dict: {folder_name: [list of raw URLs]}
+    """
+    url = f"{API_URL}/{quote(path)}?ref={BRANCH}"
+    response = requests.get(url, headers=HEADERS)
+    response.raise_for_status()
+    items = response.json()
+
+    folder_dict = {}
+
+    for item in items:
+        if item["type"] == "file":
+            if path:  # Only group files in a folder, skip root files if desired
+                folder_name = path.rstrip("/").split("/")[-1]
+                raw_url = f"https://raw.githubusercontent.com/{USERNAME}/{REPO}/{BRANCH}/{path}{item['name']}"
+                folder_dict.setdefault(folder_name, []).append(raw_url)
+            else:
+                # Optional: uncomment to include root files
+                # folder_name = "Root"
+                # raw_url = f"https://raw.githubusercontent.com/{USERNAME}/{REPO}/{BRANCH}/{item['name']}"
+                # folder_dict.setdefault(folder_name, []).append(raw_url)
+                continue
+
+        elif item["type"] == "dir":
+            subfolder_dict = fetch_files_grouped(f"{path}{item['name']}/")
+            for k, v in subfolder_dict.items():
+                folder_dict[k] = v
+
+    return folder_dict
+
+if __name__ == "__main__":
+    grouped_files = fetch_files_grouped()
+
+    # Convert to Wix format: list of {name: folder, urls: [...]}, sorted alphabetically by folder name
+    wix_list = [{"name": folder, "urls": urls} for folder, urls in sorted(grouped_files.items())]
+
+    # Save to JSON file
+    with open(OUTPUT_FILE, "w") as f:
+        json.dump(wix_list, f, indent=4)
+
+    print(f"✅ Exported {len(wix_list)} folder groups into {OUTPUT_FILE} (folders sorted alphabetically)")
