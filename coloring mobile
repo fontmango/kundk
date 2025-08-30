@@ -3046,11 +3046,12 @@ function showStickerOverlay(urls, groupName) {
             e.dataTransfer.setData('application/json', JSON.stringify(stickerData));
         });
         
-        sticker.addEventListener('click', () => {
-             const group = stickerGroups.find(g => g.urls.includes(url));
-             addSticker(url, group ? group.name : null);
-        });
-        
+           sticker.addEventListener('click', () => {
+    const group = stickerGroups.find(g => g.urls.includes(url));
+    addOrReplaceSticker(url, group ? group.name : null);
+    hideOverlays();
+});
+
         sticker.onload = () => {
             sticker.style.opacity = '1';
         };
