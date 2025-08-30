@@ -487,7 +487,7 @@ button.active {
 </button>
     
         <button id="add-sticker-btn" title="Add Random">
-            <i data-lucide="shuffle" class="icon"></i>
+            <i data-lucide="plus" class="icon"></i>
         </button>
 
         <button id="sticker-picker-btn" title="Choose Sticker">
@@ -821,6 +821,49 @@ urls: [
 
                     ]
                     },
+             
+                          {
+name: "Wrestler",
+urls: [
+"https://static.wixstatic.com/shapes/990059_3cabb99a02da451abb0cfe16fd833d87.svg",
+"https://static.wixstatic.com/shapes/990059_103b43aa7df54689bbbba7cecbf6fa3b.svg",
+"https://static.wixstatic.com/shapes/990059_f14213ff8312421f98409d06d72b663d.svg",
+"https://static.wixstatic.com/shapes/990059_09b702d304f249e18c565f85fb0e706e.svg",
+"https://static.wixstatic.com/shapes/990059_838df40d8d7c4ccb8167badf3ef16ce7.svg",
+"https://static.wixstatic.com/shapes/990059_80a916c5a19a45f3870c97f45980bf0e.svg",
+"https://static.wixstatic.com/shapes/990059_98c1e3f20c8648a7ac83987e197af1a7.svg",
+"https://static.wixstatic.com/shapes/990059_61aadf7bb27f4ee796200f998f14358d.svg",
+"https://static.wixstatic.com/shapes/990059_4c2cdc2a67cb47b994df984063b07b32.svg",
+"https://static.wixstatic.com/shapes/990059_0ecd2170cdb444909e8870e917b78803.svg",
+"https://static.wixstatic.com/shapes/990059_e03fe0c51a404ba282ca25abe78dd068.svg",
+"https://static.wixstatic.com/shapes/990059_4d16991cf44b4a72b70decd726f08e72.svg",
+"https://static.wixstatic.com/shapes/990059_31a469dc32a940bfbc5f02fc297ddb46.svg",
+"https://static.wixstatic.com/shapes/990059_3e3fae76afe643c1b435f75427964ad8.svg",
+"https://static.wixstatic.com/shapes/990059_6e51684b26104e059138c964aedbd660.svg",
+"https://static.wixstatic.com/shapes/990059_8d3b537ce3694fbfb7384f73fbcb1352.svg",
+"https://static.wixstatic.com/shapes/990059_7a8eaf9f24124fc99290bf1daf0e299f.svg",
+"https://static.wixstatic.com/shapes/990059_7edfd09e9d114cb2b1600821f6d495db.svg",
+"https://static.wixstatic.com/shapes/990059_ab711b3f05c14147872ddbe1f8424ed5.svg",
+"https://static.wixstatic.com/shapes/990059_08c52207e36b42d0869b0bc6bc3bdf93.svg",
+"https://static.wixstatic.com/shapes/990059_540fd01aae22425ebe25e8c0bc62bffe.svg",
+"https://static.wixstatic.com/shapes/990059_ef60a025b326417d9df196b1c4f57713.svg",
+
+"https://static.wixstatic.com/shapes/990059_b73ef8f40f8b47b09fd13587b5a3543c.svg",
+"https://static.wixstatic.com/shapes/990059_d4fcf76f867f4469b5592cbb7e5ed894.svg",
+"https://static.wixstatic.com/shapes/990059_52999e7318234357b27203fce5008884.svg",
+"https://static.wixstatic.com/shapes/990059_60afad40c0b847c38ce9bc52042e3c68.svg",
+"https://static.wixstatic.com/shapes/990059_70d5fcb7a3a141b396065d164c564f25.svg",
+"https://static.wixstatic.com/shapes/990059_850f6cceadf4491fb898393c784c28ce.svg",
+"https://static.wixstatic.com/shapes/990059_2a133c7e6ff2435c9ad42f989372ba0b.svg",
+"https://static.wixstatic.com/shapes/990059_78f149267b164130b94adc6c89b707e5.svg",
+"https://static.wixstatic.com/shapes/990059_484bd7b1049e4bb08e1d5aba568643e3.svg",
+"https://static.wixstatic.com/shapes/990059_3cf0529b87e2418e9ec8b96a50fd5e5e.svg",
+"https://static.wixstatic.com/shapes/990059_586d762ef3974e499916e1df08cf9f86.svg",
+"https://static.wixstatic.com/shapes/990059_b029c8a939b7495d99bc5b8f966b7a3d.svg",
+"https://static.wixstatic.com/shapes/990059_2e0d11840cf84ab5b5e84c3db65bd541.svg"
+
+]
+},
                {
         name: "fries",
         urls: [
@@ -1707,34 +1750,48 @@ const spinBtn = document.getElementById("spin-sticker-btn");
         };
         let firstStickerAdded = false;
 
-        const colors = [
-            '#8d5524', '#c68642', '#e0ac69', '#f1c27d', '#ffdbac',
-            // Reds
-            '#FF0000', '#FF6347', '#D2691E', '#CD5C5C',
+       const colors = [
+    // Skin tones
+    '#8d5524', '#c68642', '#e0ac69', '#f1c27d', '#ffdbac',
 
-            // Oranges & Yellows
-            '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C',
+    // Reds
+    '#FF0000', '#FF6347', '#D2691E', '#CD5C5C', '#800020', // burgundy added
 
-            // Greens
-            '#008000', '#3CB371', '#9ACD32', '#ADFF2F',
+    // Oranges & Yellows
+    '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C', '#a67c00', 
+    '#FF7F50', // coral
+    '#DAA520', // goldenrod
+    '#C2B280', // sand beige
 
-            // Blues
-            '#0000FF', '#4169E1', '#1E90FF', '#87CEFA',
+    // Greens
+    '#008000', '#3CB371', '#9ACD32', '#ADFF2F',
+    '#013220', // deep forest green
+    '#808000', // olive green
 
-            // Purples
-            '#800080', '#4B0082','#BA55D3', '#DA70D6',
+    // Blues
+    '#0000FF', '#4169E1', '#1E90FF', '#87CEFA',
+    '#000080', // navy
+    '#008080', // teal
+    '#40E0D0', // turquoise
 
-            // Pinks & Browns
-            '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
+    // Purples
+    '#800080', '#4B0082', '#BA55D3', '#DA70D6',
 
-            '#C0C0C0', '#808080',
-          
-          '#ff71ce','#01cdfe','#05ffa1','#b967ff','#fffb96',
+    // Pinks & Browns
+    '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
 
-            '#ffb3ba','#ffdfba','#ffffba','#baffc9','#bae1ff',
-            
-            '#ffdef2','#f2e2ff','#e2eeff','#ddfffc','#ffffe3'
-        ];
+    // Grays & Neutrals
+    '#C0C0C0', '#808080', 
+    '#A9A9A9', // dark gray / stone gray
+
+    // Brights
+    '#ff71ce', '#01cdfe', '#05ffa1', '#b967ff', '#fffb96',
+
+    // Pastels
+    '#ffb3ba', '#ffdfba', '#ffffba', '#baffc9', '#bae1ff',
+    '#ffdef2', '#f2e2ff', '#e2eeff', '#ddfffc', '#ffffe3'
+];
+
 
         // This is the special "erase" object that will be used by the eraser button.
         const transparentColor = {
