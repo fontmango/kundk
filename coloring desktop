@@ -277,9 +277,10 @@
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
     width: 90%;
     max-width: 400px; /* Adjusted max-width for a sleeker look on the side */
-    
+    height: 90%;
     display: flex;
     flex-direction: column;
+    
 }
 
 .overlay-header {
@@ -2550,6 +2551,12 @@ sticker.appendChild(groupBtn);
                 paletteSticker.classList.add('palette-sticker');
                 paletteSticker.dataset.group = group.name;
 
+                
+        // ✅ NEW: Preload the group's stickers on hover
+        paletteSticker.addEventListener('mouseenter', () => {
+            preloadGroup(group.urls);
+        });
+
                 paletteSticker.addEventListener('click', (e) => {
                     if (activePaletteSticker === paletteSticker) {
                         hideOverlay();
@@ -2581,64 +2588,84 @@ sticker.appendChild(groupBtn);
         }
 
         let activeGroupURLs = [];
-        
-        // --- REWRITTEN JAVASCRIPT showOverlay FUNCTION ---
-        function showOverlay(event, groupName, urls) {
-            // Prevent default behavior if triggered by an event
-            if (event) event.stopPropagation();
-        
-            overlayContainer.innerHTML = ''; // Clear previous content
-        
-            // --- Header ---
-            const header = document.createElement('div');
-            header.className = 'overlay-header';
-        
-            const title = document.createElement('h2');
-            title.className = 'overlay-title';
-            title.textContent = groupName; // Use the group name for the title
-        
-           const closeBtn = document.createElement('button');
-closeBtn.className = 'overlay-close-btn';
-// Replace the text 'X' with an SVG icon
-closeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
-closeBtn.onclick = hideOverlay;
-        
-            header.appendChild(title);
-            header.appendChild(closeBtn);
-            overlayContainer.appendChild(header);
-        
-            // --- Grid of stickers ---
-            const grid = document.createElement('div');
-            grid.className = 'overlay-grid';
-        
-            urls.forEach(url => {
-                const sticker = document.createElement('img');
-                sticker.src = url;
-                sticker.classList.add('overlay-sticker');
-                sticker.draggable = true;
-        
-                // Click to add sticker to canvas
-                sticker.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    addSticker(url, undefined, undefined, 120, 120, { group: groupName });
-                    hideOverlay();
-                });
-        
-                // Drag to canvas
-                sticker.addEventListener('dragstart', (e) => {
-                    e.dataTransfer.setData('application/json', JSON.stringify({ url, group: groupName }));
-                   
-                });
-        
-                grid.appendChild(sticker);
-            });
-        
-            overlayContainer.appendChild(grid);
-        
-            // Display the overlay
-            overlayContainer.style.display = 'flex';
-        }
 
+
+        // Function to preload all stickers from the stickerGroups array
+function preloadStickers() {
+    stickerGroups.forEach(group => {
+        group.urls.forEach(url => {
+            const img = new Image();
+            img.src = url;
+            // You can optionally add a console log to track progress
+            // console.log(`Preloading: ${url}`);
+        });
+    });
+}
+        
+      
+       function showOverlay(event, groupName, urls) {
+    if (event) event.stopPropagation();
+    
+    // Clear previous content
+    const overlayContainer = document.getElementById('overlay-container');
+    overlayContainer.innerHTML = ''; 
+
+    // --- Header ---
+    const header = document.createElement('div');
+    header.className = 'overlay-header';
+    
+    const title = document.createElement('h2');
+    title.className = 'overlay-title';
+    title.textContent = groupName; 
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'overlay-close-btn';
+    closeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+    closeBtn.onclick = hideOverlay;
+    
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+    overlayContainer.appendChild(header);
+    
+    // --- Grid of stickers ---
+    const grid = document.createElement('div');
+    grid.className = 'overlay-grid';
+    overlayContainer.appendChild(grid);
+
+    // Display the overlay immediately so the loading effect is visible
+    overlayContainer.style.display = 'flex';
+
+    // Loop through URLs with a delay to create the staggered effect
+    urls.forEach((url, index) => {
+        setTimeout(() => {
+            const sticker = document.createElement('img');
+            sticker.src = url;
+            sticker.classList.add('overlay-sticker');
+            sticker.draggable = true;
+
+            // Optional: Hide the sticker initially and fade it in
+            sticker.style.opacity = '0';
+            sticker.style.transition = 'opacity 0.5s ease-in-out';
+            sticker.onload = () => {
+                sticker.style.opacity = '1';
+            };
+
+            // Click to add sticker to canvas
+            sticker.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addSticker(url, undefined, undefined, 120, 120, { group: groupName });
+                hideOverlay();
+            });
+
+            // Drag to canvas
+            sticker.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('application/json', JSON.stringify({ url, group: groupName }));
+            });
+
+            grid.appendChild(sticker);
+        }, index * 50); // Adjust the 50ms delay for a faster or slower effect
+    });
+}
 
         document.addEventListener('click', (e) => {
             // Updated to hide overlay if click is outside the new elements
