@@ -484,7 +484,7 @@ button.active {
 #sticker-overlay-container {
     /* Main overlay styles */
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90vw;
@@ -507,7 +507,7 @@ button.active {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
     gap: 10px;
-    padding: 10px;
+    padding: 5px;
     max-height: 70vh; /* Adjust as needed */
     overflow-y: auto;
 }
@@ -5988,8 +5988,13 @@ stickerPickerBtn.addEventListener('click', (e) => {
 // This function is now responsible for opening the overlay and handling the loading effect.
 function showStickerOverlay(urls, groupName) {
     hideOverlays();
+    
+    // Save the current scroll position before clearing
+    const scrollPosition = stickerOverlayContainer.scrollTop;
+    
     stickerOverlayContainer.innerHTML = '';
     
+    // Create the header and content wrapper
     const header = document.createElement('div');
     header.classList.add('overlay-header');
     
@@ -6009,17 +6014,17 @@ function showStickerOverlay(urls, groupName) {
     stickerOverlayContainer.appendChild(header);
     stickerOverlayContainer.appendChild(contentWrapper);
     
-    // Show the container immediately for instant feedback
+    // Show the container
     stickerOverlayContainer.style.display = 'flex';
     
-    // Load and add stickers one-by-one
+    // Load and add stickers
     urls.forEach((url, index) => {
         const sticker = document.createElement('img');
         sticker.classList.add('overlay-sticker');
         sticker.draggable = true;
         sticker.dataset.url = url;
         
-        sticker.style.opacity = '0'; 
+        sticker.style.opacity = '0';
         sticker.style.transition = 'opacity 0.5s ease-in-out';
 
         sticker.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -6028,12 +6033,11 @@ function showStickerOverlay(urls, groupName) {
             e.dataTransfer.setData('application/json', JSON.stringify(stickerData));
         });
         
-    sticker.addEventListener('click', () => {
-    const group = stickerGroups.find(g => g.urls.includes(url));
-    addOrReplaceSticker(url, group ? group.name : null);
-    hideOverlays();
-});
-
+        sticker.addEventListener('click', () => {
+            const group = stickerGroups.find(g => g.urls.includes(url));
+            addOrReplaceSticker(url, group ? group.name : null);
+            hideOverlays();
+        });
 
         sticker.onload = () => {
             sticker.style.opacity = '1';
@@ -6045,8 +6049,12 @@ function showStickerOverlay(urls, groupName) {
             sticker.src = url;
         }, index * 50);
     });
+    
+    // ✅ The key fix: Set the scroll position after a short delay
+    setTimeout(() => {
+        stickerOverlayContainer.scrollTop = scrollPosition;
+    }, 200); // 200ms delay to give the browser time to render all images
 }
-
        
 
         document.addEventListener('click', (e) => {
