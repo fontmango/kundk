@@ -277,9 +277,10 @@
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
     width: 90%;
     max-width: 400px; /* Adjusted max-width for a sleeker look on the side */
-    
+    height: 90%;
     display: flex;
     flex-direction: column;
+    
 }
 
 .overlay-header {
