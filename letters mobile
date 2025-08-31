@@ -236,7 +236,6 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
     border: 1px solid #ccc;
     border-radius: 12px; /* A bit more rounded */
     padding: 10px 15px;
-    display: none; /* Keep this */
     z-index: 200;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     width: 380px;
@@ -17001,16 +17000,23 @@ groupBtn.innerHTML = `
 
 groupBtn.addEventListener('click', (ev) => {
     ev.stopPropagation();
+    
     const letter = sticker.dataset.letter;
     const url = sticker.querySelector('img').src;
-    const group = stickerGroups.find(g => g.urls[letter]?.includes(url));
+    
+    // ✅ FIX: Decode the URL from the sticker before searching
+    const decodedUrl = decodeURIComponent(url);
+
+    // The find method will now work correctly
+    const group = stickerGroups.find(g => g.urls[letter]?.includes(decodedUrl));
 
     if (group) {
-        // ✅ Pass the sticker's dimensions here
+        console.log("Group found:", group.name);
         showOverlay(ev, group.urls, sticker.offsetWidth, sticker.offsetHeight);
+    } else {
+        console.log("Error: Group not found. Check if the sticker's letter or URL matches the data.");
     }
 });
-
 sticker.appendChild(groupBtn);
 
 
@@ -17584,13 +17590,14 @@ function hideOverlay() {
 
         let activeGroupURLs = [];
 
-function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
-    overlayContainer.innerHTML = ''; // Clear previous content
 
+function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
+    overlayContainer.innerHTML = '';
+    
     const group = stickerGroups.find(g => g.urls === urlsByLetter);
     if (!group) return;
 
-    // --- 1. Create Header & Content (No Changes Here) ---
+    // --- Header ---
     const header = document.createElement('div');
     header.className = 'overlay-header';
     const cartLink = document.createElement('a');
@@ -17611,6 +17618,7 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
     header.appendChild(title);
     header.appendChild(closeBtn);
     overlayContainer.appendChild(header);
+
     const stickersGrid = document.createElement('div');
     stickersGrid.className = 'overlay-stickers-grid';
     for (const letter in urlsByLetter) {
@@ -17624,22 +17632,20 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
             overlaySticker.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 addSticker(url, undefined, undefined, stickerWidth, stickerHeight, {
-                letter: letter,
-                group: group.name
-            });
-                 hideOverlay(); // ✅ Correct placement
+                    letter: letter,
+                    group: group.name
+                });
+                hideOverlay();
             });
             overlaySticker.addEventListener('dragstart', (dragStartEvent) => {
                 dragStartEvent.stopPropagation();
-
                 dragStartEvent.dataTransfer.setData('application/json', JSON.stringify({
-                url: dragStartEvent.target.src,
-                width: stickerWidth,
-                height: stickerHeight,
-                letter: dragStartEvent.target.dataset.letter,
-                group: dragStartEvent.target.dataset.group
-            }));
-
+                    url: dragStartEvent.target.src,
+                    width: stickerWidth,
+                    height: stickerHeight,
+                    letter: dragStartEvent.target.dataset.letter,
+                    group: dragStartEvent.target.dataset.group
+                }));
                 const overlay = overlayContainer;
                 const offsetX = dragStartEvent.clientX - overlay.offsetLeft;
                 const offsetY = dragStartEvent.clientY - overlay.offsetTop;
@@ -17664,56 +17670,45 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
         });
     }
     overlayContainer.appendChild(stickersGrid);
-     // ✅ ADD this event listener to the overlay
     overlayContainer.addEventListener('click', (ev) => {
         if (ev.target.closest('.overlay-close-btn')) {
             hideOverlay();
         }
     });
 
-    // --- 6. Position Overlay ---
+    // --- Position Overlay ---
     const isFromPalette = e.target.closest('#sticker-palette-container');
 
     if (isFromPalette) {
-        // Logic for palette trigger (no change)
         const canvasRect = canvas.getBoundingClientRect();
         const margin = 10;
         overlayContainer.style.left = `${canvasRect.left + margin}px`;
         overlayContainer.style.top = `${canvasRect.top + margin}px`;
     } else {
         // ✅ NEW, ROBUST LOGIC for on-canvas trigger
-        
         // Step 1: Temporarily show the overlay to measure it
-        overlayContainer.style.visibility = 'hidden';
         overlayContainer.style.display = 'flex';
+        overlayContainer.style.visibility = 'hidden';
+
         const overlayWidth = overlayContainer.offsetWidth;
         const overlayHeight = overlayContainer.offsetHeight;
-        overlayContainer.style.display = 'none';
-        overlayContainer.style.visibility = 'visible';
 
         // Step 2: Calculate the best position
         const rect = e.target.getBoundingClientRect();
-        const margin = 15; // A comfortable margin from the window edge
-
-        // Default position: Below the button
+        const margin = 15;
         let top = rect.bottom + margin;
-        // Default position: Horizontally centered with the button
         let left = rect.left + (rect.width / 2) - (overlayWidth / 2);
 
         // Step 3: Check and correct for screen edges
-        // If it goes off the bottom, flip it to the top
         if (top + overlayHeight > window.innerHeight) {
             top = rect.top - overlayHeight - margin;
         }
-        // If it goes off the right, align to the right edge
         if (left + overlayWidth > window.innerWidth) {
             left = window.innerWidth - overlayWidth - margin;
         }
-        // If it goes off the left, align to the left edge
         if (left < 0) {
             left = margin;
         }
-        // If it (now) goes off the top, align to the top edge
         if (top < 0) {
             top = margin;
         }
@@ -17721,6 +17716,9 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
         // Step 4: Apply the final, safe position
         overlayContainer.style.left = `${left}px`;
         overlayContainer.style.top = `${top}px`;
+
+        // ✅ Step 5: Make the overlay visible again
+        overlayContainer.style.visibility = 'visible';
     }
     
     overlayContainer.dataset.originalLeft = overlayContainer.style.left;
@@ -17728,11 +17726,11 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
     
     overlayContainer.style.display = 'flex';
 
-    // --- 7. Render Lucide Icons ---
     lucide.createIcons();
     
     document.addEventListener('mousedown', handleCloseOverlayOnOutsideClick);
 }
+
 
         document.addEventListener('click', (e) => {
             if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target)) {
