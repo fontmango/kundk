@@ -229,6 +229,8 @@
     /* ✅ Changed to flex layout */
     display: none;
     flex-direction: column;
+
+   
     
 }
 
@@ -291,6 +293,7 @@
             object-fit: contain;
             cursor: grab;
             border: 1px solid transparent;
+            
         }
 
         .overlay-sticker:hover {
@@ -523,6 +526,99 @@
     
     <script>
         const stickerGroups = [
+          
+          
+{
+    name: "Aztec",
+    purchaseUrl: "https://www.fontmango.com/product-page/aztec-font", 
+    urls: {
+
+"A": ["https://static.wixstatic.com/media/990059_bc61ede81e964cc2b444e9a3b2c42678~mv2.png"],
+"B": ["https://static.wixstatic.com/media/990059_f58c1fb0928e402ebe062f851bd04b73~mv2.png"],
+"C": ["https://static.wixstatic.com/media/990059_468441ba64be431facce02a9ddc5f032~mv2.png"],
+"D": ["https://static.wixstatic.com/media/990059_c7a7a3806c0d4c768d7f0bf148b85a7c~mv2.png"],
+"E": ["https://static.wixstatic.com/media/990059_0eff365c5da4467d87305f8a3674b666~mv2.png"],
+"F": ["https://static.wixstatic.com/media/990059_06f6adea54a84535bec464c3f5723164~mv2.png"],
+"G": ["https://static.wixstatic.com/media/990059_b9d86620aa20471fa61ac5d426af1947~mv2.png"],
+"H": ["https://static.wixstatic.com/media/990059_dc74dffed0414837aa8ce9a48f9ba8b7~mv2.png"],
+"I": ["https://static.wixstatic.com/media/990059_f77cd9321b5848d98f9071b72857449b~mv2.png"],
+"J": ["https://static.wixstatic.com/media/990059_304e40f6c53a45129561b7fb67540e9b~mv2.png"],
+"K": ["https://static.wixstatic.com/media/990059_2b5d9b9ba94041bf97d54ceb549b3b49~mv2.png"],
+"L": ["https://static.wixstatic.com/media/990059_c02893e9eeef46208daa8ff92f932fb7~mv2.png"],
+"M": ["https://static.wixstatic.com/media/990059_b20c6524593c4403a548ac963d401071~mv2.png"],
+"N": ["https://static.wixstatic.com/media/990059_0656bcb6947b4b47b77feb7d44de1649~mv2.png"],
+"O": ["https://static.wixstatic.com/media/990059_3dd05b31359b466f84ac8a7812dbe2df~mv2.png"],
+"P": ["https://static.wixstatic.com/media/990059_f3731bb165e24a57bff9920988c88734~mv2.png"],
+"Q": ["https://static.wixstatic.com/media/990059_32180ab6a4dd4e7a82bbef0986cd2ca0~mv2.png"],
+"R": ["https://static.wixstatic.com/media/990059_9d47b8b624b943ea89c8d39c85e5a79a~mv2.png"],
+"S": ["https://static.wixstatic.com/media/990059_2c6f7e8c32254bf1baaf158c66ca3945~mv2.png"],
+"T": ["https://static.wixstatic.com/media/990059_a160c29b8fd94b878500d7966e752cb9~mv2.png"],
+"U": ["https://static.wixstatic.com/media/990059_c648369852794dc4951f3b75f58a161b~mv2.png"],
+"V": ["https://static.wixstatic.com/media/990059_9ec7e776f39c46ef8efbcbbb0da5626c~mv2.png"],
+"W": ["https://static.wixstatic.com/media/990059_fdc70e58269e489ca09831321cccc381~mv2.png"],
+"X": ["https://static.wixstatic.com/media/990059_2360798fb4874988bef3904678ae2543~mv2.png"],
+"Y": ["https://static.wixstatic.com/media/990059_15852fa1d7a44802adf757ca33c5864f~mv2.png"],
+"Z": ["https://static.wixstatic.com/media/990059_cdd575e3c4a34ff6906210a7d4ff249e~mv2.png"],
+"0": ["https://static.wixstatic.com/media/990059_63a48fc0332b42d6841e6fe52eadd0b7~mv2.png"],
+"1": ["https://static.wixstatic.com/media/990059_726bc6ccb4674ecbb307769f033c87f9~mv2.png"],
+"2": ["https://static.wixstatic.com/media/990059_7ba54d788e1b4ef78402492a66671258~mv2.png"],
+"3": ["https://static.wixstatic.com/media/990059_9c6a5b124ae9457bb3d7d8cff037e458~mv2.png"],
+"4": ["https://static.wixstatic.com/media/990059_af30a689145342aa8f78a47b9513b716~mv2.png"],
+"5": ["https://static.wixstatic.com/media/990059_fb6e7cccc0cb4bde99bc4f0707682409~mv2.png"],
+"6": ["https://static.wixstatic.com/media/990059_0e9c37eb5cf2430daf44478c8eabd8c0~mv2.png"],
+"7": ["https://static.wixstatic.com/media/990059_416ba4576ef54717a7e2fbd985eb2088~mv2.png"],
+"8": ["https://static.wixstatic.com/media/990059_f764cdb4c999422286d0c6d37563dcdb~mv2.png"],
+"9": ["https://static.wixstatic.com/media/990059_5ea2e173108a4b54a6ad6468d81aacc5~mv2.png"],
+
+        }
+     },
+          
+           {
+    name: "Adventure",
+    purchaseUrl: "https://example.com/shop/asia-pack", 
+    urls: {
+
+"A": ["https://static.wixstatic.com/media/990059_96159bb434034ce6baf0f6c280db0a44~mv2.png"],
+"B": ["https://static.wixstatic.com/media/990059_f94ca4fa77424977a853578d363f858c~mv2.png"],
+"C": ["https://static.wixstatic.com/media/990059_4ae3fafd9e1a4b53bd474bbcdfa25d1a~mv2.png"],
+"D": ["https://static.wixstatic.com/media/990059_1a9d39ff92c141e8b5365eaf014f96f0~mv2.png"],
+"E": ["https://static.wixstatic.com/media/990059_d8f3cc9011654da58c4a62412ceb98d4~mv2.png"],
+"F": ["https://static.wixstatic.com/media/990059_0cdeff72959e45c9aed43a6526b7db9d~mv2.png"],
+"G": ["https://static.wixstatic.com/media/990059_995dd4060bc54bbf955acb740c48b819~mv2.png"],
+"H": ["https://static.wixstatic.com/media/990059_b31dc6de439b4dd4bffc695848407c49~mv2.png"],
+"I": ["https://static.wixstatic.com/media/990059_b5f08343b97540408897d2767e34489a~mv2.png"],
+"J": ["https://static.wixstatic.com/media/990059_0c40f64ff2a94478ba5960a2e9255ccb~mv2.png"],
+"K": ["https://static.wixstatic.com/media/990059_9b953f95242341279cdad5af18c900fc~mv2.png"],
+"L": ["https://static.wixstatic.com/media/990059_0e78431e2bb141dca9bf0f187bb3381b~mv2.png"],
+"M": ["https://static.wixstatic.com/media/990059_e51f17baa1b343b2aa100fa0e7985744~mv2.png"],
+"N": ["https://static.wixstatic.com/media/990059_652d1d2aeb7a46eb8ffce7bc32ddbc9c~mv2.png"],
+"O": ["https://static.wixstatic.com/media/990059_79eca30757804a3b8a8fcec349929061~mv2.png"],
+"P": ["https://static.wixstatic.com/media/990059_3818ebb3a04d413c8c676bc676fed5fd~mv2.png"],
+"Q": ["https://static.wixstatic.com/media/990059_617550b7bf464779b06effceec424ff2~mv2.png"],
+"R": ["https://static.wixstatic.com/media/990059_4cb3612b647f40d186b4514d205c1b81~mv2.png"],
+"S": ["https://static.wixstatic.com/media/990059_a675cf6bc1a34055bfcee1e9b06a25db~mv2.png"],
+"T": ["https://static.wixstatic.com/media/990059_1c141d8efbb9480f89751600d10394f0~mv2.png"],
+"U": ["https://static.wixstatic.com/media/990059_e7c1230002fa48f1922232f85e8ca5e4~mv2.png"],
+"V": ["https://static.wixstatic.com/media/990059_72f75a4844a247fb9a841a547718b9a4~mv2.png"],
+"W": ["https://static.wixstatic.com/media/990059_b51911ab69a149678d1f6f00d83d9608~mv2.png"],
+"X": ["https://static.wixstatic.com/media/990059_12a4907c6ed4444abe6c9576b1fd736f~mv2.png"],
+"Y": ["https://static.wixstatic.com/media/990059_8ef8de91ba664a6cb35d82b412cb6cf7~mv2.png"],
+"Z": ["https://static.wixstatic.com/media/990059_d1420411d4664df48ffa6754762dd214~mv2.png"],
+"0": ["https://static.wixstatic.com/media/990059_09155757985a4cddaca1ceffc033dc1d~mv2.png"],
+"1": ["https://static.wixstatic.com/media/990059_c71b957eb1c947baa25ae6eee20e695a~mv2.png"],
+"2": ["https://static.wixstatic.com/media/990059_e787847e579746e9a2536272c910955f~mv2.png"],
+"3": ["https://static.wixstatic.com/media/990059_7a132be597974dcaaf0b5adc2e8f6519~mv2.png"],
+"4": ["https://static.wixstatic.com/media/990059_fcec449f89164809a137d8e9e99cc10c~mv2.png"],
+"5": ["https://static.wixstatic.com/media/990059_e7310d3f3abe4b9d8b22f631f5609fd4~mv2.png"],
+"6": ["https://static.wixstatic.com/media/990059_3f474f37ace14af99fdbcd675666262f~mv2.png"],
+"7": ["https://static.wixstatic.com/media/990059_49f627bdabae4fae8930eca79897f22e~mv2.png"],
+"8": ["https://static.wixstatic.com/media/990059_a741b811be0a4ced81840c67325f9dc6~mv2.png"],
+"9": ["https://static.wixstatic.com/media/990059_cf405bf98ae64663a89c8b177d46c49b~mv2.png"]
+
+
+        }
+     },
+  
             {
     name: "Asia",
     purchaseUrl: "https://example.com/shop/asia-pack", 
@@ -557,18 +653,52 @@
 
         }
      },
-            {
-                name: "Bug",
-                purchaseUrl: "https://example.com/shop/bug-pack",
-                urls: {
-                    "A": ["https://static.wixstatic.com/media/990059_896e4ce4fb094112aa5e524b4230f562~mv2.png"],
-                    "B": ["https://static.wixstatic.com/media/990059_e49cdd1403a949019aeafce0185ac178~mv2.png"]
-                }
-            },
+
+{
+    name: "Bugs",
+    purchaseUrl: "https://www.fontmango.com/product-page/bug-font-1", 
+    urls: {
+
+"A": ["https://static.wixstatic.com/media/990059_896e4ce4fb094112aa5e524b4230f562~mv2.png"],
+"B": ["https://static.wixstatic.com/media/990059_e49cdd1403a949019aeafce0185ac178~mv2.png"],
+"C": ["https://static.wixstatic.com/media/990059_59e4bc35841a44f4b825e885a7ff6d5a~mv2.png"],
+"D": ["https://static.wixstatic.com/media/990059_c922338144244b6c92f459c5e5a35b07~mv2.png"],
+"E": ["https://static.wixstatic.com/media/990059_8911374c9d3b435eb975f37e9e3676a7~mv2.png"],
+"F": ["https://static.wixstatic.com/media/990059_87adee3e98fc441cadf31b8ba66ebaea~mv2.png"],
+"G": ["https://static.wixstatic.com/media/990059_2c526b9db7f4407597a07d6e244220a1~mv2.png"],
+"H": ["https://static.wixstatic.com/media/990059_5a4fd16bc8be4694b1cdc5cf70342350~mv2.png"],
+"I": ["https://static.wixstatic.com/media/990059_805dfdfadbf44aaea876b8d05835c668~mv2.png"],
+"J": ["https://static.wixstatic.com/media/990059_675753dcae7a4a18ad5aea8187a31961~mv2.png"],
+"K": ["https://static.wixstatic.com/media/990059_b6f4dd7a63574821913c85a79947161d~mv2.png"],
+"L": ["https://static.wixstatic.com/media/990059_edb24fc96c0646a6b87116433c7246fa~mv2.png"],
+"M": ["https://static.wixstatic.com/media/990059_3f73fa71b18644b1945873f32b4ed39c~mv2.png"],
+"N": ["https://static.wixstatic.com/media/990059_927c99c0050d4911a44e4b29a4890bb5~mv2.png"],
+"O": ["https://static.wixstatic.com/media/990059_af725be38c1d40078b913139ed9af6b2~mv2.png"],
+"P": ["https://static.wixstatic.com/media/990059_445bcbc8379849efb4ebc0479f48c7a1~mv2.png"],
+"Q": ["https://static.wixstatic.com/media/990059_df6e1afbb4a54c1f85c0e9316936ef73~mv2.png"],
+"R": ["https://static.wixstatic.com/media/990059_c494eb41487046cfb92f3b22eec58eb8~mv2.png"],
+"S": ["https://static.wixstatic.com/media/990059_3812ea173de1489e9abea0de3d75e5c6~mv2.png"],
+"T": ["https://static.wixstatic.com/media/990059_911b368e05ef42c887fa9b9762d00a45~mv2.png"],
+"U": ["https://static.wixstatic.com/media/990059_a116616babb1499e839225ad566e47a5~mv2.png"],
+"V": ["https://static.wixstatic.com/media/990059_3a5287234c2442d984e20e865cc41c28~mv2.png"],
+"W": ["https://static.wixstatic.com/media/990059_c9c44cd006964460b6299f3e7682daef~mv2.png"],
+"X": ["https://static.wixstatic.com/media/990059_a725b58cf89d4b288763f072986da133~mv2.png"],
+"Y": ["https://static.wixstatic.com/media/990059_ddd2f534df014364851155ce6e957923~mv2.png"],
+"Z": ["https://static.wixstatic.com/media/990059_eba94784326942dabb4bc7ad434d1b70~mv2.png"],
+"0": ["https://static.wixstatic.com/media/990059_a383998b595f409ba14f61dc2381e40e~mv2.png"],
+"1": ["https://static.wixstatic.com/media/990059_47a0811b3c66418d8afb2ba93f84ab8e~mv2.png"],
+"2": ["https://static.wixstatic.com/media/990059_3ae0806d32364cb4ad692833471f453c~mv2.png"],
+"3": ["https://static.wixstatic.com/media/990059_c252fde0928c4e24be954a72054261cd~mv2.png"],
+"4": ["https://static.wixstatic.com/media/990059_b42070a60e6242b4a6d0aac4ad1c4df9~mv2.png"],
+"5": ["https://static.wixstatic.com/media/990059_4b82b46b34784dc5997340cd6b5b6649~mv2.png"],
+"6": ["https://static.wixstatic.com/media/990059_8ec24673b06c4c0c8fa7c647a68860f2~mv2.png"],
+"7": ["https://static.wixstatic.com/media/990059_1287ea800028485797d4602eff29a925~mv2.png"],
+"8": ["https://static.wixstatic.com/media/990059_886df1dcd996446ab7f53adb2bdb4f9f~mv2.png"],
+"9": ["https://static.wixstatic.com/media/990059_d0939a7373ba470b973ae8850f75ca85~mv2.png"]
+
+        }
+     },                   
         ];
-
-
-
 
 
         const spinBtn = document.getElementById("spin-sticker-btn");
@@ -1341,12 +1471,11 @@ function checkSelectionCollision(isShiftPressed) {
         let activeGroupURLs = [];
 
 function showOverlay(e, urlsByLetter) {
-    overlayContainer.innerHTML = ''; // Clear previous content
-
+    overlayContainer.innerHTML = '';
     const group = stickerGroups.find(g => g.urls === urlsByLetter);
     if (!group) return;
 
-    // --- 1. Create Header & Content (No Changes Here) ---
+    // --- Header ---
     const header = document.createElement('div');
     header.className = 'overlay-header';
     const cartLink = document.createElement('a');
@@ -1369,14 +1498,52 @@ function showOverlay(e, urlsByLetter) {
     overlayContainer.appendChild(header);
     const stickersGrid = document.createElement('div');
     stickersGrid.className = 'overlay-stickers-grid';
-    for (const letter in urlsByLetter) {
-        urlsByLetter[letter].forEach(url => {
+    overlayContainer.appendChild(stickersGrid);
+
+    // ✅ FIX: Get and sort the keys first
+    const sortedKeys = Object.keys(urlsByLetter).sort((a, b) => {
+        const numA = parseFloat(a);
+        const numB = parseFloat(b);
+
+        // If both are numbers, sort numerically
+        if (!isNaN(numA) && !isNaN(numB)) {
+            return numA - numB;
+        }
+        // If 'a' is a number, it comes before 'b'
+        if (!isNaN(numA)) {
+            return -1;
+        }
+        // If 'b' is a number, it comes before 'a'
+        if (!isNaN(numB)) {
+            return 1;
+        }
+        // Otherwise, they are both letters, so sort alphabetically
+        return a.localeCompare(b);
+    });
+
+    let allUrls = [];
+    sortedKeys.forEach(key => {
+        allUrls = allUrls.concat(urlsByLetter[key]);
+    });
+
+    allUrls.forEach((url, index) => {
+        setTimeout(() => {
             const overlaySticker = document.createElement('img');
             overlaySticker.src = url;
             overlaySticker.classList.add('overlay-sticker');
             overlaySticker.draggable = true;
+
+             overlaySticker.style.opacity = '0';
+            overlaySticker.style.transition = 'opacity 0.5s ease-in-out';
+            overlaySticker.onload = () => {
+                overlaySticker.style.opacity = '1';
+            };
+
+
+            const letter = Object.keys(urlsByLetter).find(key => urlsByLetter[key].includes(url));
             overlaySticker.dataset.letter = letter;
             overlaySticker.dataset.group = group.name;
+
             overlaySticker.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 addSticker(url, undefined, undefined, 120, 120, {
@@ -1384,6 +1551,7 @@ function showOverlay(e, urlsByLetter) {
                     group: group.name
                 });
             });
+
             overlaySticker.addEventListener('dragstart', (dragStartEvent) => {
                 dragStartEvent.stopPropagation();
                 dragStartEvent.dataTransfer.setData('application/json', JSON.stringify({
@@ -1413,23 +1581,18 @@ function showOverlay(e, urlsByLetter) {
                 dragStartEvent.target.addEventListener('dragend', stopFollowing);
             });
             stickersGrid.appendChild(overlaySticker);
-        });
-    }
-    overlayContainer.appendChild(stickersGrid);
+        }, index * 50);
+    });
 
-    // --- 6. Position Overlay ---
+    // --- The rest of the function remains the same ---
     const isFromPalette = e.target.closest('#sticker-palette-container');
 
     if (isFromPalette) {
-        // Logic for palette trigger (no change)
         const canvasRect = canvas.getBoundingClientRect();
         const margin = 10;
         overlayContainer.style.left = `${canvasRect.left + margin}px`;
         overlayContainer.style.top = `${canvasRect.top + margin}px`;
     } else {
-        // ✅ NEW, ROBUST LOGIC for on-canvas trigger
-        
-        // Step 1: Temporarily show the overlay to measure it
         overlayContainer.style.visibility = 'hidden';
         overlayContainer.style.display = 'flex';
         const overlayWidth = overlayContainer.offsetWidth;
@@ -1437,46 +1600,32 @@ function showOverlay(e, urlsByLetter) {
         overlayContainer.style.display = 'none';
         overlayContainer.style.visibility = 'visible';
 
-        // Step 2: Calculate the best position
         const rect = e.target.getBoundingClientRect();
-        const margin = 15; // A comfortable margin from the window edge
-
-        // Default position: Below the button
+        const margin = 15;
         let top = rect.bottom + margin;
-        // Default position: Horizontally centered with the button
         let left = rect.left + (rect.width / 2) - (overlayWidth / 2);
 
-        // Step 3: Check and correct for screen edges
-        // If it goes off the bottom, flip it to the top
         if (top + overlayHeight > window.innerHeight) {
             top = rect.top - overlayHeight - margin;
         }
-        // If it goes off the right, align to the right edge
         if (left + overlayWidth > window.innerWidth) {
             left = window.innerWidth - overlayWidth - margin;
         }
-        // If it goes off the left, align to the left edge
         if (left < 0) {
             left = margin;
         }
-        // If it (now) goes off the top, align to the top edge
         if (top < 0) {
             top = margin;
         }
-
-        // Step 4: Apply the final, safe position
         overlayContainer.style.left = `${left}px`;
         overlayContainer.style.top = `${top}px`;
     }
-    
+
     overlayContainer.dataset.originalLeft = overlayContainer.style.left;
     overlayContainer.dataset.originalTop = overlayContainer.style.top;
-    
-    overlayContainer.style.display = 'flex';
 
-    // --- 7. Render Lucide Icons ---
+    overlayContainer.style.display = 'flex';
     lucide.createIcons();
-    
     document.addEventListener('mousedown', handleCloseOverlayOnOutsideClick);
 }
 
