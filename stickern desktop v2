@@ -5070,397 +5070,375 @@ function addOrReplaceSticker(newUrl, groupName = null) {
 
 
 function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
-    const { suppressSave = false ,  group} = opts;
-                    const sticker = document.createElement('div');
-                        const groupName = group || 'default';
+    const { suppressSave = false, group } = opts;
+    const sticker = document.createElement('div');
+    const groupName = group || 'default';
     sticker.dataset.group = groupName;
-            sticker.classList.add('sticker');
-            sticker.style.width = `${width}px`;
-            sticker.style.height = `${height}px`;
+    sticker.classList.add('sticker');
+    sticker.style.width = `${width}px`;
+    sticker.style.height = `${height}px`;
 
-            const stickerImg = document.createElement('img');
-            stickerImg.crossOrigin = "Anonymous";
-            stickerImg.src = url;
-            stickerImg.draggable = false;
-            sticker.appendChild(stickerImg);
+    const stickerImg = document.createElement('img');
+    stickerImg.crossOrigin = "Anonymous";
+    stickerImg.src = url;
+    stickerImg.draggable = false;
+    sticker.appendChild(stickerImg);
 
-            sticker.addEventListener('click', (e) => {
-                if (bucketMode && selectedColor) {
-                    e.stopPropagation();
-                    const rect = sticker.getBoundingClientRect();
-                    const clickX = Math.floor((e.clientX - rect.left) * (stickerImg.naturalWidth / rect.width));
-                    const clickY = Math.floor((e.clientY - rect.top) * (stickerImg.naturalHeight / rect.height));
-                    recolorSticker(stickerImg, selectedColor, clickX, clickY);
-                    
-                }
-            });
+    // --- BUTTONS AND HANDLES ---
+    const copyBtn = document.createElement('div');
+    copyBtn.classList.add('copy-btn');
+    copyBtn.innerHTML = `
+        <svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+        </svg>
+    `;
 
-            const copyBtn = document.createElement('div');
-            copyBtn.classList.add('copy-btn');
-            copyBtn.innerHTML = `
-                <svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="8" x2="12" y2="16" />
-                    <line x1="8" y1="12" x2="16" y2="12" />
-                </svg>
-            `;
-
-            copyBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const stickerWidth = sticker.offsetWidth;
-                const stickerHeight = sticker.offsetHeight;
-                let newX = parseInt(sticker.style.left) + 10;
-                let newY = parseInt(sticker.style.top) + 10;
-                function isOverlapping(x, y) {
-                    const stickers = document.querySelectorAll('.sticker');
-                    return Array.from(stickers).some(s => {
-                        const sx = parseInt(s.style.left);
-                        const sy = parseInt(s.style.top);
-                        const sw = s.offsetWidth;
-                        const sh = s.offsetHeight;
-                        return !(x + stickerWidth < sx || x > sx + sw || y + stickerHeight < sy || y > sy + sh);
-                    });
-                }
-                const step = 10;
-                let attempts = 0;
-                while (isOverlapping(newX, newY) && attempts < 100) {
-                    newX += step;
-                    newY += step;
-                    if (newX + stickerWidth > canvas.offsetWidth) newX = step;
-                    if (newY + stickerHeight > canvas.offsetHeight) newY = step;
-                    attempts++;
-                }
-                saveState();
-                addSticker(
-    sticker.querySelector('img').src, 
-    newX, 
-    newY, 
-    sticker.offsetWidth, 
-    sticker.offsetHeight, 
-    { group: sticker.dataset.group }
-);
-            });
-
-            const deleteBtn = document.createElement('div');
-            deleteBtn.classList.add('delete-btn');
-            deleteBtn.innerHTML = `
-                <svg class="delete-btn-icon" viewBox="0 0 24 24">
-                    <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
-                </svg>
-            `;
-            deleteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                saveState();
-                sticker.remove();
-            });
-
-            const resizeHandle = document.createElement('div');
-            resizeHandle.classList.add('resize-handle');
-            resizeHandle.innerHTML = `
-                <svg class="resize-handle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <polyline points="9 21 3 21 3 15"></polyline>
-                    <line x1="21" y1="3" x2="14" y2="10"></line>
-                    <line x1="3" y1="21" x2="10" y2="14"></line>
-                </svg>
-            `;
-
-            sticker.appendChild(deleteBtn);
-            sticker.appendChild(copyBtn);
-            sticker.appendChild(resizeHandle);
-
-
-const groupBtn = document.createElement('div');
-groupBtn.classList.add('sticker-btn', 'group-btn');
-groupBtn.innerHTML = `
-<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 6h16M4 12h16M4 18h16"/>
-</svg>`;
-
-
-
-// On click, open overlay with this sticker's group
-groupBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const stickerGroup = sticker.dataset.group;
-    const group = stickerGroups.find(g => g.name === stickerGroup);
-    if (group) {
-        // MODIFIED: Call the new showOverlay function
-        showOverlay(e, group.name, group.urls);
-    }
-});
-
-sticker.appendChild(groupBtn);
-
-    function startInteraction(e) {
-    if (e.target.closest('.delete-btn, .copy-btn, .lock-btn, .group-btn')) return;
-                if (bucketMode) return;
-                
-                // Save state at the beginning of an interaction
-                saveState();
-
-                deselectAllStickers();
-                sticker.classList.add('selected');
-
-                e.preventDefault();
-                activeSticker = sticker;
-
-                initialCenter.x = sticker.offsetLeft + sticker.offsetWidth / 2;
-                initialCenter.y = sticker.offsetTop + sticker.offsetHeight / 2;
-
-                if (e.touches && e.touches.length === 2) {
-                    initialTouchDistance = getTouchDistance(e.touches);
-                    initialStickerWidth = sticker.offsetWidth;
-                    initialStickerHeight = sticker.offsetHeight;
-                } else if (e.touches && e.touches.length === 1) {
-                    const touch = e.touches[0];
-                    initialX = touch.clientX;
-                    initialY = touch.clientY;
-                    offsetX = sticker.offsetLeft;
-                    offsetY = sticker.offsetTop;
-                } else {
-                    initialX = e.clientX;
-                    initialY = e.clientY;
-                    offsetX = sticker.offsetLeft;
-                    offsetY = sticker.offsetTop;
-                }
-
-                document.addEventListener('mousemove', handleMove);
-                document.addEventListener('mouseup', handleEnd);
-                document.addEventListener('touchmove', handleMove, { passive: false });
-                document.addEventListener('touchend', handleEnd);
-            }
-
-            function handleMove(e) {
-                if (!activeSticker || bucketMode) return;
-                e.preventDefault();
-
-                if (e.touches && e.touches.length === 2) {
-                    const newTouchDistance = getTouchDistance(e.touches);
-                    const scaleChange = newTouchDistance / initialTouchDistance;
-                    const newWidth = Math.max(initialStickerWidth * scaleChange, 30);
-                    const aspectRatio = initialStickerWidth / initialStickerHeight;
-                    const newHeight = newWidth / aspectRatio;
-
-                    activeSticker.style.width = `${newWidth}px`;
-                    activeSticker.style.height = `${newHeight}px`;
-
-                    activeSticker.style.left = `${initialCenter.x - newWidth / 2}px`;
-                    activeSticker.style.top = `${initialCenter.y - newHeight / 2}px`;
-
-                } else {
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    const newX = offsetX + (clientX - initialX);
-                    const newY = offsetY + (clientY - initialY);
-                    activeSticker.style.left = `${newX}px`;
-                    activeSticker.style.top = `${newY}px`;
-                }
-            }
-
-            function handleEnd() {
-                document.removeEventListener('mousemove', handleMove);
-                document.removeEventListener('mouseup', handleEnd);
-                document.removeEventListener('touchmove', handleMove);
-                document.removeEventListener('touchend', handleEnd);
-                activeSticker = null;
-                // Save state here, AFTER the drag/resize is complete
-                saveState();
-            }
-
-            function addResizeHandleListeners(handle, sticker) {
-    let startX, startY, startWidth, startHeight, startLeft, startTop;
-
-    const startResize = (e) => {
+    copyBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        e.preventDefault();
-
-        saveState();
-
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-        startX = clientX;
-        startY = clientY;
-        startWidth = sticker.offsetWidth;
-        startHeight = sticker.offsetHeight;
-        startLeft = sticker.offsetLeft;
-        startTop = sticker.offsetTop;
-
-        document.addEventListener('mousemove', doResize);
-        document.addEventListener('mouseup', endResize);
-        document.addEventListener('touchmove', doResize, { passive: false });
-        document.addEventListener('touchend', endResize);
-    };
-
-    const doResize = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-        const deltaX = clientX - startX;
-        const newWidth = Math.max(startWidth + deltaX, 30);
-        const aspectRatio = startWidth / startHeight;
-        const newHeight = newWidth / aspectRatio;
-
-        sticker.style.width = `${newWidth}px`;
-        sticker.style.height = `${newHeight}px`;
-
-        // The key change is here:
-        // Adjust the top-left position to simulate resizing from the center or another anchor point.
-        sticker.style.left = `${startLeft + (startWidth - newWidth) / 2}px`;
-        sticker.style.top = `${startTop + (startHeight - newHeight) / 2}px`;
-
-    };
-
-    const endResize = () => {
-        document.removeEventListener('mousemove', doResize);
-        document.removeEventListener('mouseup', endResize);
-        document.removeEventListener('touchmove', doResize);
-        document.removeEventListener('touchend', endResize);
-        saveState();
-    };
-
-    handle.addEventListener('mousedown', startResize);
-    handle.addEventListener('touchstart', startResize);
-}
-
-            addResizeHandleListeners(resizeHandle, sticker);
-
-            function addWheelResize(stickerImg) {
-                let lastWheelTime = 0;
-                let timeoutId = null;
-                stickerImg.addEventListener('wheel', (e) => {
-                    e.preventDefault();
-                    
-                    // Save the state before the first scroll delta in a sequence
-                    if (Date.now() - lastWheelTime > 200 || history.length === 0) {
-                        saveState();
-                    }
-
-                    const parent = stickerImg.parentElement;
-                    const delta = Math.sign(e.deltaY);
-
-                    const initialWidth = parent.offsetWidth;
-                    const initialHeight = parent.offsetHeight;
-
-                    const initialLeft = parent.offsetLeft;
-                    const initialTop = parent.offsetTop;
-
-                    const newSize = initialWidth + (delta * 10);
-                    const minSize = 30;
-
-                    if (newSize >= minSize) {
-                        const newHeight = newSize / (initialWidth / initialHeight);
-
-                        parent.style.width = `${newSize}px`;
-                        parent.style.height = `${newHeight}px`;
-
-                        parent.style.left = `${initialLeft + (initialWidth - newSize) / 2}px`;
-                        parent.style.top = `${initialTop + (initialHeight - newHeight) / 2}px`;
-                    }
-                    lastWheelTime = Date.now();
-                    clearTimeout(timeoutId);
-                    timeoutId = setTimeout(() => {
-                        saveState();
-                    }, 200);
-                });
-            }
-
-            addWheelResize(stickerImg);
-
-            sticker.addEventListener('mousedown', startInteraction);
-            sticker.addEventListener('touchstart', startInteraction);
-
-            canvas.addEventListener('mousedown', (e) => {
-                if (!e.target.closest('.sticker')) {
-                    deselectAllStickers();
-                }
+        const stickerWidth = sticker.offsetWidth;
+        const stickerHeight = sticker.offsetHeight;
+        let newX = parseInt(sticker.style.left) + 10;
+        let newY = parseInt(sticker.style.top) + 10;
+        function isOverlapping(x, y) {
+            const stickers = document.querySelectorAll('.sticker');
+            return Array.from(stickers).some(s => {
+                const sx = parseInt(s.style.left);
+                const sy = parseInt(s.style.top);
+                const sw = s.offsetWidth;
+                const sh = s.offsetHeight;
+                return !(x + stickerWidth < sx || x > sx + sw || y + stickerHeight < sy || y > sy + sh);
             });
-            canvas.addEventListener('touchstart', (e) => {
-                if (!e.target.closest('.sticker')) {
-                    deselectAllStickers();
-                }
-            });
-
-            let finalX, finalY;
-            const canvasRect = canvas.getBoundingClientRect();
-            const existingStickers = document.querySelectorAll('.sticker');
-
-            if (existingStickers.length === 0) {
-                finalX = (canvas.offsetWidth / 2) - (width / 2);
-                finalY = (canvas.offsetHeight / 2) - (width / 2);
-            } else if (x !== undefined && y !== undefined) {
-                finalX = x;
-                finalY = y;
-            } else {
-                const newStickerWidth = width;
-                const newStickerHeight = (stickerImg.naturalHeight / stickerImg.naturalWidth) * newStickerWidth;
-                let foundPosition = false;
-
-                const step = newStickerWidth / 2;
-                for (let yy = 0; yy < canvas.offsetHeight - newStickerHeight && !foundPosition; yy += step) {
-                    for (let xx = 0; xx < canvas.offsetWidth - newStickerWidth && !foundPosition; xx += step) {
-                        let overlap = false;
-                        document.querySelectorAll('.sticker').forEach(existing => {
-                            const rect = existing.getBoundingClientRect();
-                            const ex = rect.left - canvasRect.left;
-                            const ey = rect.top - canvasRect.top;
-                            const ew = rect.width;
-                            const eh = rect.height;
-
-                            if (
-                                xx < ex + ew &&
-                                xx + newStickerWidth > ex &&
-                                yy < ey + eh &&
-                                yy + newStickerHeight > ey
-                            ) {
-                                overlap = true;
-                            }
-                        });
-
-                        if (!overlap) {
-                            finalX = xx;
-                            finalY = yy;
-                            foundPosition = true;
-                        }
-                    }
-                }
-
-                if (!foundPosition) {
-                    finalX = Math.floor(Math.random() * (canvas.offsetWidth - newStickerWidth));
-                    finalY = Math.floor(Math.random() * (canvas.offsetHeight - newStickerHeight));
-                }
-            }
-
-            sticker.style.left = `${finalX}px`;
-            sticker.style.top = `${finalY}px`;
-
-            function updateButtonSizes() {
-                const btnSize = sticker.offsetWidth * 0.2;
-                [deleteBtn, copyBtn, resizeHandle,, groupBtn].forEach(btn => {
-                    btn.style.width = btnSize + 'px';
-                    btn.style.height = btnSize + 'px';
-                });
-                deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
-                copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
-                resizeHandle.style.bottom = resizeHandle.style.left = `${btnSize * 0.25}px`;
-                groupBtn.style.bottom = groupBtn.style.right = `${btnSize * 0.25}px`;
-            }
-
-            updateButtonSizes();
-            const observer = new ResizeObserver(updateButtonSizes);
-            observer.observe(sticker);
-            canvas.appendChild(sticker);
-            
-            // Save state after a sticker is added to the DOM
-            if (!suppressSave && !isRestoring) {
-    saveState();
-}
-            
-            return sticker;
         }
+        const step = 10;
+        let attempts = 0;
+        while (isOverlapping(newX, newY) && attempts < 100) {
+            newX += step;
+            newY += step;
+            if (newX + stickerWidth > canvas.offsetWidth) newX = step;
+            if (newY + stickerHeight > canvas.offsetHeight) newY = step;
+            attempts++;
+        }
+        saveState();
+        addSticker(
+            sticker.querySelector('img').src,
+            newX,
+            newY,
+            sticker.offsetWidth,
+            sticker.offsetHeight,
+            { group: sticker.dataset.group }
+        );
+    });
+
+    const deleteBtn = document.createElement('div');
+    deleteBtn.classList.add('delete-btn');
+    deleteBtn.innerHTML = `
+        <svg class="delete-btn-icon" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
+        </svg>
+    `;
+    deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        saveState();
+        sticker.remove();
+    });
+
+    const resizeHandle = document.createElement('div');
+    resizeHandle.classList.add('resize-handle');
+    resizeHandle.innerHTML = `
+        <svg class="resize-handle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+        </svg>
+    `;
+
+    const groupBtn = document.createElement('div');
+    groupBtn.classList.add('sticker-btn', 'group-btn');
+    groupBtn.innerHTML = `
+        <svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+    `;
+
+    groupBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const stickerGroup = sticker.dataset.group;
+        const group = stickerGroups.find(g => g.name === stickerGroup);
+        if (group) {
+            showOverlay(e, group.name, group.urls);
+        }
+    });
+
+    sticker.appendChild(deleteBtn);
+    sticker.appendChild(copyBtn);
+    sticker.appendChild(resizeHandle);
+    sticker.appendChild(groupBtn);
+
+    // --- EVENT LISTENERS ---
+    function startInteraction(e) {
+        if (e.target.closest('.delete-btn, .copy-btn, .lock-btn, .group-btn')) return;
+        if (bucketMode) return;
+
+        saveState();
+
+        deselectAllStickers();
+        sticker.classList.add('selected');
+
+        e.preventDefault();
+        activeSticker = sticker;
+
+        initialCenter.x = sticker.offsetLeft + sticker.offsetWidth / 2;
+        initialCenter.y = sticker.offsetTop + sticker.offsetHeight / 2;
+
+        if (e.touches && e.touches.length === 2) {
+            initialTouchDistance = getTouchDistance(e.touches);
+            initialStickerWidth = sticker.offsetWidth;
+            initialStickerHeight = sticker.offsetHeight;
+        } else if (e.touches && e.touches.length === 1) {
+            const touch = e.touches[0];
+            initialX = touch.clientX;
+            initialY = touch.clientY;
+            offsetX = sticker.offsetLeft;
+            offsetY = sticker.offsetTop;
+        } else {
+            initialX = e.clientX;
+            initialY = e.clientY;
+            offsetX = sticker.offsetLeft;
+            offsetY = sticker.offsetTop;
+        }
+
+        document.addEventListener('mousemove', handleMove);
+        document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('touchmove', handleMove, { passive: false });
+        document.addEventListener('touchend', handleEnd);
+    }
+
+    function handleMove(e) {
+        if (!activeSticker || bucketMode) return;
+        e.preventDefault();
+
+        if (e.touches && e.touches.length === 2) {
+            const newTouchDistance = getTouchDistance(e.touches);
+            const scaleChange = newTouchDistance / initialTouchDistance;
+            const newWidth = Math.max(initialStickerWidth * scaleChange, 30);
+            const aspectRatio = initialStickerWidth / initialStickerHeight;
+            const newHeight = newWidth / aspectRatio;
+
+            activeSticker.style.width = `${newWidth}px`;
+            activeSticker.style.height = `${newHeight}px`;
+
+            activeSticker.style.left = `${initialCenter.x - newWidth / 2}px`;
+            activeSticker.style.top = `${initialCenter.y - newHeight / 2}px`;
+
+        } else {
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const newX = offsetX + (clientX - initialX);
+            const newY = offsetY + (clientY - initialY);
+            activeSticker.style.left = `${newX}px`;
+            activeSticker.style.top = `${newY}px`;
+        }
+    }
+
+    function handleEnd() {
+        document.removeEventListener('mousemove', handleMove);
+        document.removeEventListener('mouseup', handleEnd);
+        document.removeEventListener('touchmove', handleMove);
+        document.removeEventListener('touchend', handleEnd);
+        activeSticker = null;
+        saveState();
+    }
+
+    function addResizeHandleListeners(handle, sticker) {
+        let startX, startY, startWidth, startHeight, startLeft, startTop;
+
+        const startResize = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            saveState();
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            startX = clientX;
+            startY = clientY;
+            startWidth = sticker.offsetWidth;
+            startHeight = sticker.offsetHeight;
+            startLeft = sticker.offsetLeft;
+            startTop = sticker.offsetTop;
+
+            document.addEventListener('mousemove', doResize);
+            document.addEventListener('mouseup', endResize);
+            document.addEventListener('touchmove', doResize, { passive: false });
+            document.addEventListener('touchend', endResize);
+        };
+
+        const doResize = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            const deltaX = clientX - startX;
+            const newWidth = Math.max(startWidth + deltaX, 30);
+            const aspectRatio = startWidth / startHeight;
+            const newHeight = newWidth / aspectRatio;
+
+            sticker.style.width = `${newWidth}px`;
+            sticker.style.height = `${newHeight}px`;
+            sticker.style.left = `${startLeft + (startWidth - newWidth) / 2}px`;
+            sticker.style.top = `${startTop + (startHeight - newHeight) / 2}px`;
+        };
+
+        const endResize = () => {
+            document.removeEventListener('mousemove', doResize);
+            document.removeEventListener('mouseup', endResize);
+            document.removeEventListener('touchmove', doResize);
+            document.removeEventListener('touchend', endResize);
+            saveState();
+        };
+
+        handle.addEventListener('mousedown', startResize);
+        handle.addEventListener('touchstart', startResize);
+    }
+
+    addResizeHandleListeners(resizeHandle, sticker);
+
+    function addWheelResize(stickerImg) {
+        let lastWheelTime = 0;
+        let timeoutId = null;
+        stickerImg.addEventListener('wheel', (e) => {
+            e.preventDefault();
+
+            if (Date.now() - lastWheelTime > 200 || history.length === 0) {
+                saveState();
+            }
+
+            const parent = stickerImg.parentElement;
+            const delta = Math.sign(e.deltaY);
+            const initialWidth = parent.offsetWidth;
+            const initialHeight = parent.offsetHeight;
+            const initialLeft = parent.offsetLeft;
+            const initialTop = parent.offsetTop;
+            const newSize = initialWidth + (delta * 10);
+            const minSize = 30;
+
+            if (newSize >= minSize) {
+                const newHeight = newSize / (initialWidth / initialHeight);
+                parent.style.width = `${newSize}px`;
+                parent.style.height = `${newHeight}px`;
+                parent.style.left = `${initialLeft + (initialWidth - newSize) / 2}px`;
+                parent.style.top = `${initialTop + (initialHeight - newHeight) / 2}px`;
+            }
+            lastWheelTime = Date.now();
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                saveState();
+            }, 200);
+        });
+    }
+
+    addWheelResize(stickerImg);
+
+    sticker.addEventListener('mousedown', startInteraction);
+    sticker.addEventListener('touchstart', startInteraction);
+
+    canvas.addEventListener('mousedown', (e) => {
+        if (!e.target.closest('.sticker')) {
+            deselectAllStickers();
+        }
+    });
+    canvas.addEventListener('touchstart', (e) => {
+        if (!e.target.closest('.sticker')) {
+            deselectAllStickers();
+        }
+    });
+
+    // ✅ FIX: Move placement logic inside onload event
+    stickerImg.onload = () => {
+        let finalX, finalY;
+        const canvasRect = canvas.getBoundingClientRect();
+        const existingStickers = document.querySelectorAll('.sticker');
+
+        // Check if it's the first sticker on the canvas
+        if (existingStickers.length === 1) { 
+            finalX = (canvas.offsetWidth / 2) - (sticker.offsetWidth / 2);
+            finalY = (canvas.offsetHeight / 2) - (sticker.offsetHeight / 2);
+        } else if (x !== undefined && y !== undefined) {
+            finalX = x;
+            finalY = y;
+        } else {
+            let foundPosition = false;
+            const newStickerWidth = sticker.offsetWidth;
+            // Use natural dimensions for correct aspect ratio
+            const newStickerHeight = (stickerImg.naturalHeight / stickerImg.naturalWidth) * newStickerWidth;
+
+            const step = newStickerWidth / 2;
+            for (let yy = 0; yy < canvas.offsetHeight - newStickerHeight && !foundPosition; yy += step) {
+                for (let xx = 0; xx < canvas.offsetWidth - newStickerWidth && !foundPosition; xx += step) {
+                    let overlap = false;
+                    document.querySelectorAll('.sticker').forEach(existing => {
+                        if (existing === sticker) return;
+
+                        const rect = existing.getBoundingClientRect();
+                        const ex = rect.left - canvasRect.left;
+                        const ey = rect.top - canvasRect.top;
+                        const ew = rect.width;
+                        const eh = rect.height;
+
+                        if (
+                            xx < ex + ew &&
+                            xx + newStickerWidth > ex &&
+                            yy < ey + eh &&
+                            yy + newStickerHeight > ey
+                        ) {
+                            overlap = true;
+                        }
+                    });
+
+                    if (!overlap) {
+                        finalX = xx;
+                        finalY = yy;
+                        foundPosition = true;
+                    }
+                }
+            }
+            if (!foundPosition) {
+                finalX = Math.floor(Math.random() * (canvas.offsetWidth - newStickerWidth));
+                finalY = Math.floor(Math.random() * (canvas.offsetHeight - newStickerHeight));
+            }
+        }
+        
+        sticker.style.left = `${finalX}px`;
+        sticker.style.top = `${finalY}px`;
+        
+        if (!suppressSave && !isRestoring) {
+            saveState();
+        }
+    };
+
+    const updateButtonSizes = () => {
+        const btnSize = sticker.offsetWidth * 0.2;
+        [deleteBtn, copyBtn, resizeHandle, groupBtn].forEach(btn => {
+            btn.style.width = btnSize + 'px';
+            btn.style.height = btnSize + 'px';
+        });
+        deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
+        copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
+        resizeHandle.style.bottom = resizeHandle.style.left = `${btnSize * 0.25}px`;
+        groupBtn.style.bottom = groupBtn.style.right = `${btnSize * 0.25}px`;
+    };
+
+    updateButtonSizes();
+    const observer = new ResizeObserver(updateButtonSizes);
+    observer.observe(sticker);
+    canvas.appendChild(sticker);
+
+    return sticker;
+}
 
       function populatePalette() {
     stickerGroups.forEach(group => {
