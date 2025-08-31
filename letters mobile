@@ -16874,20 +16874,25 @@ function loadState(state) {
 
     let stickerDiv = document.querySelector(`#canvas-container .sticker[data-letter="${selectedLetter}"]`);
     
-    // If no "A" sticker exists on the canvas, add one first.
-    if (!stickerDiv) {
-        const url = getRandomStickerByLetter(selectedLetter);
-        if (url) {
-            const groupWithLetter = stickerGroups.find(g => g.urls[selectedLetter]);
-            const groupName = groupWithLetter ? groupWithLetter.name : null;
-            stickerDiv = addSticker(url, undefined, undefined, 120, 120, { letter: selectedLetter, group: groupName });
-        } else {
-            console.warn("⚠️ No sticker available for letter A.");
-            return;
-        }
+    // Get all 'A' URLs and only take the first one from each group
+    const urlsToSpin = stickerGroups
+        .filter(group => group.urls[selectedLetter] && group.urls[selectedLetter].length > 0)
+        .map(group => group.urls[selectedLetter][0]); // Get only the first URL
+
+    if (urlsToSpin.length === 0) {
+        console.warn("⚠️ No sticker available for letter A.");
+        return;
     }
 
-    // ✅ ADD THESE LINES to re-center and resize the sticker before spinning
+    // If no "A" sticker exists, add one using the first available URL.
+    if (!stickerDiv) {
+        const initialUrl = urlsToSpin[0];
+        const groupWithLetter = stickerGroups.find(g => g.urls[selectedLetter]);
+        const groupName = groupWithLetter ? groupWithLetter.name : null;
+        stickerDiv = addSticker(initialUrl, undefined, undefined, 120, 120, { letter: selectedLetter, group: groupName });
+    }
+
+    // Re-center and resize the sticker before spinning
     const stickerSize = 120;
     const centerX = (canvas.offsetWidth / 2) - (stickerSize / 2);
     const centerY = (canvas.offsetHeight / 2) - (stickerSize / 2);
@@ -16897,22 +16902,39 @@ function loadState(state) {
     stickerDiv.style.top = `${centerY}px`;
 
     const stickerImg = stickerDiv.querySelector("img");
-    let spinCount = 0;
-    const maxSpins = 15 + Math.floor(Math.random() * 10);
+    
+    // ✅ Preload all images before starting the spin
+    let loadedCount = 0;
+    urlsToSpin.forEach(url => {
+        const img = new Image();
+        img.onload = () => {
+            loadedCount++;
+            // Once all images are preloaded, start the spinning animation
+            if (loadedCount === urlsToSpin.length) {
+                startSpinning();
+            }
+        };
+        img.src = url;
+    });
 
-    const spinInterval = setInterval(() => {
-        const nextUrl = getRandomStickerByLetter(selectedLetter);
-        if (nextUrl) {
+    // Start the spinning animation only after preloading
+    function startSpinning() {
+        let spinCount = 0;
+        const maxSpins = 15 + Math.floor(Math.random() * 10);
+        
+        const spinInterval = setInterval(() => {
+            const nextUrl = urlsToSpin[Math.floor(Math.random() * urlsToSpin.length)];
             stickerImg.src = nextUrl;
-        }
-        spinCount++;
-        if (spinCount >= maxSpins) {
-            clearInterval(spinInterval);
-            stickerDiv.classList.add("pulse-effect");
-            setTimeout(() => stickerDiv.classList.remove("pulse-effect"), 3000);
-            saveState();
-        }
-    }, 100);
+            
+            spinCount++;
+            if (spinCount >= maxSpins) {
+                clearInterval(spinInterval);
+                stickerDiv.classList.add("pulse-effect");
+                setTimeout(() => stickerDiv.classList.remove("pulse-effect"), 3000);
+                saveState();
+            }
+        }, 100);
+    }
 });
 
         // MODIFIED: This function now correctly handles replacing the sticker and centering it
