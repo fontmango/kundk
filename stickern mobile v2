@@ -373,10 +373,11 @@ button.active {
     gap: 10px;
     overflow-y: auto;
     height: calc(100% - 40px);
+    width: 100%;
 }
 
 .overlay-icon {
-    width: 60px; /* Set a fixed width for consistent sizing */
+   
     max-width: 100%; /* Ensures it scales down on smaller screens */
     height: auto;
     aspect-ratio: 1/1;
@@ -505,7 +506,7 @@ button.active {
 .overlay-stickers-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-    gap: 15px;
+    gap: 10px;
     padding: 10px;
     max-height: 70vh; /* Adjust as needed */
     overflow-y: auto;
@@ -547,7 +548,7 @@ button.active {
 
 #group-overlay-container {
     position: fixed;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgba(255, 255, 255, 0.95);
@@ -559,16 +560,20 @@ button.active {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     width: 80%;
     max-width: 500px;
-    
-    /* Set a max-height to enable scrolling */
     max-height: 80vh;
     overflow-y: auto;
     
-    /* A more responsive grid for both desktop and mobile */
+    /* Change to flexbox for vertical stacking */
+    display: none;
+    flex-direction: column;
+}
 
-    /* Decrease the minmax value to allow more icons to fit */
+.overlay-icons-grid {
+    /* Apply grid properties to the new container for icons */
+    display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-    gap: 5px;
+    gap: 10px;
+    padding: 10px 0; /* Adjust padding as needed */
 }
 
 .overlay-title {
@@ -5861,17 +5866,43 @@ window.addEventListener('load', () => {
 
 // Function to show the initial group selection overlay
 function showGroupOverlay() {
-    hideOverlays();
+     hideOverlays();
     groupOverlayContainer.innerHTML = '';
 
-    // add close button
+    // Create the header with the title and close button
+    const header = document.createElement('div');
+    header.classList.add('overlay-header');
+    
+    const title = document.createElement('h2');
+    title.textContent = "Sticker auswählen";
+    title.classList.add('overlay-title');
+    header.appendChild(title);
+    
+    // Create and append the close button to the header
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '✕';
     closeBtn.classList.add('close-btn');
     closeBtn.addEventListener('click', hideOverlays);
-    groupOverlayContainer.appendChild(closeBtn);
+    header.appendChild(closeBtn);
     
-    // Show the container immediately
+    // Create a separate container for the icons
+    const iconsGrid = document.createElement('div');
+    iconsGrid.classList.add('overlay-icons-grid');
+
+      // Set grid styles directly in JavaScript
+    iconsGrid.style.display = 'grid';
+    iconsGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(40px, 1fr))';
+    iconsGrid.style.gap = '10px';
+    iconsGrid.style.padding = '10px';
+    iconsGrid.style.overflowY = 'auto';
+
+    // Append both the header and the icons grid to the main container
+    groupOverlayContainer.appendChild(header);
+    groupOverlayContainer.appendChild(iconsGrid);
+
+    // Show the main container and give it a vertical layout
+    groupOverlayContainer.style.display = 'flex';
+    groupOverlayContainer.style.flexDirection = 'column';
     groupOverlayContainer.style.display = 'grid';
 
     // ✅ NEW: Load and add group icons one-by-one
@@ -5900,7 +5931,9 @@ function showGroupOverlay() {
         });
         
         // Append to the DOM before setting the src to trigger the load
-        groupOverlayContainer.appendChild(groupIcon);
+        iconsGrid.appendChild(groupIcon);
+
+
 
         // Use a short delay before setting the src for each icon
         setTimeout(() => {
