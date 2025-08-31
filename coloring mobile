@@ -373,26 +373,24 @@ button.active {
     gap: 10px;
     overflow-y: auto;
     height: calc(100% - 40px);
+    width: 100%;
 }
 
 .overlay-icon {
-    width: 100%;
+   
+    max-width: 100%; /* Ensures it scales down on smaller screens */
     height: auto;
     aspect-ratio: 1/1;
     object-fit: contain;
     cursor: pointer;
     border-radius: 8px;
-    
-    /* Remove the problematic transition property */
-    transition: none !important; 
-    
-    /* Ensure a default transform value */
-    transform: scale(1); 
-    
+    transition: transform 0.2s;
+    transform: scale(1);
     -webkit-tap-highlight-color: transparent;
     -webkit-focus-ring-color: transparent;
-    outline: none;    
+    outline: none;
 }
+
 
 .overlay-icon:hover {
     animation: pulse 1.5s infinite;
@@ -518,8 +516,18 @@ button.active {
     grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
     gap: 15px;
     padding: 10px;
+    max-height: 70vh; /* Adjust as needed */
       overflow-y: auto;
 }
+
+.overlay-icons-grid {
+    /* Apply grid properties to the new container for icons */
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 10px;
+    padding: 10px 0; /* Adjust padding as needed */
+}
+
 
 .overlay-header {
     display: flex;
@@ -562,6 +570,28 @@ button.active {
     margin: 0;
     font-size: 16px; /* Adjust font size as needed */
     font-weight: 600;
+}
+
+#group-overlay-container {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    display: none;
+    z-index: 200;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    
+    /* Change to flexbox for vertical stacking */
+    display: none;
+    flex-direction: column;
 }
 
     </style>
@@ -609,7 +639,7 @@ button.active {
     </div>
         <div id="sticker-overlay-container"></div>
 
-    <div id="group-overlay-container" class="overlay"></div>
+    <div id="group-overlay-container"></div>
 
     <script>
              const stickerGroups = [
@@ -2939,40 +2969,86 @@ window.addEventListener('load', () => {
             stickerOverlayContainer.style.display = 'none';
         }
 
-   function showGroupOverlay() {
-    hideOverlays();
+  // Function to show the initial group selection overlay
+function showGroupOverlay() {
+     hideOverlays();
     groupOverlayContainer.innerHTML = '';
 
-    // add close button
+    // Create the header with the title and close button
+    const header = document.createElement('div');
+    header.classList.add('overlay-header');
+    
+    const title = document.createElement('h2');
+    title.textContent = "Sticker auswählen";
+    title.classList.add('overlay-title');
+    header.appendChild(title);
+    
+    // Create and append the close button to the header
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '✕';
     closeBtn.classList.add('close-btn');
     closeBtn.addEventListener('click', hideOverlays);
-    groupOverlayContainer.appendChild(closeBtn);
+    header.appendChild(closeBtn);
+    
+    // Create a separate container for the icons
+    const iconsGrid = document.createElement('div');
+    iconsGrid.classList.add('overlay-icons-grid');
 
-    // add group icons
-    stickerGroups.forEach(group => {
+      // Set grid styles directly in JavaScript
+    iconsGrid.style.display = 'grid';
+    iconsGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(40px, 1fr))';
+    iconsGrid.style.gap = '10px';
+    iconsGrid.style.padding = '10px';
+    iconsGrid.style.overflowY = 'auto';
+
+    // Append both the header and the icons grid to the main container
+    groupOverlayContainer.appendChild(header);
+    groupOverlayContainer.appendChild(iconsGrid);
+
+    // Show the main container and give it a vertical layout
+    groupOverlayContainer.style.display = 'flex';
+    groupOverlayContainer.style.flexDirection = 'column';
+    groupOverlayContainer.style.display = 'grid';
+
+    // ✅ NEW: Load and add group icons one-by-one
+    stickerGroups.forEach((group, index) => {
         const groupIcon = document.createElement('img');
-        groupIcon.src = group.urls[0];
         groupIcon.classList.add('overlay-icon');
         groupIcon.title = group.name;
+
+        // Add a listener to wait for the image to load, then fade it in
+        groupIcon.onload = () => {
+            groupIcon.style.opacity = '1';
+        };
+        
+        // Initially hide the icon to prevent a blank box
+        groupIcon.style.opacity = '0'; 
+        groupIcon.style.transition = 'opacity 0.5s ease-in-out';
 
         // Add contextmenu listener
         groupIcon.addEventListener('contextmenu', (e) => {
             e.preventDefault();
         });
 
-        // ✅ The crucial change: call showStickerOverlay directly without preloading
+        // Call showStickerOverlay directly
         groupIcon.addEventListener('click', () => {
             showStickerOverlay(group.urls, group.name);
         });
+        
+        // Append to the DOM before setting the src to trigger the load
+        iconsGrid.appendChild(groupIcon);
 
-        groupOverlayContainer.appendChild(groupIcon);
+
+
+        // Use a short delay before setting the src for each icon
+        setTimeout(() => {
+            if (group.urls && group.urls.length > 0) {
+                groupIcon.src = group.urls[0];
+            }
+        }, index * 50); // 50ms delay for each icon
     });
-
-    // finally: show overlay
-    groupOverlayContainer.style.display = 'grid';
 }
+
 
         function updateCanvasDrop() {
             const canvas = document.getElementById('canvas-container');
