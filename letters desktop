@@ -16988,21 +16988,23 @@ groupBtn.innerHTML = `
 
 groupBtn.addEventListener('click', (ev) => {
     ev.stopPropagation();
-
+    
     const letter = sticker.dataset.letter;
     const url = sticker.querySelector('img').src;
+    
+    // ✅ FIX: Decode the URL from the sticker before searching
+    const decodedUrl = decodeURIComponent(url);
 
-    // Find the group that actually contains this URL under this letter
-    const group = stickerGroups.find(g => g.urls[letter]?.includes(url));
+    // The find method will now work correctly
+    const group = stickerGroups.find(g => g.urls[letter]?.includes(decodedUrl));
 
     if (group) {
-        console.log('Found correct group:', group.name);
-        showOverlay(ev, group.urls);
+        console.log("Group found:", group.name);
+        showOverlay(ev, group.urls, sticker.offsetWidth, sticker.offsetHeight);
     } else {
-        console.warn('⚠️ No matching group found for this sticker!');
+        console.log("Error: Group not found. Check if the sticker's letter or URL matches the data.");
     }
 });
-
 sticker.appendChild(groupBtn);
 
 
@@ -17469,8 +17471,9 @@ function checkSelectionCollision(isShiftPressed) {
 
         let activeGroupURLs = [];
 
-function showOverlay(e, urlsByLetter) {
+function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
     overlayContainer.innerHTML = '';
+    
     const group = stickerGroups.find(g => g.urls === urlsByLetter);
     if (!group) return;
 
@@ -17495,67 +17498,31 @@ function showOverlay(e, urlsByLetter) {
     header.appendChild(title);
     header.appendChild(closeBtn);
     overlayContainer.appendChild(header);
+
     const stickersGrid = document.createElement('div');
     stickersGrid.className = 'overlay-stickers-grid';
-    overlayContainer.appendChild(stickersGrid);
-
-    // ✅ FIX: Get and sort the keys first
-    const sortedKeys = Object.keys(urlsByLetter).sort((a, b) => {
-        const numA = parseFloat(a);
-        const numB = parseFloat(b);
-
-        // If both are numbers, sort numerically
-        if (!isNaN(numA) && !isNaN(numB)) {
-            return numA - numB;
-        }
-        // If 'a' is a number, it comes before 'b'
-        if (!isNaN(numA)) {
-            return -1;
-        }
-        // If 'b' is a number, it comes before 'a'
-        if (!isNaN(numB)) {
-            return 1;
-        }
-        // Otherwise, they are both letters, so sort alphabetically
-        return a.localeCompare(b);
-    });
-
-    let allUrls = [];
-    sortedKeys.forEach(key => {
-        allUrls = allUrls.concat(urlsByLetter[key]);
-    });
-
-    allUrls.forEach((url, index) => {
-        setTimeout(() => {
+    for (const letter in urlsByLetter) {
+        urlsByLetter[letter].forEach(url => {
             const overlaySticker = document.createElement('img');
             overlaySticker.src = url;
             overlaySticker.classList.add('overlay-sticker');
             overlaySticker.draggable = true;
-
-             overlaySticker.style.opacity = '0';
-            overlaySticker.style.transition = 'opacity 0.5s ease-in-out';
-            overlaySticker.onload = () => {
-                overlaySticker.style.opacity = '1';
-            };
-
-
-            const letter = Object.keys(urlsByLetter).find(key => urlsByLetter[key].includes(url));
             overlaySticker.dataset.letter = letter;
             overlaySticker.dataset.group = group.name;
-
             overlaySticker.addEventListener('click', (ev) => {
                 ev.stopPropagation();
-                addSticker(url, undefined, undefined, 120, 120, {
+                addSticker(url, undefined, undefined, stickerWidth, stickerHeight, {
                     letter: letter,
                     group: group.name
                 });
+                hideOverlay();
             });
-
             overlaySticker.addEventListener('dragstart', (dragStartEvent) => {
                 dragStartEvent.stopPropagation();
                 dragStartEvent.dataTransfer.setData('application/json', JSON.stringify({
                     url: dragStartEvent.target.src,
-                    width: 120,
+                    width: stickerWidth,
+                    height: stickerHeight,
                     letter: dragStartEvent.target.dataset.letter,
                     group: dragStartEvent.target.dataset.group
                 }));
@@ -17580,10 +17547,16 @@ function showOverlay(e, urlsByLetter) {
                 dragStartEvent.target.addEventListener('dragend', stopFollowing);
             });
             stickersGrid.appendChild(overlaySticker);
-        }, index * 50);
+        });
+    }
+    overlayContainer.appendChild(stickersGrid);
+    overlayContainer.addEventListener('click', (ev) => {
+        if (ev.target.closest('.overlay-close-btn')) {
+            hideOverlay();
+        }
     });
 
-    // --- The rest of the function remains the same ---
+    // --- Position Overlay ---
     const isFromPalette = e.target.closest('#sticker-palette-container');
 
     if (isFromPalette) {
@@ -17592,18 +17565,21 @@ function showOverlay(e, urlsByLetter) {
         overlayContainer.style.left = `${canvasRect.left + margin}px`;
         overlayContainer.style.top = `${canvasRect.top + margin}px`;
     } else {
-        overlayContainer.style.visibility = 'hidden';
+        // ✅ NEW, ROBUST LOGIC for on-canvas trigger
+        // Step 1: Temporarily show the overlay to measure it
         overlayContainer.style.display = 'flex';
+        overlayContainer.style.visibility = 'hidden';
+
         const overlayWidth = overlayContainer.offsetWidth;
         const overlayHeight = overlayContainer.offsetHeight;
-        overlayContainer.style.display = 'none';
-        overlayContainer.style.visibility = 'visible';
 
+        // Step 2: Calculate the best position
         const rect = e.target.getBoundingClientRect();
         const margin = 15;
         let top = rect.bottom + margin;
         let left = rect.left + (rect.width / 2) - (overlayWidth / 2);
 
+        // Step 3: Check and correct for screen edges
         if (top + overlayHeight > window.innerHeight) {
             top = rect.top - overlayHeight - margin;
         }
@@ -17616,17 +17592,25 @@ function showOverlay(e, urlsByLetter) {
         if (top < 0) {
             top = margin;
         }
+
+        // Step 4: Apply the final, safe position
         overlayContainer.style.left = `${left}px`;
         overlayContainer.style.top = `${top}px`;
-    }
 
+        // ✅ Step 5: Make the overlay visible again
+        overlayContainer.style.visibility = 'visible';
+    }
+    
     overlayContainer.dataset.originalLeft = overlayContainer.style.left;
     overlayContainer.dataset.originalTop = overlayContainer.style.top;
-
+    
     overlayContainer.style.display = 'flex';
+
     lucide.createIcons();
+    
     document.addEventListener('mousedown', handleCloseOverlayOnOutsideClick);
 }
+
 
         document.addEventListener('click', (e) => {
             if (!paletteContainer.contains(e.target) && !overlayContainer.contains(e.target)) {
@@ -17638,20 +17622,20 @@ function showOverlay(e, urlsByLetter) {
             e.preventDefault();
         });
 
-       canvas.addEventListener('drop', (e) => {
+  canvas.addEventListener('drop', (e) => {
     e.preventDefault();
     const data = e.dataTransfer.getData('application/json');
     if (data) {
-        // ✅ Unpack the new letter and group data
-        const { url, width, letter, group } = JSON.parse(data);
+        // ✅ Unpack the width AND height
+        const { url, width, height, letter, group } = JSON.parse(data);
         const rect = canvas.getBoundingClientRect();
 
         // Center the sticker on the drop location
         const x = e.clientX - rect.left - (width / 2);
-        const y = e.clientY - rect.top - (width / 2);
-        
-        // ✅ Pass the letter and group into the options object
-        addSticker(url, x, y, width, width, { letter, group });
+        const y = e.clientY - rect.top - (height / 2); // ✅ Use height for y calculation
+
+        // ✅ Pass the correct width AND height
+        addSticker(url, x, y, width, height, { letter, group });
     }
 });
 
