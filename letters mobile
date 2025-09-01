@@ -17538,11 +17538,9 @@ function checkSelectionCollision(isShiftPressed) {
 }
 
 function showStickerSelectionOverlay() {
-    // We reuse the overlay container for this
     overlayContainer.innerHTML = '';
     overlayContainer.style.display = 'flex';
 
-    // Create a title and close button for this primary overlay
     const header = document.createElement('div');
     header.className = 'overlay-header';
     header.innerHTML = `
@@ -17554,21 +17552,29 @@ function showStickerSelectionOverlay() {
     const grid = document.createElement('div');
     grid.id = 'sticker-selection-grid';
     
-    // Populate the grid with sticker groups
-    stickerGroups.forEach(group => {
+    // ✅ Use forEach with an index to create a staggered delay
+    stickerGroups.forEach((group, index) => {
         const representativeUrl = group.urls["A"]?.[0];
         if (representativeUrl) {
             const stickerEl = document.createElement('div');
             stickerEl.className = 'selection-sticker';
+
+            // Set initial state for the fade-in effect
+            stickerEl.style.opacity = '0';
+            stickerEl.style.transition = 'opacity 0.5s ease-in-out';
+            
+            // ✅ Use setTimeout to make each sticker appear with a delay
+            setTimeout(() => {
+                stickerEl.style.opacity = '1';
+            }, index * 50); // 50ms delay between each sticker group
             
             stickerEl.innerHTML = `
                 <img src="${representativeUrl}" alt="${group.name}">
                 <span>${group.name}</span>
             `;
             
-            // When a group is clicked, open the *second* overlay with its stickers
             stickerEl.addEventListener('click', (e) => {
-                showOverlay(e, group.urls); // This is your existing function
+                showOverlay(e, group.urls);
             });
 
             grid.appendChild(stickerEl);
@@ -17576,15 +17582,13 @@ function showStickerSelectionOverlay() {
     });
     
     overlayContainer.appendChild(grid);
-     overlayContainer.addEventListener('click', (e) => {
-        // If the click happened on the close button, hide the overlay
+    overlayContainer.addEventListener('click', (e) => {
         if (e.target.closest('.overlay-close-btn')) {
             hideOverlay();
         }
     });
-    lucide.createIcons();
     
-    // Add the "click outside to close" logic
+    lucide.createIcons();
     document.addEventListener('mousedown', handleCloseOverlayOnOutsideClick);
 }
 
@@ -17649,6 +17653,14 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
             overlaySticker.src = url;
             overlaySticker.classList.add('overlay-sticker');
             overlaySticker.draggable = true;
+ overlaySticker.style.opacity = '0';
+            overlaySticker.style.transition = 'opacity 0.5s ease-in-out';
+            
+            overlaySticker.onload = () => {
+                // Once the image is loaded, make it visible
+                overlaySticker.style.opacity = '1';
+            };
+
             overlaySticker.dataset.letter = letter;
             overlaySticker.dataset.group = group.name;
             overlaySticker.addEventListener('click', (ev) => {
