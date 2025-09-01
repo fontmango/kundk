@@ -16779,8 +16779,7 @@ function loadState(state) {
 }
 
 function populatePalette() {
-    stickerGroups.forEach(group => {
-        // The representative sticker is always the one for letter "A"
+    stickerGroups.forEach((group, index) => {
         const representativeUrl = group.urls["A"] ? group.urls["A"][0] : null;
 
         if (representativeUrl) {
@@ -16792,6 +16791,10 @@ function populatePalette() {
             paletteSticker.src = representativeUrl;
             paletteSticker.classList.add('palette-sticker');
             paletteSticker.dataset.group = group.name;
+            
+            // ✅ Set initial state for the fade-in effect
+            paletteSticker.style.opacity = '0';
+            paletteSticker.style.transition = 'opacity 0.5s ease-in-out';
 
             paletteSticker.addEventListener('click', (e) => {
                 if (activePaletteSticker === paletteSticker) {
@@ -16805,11 +16808,10 @@ function populatePalette() {
 
             paletteSticker.draggable = true;
             paletteSticker.addEventListener('dragstart', (e) => {
-                // ✅ Add the missing letter and group data to the payload
                 e.dataTransfer.setData('application/json', JSON.stringify({
                     url: e.target.src,
                     width: 120,
-                    letter: "A", // Palette stickers represent letter "A"
+                    letter: "A",
                     group: group.name
                 }));
                 hideOverlay();
@@ -16817,6 +16819,11 @@ function populatePalette() {
 
             wrapper.appendChild(paletteSticker);
             paletteContainer.appendChild(wrapper);
+
+            // ✅ Add a delay for each sticker to create the stagger effect
+            setTimeout(() => {
+                paletteSticker.style.opacity = '1';
+            }, index * 100); // 100ms delay between each sticker
         }
     });
 }
@@ -17507,6 +17514,16 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
             overlaySticker.src = url;
             overlaySticker.classList.add('overlay-sticker');
             overlaySticker.draggable = true;
+
+             // Set initial state for the fade-in effect
+            overlaySticker.style.opacity = '0';
+            overlaySticker.style.transition = 'opacity 0.5s ease-in-out';
+            
+            overlaySticker.onload = () => {
+                // Once the image is loaded, make it visible
+                overlaySticker.style.opacity = '1';
+            };
+
             overlaySticker.dataset.letter = letter;
             overlaySticker.dataset.group = group.name;
             overlaySticker.addEventListener('click', (ev) => {
@@ -17704,7 +17721,9 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
     }
 });
       
-   
+   window.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+});
     </script>
 </body>
 </html>
