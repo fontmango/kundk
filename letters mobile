@@ -230,19 +230,33 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             transform: scale(1.1);
         }
 
-        #overlay-container {
-    position: absolute;
-    background-color: rgba(255, 255, 255, 0.98); /* Slightly less transparent */
+#overlay-container {
+    background-color: rgba(255, 255, 255, 0.98);
     border: 1px solid #ccc;
-    border-radius: 12px; /* A bit more rounded */
+    border-radius: 12px;
     padding: 10px 15px;
     z-index: 200;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    width: 380px;
-    /* ✅ Changed to flex layout */
+    /* ✅ New: Use a percentage width relative to the canvas */
+    width: 90%; 
+    
     display: none;
     flex-direction: column;
-    
+
+    /* ✅ New: Position absolutely within the canvas */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media (max-width: 480px) {
+    #overlay-container {
+        /* ✅ Keep mobile styles for percentage width */
+        width: 90%; 
+        padding: 8px 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
 }
 
 /* ✅ New styles for the overlay header */
@@ -1617,100 +1631,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             ]
         }
     },
-    {
-        "name": "Baloon",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Bamboo",
         "purchaseUrl": "",
@@ -1825,100 +1746,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             ]
         }
     },
-    {
-        "name": "Baseball",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Bee",
         "purchaseUrl": "https://www.fontmango.com/product-page/bee-font",
@@ -2147,100 +1975,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             ]
         }
     },
-    {
-        "name": "Biopunk",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Birthday",
         "purchaseUrl": "https://www.fontmango.com/product-page/birthday-font",
@@ -2355,120 +2090,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             ]
         }
     },
-    {
-        "name": "Bones",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/Z.png"
-            ],
-            "0": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/0.png"
-            ],
-            "1": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/1.png"
-            ],
-            "2": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/2.png"
-            ],
-            "3": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/3.png"
-            ],
-            "4": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/4.png"
-            ],
-            "5": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/5.png"
-            ],
-            "6": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/6.png"
-            ],
-            "7": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/7.png"
-            ],
-            "8": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/8.png"
-            ],
-            "9": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/9.png"
-            ]
-        }
-    },
+    
     {
         "name": "Books",
         "purchaseUrl": "https://www.fontmango.com/product-page/book-font",
@@ -3527,100 +3149,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             "9": []
         }
     },
-    {
-        "name": "Chillout",
-        "purchaseUrl": "https://www.fontmango.com/product-page/chillout-font",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Christmas",
         "purchaseUrl": "",
@@ -5017,100 +4546,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             "9": []
         }
     },
-    {
-        "name": "Diwali",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Dog",
         "purchaseUrl": "",
@@ -5943,100 +5379,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             ]
         }
     },
-    {
-        "name": "Firefighter",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Firefly",
         "purchaseUrl": "",
@@ -6849,120 +6192,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             ]
         }
     },
-    {
-        "name": "Gift",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/Z.png"
-            ],
-            "0": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/0.png"
-            ],
-            "1": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/1.png"
-            ],
-            "2": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/2.png"
-            ],
-            "3": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/3.png"
-            ],
-            "4": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/4.png"
-            ],
-            "5": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/5.png"
-            ],
-            "6": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/6.png"
-            ],
-            "7": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/7.png"
-            ],
-            "8": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/8.png"
-            ],
-            "9": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/9.png"
-            ]
-        }
-    },
+    
     {
         "name": "Graffiti",
         "purchaseUrl": "",
@@ -8117,100 +7347,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             ]
         }
     },
-    {
-        "name": "Junkyard",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Knight",
         "purchaseUrl": "",
@@ -8305,100 +7442,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             "9": []
         }
     },
-    {
-        "name": "Kokopelli",
-        "purchaseUrl": "https://www.fontmango.com/product-page/kokopelli-font",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+  
     {
         "name": "Ladybug",
         "purchaseUrl": "",
@@ -8607,120 +7651,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             ]
         }
     },
-    {
-        "name": "Library",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/Z.png"
-            ],
-            "0": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/0.png"
-            ],
-            "1": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/1.png"
-            ],
-            "2": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/2.png"
-            ],
-            "3": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/3.png"
-            ],
-            "4": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/4.png"
-            ],
-            "5": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/5.png"
-            ],
-            "6": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/6.png"
-            ],
-            "7": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/7.png"
-            ],
-            "8": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/8.png"
-            ],
-            "9": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/9.png"
-            ]
-        }
-    },
+   
     {
         "name": "Lion",
         "purchaseUrl": "",
@@ -8929,194 +7860,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             "9": []
         }
     },
-    {
-        "name": "Lounge",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
-    {
-        "name": "Satellite",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+
     {
         "name": "Madagascar",
         "purchaseUrl": "",
@@ -10023,100 +8767,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             "9": []
         }
     },
-    {
-        "name": "Mutation",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+  
     {
         "name": "Nature",
         "purchaseUrl": "https://www.fontmango.com/product-page/nature-font",
@@ -10533,100 +9184,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             "9": []
         }
     },
-    {
-        "name": "Nightmare",
-        "purchaseUrl": "https://www.fontmango.com/product-page/nightmare-font",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Nursery",
         "purchaseUrl": "",
@@ -10929,120 +9487,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             "9": []
         }
     },
-    {
-        "name": "Oil",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/Z.png"
-            ],
-            "0": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/0.png"
-            ],
-            "1": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/1.png"
-            ],
-            "2": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/2.png"
-            ],
-            "3": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/3.png"
-            ],
-            "4": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/4.png"
-            ],
-            "5": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/5.png"
-            ],
-            "6": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/6.png"
-            ],
-            "7": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/7.png"
-            ],
-            "8": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/8.png"
-            ],
-            "9": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/9.png"
-            ]
-        }
-    },
+  
     {
         "name": "Orc",
         "purchaseUrl": "https://www.fontmango.com/product-page/orc-font",
@@ -11439,100 +9884,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             ]
         }
     },
-    {
-        "name": "Pixel",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Plane",
         "purchaseUrl": "",
@@ -14519,100 +12871,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             "9": []
         }
     },
-    {
-        "name": "Tank",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Texas",
         "purchaseUrl": "",
@@ -14707,100 +12966,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             "9": []
         }
     },
-    {
-        "name": "Thanksgiving",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Tornado",
         "purchaseUrl": "",
@@ -16217,100 +14383,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             ]
         }
     },
-    {
-        "name": "Wedding",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+  
     {
         "name": "Western",
         "purchaseUrl": "https://www.fontmango.com/product-page/western-font",
@@ -17544,7 +15617,7 @@ function showStickerSelectionOverlay() {
     const header = document.createElement('div');
     header.className = 'overlay-header';
     header.innerHTML = `
-        <h2 class="overlay-title">Choose a Sticker Pack</h2>
+        <h2 class="overlay-title">Choose your Font</h2>
         <button class="overlay-close-btn" title="Close"><i data-lucide="x" class="icon"></i></button>
     `;
     overlayContainer.appendChild(header);
@@ -17713,47 +15786,52 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
     // --- Position Overlay ---
     const isFromPalette = e.target.closest('#sticker-palette-container');
 
-    if (isFromPalette) {
-        const canvasRect = canvas.getBoundingClientRect();
-        const margin = 10;
-        overlayContainer.style.left = `${canvasRect.left + margin}px`;
-        overlayContainer.style.top = `${canvasRect.top + margin}px`;
-    } else {
-        // ✅ NEW, ROBUST LOGIC for on-canvas trigger
-        // Step 1: Temporarily show the overlay to measure it
-        overlayContainer.style.display = 'flex';
-        overlayContainer.style.visibility = 'hidden';
+   if (isFromPalette) {
+    const canvasRect = canvas.getBoundingClientRect();
+    const margin = 10;
+    // Position relative to the canvas's top-left corner
+    overlayContainer.style.left = `${canvasRect.left + margin}px`;
+    overlayContainer.style.top = `${canvasRect.top + margin}px`;
+} else {
+    // ✅ NEW, ROBUST LOGIC for on-canvas trigger
+    // Step 1: Temporarily show the overlay to measure it
+    overlayContainer.style.display = 'flex';
+    overlayContainer.style.visibility = 'hidden';
 
-        const overlayWidth = overlayContainer.offsetWidth;
-        const overlayHeight = overlayContainer.offsetHeight;
+    const overlayWidth = overlayContainer.offsetWidth;
+    const overlayHeight = overlayContainer.offsetHeight;
 
-        // Step 2: Calculate the best position
-        const rect = e.target.getBoundingClientRect();
-        const margin = 15;
-        let top = rect.bottom + margin;
-        let left = rect.left + (rect.width / 2) - (overlayWidth / 2);
+    // Get the canvas's position and the click position relative to the canvas
+    const canvasRect = canvas.getBoundingClientRect();
+    const clickXRelativeToCanvas = e.clientX - canvasRect.left;
+    const clickYRelativeToCanvas = e.clientY - canvasRect.top;
 
-        // Step 3: Check and correct for screen edges
-        if (top + overlayHeight > window.innerHeight) {
-            top = rect.top - overlayHeight - margin;
-        }
-        if (left + overlayWidth > window.innerWidth) {
-            left = window.innerWidth - overlayWidth - margin;
-        }
-        if (left < 0) {
-            left = margin;
-        }
-        if (top < 0) {
-            top = margin;
-        }
+    // Step 2: Calculate the best position relative to the canvas
+    const margin = 15;
+    let top = clickYRelativeToCanvas + margin;
+    let left = clickXRelativeToCanvas + (e.target.offsetWidth / 2) - (overlayWidth / 2);
 
-        // Step 4: Apply the final, safe position
-        overlayContainer.style.left = `${left}px`;
-        overlayContainer.style.top = `${top}px`;
-
-        // ✅ Step 5: Make the overlay visible again
-        overlayContainer.style.visibility = 'visible';
+    // Step 3: Check and correct for canvas edges
+    if (top + overlayHeight > canvasRect.height) {
+        top = clickYRelativeToCanvas - overlayHeight - margin;
     }
+    if (left + overlayWidth > canvasRect.width) {
+        left = canvasRect.width - overlayWidth - margin;
+    }
+    if (left < 0) {
+        left = margin;
+    }
+    if (top < 0) {
+        top = margin;
+    }
+
+    // Step 4: Apply the final, safe position
+    overlayContainer.style.left = `${left}px`;
+    overlayContainer.style.top = `${top}px`;
+
+    // Step 5: Make the overlay visible again
+    overlayContainer.style.visibility = 'visible';
+}
     
     overlayContainer.dataset.originalLeft = overlayContainer.style.left;
     overlayContainer.dataset.originalTop = overlayContainer.style.top;
@@ -17884,11 +15962,11 @@ addStickerBtn.addEventListener("click", () => {
             controls.style.visibility = 'visible';
         }
 
-
         // This prevents the context menu from appearing on long-press
 window.addEventListener('contextmenu', function(e) {
   e.preventDefault();
 });
+ 
     </script>
 </body>
 </html>
