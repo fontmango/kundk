@@ -229,6 +229,8 @@
     /* ✅ Changed to flex layout */
     display: none;
     flex-direction: column;
+    overflow-y:auto;
+    max-height: 80vh;  
 
    
     
