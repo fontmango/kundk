@@ -491,44 +491,49 @@ button.active {
   }
 }
 #sticker-overlay-container {
-    /* Main overlay styles */
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90vw;
-    max-width: 500px;
-    background-color: #fff;
-    border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-    padding: 0; /* Remove padding here, add it to the content wrapper */
-    z-index: 300;
-    
-    /* Crucial for centering and stacking header/content */
-    display: none; /* Hide by default */
-    flex-direction: column; 
+  position: fixed;                     /* modal */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   
+  width: 90vw;
+  max-width: 500px;
+  max-height: 80vh;                    /* stays inside screen */
+  
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  z-index: 300;
+  
+  display: none;
+  flex-direction: column;
+  overflow: hidden;                    /* ✅ never scroll here */
 }
 
 /* Other CSS remains the same */
 
 .overlay-stickers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-    gap: 15px;
-    padding: 10px;
-    max-height: 70vh; /* Adjust as needed */
-      overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 15px;
+  padding: 10px;
+  
+  flex: 1;                             /* take remaining space */
+  overflow-y: auto;                    /* ✅ scroll only here */
+  overflow-x: hidden;                  /* ✅ no horizontal scroll */
+  max-height: 100%;                    /* constrained by parent */
 }
 
 .overlay-icons-grid {
-    /* Apply grid properties to the new container for icons */
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-    gap: 10px;
-    padding: 10px 0; /* Adjust padding as needed */
-}
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 10px;
+  padding: 10px;
 
+  flex: 1;
+  overflow-y: auto;    /* ✅ scroll only here */
+  overflow-x: hidden;  /* ✅ no x-scroll */
+}
 
 .overlay-header {
     display: flex;
@@ -644,6 +649,14 @@ button.active {
 
     <script>
              const stickerGroups = [
+               
+               {
+                 name: "Kids",
+                 urls: [
+                   
+                   "https://static.wixstatic.com/media/990059_cff7ab1b0c9848f7b2a118d9947ba1f2~mv2.png"
+                   ]
+               },
             {
 name: "Alpaca",
 urls: [
@@ -3009,7 +3022,6 @@ function showGroupOverlay() {
     // Show the main container and give it a vertical layout
     groupOverlayContainer.style.display = 'flex';
     groupOverlayContainer.style.flexDirection = 'column';
-    groupOverlayContainer.style.display = 'grid';
 
     // ✅ NEW: Load and add group icons one-by-one
     stickerGroups.forEach((group, index) => {
