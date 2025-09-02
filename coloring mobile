@@ -784,6 +784,83 @@ urls: [
 
 ]
 },
+ {
+        "name": "Blobby",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 21.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 22.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 23.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 24.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 25.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 26.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 27.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 28.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 29.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 30.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 31.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 32.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 33.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 34.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Blobby/Blobby 9.svg"
+        ]
+    },
+    {
+        "name": "Elefant",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 21.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 22.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 23.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 24.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 25.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 26.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 27.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 28.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 29.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 30.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 31.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 32.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 33.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Elephant/Elephant 9.svg"
+        ]
+    },
 {
 name: "Faultier",
 urls: [
@@ -910,6 +987,46 @@ urls: [
 
                     ]
                     },
+                    {
+        "name": "Geist",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 21.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 22.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 23.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 24.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 25.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 26.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 27.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 28.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 29.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 30.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 31.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 32.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 33.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 34.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 35.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Ghost/ghost 9.svg"
+        ]
+    },
                     {
 name: "Giraffen",
 urls: [
@@ -1633,6 +1750,7 @@ urls: [
 
 ]
 },
+
       
 {
 name: "Schnecke",
@@ -1806,6 +1924,45 @@ urls: [
 ]
 },
   {
+        "name": "Tod",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 21.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 22.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 23.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 24.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 25.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 26.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 27.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 28.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 29.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 30.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 31.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 32.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 33.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 34.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Grim Reaper/Grim Reaper 9.svg"
+        ]
+    },
+  {
 name: "Tofu",
 urls: [
 "https://static.wixstatic.com/media/990059_348351c78ee3464895e9c3e580ae4c32~mv2.png",
@@ -1891,6 +2048,46 @@ urls: [
 
                 ]
             },
+            {
+        "name": "Wolken",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 21.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 22.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 23.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 24.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 25.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 26.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 27.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 28.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 29.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 30.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 31.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 32.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 33.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 34.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 35.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/coloring_assets/main/Cloud/Cloud 9.svg"
+        ]
+    },
 
             
                     
