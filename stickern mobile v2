@@ -488,7 +488,7 @@ button.active {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90vw;
-    max-width: 500px;
+   
     background-color: #fff;
     border-radius: 16px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.15);
@@ -5903,7 +5903,6 @@ function showGroupOverlay() {
     // Show the main container and give it a vertical layout
     groupOverlayContainer.style.display = 'flex';
     groupOverlayContainer.style.flexDirection = 'column';
-    groupOverlayContainer.style.display = 'grid';
 
     // ✅ NEW: Load and add group icons one-by-one
     stickerGroups.forEach((group, index) => {
