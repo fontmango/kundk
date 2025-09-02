@@ -231,15 +231,14 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
         }
 
 #overlay-container {
-  position: fixed;              /* ✅ modal, independent of canvas */
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   
   width: 90vw;
   max-width: 500px;
-  max-height: 80vh;             /* ✅ never taller than screen */
-  overflow-y: auto;             /* ✅ scroll internally if too many stickers */
+  max-height: 80vh;   /* keep modal within screen */
   
   background-color: #fff;
   border-radius: 16px;
@@ -249,6 +248,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
   display: none;
   flex-direction: column;
 }
+
 
 @media (max-width: 480px) {
     #overlay-container {
@@ -308,6 +308,8 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 15px;
+     overflow-y: auto; 
+     overflow-x: hidden;
    
 }
 
