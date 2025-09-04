@@ -120,7 +120,6 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
             display: flex;
             gap: 8px;
             align-items: center;
-            visibility: hidden;
         }
 
         button {
@@ -232,7 +231,7 @@ button, .delete-btn, .copy-btn, .resize-handle, .rotate-handle, .group-btn {
 
 #overlay-container {
   position: fixed;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   
@@ -15959,10 +15958,7 @@ addStickerBtn.addEventListener("click", () => {
             }
         });
         
-          const controls = document.querySelector('.controls');
-        if (controls) {
-            controls.style.visibility = 'visible';
-        }
+        
 
         // This prevents the context menu from appearing on long-press
 window.addEventListener('contextmenu', function(e) {
