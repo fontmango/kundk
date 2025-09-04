@@ -79,7 +79,6 @@
             display: flex;
             gap: 15px;
             align-items: center;
-            visibility: hidden;
         }
 
         button {
@@ -17715,11 +17714,7 @@ function showOverlay(e, urlsByLetter, stickerWidth, stickerHeight) {
     if (window.lucide) {
         lucide.createIcons();
         
-        // ✅ Make controls visible after icons are rendered
-        const controls = document.querySelector('.controls');
-        if (controls) {
-            controls.style.visibility = 'visible';
-        }
+       
     }
 });
       
