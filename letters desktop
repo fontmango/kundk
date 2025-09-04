@@ -526,11 +526,12 @@
     <div id="overlay-container"></div>
     
     <script>
+      
         const stickerGroups =
              [
     {
         "name": "Adventure",
-        "purchaseUrl": "https://www.fontmango.com/product-page/adventure-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1737023537/adventure-font-alphabet-with-exploration",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Adventure Font/A.png"
@@ -644,7 +645,7 @@
     },
     {
         "name": "Africa",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1794062947/africa-font-alphabet-with-africa-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Africa Font/A.png"
@@ -756,103 +757,10 @@
             ]
         }
     },
-    {
-        "name": "Alien",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Alien Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Ant",
-        "purchaseUrl": "https://www.fontmango.com/product-page/ant-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1726246901/ant-font-alphabet-with-ant-design-ant",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Ant Font/A.png"
@@ -931,22 +839,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Ant Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Antartica",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779863518/antarctica-font-alphabet-with-antarctica",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Antartica Font/A.png"
@@ -1025,22 +923,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Antartica Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Apache",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1881687573/apache-font-alphabet-with-apache-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Apache Font/A.png"
@@ -1154,7 +1042,7 @@
     },
     {
         "name": "Asia",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1794063975/asia-font-alphabet-with-asia-design-asia",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Asia Font/A.png"
@@ -1233,116 +1121,14 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Asia Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
-    {
-        "name": "Astronaut",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Astronaut Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
+ 
     {
         "name": "Atlantis",
-        "purchaseUrl": "https://www.fontmango.com/product-page/atlantis-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1760785276/atlantis-font-alphabet-with-atlantis",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Atlantis Font/A.png"
@@ -1456,7 +1242,7 @@
     },
     {
         "name": "Aztec",
-        "purchaseUrl": "https://www.fontmango.com/product-page/aztec-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1722837812/aztec-font-alphabet-with-aztec-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Aztec Font/A.png"
@@ -1568,103 +1354,10 @@
             ]
         }
     },
-    {
-        "name": "Baloon",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baloon Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Bamboo",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1881685529/bamboo-font-alphabet-with-bamboo-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bamboo Font/A.png"
@@ -1776,103 +1469,10 @@
             ]
         }
     },
-    {
-        "name": "Baseball",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Baseball Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Bee",
-        "purchaseUrl": "https://www.fontmango.com/product-page/bee-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1707766472/bee-font-alphabet-with-bee-design-bee",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bee Font/A.png"
@@ -1986,7 +1586,7 @@
     },
     {
         "name": "Beer",
-        "purchaseUrl": "https://www.fontmango.com/product-page/beer-font",
+        "purchaseUrl": "hhttps://sirsilhouette.etsy.com/de-en/listing/1760785660/beer-font-alphabet-with-beer-design-beer",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Beer Font/A.png"
@@ -2098,103 +1698,10 @@
             ]
         }
     },
-    {
-        "name": "Biopunk",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Biopunk Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Birthday",
-        "purchaseUrl": "https://www.fontmango.com/product-page/birthday-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1759968504/birthday-font-alphabet-with-birthday",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Birthday Font/A.png"
@@ -2308,7 +1815,7 @@
     },
     {
         "name": "Bones",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1867494774/bone-font-alphabet-with-bone-design-bone",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bone Font/A.png"
@@ -2422,7 +1929,7 @@
     },
     {
         "name": "Books",
-        "purchaseUrl": "https://www.fontmango.com/product-page/book-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1774164827/book-font-alphabet-with-book-design-book",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Book Font/A.png"
@@ -2536,7 +2043,7 @@
     },
     {
         "name": "Brick",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1867492874/brick-font-alphabet-with-brick-wall",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Brick Font/A.png"
@@ -2650,7 +2157,7 @@
     },
     {
         "name": "Bug",
-        "purchaseUrl": "https://www.fontmango.com/product-page/bug-font-1",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1637708884/bug-font-alphabet-with-bug-design-insect",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Bug Font/A.png"
@@ -2764,7 +2271,7 @@
     },
     {
         "name": "Cactus",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1725257548/cactus-font-alphabet-with-succulent",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Cactus Font/A.png"
@@ -2841,22 +2348,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Cactus Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "California",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1763537234/california-font-alphabet-with-california",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/California Font/A.png"
@@ -2935,22 +2432,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/California Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Camping",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1815968855/outdoor-font-alphabet-with-camping",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Camping Font/A.png"
@@ -3064,7 +2551,7 @@
     },
     {
         "name": "Candy",
-        "purchaseUrl": "https://www.fontmango.com/product-page/candy-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1689435565/candy-font-alphabet-with-candy-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Candy Font/A.png"
@@ -3178,7 +2665,7 @@
     },
     {
         "name": "Carribean",
-        "purchaseUrl": "https://www.fontmango.com/product-page/carribean-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1651878041/caribbean-font-alphabet-with-caribbean",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Carribean Font/A.png"
@@ -3292,7 +2779,7 @@
     },
     {
         "name": "Cat",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1785593992/cat-font-alphabet-with-cat-design-cat",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Cat Font/A.png"
@@ -3371,22 +2858,13 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Cat Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
+            
         }
     },
     {
         "name": "Caterpillar",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1725144299/caterpillar-font-alphabet-with",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Caterpillar Font/A.png"
@@ -3465,116 +2943,13 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Caterpillar Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
-    {
-        "name": "Chillout",
-        "purchaseUrl": "https://www.fontmango.com/product-page/chillout-font",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/ChilloutFont/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Christmas",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1782988185/christmas-font-alphabet-with-christmas",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Christmas Font/A.png"
@@ -3688,7 +3063,7 @@
     },
     {
         "name": "Citrus",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1801139389/citrus-font-alphabet-with-lemon-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Citrus Font/A.png"
@@ -3767,22 +3142,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Citrus Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Climate",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1714247870/climate-font-alphabet-with-climate",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Climate Font/A.png"
@@ -3896,7 +3261,7 @@
     },
     {
         "name": "Cloud",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1737084196/cloud-font-alphabet-with-airy-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Cloud Font/A.png"
@@ -3975,22 +3340,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Cloud Font/z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Coconut",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1786939526/coconut-font-alphabet-with-coconut",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Coconut Font/A.png"
@@ -4069,22 +3424,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Coconut Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Computer",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1739973890/computer-font-alphabet-with-tech-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Computer Font/A.png"
@@ -4163,116 +3508,13 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Computer Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
-    {
-        "name": "Crystal",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Crystal Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Cyberpunk",
-        "purchaseUrl": "https://www.fontmango.com/product-page/cyberpunk-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1754179562/cyberpunk-font-alphabet-with-cyberpunk",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Cyberpunk Font/A.png"
@@ -4351,22 +3593,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Cyberpunk Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Desert",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1754167921/desert-font-alphabet-with-arid-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Desert Font/A.png"
@@ -4480,7 +3712,7 @@
     },
     {
         "name": "Detective",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1812669588/detective-font-alphabet-with-detective",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Detective Font/A.png"
@@ -4594,7 +3826,7 @@
     },
     {
         "name": "Devil",
-        "purchaseUrl": "https://www.fontmango.com/product-page/devil-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1759967284/devil-font-alphabet-with-devil-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Devil Font/A.png"
@@ -4673,22 +3905,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Devil Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Dia de los muertos",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779864462/day-of-the-dead-font-alphabet-with-day",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Dia de los muertos font/A.png"
@@ -4767,22 +3989,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Dia de los muertos font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Dinosaur",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1651879761/dinosaur-font-alphabet-with-dinosaur",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Dinosaur Font/A.png"
@@ -4861,22 +4073,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Dinosaur Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Disco",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1739974678/disco-font-alphabet-with-funky-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Disco Font/A.png"
@@ -4955,116 +4157,13 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Disco Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
-    {
-        "name": "Diwali",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Diwali Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Dog",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1785595154/dog-font-alphabet-with-dog-design-dog",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Dog Font/A.png"
@@ -5143,22 +4242,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Dog Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Dragon",
-        "purchaseUrl": "https://www.fontmango.com/product-page/dragon-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1737024439/dragon-font-alphabet-with-drake-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Dragon Font/A.png"
@@ -5272,7 +4361,7 @@
     },
     {
         "name": "Easter",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1768794958/easter-font-alphabet-with-easter-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Easter Font/A.png"
@@ -5351,22 +4440,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Easter Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Egypt",
-        "purchaseUrl": "https://www.fontmango.com/product-page/egypt-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1651880517/egypt-font-alphabet-with-egypt-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Egypt Font/A.png"
@@ -5480,7 +4559,7 @@
     },
     {
         "name": "Electric",
-        "purchaseUrl": "https://www.fontmango.com/product-page/electric-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1733851779/electric-font-alphabet-with-power-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Electric Font/A.png"
@@ -5594,7 +4673,7 @@
     },
     {
         "name": "Explosion",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1761444971/explosion-font-alphabet-with-explosion",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Explosion Font/A.png"
@@ -5673,22 +4752,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Explosion Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Farm",
-        "purchaseUrl": "https://www.fontmango.com/product-page/farm-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1774983079/farm-font-alphabet-with-farm-design-farm",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Farm Font/A.png"
@@ -5767,22 +4836,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Farm Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Fire",
-        "purchaseUrl": "https://www.fontmango.com/product-page/fire-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1719663100/fire-font-alphabet-with-flame-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Fire Font/A.png"
@@ -5896,7 +4955,7 @@
     },
     {
         "name": "Firefighter",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1794569264/firefighter-font-alphabet-with",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/A.png"
@@ -5975,22 +5034,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefighter Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Firefly",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1726247135/firefly-font-alphabet-with-firefly",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Firefly Font/A.png"
@@ -6104,7 +5153,7 @@
     },
     {
         "name": "Fishing",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1814561830/fishing-font-alphabet-with-fishing",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Fishing Font/A.png"
@@ -6218,7 +5267,7 @@
     },
     {
         "name": "Florida",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1763536942/florida-font-alphabet-with-florida",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Florida Font/A.png"
@@ -6297,22 +5346,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Florida Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Football",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1772684548/football-font-alphabet-with-football",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Football Font/A.png"
@@ -6391,22 +5430,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Football Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Forest",
-        "purchaseUrl": "https://www.fontmango.com/product-page/forest-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1774163617/forest-font-alphabet-with-forest-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Forest Font/A.png"
@@ -6485,22 +5514,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Forest Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Fruit",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1732767135/fruit-font-alphabet-with-fruit-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Fruit Font/A.png"
@@ -6579,22 +5598,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Fruit Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Future",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1718872870/future-font-alphabet-with-sci-fi-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Future Font/A.png"
@@ -6673,22 +5682,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Future Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Galaxy",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1754168807/galaxy-font-alphabet-with-space-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Galaxy Font/A.png"
@@ -6802,7 +5801,7 @@
     },
     {
         "name": "Gift",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1812810394/gift-font-alphabet-with-gift-design-gift",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Gift Font/A.png"
@@ -6916,7 +5915,7 @@
     },
     {
         "name": "Graffiti",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1754981523/graffiti-font-alphabet-with-graffiti",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Graffiti Font/A.png"
@@ -6995,22 +5994,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Graffiti Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Halloween",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1780143111/halloween-font-alphabet-with-halloween",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Halloween Font/A.png"
@@ -7089,22 +6078,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Halloween Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Hollywood",
-        "purchaseUrl": "https://www.fontmango.com/product-page/hollywood-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1774165395/hollywood-font-alphabet-with-hollywood",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Hollywood Font/A.png"
@@ -7183,22 +6162,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Hollywood Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Hunting",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1828754541/hunter-font-alphabet-hunting-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Hunting Font/A.png"
@@ -7312,7 +6281,7 @@
     },
     {
         "name": "Ice Fire",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779864764/fire-ice-font-alphabet-with-fire-ice",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Ice Fire Font/A.png"
@@ -7391,22 +6360,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Ice Fire Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Ice",
-        "purchaseUrl": "https://www.fontmango.com/product-page/ice-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1733851677/ice-font-alphabet-with-frozen-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Ice Font/A.png"
@@ -7520,7 +6479,7 @@
     },
     {
         "name": "Inca",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1766057054/inca-font-alphabet-with-inca-design-inca",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Inca Font/A.png"
@@ -7634,7 +6593,7 @@
     },
     {
         "name": "Insect",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1747251330/insect-font-alphabet-with-insect-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Insect Font/A.png"
@@ -7748,7 +6707,7 @@
     },
     {
         "name": "Jamaica",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1881685185/jamaica-font-alphabet-with-jamaica",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Jamaica font/A.png"
@@ -7862,7 +6821,7 @@
     },
     {
         "name": "Japan",
-        "purchaseUrl": "https://www.fontmango.com/product-page/japan-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1760786364/japan-font-alphabet-with-japan-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Japan Font/A.png"
@@ -7941,22 +6900,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Japan Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Jungle",
-        "purchaseUrl": "https://www.fontmango.com/product-page/jungle-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1666620502/jungle-font-alphabet-with-jungle-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Jungle Font/A.png"
@@ -8068,103 +7017,10 @@
             ]
         }
     },
-    {
-        "name": "Junkyard",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Junkyard Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Knight",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1666622496/knight-font-alphabet-with-knight-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Knight Font/A.png"
@@ -8243,116 +7099,13 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Knight Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
-    {
-        "name": "Kokopelli",
-        "purchaseUrl": "https://www.fontmango.com/product-page/kokopelli-font",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Kokopelli Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Ladybug",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1708211132/ladybug-font-alphabet-with-ladybug",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Ladybug Font/A.png"
@@ -8431,22 +7184,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Ladybug Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Leather",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1881686825/leather-font-alphabet-with-leather",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Leather Font/A.png"
@@ -8560,7 +7303,7 @@
     },
     {
         "name": "Library",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1828754813/library-font-alphabet-with-library",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Library Font/A.png"
@@ -8674,7 +7417,7 @@
     },
     {
         "name": "Lion",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1881688025/lion-font-alphabet-with-lion-design-lion",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lion Font/A.png"
@@ -8788,7 +7531,7 @@
     },
     {
         "name": "Los Angeles",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1763536580/los-angeles-font-alphabet-with-los",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Los Angeles Font/A.png"
@@ -8867,210 +7610,13 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Los Angeles Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
-    {
-        "name": "Lounge",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Lounge Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
-    {
-        "name": "Satellite",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango/main/Satellite Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Madagascar",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779865416/madagascar-font-alphabet-with-madagascar",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Madagascar Font/A.png"
@@ -9149,22 +7695,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Madagascar Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Magic",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1746291790/magic-font-alphabet-with-magic-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Magic Font/A.png"
@@ -9243,22 +7779,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Magic Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Meteor",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1754981777/meteor-font-alphabet-with-asteroid",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Meteor Font/A.png"
@@ -9337,22 +7863,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Meteor Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Mexico",
-        "purchaseUrl": "https://www.fontmango.com/product-page/mexico-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1760786650/mexico-font-alphabet-with-mexico-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mexico Font/A.png"
@@ -9466,7 +7982,7 @@
     },
     {
         "name": "Military",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1725257216/military-font-alphabet-with-army-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Military Font/A.png"
@@ -9545,22 +8061,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Military Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Molten Core",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1794065583/molten-font-alphabet-with-molten-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Molten Core Font/A.png"
@@ -9639,22 +8145,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Molten Core Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Monster",
-        "purchaseUrl": "https://www.fontmango.com/product-page/cute-monster-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1834107354/monster-font-alphabet-with-monster",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Monster Font/A.png"
@@ -9768,7 +8264,7 @@
     },
     {
         "name": "Mountain",
-        "purchaseUrl": "https://www.fontmango.com/product-page/mountain-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1785595952/mountain-font-alphabet-with-mountain",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mountain Font/A.png"
@@ -9882,7 +8378,7 @@
     },
     {
         "name": "Mummy",
-        "purchaseUrl": "https://www.fontmango.com/product-page/mummy-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1737546779/mummy-font-alphabet-with-mummy-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mummy Font/A.png"
@@ -9961,22 +8457,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mummy Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Mutation",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1754179728/mutation-font-alphabet-with-mutant",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/A.png"
@@ -10055,22 +8541,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Mutation Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Nature",
-        "purchaseUrl": "https://www.fontmango.com/product-page/nature-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1694614592/nature-font-alphabet-with-nature-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nature Font/A.png"
@@ -10184,7 +8660,7 @@
     },
     {
         "name": "Navajo",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1694615580/navajo-font-alphabet-with-navajo-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Navajo Font/A.png"
@@ -10298,7 +8774,7 @@
     },
     {
         "name": "New York",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1763536286/new-york-font-alphabet-with-new-york",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/New York Font/A.png"
@@ -10377,22 +8853,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/New York Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Night",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1754169897/night-font-alphabet-with-moonlight",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Night Font/A.png"
@@ -10471,116 +8937,13 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Night Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
-    {
-        "name": "Nightmare",
-        "purchaseUrl": "https://www.fontmango.com/product-page/nightmare-font",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nightmare Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+   
     {
         "name": "Nursery",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1759964240/nightmare-font-alphabet-with-nightmare",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nursery Font/A.png"
@@ -10659,22 +9022,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Nursery Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Octopus",
-        "purchaseUrl": "https://www.fontmango.com/product-page/octopus-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1715796568/octopus-font-alphabet-with-tentacle",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Octopus Font/A.png"
@@ -10788,7 +9141,7 @@
     },
     {
         "name": "Ogre",
-        "purchaseUrl": "https://www.fontmango.com/product-page/ogre-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1834107904/ogre-font-alphabet-with-ogre-design-ogre",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Ogre Font/A.png"
@@ -10867,136 +9220,13 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Ogre Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
-    {
-        "name": "Oil",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/Z.png"
-            ],
-            "0": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/0.png"
-            ],
-            "1": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/1.png"
-            ],
-            "2": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/2.png"
-            ],
-            "3": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/3.png"
-            ],
-            "4": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/4.png"
-            ],
-            "5": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/5.png"
-            ],
-            "6": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/6.png"
-            ],
-            "7": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/7.png"
-            ],
-            "8": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/8.png"
-            ],
-            "9": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Oil Font/9.png"
             ]
         }
     },
+   
     {
         "name": "Orc",
-        "purchaseUrl": "https://www.fontmango.com/product-page/orc-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1834108146/orc-font-alphabet-with-orc-design-orc",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Orc Font/A.png"
@@ -11075,22 +9305,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Orc Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Outdoor",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1815968855/outdoor-font-alphabet-with-camping",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Outdoor Font/A.png"
@@ -11169,22 +9389,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Outdoor Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Philippines",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1765950384/philippines-font-alphabet-with",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Philippines Font/A.png"
@@ -11263,22 +9473,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Philippines Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Pirate",
-        "purchaseUrl": "https://www.fontmango.com/product-page/pirate-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1725257070/pirate-font-alphabet-with-treasure",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pirate Font/A.png"
@@ -11392,7 +9592,7 @@
     },
     {
         "name": "Pixel",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1760487585/pixel-font-alphabet-with-8-bit-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/A.png"
@@ -11471,22 +9671,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pixel Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Plane",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1798010996/plane-font-alphabet-with-planedesign",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Plane Font/A.png"
@@ -11565,22 +9755,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Plane Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Police",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1808774309/police-font-alphabet-with-police-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Police Font/A.png"
@@ -11694,7 +9874,7 @@
     },
     {
         "name": "Pool",
-        "purchaseUrl": "https://www.fontmango.com/product-page/pool-party-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1722838420/pool-party-font-alphabet-with-pool",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pool Font/A.png"
@@ -11773,22 +9953,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Pool Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Princess",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1666624190/princess-font-alphabet-with-princess",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Princess Font/A.png"
@@ -11867,22 +10037,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Princess Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Psychedelic",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1826864359/psychedelic-font-alphabet-with",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Psychedelic Font/A.png"
@@ -11996,7 +10156,7 @@
     },
     {
         "name": "Race",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1827001559/race-font-alphabet-with-race-design-race",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Race Font/A.png"
@@ -12110,7 +10270,7 @@
     },
     {
         "name": "Rainbow",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1733061931/rainbow-font-alphabet-with-rainbow",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Rainbow Font/A.png"
@@ -12189,22 +10349,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Rainbow Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Rap",
-        "purchaseUrl": "https://www.fontmango.com/product-page/rap-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1759969090/rap-font-alphabet-with-rap-design-hip",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Rap Font/A.png"
@@ -12283,22 +10433,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Rap Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Reptile",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1761444471/reptile-font-alphabet-with-reptile",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Reptile Font/A.png"
@@ -12412,7 +10552,7 @@
     },
     {
         "name": "Robot",
-        "purchaseUrl": "https://www.fontmango.com/product-page/robot-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1715796350/robot-font-alphabet-with-android-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Robot Font/A.png"
@@ -12526,7 +10666,7 @@
     },
     {
         "name": "Safari",
-        "purchaseUrl": "https://www.fontmango.com/product-page/safari-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1759966344/safari-font-alphabet-with-safari-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Safari Font/A.png"
@@ -12640,7 +10780,7 @@
     },
     {
         "name": "Samurai",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1680796449/samurai-font-alphabet-with-samurai",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Samurai Font/A.png"
@@ -12754,7 +10894,7 @@
     },
     {
         "name": "School",
-        "purchaseUrl": "https://www.fontmango.com/product-page/school-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1774161653/school-font-alphabet-with-school-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/School Font/A.png"
@@ -12833,22 +10973,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/School Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Secret Agent",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1812814004/secret-agent-font-alphabet-with-spy",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Secret Agent Font/A.png"
@@ -12962,7 +11092,7 @@
     },
     {
         "name": "Shiny",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1714248452/shiny-font-alphabet-with-shiny-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Shiny Font/A.png"
@@ -13041,22 +11171,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Shiny Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Slime",
-        "purchaseUrl": "https://www.fontmango.com/product-page/slime-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1732766889/slime-font-alphabet-with-slime-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Slime Font/A.png"
@@ -13170,7 +11290,7 @@
     },
     {
         "name": "Snail",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1710960792/snail-font-alphabet-with-snail-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Snail Font/A.png"
@@ -13249,22 +11369,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Snail Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Snake",
-        "purchaseUrl": "https://www.fontmango.com/product-page/snake-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1710960888/snake-font-alphabet-with-snake-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Snake Font/A.png"
@@ -13378,7 +11488,7 @@
     },
     {
         "name": "Snow",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1761444689/snow-font-alphabet-with-snow-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Snow Font/A.png"
@@ -13457,22 +11567,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Snow Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Spaceship",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1715796862/spaceship-font-alphabet-with-spaceship",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Spaceship Font/A.png"
@@ -13551,22 +11651,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Spaceship Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Spider",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1712066970/spider-font-alphabet-with-spider-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Spider Font/A.png"
@@ -13680,7 +11770,7 @@
     },
     {
         "name": "Steampunk",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1768375525/steampunk-font-alphabet-with-steampunk",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Steampunk Font/A.png"
@@ -13759,22 +11849,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Steampunk Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Stone",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1867494492/stone-font-alphabet-with-stone-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Stone Font/A.png"
@@ -13888,7 +11968,7 @@
     },
     {
         "name": "Stoneage",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1714247164/stoneage-font-alphabet-with-stoneage",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Stoneage Font/A.png"
@@ -13967,22 +12047,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Stoneage Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Storm",
-        "purchaseUrl": "https://www.fontmango.com/product-page/storm-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1759963084/storm-font-alphabet-with-storm-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Storm Font/A.png"
@@ -14061,22 +12131,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Storm Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Sunset",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1812665294/sunset-font-alphabet-with-sunset-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Sunset Font/A.png"
@@ -14190,7 +12250,7 @@
     },
     {
         "name": "Superhero",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1740789430/superhero-font-alphabet-with-hero-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Superhero Font/A.png"
@@ -14269,22 +12329,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Superhero Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Supervillain",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1768375739/supervillain-font-alphabet-with",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Supervillain Font/A.png"
@@ -14363,22 +12413,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Supervillain Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Surfer",
-        "purchaseUrl": "https://www.fontmango.com/product-page/surfer-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1774983995/surf-font-alphabet-with-surf-design-surf",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Surfer Font/A.png"
@@ -14457,116 +12497,13 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Surfer Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
-    {
-        "name": "Tank",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tank Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Texas",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1777728703/texas-font-alphabet-with-texas-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Texas Font/A.png"
@@ -14645,116 +12582,13 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Texas Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
-    {
-        "name": "Thanksgiving",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Thanksgiving Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Tornado",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779865872/tornado-font-alphabet-with-twister",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tornado Font/A.png"
@@ -14833,22 +12667,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tornado Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Toxic",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1732767479/toxic-font-alphabet-with-toxic-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Toxic Font/A.png"
@@ -14927,22 +12751,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Toxic Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Tractor",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1812307095/tractor-font-alphabet-with-tractor",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tractor Font/A.png"
@@ -15021,22 +12835,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tractor Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Train",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1812211317/train-font-alphabet-with-train-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Train Font/A.png"
@@ -15115,22 +12919,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Train Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Travel",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1745456206/travel-font-alphabet-with-travel-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Travel Font/A.png"
@@ -15244,7 +13038,7 @@
     },
     {
         "name": "Tree",
-        "purchaseUrl": "https://www.fontmango.com/product-page/tree-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1774162615/tree-font-alphabet-with-tree-design-tree",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Tree Font/A.png"
@@ -15358,7 +13152,7 @@
     },
     {
         "name": "Truck",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1812307405/truck-font-alphabet-with-truck-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Truck Font/A.png"
@@ -15437,22 +13231,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Truck Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Turtle",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1785596866/turtle-font-alphabet-with-turtle-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Turtle Font/A.png"
@@ -15531,22 +13315,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Turtle Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "USA",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1763535674/usa-font-alphabet-with-usa-design-usa",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/USA Font/A.png"
@@ -15625,22 +13399,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/USA Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Unicorn",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1675273202/unicorn-font-alphabet-with-unicorn",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Unicorn Font/A.png"
@@ -15719,22 +13483,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Unicorn Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Viking",
-        "purchaseUrl": "https://www.fontmango.com/product-page/viking-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1675262494/viking-font-alphabet-with-viking-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Viking Font/A.png"
@@ -15848,7 +13602,7 @@
     },
     {
         "name": "Voodoo",
-        "purchaseUrl": "https://www.fontmango.com/product-page/voodoo-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1722838276/voodoo-font-alphabet-with-occult-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Voodoo Font/A.png"
@@ -15927,22 +13681,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Voodoo Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Vulcano Font",
-        "purchaseUrl": "https://www.fontmango.com/product-page/vulcano-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1713318864/volcano-font-alphabet-with-volcano",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Vulcano Font/A.png"
@@ -16056,7 +13800,7 @@
     },
     {
         "name": "Water",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779866066/water-font-alphabet-with-water-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Water Font/A.png"
@@ -16168,103 +13912,10 @@
             ]
         }
     },
-    {
-        "name": "Wedding",
-        "purchaseUrl": "",
-        "urls": {
-            "A": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/A.png"
-            ],
-            "B": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/B.png"
-            ],
-            "C": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/C.png"
-            ],
-            "D": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/D.png"
-            ],
-            "E": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/E.png"
-            ],
-            "F": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/F.png"
-            ],
-            "G": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/G.png"
-            ],
-            "H": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/H.png"
-            ],
-            "I": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/I.png"
-            ],
-            "J": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/J.png"
-            ],
-            "K": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/K.png"
-            ],
-            "L": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/L.png"
-            ],
-            "M": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/M.png"
-            ],
-            "N": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/N.png"
-            ],
-            "O": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/O.png"
-            ],
-            "P": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/P.png"
-            ],
-            "Q": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/Q.png"
-            ],
-            "R": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/R.png"
-            ],
-            "S": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/S.png"
-            ],
-            "T": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/T.png"
-            ],
-            "U": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/U.png"
-            ],
-            "V": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/V.png"
-            ],
-            "W": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/W.png"
-            ],
-            "X": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/X.png"
-            ],
-            "Y": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/Y.png"
-            ],
-            "Z": [
-                "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wedding Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
-        }
-    },
+    
     {
         "name": "Western",
-        "purchaseUrl": "https://www.fontmango.com/product-page/western-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1689426481/western-font-alphabet-with-western",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Western Font/A.png"
@@ -16343,22 +13994,12 @@
             ],
             "Z": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Western Font/Z.png"
-            ],
-            "0": [],
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": []
+            ]
         }
     },
     {
         "name": "Wizard",
-        "purchaseUrl": "https://www.fontmango.com/product-page/wizard-font",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1722838010/wizard-font-alphabet-with-magic-design",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wizard Font/A.png"
@@ -16472,7 +14113,7 @@
     },
     {
         "name": "Wood",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1867495762/wood-font-alphabet-with-wood-design-wood",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Wood Font/A.png"
@@ -16586,7 +14227,7 @@
     },
     {
         "name": "Zulu",
-        "purchaseUrl": "",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1708798439/zulu-font-alphabet-with-zulu-design-zulu",
         "urls": {
             "A": [
                 "https://raw.githubusercontent.com/phoneticgenius/fontmango_2/main/Zulu Font/A.png"
