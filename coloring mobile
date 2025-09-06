@@ -3325,15 +3325,13 @@ function handleEnd() {
         }
     });
 
-    stickerImg.addEventListener('click', (e) => {
-        if (bucketMode && selectedColor) {
-            e.stopPropagation();
-            const rect = sticker.getBoundingClientRect();
-            const clickX = Math.floor((e.clientX - rect.left) * (stickerImg.naturalWidth / rect.width));
-            const clickY = Math.floor((e.clientY - rect.top) * (stickerImg.naturalHeight / rect.height));
-            recolorSticker(stickerImg, selectedColor, clickX, clickY);
-        }
-    });
+stickerImg.addEventListener('click', (e) => {
+    if(bucketMode && selectedColor){
+        e.stopPropagation();
+        recolorSticker(stickerImg, selectedColor, e);
+    }
+});
+
 
     const updateButtonSizes = () => {
         const btnSize = sticker.offsetWidth * 0.2;
@@ -3363,7 +3361,6 @@ function handleEnd() {
     return sticker;
 }
 
-     
     
         function hexToRgb(hex) {
             hex = hex.replace(/^#/, "");
@@ -3371,12 +3368,36 @@ function handleEnd() {
             return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
         }
 
-  
-        function recolorSticker(stickerImg, fillColor, clickX, clickY) {
+
+function recolorSticker(stickerImg, fillColor, e) {
+    // --- Step 0: Compute accurate click coordinates accounting for letterboxing ---
+    const rect = stickerImg.getBoundingClientRect();
+    const imgRatio = stickerImg.naturalWidth / stickerImg.naturalHeight;
+    const rectRatio = rect.width / rect.height;
+
+    let contentX = 0, contentY = 0, contentWidth = rect.width, contentHeight = rect.height;
+
+    if (rectRatio > imgRatio) {
+        contentHeight = rect.height;
+        contentWidth = rect.height * imgRatio;
+        contentX = (rect.width - contentWidth) / 2;
+    } else {
+        contentWidth = rect.width;
+        contentHeight = rect.width / imgRatio;
+        contentY = (rect.height - contentHeight) / 2;
+    }
+
+    let clickX = Math.floor(((e.clientX - rect.left - contentX) / contentWidth) * stickerImg.naturalWidth);
+    let clickY = Math.floor(((e.clientY - rect.top - contentY) / contentHeight) * stickerImg.naturalHeight);
+
+    clickX = Math.max(0, Math.min(clickX, stickerImg.naturalWidth - 1));
+    clickY = Math.max(0, Math.min(clickY, stickerImg.naturalHeight - 1));
+
+    // --- Step 1: Prepare canvas ---
     const canvasEl = document.createElement("canvas");
-    const ctx = canvasEl.getContext("2d", { willReadFrequently: true });
     canvasEl.width = stickerImg.naturalWidth;
     canvasEl.height = stickerImg.naturalHeight;
+    const ctx = canvasEl.getContext("2d", { willReadFrequently: true });
     ctx.drawImage(stickerImg, 0, 0);
 
     const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
@@ -3384,9 +3405,9 @@ function handleEnd() {
     const { width, height } = canvasEl;
 
     const isEraser = fillColor && fillColor.type === 'erase';
-    const [r, g, b] = isEraser ? [0, 0, 0] : hexToRgb(fillColor); // Assuming you have a hexToRgb function
+    const [r, g, b] = isEraser ? [0, 0, 0] : hexToRgb(fillColor);
 
-    // --- Inlined helper functions for performance ---
+    // --- Step 2: Define the target color and other constants ---
     const blackThreshold = 30;
     const tolerance = 30;
 
@@ -3397,74 +3418,74 @@ function handleEnd() {
         data[startIndex + 2],
         data[startIndex + 3]
     ];
-    
-    // Early exit if the clicked pixel is a border
+
     if (targetColor[3] > 0 && targetColor[0] < blackThreshold && targetColor[1] < blackThreshold && targetColor[2] < blackThreshold) {
-        return; 
+        console.log("❌ Clicked on a border pixel → no fill");
+        return;
     }
 
-    const visited = new Uint8Array(width * height);
-    let touchesEdge = false;
+    if (!isEraser && targetColor[0] === r && targetColor[1] === g && targetColor[2] === b && targetColor[3] === 255) {
+        console.log("❌ The clicked area already has the selected color.");
+        return;
+    }
+    
+    // Create a copy of the original pixel data to revert if the fill escapes
+    const originalData = new Uint8ClampedArray(data);
 
+    // --- Step 3: Flood-fill ---
     const stack = [[clickX, clickY]];
+    const visited = new Uint8Array(width * height);
+    let touchesEdge = false; // New flag to check if the fill reaches the edge
 
-    // --- OPTIMIZATION 1: Run synchronously in a single loop ---
     while (stack.length) {
         let [x, y] = stack.pop();
 
         let left = x;
-        while (left >= 0 && !visited[y * width + left] && isFillable(left, y)) {
-            left--;
-        }
+        while (left >= 0 && !visited[y * width + left] && isFillable(left, y)) left--;
         left++;
-
         let right = x;
-        while (right < width && !visited[y * width + right] && isFillable(right, y)) {
-            right++;
-        }
+        while (right < width && !visited[y * width + right] && isFillable(right, y)) right++;
         right--;
 
-        // Fill the span
         for (let i = left; i <= right; i++) {
             const idx = y * width + i;
             visited[idx] = 1;
-            const dataIndex = idx * 4;
+            const di = idx * 4;
 
             if (isEraser) {
-                data[dataIndex + 3] = 0;
+                data[di + 3] = 0;
             } else {
-                data[dataIndex] = r;
-                data[dataIndex + 1] = g;
-                data[dataIndex + 2] = b;
-                data[dataIndex + 3] = 255;
+                data[di] = r;
+                data[di + 1] = g;
+                data[di + 2] = b;
+                data[di + 3] = 255;
             }
 
+            // Check if any of the filled pixels are on the image boundary
             if (i === 0 || i === width - 1 || y === 0 || y === height - 1) {
                 touchesEdge = true;
             }
         }
-
-        // --- OPTIMIZATION 2: Efficiently find and add new scanlines ---
-        scan(y - 1, left, right); // Scan row above
-        scan(y + 1, left, right); // Scan row below
+        scan(y - 1, left, right);
+        scan(y + 1, left, right);
     }
 
-    // Helper to check if a pixel should be filled
     function isFillable(px, py) {
         if (px < 0 || px >= width || py < 0 || py >= height) return false;
-        
-        const idx = (py * width + px) * 4;
-        const R = data[idx];
-        const G = data[idx + 1];
-        const B = data[idx + 2];
-        const A = data[idx + 3];
+        const idx = py * width + px;
+        if (visited[idx]) return false;
 
-        // Check if it's a border pixel
+        const di = idx * 4;
+        const R = data[di], G = data[di + 1], B = data[di + 2], A = data[di + 3];
+
         if (A > 0 && R < blackThreshold && G < blackThreshold && B < blackThreshold) {
             return false;
         }
 
-        // Check if it matches the target color
+        if (targetColor[3] === 0) {
+            return A === 0;
+        }
+
         return (
             Math.abs(R - targetColor[0]) <= tolerance &&
             Math.abs(G - targetColor[1]) <= tolerance &&
@@ -3472,15 +3493,12 @@ function handleEnd() {
             Math.abs(A - targetColor[3]) <= tolerance
         );
     }
-    
-    // Helper to find new spans to add to the stack
+
     function scan(y, lx, rx) {
         if (y < 0 || y >= height) return;
         for (let x = lx; x <= rx; x++) {
             if (!visited[y * width + x] && isFillable(x, y)) {
-                // We found a new, uncolored span. Push it and skip the rest of this span.
                 stack.push([x, y]);
-                // Fast-forward past the rest of this colored span
                 while (x <= rx && isFillable(x, y)) {
                     x++;
                 }
@@ -3488,12 +3506,25 @@ function handleEnd() {
         }
     }
 
-    if (!touchesEdge) {
+    // --- Step 4: Apply or revert changes based on the touchesEdge flag ---
+    if (touchesEdge) {
+        console.log("❌ The fill escaped the black lines and touched the edge. Reverting changes.");
+        // Revert to original state by creating a new canvas and drawing the original data
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = width;
+        tempCanvas.height = height;
+        const tempCtx = tempCanvas.getContext("2d");
+        const originalImgData = new ImageData(originalData, width, height);
+        tempCtx.putImageData(originalImgData, 0, 0);
+        stickerImg.src = tempCanvas.toDataURL();
+    } else {
+        console.log("✅ The fill was successful and contained within the shape.");
         ctx.putImageData(imgData, 0, 0);
         stickerImg.src = canvasEl.toDataURL();
-       saveState(); 
+        saveState();
     }
 }
+
 
 
         function updateUndoRedoButtons() {
