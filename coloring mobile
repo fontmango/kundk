@@ -3139,10 +3139,9 @@ lockBtn.addEventListener('click', (e) => {
 const groupBtn = document.createElement('div');
 groupBtn.classList.add('sticker-btn', 'group-btn');
 groupBtn.innerHTML = `
-<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M4 6h16M4 12h16M4 18h16"/>
+<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 6h16M4 12h16M4 18h16"/>
 </svg>`;
-
 
 // On click, open overlay with this sticker's group
 groupBtn.addEventListener('click', (e) => {
@@ -3151,7 +3150,7 @@ groupBtn.addEventListener('click', (e) => {
     const group = stickerGroups.find(g => g.name === stickerGroup);
     if (group) {
         // Pass both the URLs and the group name
-        showStickerOverlay(group.urls, group.name); 
+        showStickerOverlay(group.urls, group.name);
     }
 });
 
@@ -3334,31 +3333,44 @@ stickerImg.addEventListener('click', (e) => {
 
 
     const updateButtonSizes = () => {
-        const btnSize = sticker.offsetWidth * 0.2;
-        [deleteBtn, copyBtn, lockBtn, groupBtn].forEach(btn => {
-            btn.style.width = btnSize + 'px';
-            btn.style.height = btnSize + 'px';
-        });
-        deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
-        copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
-         lockBtn.style.bottom = lockBtn.style.left = `${btnSize * 0.25}px`;
-        groupBtn.style.bottom = groupBtn.style.right = `${btnSize * 0.25}px`;
-    };
+    const btnSize = sticker.offsetWidth * 0.2;
+    [deleteBtn, copyBtn, lockBtn, groupBtn].forEach(btn => {
+        btn.style.width = btnSize + 'px';
+        btn.style.height = btnSize + 'px';
+    });
 
-    updateButtonSizes();
-    const observer = new ResizeObserver(updateButtonSizes);
-    observer.observe(sticker);
-    canvas.appendChild(sticker);
-
-    if (window.lucide) {
-        lucide.createIcons();
+    // New CSS for the SVG icon
+    const iconSize = btnSize * 0.7; // Make icon 70% of button size
+    const iconStrokeWidth = btnSize * 0.05; // Make stroke 5% of button size
+    
+    // Select the SVG and apply styles
+    const groupIconSVG = groupBtn.querySelector('svg');
+    if (groupIconSVG) {
+        groupIconSVG.style.width = iconSize + 'px';
+        groupIconSVG.style.height = iconSize + 'px';
+        groupIconSVG.style.strokeWidth = iconStrokeWidth + 'px';
     }
 
-    if (!suppressSave && !isRestoring) {
-        saveState();
-    }
+    deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
+    copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
+    lockBtn.style.bottom = lockBtn.style.left = `${btnSize * 0.25}px`;
+    groupBtn.style.bottom = groupBtn.style.right = `${btnSize * 0.25}px`;
+};
 
-    return sticker;
+updateButtonSizes();
+const observer = new ResizeObserver(updateButtonSizes);
+observer.observe(sticker);
+canvas.appendChild(sticker);
+
+if (window.lucide) {
+    lucide.createIcons();
+}
+
+if (!suppressSave && !isRestoring) {
+    saveState();
+}
+
+return sticker;
 }
 
     
