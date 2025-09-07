@@ -5803,6 +5803,7 @@ function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
         paletteSticker.classList.add('palette-sticker');
         paletteSticker.dataset.group = group.name;
 
+
         // ✅ NEW: Preload the group's stickers on hover
         paletteSticker.addEventListener('mouseenter', () => {
             preloadGroup(group.urls);
@@ -5813,7 +5814,7 @@ function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
                 hideOverlay();
             } else {
                 hideOverlay();
-                showOverlay(e, group.name, group.urls);
+                showOverlay(e, group.name, group.urls, group.purchaseUrl);
                 activePaletteSticker = paletteSticker;
             }
         });
