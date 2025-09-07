@@ -490,11 +490,11 @@
     <div id="overlay-container" style="display: none;"></div>
 
     <script>
-
-     
+    
                     const stickerGroups =[
     {
         "name": "80s Wrestler",
+         "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1815969883/cute-wrestler-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/80s Wrestler/Wrestler (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/80s Wrestler/Wrestler (10).png",
@@ -535,6 +535,7 @@
     },
     {
         "name": "Alpaca",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750647873/cute-alpaca-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Alpaca/_01f382d5-f1ee-47e7-870a-480afc3005aa.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Alpaca/_0fc88234-2301-411f-a649-dd18d621b72e.png",
@@ -575,6 +576,7 @@
     },
     {
         "name": "Archeology Animals",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779851243/cute-archaeology-animal-digital-design",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Archeology Animals/_0029366b-a49f-48b7-a9ec-7c6d6e32d62f.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Archeology Animals/_0145a7bc-66d6-4695-914e-810ca0f805e6.png",
@@ -615,6 +617,7 @@
     },
     {
         "name": "Astronaut Animals",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779852065/cute-astronaut-animal-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Astronaut Animals/_06275f00-c0d4-4d08-bcef-fdbf00c5744a.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Astronaut Animals/_1e81fa1b-6b1b-4112-9dba-5422eeef7375.png",
@@ -655,6 +658,7 @@
     },
     {
         "name": "Avocado",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750648395/cute-avocado-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Avocado/_0258e486-b891-49b0-9e52-ec6f7a6fc6f9.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Avocado/_07bf3f27-9547-4f5a-817c-819574e3df78.png",
@@ -695,6 +699,7 @@
     },
     {
         "name": "Axolotl",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1729739976/cute-axolotl-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Axolotl/Axolotl (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Axolotl/Axolotl (10).png",
@@ -735,6 +740,7 @@
     },
     {
         "name": "Aztec Animals",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1781934337/cute-aztec-animal-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Aztec Animals/_018689bd-052e-400d-9747-51189f1d7190.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Aztec Animals/_04bc11c4-3cff-49a2-8f42-8c4be3226aac.png",
@@ -775,6 +781,7 @@
     },
     {
         "name": "Banana",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1753701418/cute-banana-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Banana/_0149bafd-c993-450e-b166-e7a38bb103dd.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Banana/_0a4078c0-9cf0-4eb5-9919-9c009ca0e748.png",
@@ -815,6 +822,7 @@
     },
     {
         "name": "Bat",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750648619/cute-bat-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bat/_028a32ec-a8f9-4269-b3df-6638c39b0c37.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bat/_02e0a4b9-cf90-4cd4-8b7c-fe992d8a7fb6.png",
@@ -855,6 +863,7 @@
     },
     {
         "name": "Bees",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1776659693/cute-bee-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bees/_0e8cec6b-a2d1-45b1-8e10-47b62ce9d8fc.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bees/_1a74cf27-1672-48d8-9311-dc219e4dbeee.png",
@@ -893,9 +902,9 @@
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bees/_f52dc1e7-9ab5-409c-87f9-7f6e86ef914b.png"
         ]
     },
-    
-{
+    {
         "name": "BestFriends",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1761772553/cute-couple-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/BestFriends/_03ca42a4-126d-4c25-a9fe-66cb801c06de.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/BestFriends/_06517008-0e4d-4400-a017-4a54a7bfe919.png",
@@ -925,6 +934,7 @@
     },
     {
         "name": "Blobby",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736457966/cute-blobbs-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Blobby/_0ae86890-345e-4ca5-9d0a-bb8508f33310.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Blobby/_1f0639cf-b5cc-4698-be57-f86f2d962aae.png",
@@ -963,8 +973,9 @@
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Blobby/_fb87e4fc-352d-4fa3-88ca-7003a92608a9.png"
         ]
     },
-    {
+     {
         "name": "Broccoli",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1761912524/cute-broccoli-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Broccoli/_04356bd8-7550-48e5-b89a-041b17cf1d2b.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Broccoli/_0869ccd1-6c02-4914-b20e-c7df229851b2.png",
@@ -1003,9 +1014,9 @@
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Broccoli/_f9524963-1c0f-48c8-a0b1-7f62130645bb.png"
         ]
     },
-    
-{
+    {
         "name": "Bug",
+          "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1769433869/cute-bug-digital-design-for-stickers-png",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bug/_023b2509-f152-4eb9-b8b2-f21b44ed3d34.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bug/_1033fe13-b53d-4212-ac02-2ff43da26c7a.png",
@@ -1046,6 +1057,7 @@
     },
     {
         "name": "Cactus",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736458184/cute-cactus-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cactus/_0b3c0816-67f2-4a01-8a6b-59b2aa8943d5.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cactus/_17eb1b32-c9e4-4a47-968e-fe31d26467f8.png",
@@ -1086,6 +1098,7 @@
     },
     {
         "name": "Candy Sticker",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1769553454/cute-candy-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Candy Sticker/_004e2dd1-9143-43bb-8b80-2fa15fdc4596.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Candy Sticker/_01fab345-41ef-492e-aae6-bc8e0ef9914c.png",
@@ -1126,6 +1139,7 @@
     },
     {
         "name": "Carrot",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1753703066/cute-carrot-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Carrot/_050568bc-8430-4a8c-83cb-5f46a4652e8c.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Carrot/_0999157c-753d-4438-96d7-a49045a2a549.png",
@@ -1166,6 +1180,7 @@
     },
     {
         "name": "Chicken",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1776660981/cute-chicken-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Chicken/_00f5ac9d-f239-455f-8d92-2d913f894a4d.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Chicken/_2066dbc7-5684-41fd-90cb-4994a9d60d7f.png",
@@ -1206,6 +1221,7 @@
     },
     {
         "name": "Cloud",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736458368/cute-cloud-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cloud/_08414e81-bd7d-487a-b4d0-caffa15bf955.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cloud/_125899cc-bbc7-45af-941c-5c53210dfdba.png",
@@ -1246,6 +1262,7 @@
     },
     {
         "name": "Cucumber",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767898763/cute-cucumber-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cucumber/_03897f6e-e77d-4185-8b0a-3f4c138a14c6.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cucumber/_0a0a12b7-ccf0-4d43-a89f-14b0e66e1f6f.png",
@@ -1286,6 +1303,7 @@
     },
     {
         "name": "Doctor Animals",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779853865/cute-doctor-animal-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Doctor Animals/_020613e7-9cd9-4228-b123-131c937a0328.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Doctor Animals/_07f93f2d-89d1-4f72-a275-768e66f2f176.png",
@@ -1326,6 +1344,7 @@
     },
     {
         "name": "Dumpling",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736458614/cute-dumpling-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Dumpling/_089bbdea-2976-4432-9808-b050c90d68c0.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Dumpling/_0ef726be-dbbb-43ba-8f78-76970dbe33c4.png",
@@ -1366,6 +1385,7 @@
     },
     {
         "name": "Elephant",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736458902/cute-elephant-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Elephant/_00872852-91f8-4635-b852-8f7a5986a6d2.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Elephant/_0a2253ce-9e7a-4954-99cf-12b0fe6fc463.png",
@@ -1406,6 +1426,7 @@
     },
     {
         "name": "Firefighter Animal",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779855139/cute-firefighter-animal-digital-design",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Firefighter Animal/_0495ccd2-e298-4ac7-9736-1cbb67125438.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Firefighter Animal/_1666a64e-c0ce-4956-b89d-1a58537dfb26.png",
@@ -1446,6 +1467,7 @@
     },
     {
         "name": "Flamingo",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1791599317/cute-flamingo-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_00ea1390-2d8f-4770-972c-944463c8dc1a.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_14ca6aa8-83ea-4091-bd97-76abf8cc0c2e.png",
@@ -1486,6 +1508,7 @@
     },
     {
         "name": "Fox",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767900309/cute-fox-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_0170d101-f010-4ac3-8713-e12926f2fa87.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_072165bf-9582-4fc2-a9df-83fd2cad8e2c.png",
@@ -1526,6 +1549,7 @@
     },
     {
         "name": "Fries",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1741732973/cute-fries-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (10).png",
@@ -1566,6 +1590,7 @@
     },
     {
         "name": "Galapagos Turtle",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1777402860/cute-galapagos-turtle-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_010ac7e9-3a94-408b-adaa-3205f880a4cd.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_07b02460-5302-4413-ac78-3ff5a741bb37.png",
@@ -1606,6 +1631,7 @@
     },
     {
         "name": "Ghost",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1777357088/cute-ghost-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_08dbf8b7-dddd-411b-a4a0-073d5f952ca5.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_0e6df3a1-8293-4019-907f-04d2283cc976.png",
@@ -1646,6 +1672,7 @@
     },
     {
         "name": "Giraffe",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736459144/cute-giraffe-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_02899d4a-98fd-43e9-b83f-5a2426c82c72.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_04e8105e-d565-4750-9eb0-4f611858200d.png",
@@ -1684,8 +1711,9 @@
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_ffae7e90-bcf1-4c4f-983d-ec257ea4dcb1.png"
         ]
     },
-     {
+      {
         "name": "Gorilla",
+           "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1769433151/cute-gorilla-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Gorilla/_0071e5ae-2e38-4990-8a6b-cdd11c69b7b7.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Gorilla/_041c0d6b-0d70-43ae-94b3-78e1fbb6aa31.png",
@@ -1726,6 +1754,7 @@
     },
     {
         "name": "Grim Reaper",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1802063520/cute-grim-reaper-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (10).png",
@@ -1766,6 +1795,7 @@
     },
     {
         "name": "Guinea Pig",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750650433/cute-guinea-pig-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_05cd163e-d843-4336-8868-f07698fff3ea.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_0770f92a-ecd1-4b8e-8871-7c265c38a763.png",
@@ -1806,6 +1836,7 @@
     },
     {
         "name": "Halloween Sticker",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1783755621/cute-halloween-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_00fdf3ae-22f1-4411-8017-3b015a04437d.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Halloween Sticker/_0e1fff31-43ae-4788-b06a-3fef6dbc1913.png",
@@ -1846,6 +1877,7 @@
     },
     {
         "name": "Hamburger",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1741734197/cute-hamburger-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (10).png",
@@ -1886,6 +1918,7 @@
     },
     {
         "name": "Hamster",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1743931579/cute-hamster-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (10).png",
@@ -1926,6 +1959,7 @@
     },
     {
         "name": "Hedgehog",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750650695/cute-hedgehog-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_02a76faf-8d3e-40d5-854e-a148b732e7ac.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_0bf073d4-074d-4950-a4b1-98641c7893a6.png",
@@ -1966,6 +2000,7 @@
     },
     {
         "name": "Historic Figures",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1802063850/cute-historical-figures-digital-design",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Abraham Lincoln.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Historic Figures/Albert Einstein.png",
@@ -2006,6 +2041,7 @@
     },
     {
         "name": "Honey Jar",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767896889/cute-honey-jar-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_1460b305-81f2-4cce-8d23-ae874f215872.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_179a007d-b5e1-454b-92be-98aa2db2111e.png",
@@ -2046,6 +2082,7 @@
     },
     {
         "name": "IceCubes",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736460076/cute-ice-cube-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/IceCubes/_03b11caf-9939-422f-8eed-9e1d50bee02f.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/IceCubes/_11f5e133-9ee0-44e2-b95f-464cdaf29f59.png",
@@ -2086,6 +2123,7 @@
     },
     {
         "name": "Inca",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736460336/inca-art-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Inca/_07de3789-d00c-49f3-9863-fef3f7b1cc7a.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Inca/_086a5b43-086d-4c35-89f7-2286553d03c7.png",
@@ -2126,6 +2164,7 @@
     },
     {
         "name": "Inuit",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736471688/inuit-art-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Inuit/_03b9e909-1794-4af9-bd3a-24a00cef5697.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Inuit/_08adffec-5fdf-4705-8091-33fbf9931a25.png",
@@ -2166,6 +2205,7 @@
     },
     {
         "name": "Inuit Tribal Animals",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1708798439/zulu-font-alphabet-with-zulu-design-zulu",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Inuit Tribal Animals/_06bd9f1e-e81f-44e3-ba69-28ae9c463c4c.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Inuit Tribal Animals/_15dd50db-4701-4c4d-8d90-7f44af31a277.png",
@@ -2206,6 +2246,7 @@
     },
     {
         "name": "Kabuki",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1801774708/cute-kabuki-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Kabuki/Kabuki (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Kabuki/Kabuki (10).png",
@@ -2244,8 +2285,9 @@
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Kabuki/Kabuki (9).png"
         ]
     },
-    {
+       {
         "name": "Kitten",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750662885/cute-kitten-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Kitten/_070bded2-bded-4d4c-88bd-781d7df65f57.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Kitten/_0d3bcbb7-7962-41db-94d2-0bc97b84e30a.png",
@@ -2286,6 +2328,7 @@
     },
     {
         "name": "Knight",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1743944987/cute-knight-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Knight/Knight (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Knight/Knight (10).png",
@@ -2326,6 +2369,7 @@
     },
     {
         "name": "Koala",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1753700094/cute-koala-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Koala/_03ab02a1-8f19-4d8b-84a7-c984e3d408c3.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Koala/_17e83269-a0d3-4345-b157-ad18eae64bf0.png",
@@ -2366,6 +2410,7 @@
     },
     {
         "name": "Leek",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1753701626/cute-leek-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Leek/_0222f767-7770-4a6d-89b6-fcf4cc6227cd.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Leek/_098a7dfe-c25b-4359-ba00-ed4c9d39a940.png",
@@ -2406,6 +2451,7 @@
     },
     {
         "name": "Lemur",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1727547680/cute-lemur-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Lemur/Lemur (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Lemur/Lemur (10).png",
@@ -2446,6 +2492,7 @@
     },
     {
         "name": "Lucha Libre",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1743946541/cute-lucha-libre-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Lucha Libre/Lucha Libre (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Lucha Libre/Lucha Libre (10).png",
@@ -2486,6 +2533,7 @@
     },
     {
         "name": "Manatee",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736472290/cute-manatee-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Manatee/_091fe16c-f3e0-4237-9e56-b0b0b43b3f92.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Manatee/_0c858845-6f85-4033-b04a-a75adc0e69e6.png",
@@ -2526,6 +2574,7 @@
     },
     {
         "name": "Mandrill",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736101678/cute-mandrill-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mandrill/Mandrill (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mandrill/Mandrill (10).png",
@@ -2566,6 +2615,7 @@
     },
     {
         "name": "Maned Wolf",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1791602077/cute-maned-wolf-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Maned Wolf/_0495fe89-33dc-470b-a798-d49e80e6f968.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Maned Wolf/_0505a7ff-8f9c-47ca-9e94-5051016647b6.png",
@@ -2606,6 +2656,7 @@
     },
     {
         "name": "Maori",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750292721/maori-inspired-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Maori/Maori (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Maori/Maori (10).png",
@@ -2646,6 +2697,7 @@
     },
     {
         "name": "Maori Tribal Animals",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767747224/cute-maori-animal-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Maori Tribal Animals/_09fcccc6-15ba-471c-8702-e815c3947790.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Maori Tribal Animals/_0cfcd201-e931-4788-880c-e2cf27cf8ca7.png",
@@ -2686,6 +2738,7 @@
     },
     {
         "name": "Marshmallow",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750293223/cute-marshmallow-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Marshmallow/Marshmallow (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Marshmallow/Marshmallow (10).png",
@@ -2726,6 +2779,7 @@
     },
     {
         "name": "Mayan",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736475208/cute-maya-gods-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mayan/_01bc359f-f45d-49fd-863c-7fdc167eb4f8.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mayan/_0525a572-090e-4573-b8f5-cc833968ba2e.png",
@@ -2766,6 +2820,7 @@
     },
     {
         "name": "Meerkat",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1791602861/cute-meerkat-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Meerkat/_105691e3-c98e-4b47-ba61-64b196ab98a1.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Meerkat/_19a94345-5c6b-4b51-bbd0-ded5d2d5542a.png",
@@ -2806,6 +2861,7 @@
     },
     {
         "name": "Mochis",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750663369/cute-mochi-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mochis/_056e8224-50fd-4be9-bc4d-1c6927ea6d93.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mochis/_08abd6a2-c8ce-4b61-9be0-6517e0987432.png",
@@ -2846,6 +2902,7 @@
     },
     {
         "name": "Mummy",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750293595/cute-mummy-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mummy/Mummy (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mummy/Mummy (10).png",
@@ -2886,6 +2943,7 @@
     },
     {
         "name": "Mushroom",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736472770/cute-mushroom-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mushroom/_03ac6863-171c-4cb5-92a3-a7c273846704.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mushroom/_07f24165-408f-4f27-824b-d07c5705bab5.png",
@@ -2926,6 +2984,7 @@
     },
     {
         "name": "Nacho",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750294037/cute-nacho-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Nacho/Nacho (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Nacho/Nacho (10).png",
@@ -2966,6 +3025,7 @@
     },
     {
         "name": "Narwhale",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736104092/cute-narwhal-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Narwhale/Narwhale (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Narwhale/Narwhale (10).png",
@@ -3006,6 +3066,7 @@
     },
     {
         "name": "Navajo Tribal Animals",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1781477485/cute-navajo-animal-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Navajo Tribal Animals/_03f3b757-5128-425d-afa8-212b65826c9a.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Navajo Tribal Animals/_0a3e8600-26db-41da-8350-fce5cec774f5.png",
@@ -3046,6 +3107,7 @@
     },
     {
         "name": "Octopus",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750663897/cute-octopus-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Octopus/_02914884-9b42-4b74-94a8-f63b9b21a4de.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Octopus/_125df21a-7a84-4a6b-a5e8-1ab84a2d0d4a.png",
@@ -3086,6 +3148,7 @@
     },
     {
         "name": "Owl",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767897861/cute-owl-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Owl/_09876fca-558d-415b-9ad2-865dab793c9f.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Owl/_14207495-378d-408c-8b84-f8ab15c42ab7.png",
@@ -3126,6 +3189,7 @@
     },
     {
         "name": "Panda",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1777406310/cute-panda-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Panda/_0fabc77d-bbbc-4211-b6da-dea785251fc5.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Panda/_2eaa85b8-06bc-4fbd-932d-b652eaea3774.png",
@@ -3166,6 +3230,7 @@
     },
     {
         "name": "Pangolin",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750295123/cute-pangolin-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Pangolin/Pangolin (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Pangolin/Pangolin (10).png",
@@ -3206,6 +3271,7 @@
     },
     {
         "name": "Penguin",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1777407104/cute-penguin-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Penguin/_04b10163-e006-4c49-90ea-78858595c313.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Penguin/_0ee8d699-f641-464d-b358-5ec4e4e7fc0a.png",
@@ -3246,6 +3312,7 @@
     },
     {
         "name": "Platypus",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750295495/cute-platypus-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Platypus/Platypus (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Platypus/Platypus (10).png",
@@ -3286,6 +3353,7 @@
     },
     {
         "name": "Police Officer Animals",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779856263/cute-police-officer-animal-digital",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Police Officer Animals/_0110f32a-65c0-445f-8539-92f81caf4a1e.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Police Officer Animals/_0185e4d1-ae47-4f69-8f19-8ee57a901c25.png",
@@ -3326,6 +3394,7 @@
     },
     {
         "name": "Popcorn",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736473354/cute-popcorn-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Popcorn/_15b2e483-25d7-42e4-b3a4-7b1ad24b31b8.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Popcorn/_20fa6263-fe77-4990-9a62-175b4c7c9899.png",
@@ -3366,6 +3435,7 @@
     },
     {
         "name": "Potato",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767898963/cute-potato-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Potato/_066ace4f-cb14-4783-b8c7-6e20a8d07559.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Potato/_0a5f2725-25f4-4b2b-8fcd-833bbb7d7f08.png",
@@ -3406,6 +3476,7 @@
     },
     {
         "name": "Potion Sticker",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1783504177/magical-potion-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Potion Sticker/Animal Communication Potion.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Potion Sticker/Charm Potion.png",
@@ -3446,6 +3517,7 @@
     },
     {
         "name": "Predator and Prey",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767761304/cute-prey-and-predator-animal-digital",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Predator and Prey/ArmadilloAndJaguar.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Predator and Prey/BoarAndLion.png",
@@ -3486,6 +3558,7 @@
     },
     {
         "name": "Prey and Predator",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1768031896/cute-prey-and-predator-animal-digital",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Prey and Predator/_123f2675-4a92-4b24-83fe-cf0d0f938d83.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Prey and Predator/_126c7097-583f-4368-9f9a-93701e253446.png",
@@ -3526,6 +3599,7 @@
     },
     {
         "name": "Quokka",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750295869/cute-quokka-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Quokka/Quokka (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Quokka/Quokka (10).png",
@@ -3566,6 +3640,7 @@
     },
     {
         "name": "Rabbit",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736105714/cute-rabbit-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Rabbit/Rabbit (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Rabbit/Rabbit (10).png",
@@ -3606,6 +3681,7 @@
     },
     {
         "name": "Racoon",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1791605375/cute-raccoon-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Racoon/_01cc8acd-291a-457f-b900-e288cd72ba3b.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Racoon/_01ccbed4-bb55-465a-a1db-d7e33deaf08e.png",
@@ -3646,6 +3722,7 @@
     },
     {
         "name": "Red Panda",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767897677/cute-red-panda-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Red Panda/_0a7175e0-85b8-4e56-bde4-5e631d4df891.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Red Panda/_0b5bec29-1c98-4b8b-b869-d1d3a16d618e.png",
@@ -3686,6 +3763,7 @@
     },
     {
         "name": "Salamander",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736106656/cute-salamander-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Salamander/Salamander (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Salamander/Salamander (10).png",
@@ -3726,6 +3804,7 @@
     },
     {
         "name": "Scientist Animal",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1779856855/cute-scientist-animal-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Scientist Animal/_0db3bbe3-a04f-46b1-b94e-32d6e02caad5.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Scientist Animal/_177a3e0f-97a2-4450-add4-a1e36a3ffe92.png",
@@ -3766,6 +3845,7 @@
     },
     {
         "name": "Sea Otter",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1777408608/cute-sea-otter-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sea Otter/_06623e92-6503-4f42-b5fd-ed45ea6791ad.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sea Otter/_07ff0f46-0a40-4821-adcb-1a7a0eb8ed41.png",
@@ -3806,6 +3886,7 @@
     },
     {
         "name": "Seal",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736473612/cute-seal-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Seal/_02e1e7ee-f64e-4c0e-a44b-35fcc4927216.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Seal/_0a9232d5-7de3-45ff-b089-ff465d61f21d.png",
@@ -3846,6 +3927,7 @@
     },
     {
         "name": "Serval",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1791606997/cute-serval-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Serval/_065d0a1d-66f1-4748-a0c7-d72d29074b77.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Serval/_0c1b9344-f7ee-4773-b139-fbf988a0d196.png",
@@ -3886,6 +3968,7 @@
     },
     {
         "name": "Shark",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767900565/cute-shark-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Shark/_06868c3a-8d8f-47fd-bd66-837ea666beb9.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Shark/_0b771e6d-1aab-4103-bd4e-4548514fd7bd.png",
@@ -3926,6 +4009,7 @@
     },
     {
         "name": "Sifaka",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1791607853/cute-sifaka-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sifaka/_05de1f2b-6ecb-4e77-b724-9e6149bb2f26.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sifaka/_06b155d5-141b-4641-a3d4-7bf2e16aafab.png",
@@ -3966,6 +4050,7 @@
     },
     {
         "name": "Sloth",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767898065/cute-sloth-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sloth/_02518e7e-9930-4f6c-93c4-5b13ee0c6a74.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sloth/_0628226e-3bf2-4e58-b04d-53ff3b4f5b3c.png",
@@ -4006,6 +4091,7 @@
     },
     {
         "name": "Slow Iris",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1777411042/cute-slow-loris-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Slow Iris/_0496d806-5ea2-4f89-b8f5-2f75fc8740cd.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Slow Iris/_0c3c1191-ee18-4a4c-be6d-cab07411252e.png",
@@ -4046,6 +4132,7 @@
     },
     {
         "name": "Snails",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736473886/cute-snail-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Snails/_02b3c194-7dbb-4455-823d-f2fc78d4d68b.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Snails/_080c31ef-a8d4-4fa4-b766-69f4f5a9ae65.png",
@@ -4084,9 +4171,9 @@
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Snails/_fce4ae32-e58e-42f4-b2a1-c282d886cade.png"
         ]
     },
-    
- {
+     {
         "name": "Snake",
+            "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1769433499/cute-snake-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Snake/_012f129d-fcda-4da5-92e4-655c94778aee.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Snake/_0496801c-619e-4bfc-985a-b69ba90def8b.png",
@@ -4127,6 +4214,7 @@
     },
     {
         "name": "Sugar Glider",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1753700402/cute-sugar-glider-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sugar Glider/_00094a00-0944-4c0c-a31c-9db9c25b7269.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sugar Glider/_07c05b66-4d98-4522-88b9-184cb13a2a8e.png",
@@ -4167,6 +4255,7 @@
     },
     {
         "name": "Sumo Wrestler",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736107146/cute-sumo-wrestler-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sumo Wrestler/Sumo Wrestler (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sumo Wrestler/Sumo Wrestler (10).png",
@@ -4207,6 +4296,7 @@
     },
     {
         "name": "Sushi",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750665105/cute-sushi-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sushi/_034541a8-3a03-4bd6-b53c-2794015c32c6.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sushi/_2184e7d0-0f4c-4f89-bd7d-e52649a55ce4.png",
@@ -4247,6 +4337,7 @@
     },
     {
         "name": "T-Rex",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750298853/cute-t-rex-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/T-Rex/T-Rex (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/T-Rex/T-Rex (10).png",
@@ -4287,6 +4378,7 @@
     },
     {
         "name": "Taco",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736107506/cute-taco-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Taco/Taco (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Taco/Taco (10).png",
@@ -4327,6 +4419,7 @@
     },
     {
         "name": "Tamandua",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1777412048/cute-tamandua-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tamandua/_047fdd03-8401-4d02-84f3-aba9efc97725.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tamandua/_053a523b-32b7-4c22-89a9-10208197d283.png",
@@ -4367,6 +4460,7 @@
     },
     {
         "name": "Tarsier",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1741730967/cute-tarsier-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tarsier/Tarsier (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tarsier/Tarsier (10).png",
@@ -4407,6 +4501,7 @@
     },
     {
         "name": "Tasmanian Devil",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1791610493/cute-tasmanian-devil-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tasmanian Devil/_00b5b1b9-0373-4474-9680-9b79368b1324.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tasmanian Devil/_052c5b07-0ed9-4267-9a09-41f542affcf3.png",
@@ -4447,6 +4542,7 @@
     },
     {
         "name": "Tea Bag",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767896447/cute-tea-bag-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tea Bag/_0770f100-11fd-40c4-a03a-27b288dcdc7e.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tea Bag/_0b3495d1-d0cd-4fcb-ac3a-2913eadcd397.png",
@@ -4487,6 +4583,7 @@
     },
     {
         "name": "Teeth",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1753699926/cute-tooth-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Teeth/_0c9c4e19-6424-459b-a4c2-544db73ea5ce.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Teeth/_1a08efc1-e2e1-4bcd-a60f-6e08294ff191.png",
@@ -4527,6 +4624,7 @@
     },
     {
         "name": "Toast",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750298475/cute-toast-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Toast/Toast (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Toast/Toast (10).png",
@@ -4567,6 +4665,7 @@
     },
     {
         "name": "Tofu",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736474580/cute-tofu-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tofu/_07d5086e-8585-4456-b842-0e8601a69eae.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tofu/_0b985233-18ab-427a-9f41-8ce25dcca110.png",
@@ -4607,6 +4706,7 @@
     },
     {
         "name": "Trash Bag",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767896651/cute-trash-bag-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Trash Bag/_0241dbd2-3e0a-4add-bdf1-a742fe009b78.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Trash Bag/_03bc69df-e474-4966-ab52-f3f34b4b4bbf.png",
@@ -4647,6 +4747,7 @@
     },
     {
         "name": "Tribal Animals",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1781949853/cute-tribal-animal-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tribal Animals/_00ccfbe7-c01b-4ad8-8350-2e822b88897a.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tribal Animals/_05937065-7408-4feb-ac36-78e243f3a1d1 (1).png",
@@ -4687,6 +4788,7 @@
     },
     {
         "name": "Unicorn",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1736108864/cute-unicorn-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Unicorn/Unicorn (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Unicorn/Unicorn (10).png",
@@ -4727,6 +4829,7 @@
     },
     {
         "name": "Viking",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1750299689/cute-viking-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Viking/Viking (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Viking/Viking (10).png",
@@ -4767,6 +4870,7 @@
     },
     {
         "name": "Volcano",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1767896301/cute-volcano-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Volcano/_04d9fa5d-c8c5-4e9b-8228-82b477bb4f10.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Volcano/_1ca796ac-fba7-486a-9624-05b892a1ca36.png",
@@ -4807,6 +4911,7 @@
     },
     {
         "name": "Voodoo",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1772683422/cute-voodoo-doll-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Voodoo/_0a1f1535-3a34-40eb-8628-90e4aa180b2f.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Voodoo/_0baa4681-e1f9-4951-a361-a5134c162f61.png",
@@ -4847,6 +4952,7 @@
     },
     {
         "name": "Wild Hog",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1791611245/cute-wild-hog-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Wild Hog/_02f870b9-0fa2-42e7-97c0-6b0cb77a527c.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Wild Hog/_03154dba-4ba6-40fb-99bd-883e9dccb675.png",
@@ -4887,6 +4993,7 @@
     },
     {
         "name": "Yeti",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1815972289/cute-yeti-digital-design-for-stickers",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Yeti/Yeti (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Yeti/Yeti (10).png",
@@ -4927,6 +5034,7 @@
     },
     {
         "name": "Zulu Tribal Animals",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1781470897/cute-zulu-animal-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Zulu Tribal Animals/_1e79f31f-e4ef-4e60-a9c8-def566a06d2a.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Zulu Tribal Animals/_27f4f222-a424-451c-9bf6-43231c90fef9.png",
@@ -4967,6 +5075,7 @@
     },
     {
         "name": "dia de los muerstos sticker",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1799228365/day-of-the-dead-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_018f7140-17fb-427f-8d4e-e9d937d35912.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_043b10f9-ae16-4ffa-a84d-ab4eb4f4c3e6.png",
@@ -5006,6 +5115,8 @@
         ]
     }
 ]
+
+
 const spinBtn = document.getElementById("spin-sticker-btn");
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
