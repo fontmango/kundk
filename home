@@ -269,6 +269,8 @@ main {
                     </a>
                 </div>
                 <div class="flex items-center space-x-4">
+                    <a href="/ausmalen" class="px-6 py-3 text-lg font-semibold rounded-full text-secondary-dark hover:text-gray-900 transition">Ausmalen</a>
+                    <a href="/stickern" class="px-6 py-3 text-lg font-semibold rounded-full text-secondary-dark hover:text-gray-900 transition">Stickern</a>
                     <a href="/gallerie" class="px-6 py-3 text-lg font-semibold rounded-full text-secondary-dark hover:text-gray-900 transition">Gallerie</a>
                     <a href="/shop" class="px-6 py-3 text-lg font-semibold rounded-full text-white bg-gray-700 transition">Shop</a>
                 </div>
