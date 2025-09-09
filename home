@@ -155,6 +155,102 @@
         .animate-pulse-glow {
             animation: pulse-glow 2s infinite;
         }
+
+#feedbackModal {
+    /* Change position from fixed to absolute */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%; /* Use min-height to ensure it covers the content */
+
+    /* The rest of the overlay styles are fine */
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    z-index: 1000;
+}
+/* Modal content box */
+.modal-content {
+    background-color: #fff;
+    padding: 2.5rem 2rem;
+    border-radius: 1.5rem;
+    text-align: center;
+    max-width: 90%;
+    
+    /* Add margin to push it down from the very top edge */
+    margin-top: 50px;
+
+    /* This scales the content for a nice effect */
+    transform: scale(0.9);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Class to make the modal visible */
+#feedbackModal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+
+/* When the modal shows, scale up the content for a nice effect */
+#feedbackModal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-content .status-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    color: #aaa;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+main {
+    position: static;
+}
+
+/* Loading Screen Styles */
+#loadingScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Higher than the modal so it appears on top */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#loadingScreen.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loading-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This makes the video cover the full container without distortion */
+}
     </style>
 </head>
 
@@ -212,6 +308,8 @@
                         <p>Emotionen verschenken war noch nie so einfach</p>
                         <p>über 1.000 Kinderzeichnungen verarbeitet</p>
                     </div>
+
+  
                 </div>
 
                 <!-- Rechte Spalte (Bild-Slider) -->
@@ -337,190 +435,267 @@
 
     </div>
 
+    <div id="loadingScreen" class="loading-screen">
+    <video id="loadingVideo" class="loading-video" autoplay muted loop>
+        </video>
+</div>
+
+    <div id="feedbackModal" class="modal-backdrop">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+        <div class="flex justify-center mb-4">
+            <svg id="modalIcon" class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            </svg>
+        </div>
+        <h2 id="modalStatus" class="text-3xl font-bold mb-2"></h2>
+        <p id="modalMessage" class="text-lg"></p>
+    </div>
+</div>
+
     <!-- Verstecktes Dateieingabefeld zum Hochladen -->
     <input type="file" id="fileInput" class="hidden" accept="image/*">
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const fileInput = document.getElementById('fileInput');
-            const uploadBtn = document.getElementById('uploadBtn');
-            const drawBtn = document.getElementById('drawBtn');
-            const clearCanvasBtn = document.getElementById('clearCanvasBtn');
-            const saveCanvasBtn = document.getElementById('saveCanvasBtn');
+  
+   document.addEventListener('DOMContentLoaded', () => {
+    // Corrected: All your code should be inside this single listener.
 
-            const sliderContainer = document.getElementById('sliderContainer');
-            const afterImage = document.querySelector('.slider-image.after');
-            const beforeImage = document.querySelector('.slider-image.before');
-            const drawingContainer = document.getElementById('drawingContainer');
-            const drawingCanvas = document.getElementById('drawingCanvas');
-            const sliderDots = document.getElementById('sliderDots');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const drawBtn = document.getElementById('drawBtn');
+    const clearCanvasBtn = document.getElementById('clearCanvasBtn');
+    const saveCanvasBtn = document.getElementById('saveCanvasBtn');
 
-            const ctx = drawingCanvas.getContext('2d');
-            let isDrawing = false;
-            let lastX = 0;
-            let lastY = 0;
-            let currentImageIndex = 0;
-            const images = [
-                {
-                    before: 'https://static.wixstatic.com/media/990059_85541759629848b1a95b16c08f3fd6b5~mv2.jpg',
-                    after: 'https://static.wixstatic.com/media/990059_0a26adc0fe454f4f8569ab2fd7ef1116~mv2.png'
-                },
-                {
-                    before: 'https://static.wixstatic.com/media/990059_e6700b74cc0c450e8612ebd50a3070e8~mv2.jpg',
-                    after: 'https://static.wixstatic.com/media/990059_c4ffa1ce76684b2697399a58b454ee42~mv2.png'
-                },
-                {
-                    before: 'https://static.wixstatic.com/media/990059_028a00154c7c4cf9aed4a46d6ecaa54d~mv2.jpg',
-                    after: 'https://static.wixstatic.com/media/990059_71e9ca0adde145e8bffd89ff90c78675~mv2.png'
-                }
-            ];
+    const sliderContainer = document.getElementById('sliderContainer');
+    const afterImage = document.querySelector('.slider-image.after');
+    const beforeImage = document.querySelector('.slider-image.before');
+    const drawingContainer = document.getElementById('drawingContainer');
+    const drawingCanvas = document.getElementById('drawingCanvas');
+    const sliderDots = document.getElementById('sliderDots');
+    const imageSlider = document.getElementById('imageSlider');
 
-            // Funktion zur Aktualisierung der Slider-Bilder und Punkte
-            const updateSlider = (index) => {
-                beforeImage.src = images[index].before;
-                afterImage.src = images[index].after;
+    const modal = document.getElementById('feedbackModal');
+    const modalStatus = document.getElementById('modalStatus');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalIcon = document.getElementById('modalIcon');
+    const loadingScreen = document.getElementById('loadingScreen');
+    const loadingVideo = document.getElementById('loadingVideo');
 
-                // Aktualisiere die aktiven Punkte
-                const dots = document.querySelectorAll('.dot');
-                dots.forEach((dot, dotIndex) => {
-                    if (dotIndex === index) {
-                        dot.classList.add('active');
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                });
-            };
+    // This is the URL of your video uploaded to Wix
+    const videoUrl = "YOUR_WIX_VIDEO_URL_HERE"; // IMPORTANT: Replace with your actual video URL
 
-            // Funktion zur Größenanpassung des Canvas an die Bildabmessungen
-            const resizeCanvas = () => {
-                drawingCanvas.width = beforeImage.offsetWidth;
-                drawingCanvas.height = beforeImage.offsetHeight;
-                ctx.lineWidth = 4;
-                ctx.lineCap = 'round';
-                ctx.strokeStyle = '#000000';
-            };
+    if (loadingVideo && videoUrl) {
+        loadingVideo.src = videoUrl;
+    }
 
-            // Anfängliche Größenanpassung beim Laden der Seite
-            window.addEventListener('load', resizeCanvas);
-            // Größenanpassung des Canvas, wenn sich die Fenstergröße ändert
-            window.addEventListener('resize', resizeCanvas);
+    // Function to show the video loading screen
+    const showLoadingScreen = () => {
+        loadingScreen.classList.add('show');
+    };
 
-            // Funktion zum Hochladen von Bildern
-            uploadBtn.addEventListener('click', () => {
-                fileInput.click();
-            });
+    // Function to hide the video loading screen
+    const hideLoadingScreen = () => {
+        loadingScreen.classList.remove('show');
+    };
 
-            fileInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        const img = new Image();
-                        img.onload = () => {
-                            beforeImage.src = event.target.result;
-                            drawingContainer.style.display = 'none';
-                            resizeCanvas();
-                        };
-                        img.src = event.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
+    const ctx = drawingCanvas.getContext('2d');
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+    let currentImageIndex = 0;
+    const images = [
+        {
+            before: 'https://static.wixstatic.com/media/990059_85541759629848b1a95b16c08f3fd6b5~mv2.jpg',
+            after: 'https://static.wixstatic.com/media/990059_0a26adc0fe454f4f8569ab2fd7ef1116~mv2.png'
+        },
+        {
+            before: 'https://static.wixstatic.com/media/990059_e6700b74cc0c450e8612ebd50a3070e8~mv2.jpg',
+            after: 'https://static.wixstatic.com/media/990059_c4ffa1ce76684b2697399a58b454ee42~mv2.png'
+        },
+        {
+            before: 'https://static.wixstatic.com/media/990059_028a00154c7c4cf9aed4a46d6ecaa54d~mv2.jpg',
+            after: 'https://static.wixstatic.com/media/990059_71e9ca0adde145e8bffd89ff90c78675~mv2.png'
+        }
+    ];
 
-            // Funktion zum Umschalten zwischen Bild-Slider und Zeichenfläche
-            drawBtn.addEventListener('click', () => {
-                const isCanvasVisible = drawingContainer.style.display === 'block';
-                if (!isCanvasVisible) {
-                    imageSlider.style.display = 'none';
-                    drawingContainer.style.display = 'block';
-                    resizeCanvas();
-                } else {
-                    imageSlider.style.display = 'block';
-                    drawingContainer.style.display = 'none';
-                }
-            });
+    const showModal = (message, isSuccess) => {
+        modalStatus.textContent = isSuccess ? 'Erfolgreich!' : 'Fehler!';
+        modalMessage.textContent = message;
+        
+        if (isSuccess) {
+            modalStatus.classList.remove('error');
+            modalStatus.classList.add('success');
+            modalIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />`;
+            modalIcon.classList.remove('text-red-500');
+            modalIcon.classList.add('text-green-500');
+        } else {
+            modalStatus.classList.remove('success');
+            modalStatus.classList.add('error');
+            modalIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M12 2a10 10 0 100 20 10 10 0 000-20z" />`;
+            modalIcon.classList.remove('text-green-500');
+            modalIcon.classList.add('text-red-500');
+        }
+        modal.classList.add('show');
+    };
 
-            // Zeichenfläche löschen
-            clearCanvasBtn.addEventListener('click', () => {
-                ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
-            });
-            
-            // Zeichnung als Bild speichern
-            saveCanvasBtn.addEventListener('click', () => {
-                const dataURL = drawingCanvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.href = dataURL;
-                link.download = 'meine-zeichnung.png';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            });
+    window.closeModal = () => {
+        modal.classList.remove('show');
+    };
 
-            // Zeichen-Logik
-            function draw(e) {
-                if (!isDrawing) return;
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(e.offsetX, e.offsetY);
-                ctx.stroke();
-                [lastX, lastY] = [e.offsetX, e.offsetY];
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data.status) {
+            const { status, message } = event.data;
+
+            if (status === 'loading') {
+                showLoadingScreen();
+            } else if (status === 'success') {
+                hideLoadingScreen();
+                showModal(message, true);
+            } else if (status === 'error') {
+                hideLoadingScreen();
+                showModal(message, false);
             }
+        }
+    });
 
-            drawingCanvas.addEventListener('mousedown', (e) => {
-                isDrawing = true;
-                [lastX, lastY] = [e.offsetX, e.offsetY];
-            });
-            drawingCanvas.addEventListener('mouseup', () => isDrawing = false);
-            drawingCanvas.addEventListener('mouseout', () => isDrawing = false);
-            drawingCanvas.addEventListener('mousemove', draw);
-            
-            // Touch-Event-Listener für das Zeichnen
-            drawingCanvas.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                const rect = drawingCanvas.getBoundingClientRect();
-                isDrawing = true;
-                [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
-            });
-            drawingCanvas.addEventListener('touchend', () => isDrawing = false);
-            drawingCanvas.addEventListener('touchcancel', () => isDrawing = false);
-            drawingCanvas.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                const rect = drawingCanvas.getBoundingClientRect();
-                if (!isDrawing) return;
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-                ctx.stroke();
-                [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
-            });
+    const updateSlider = (index) => {
+        beforeImage.src = images[index].before;
+        afterImage.src = images[index].after;
 
-            // Vorher/Nachher-Bild-Slider-Logik (Hover-only)
-            const handleMouseOver = (clientX) => {
-                const rect = sliderContainer.getBoundingClientRect();
-                const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
-                const percentage = (x / rect.width) * 100;
-                
-                afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
-            };
-
-            // Maus-Events für den Slider
-            sliderContainer.addEventListener('mousemove', (e) => {
-                handleMouseOver(e.clientX);
-            });
-            // Event-Listener für die Navigationspunkte
-            sliderDots.addEventListener('click', (e) => {
-                if (e.target.classList.contains('dot')) {
-                    const newIndex = parseInt(e.target.dataset.index);
-                    if (!isNaN(newIndex) && newIndex !== currentImageIndex) {
-                        currentImageIndex = newIndex;
-                        updateSlider(currentImageIndex);
-                        afterImage.style.clipPath = `inset(0 100% 0 0)`;
-                    }
-                }
-            });
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, dotIndex) => {
+            if (dotIndex === index) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
         });
+    };
+
+    const resizeCanvas = () => {
+        drawingCanvas.width = beforeImage.offsetWidth;
+        drawingCanvas.height = beforeImage.offsetHeight;
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#000000';
+    };
+
+    window.addEventListener('load', resizeCanvas);
+    window.addEventListener('resize', resizeCanvas);
+
+    uploadBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const fileData = {
+                    name: file.name,
+                    data: event.target.result
+                };
+                window.parent.postMessage(fileData, '*');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    drawBtn.addEventListener('click', () => {
+        const isCanvasVisible = drawingContainer.style.display === 'block';
+        if (!isCanvasVisible) {
+            imageSlider.style.display = 'none';
+            drawingContainer.style.display = 'block';
+            resizeCanvas();
+        } else {
+            imageSlider.style.display = 'block';
+            drawingContainer.style.display = 'none';
+        }
+    });
+
+    clearCanvasBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+    });
+    
+    saveCanvasBtn.addEventListener('click', () => {
+        const dataURL = drawingCanvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'meine-zeichnung.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+
+    function draw(e) {
+        if (!isDrawing) return;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
+    drawingCanvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+    drawingCanvas.addEventListener('mouseup', () => isDrawing = false);
+    drawingCanvas.addEventListener('mouseout', () => isDrawing = false);
+    drawingCanvas.addEventListener('mousemove', draw);
+    
+    drawingCanvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = drawingCanvas.getBoundingClientRect();
+        isDrawing = true;
+        [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
+    });
+    drawingCanvas.addEventListener('touchend', () => isDrawing = false);
+    drawingCanvas.addEventListener('touchcancel', () => isDrawing = false);
+    drawingCanvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = drawingCanvas.getBoundingClientRect();
+        if (!isDrawing) return;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        ctx.stroke();
+        [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
+    });
+
+    const handleMouseOver = (clientX) => {
+        const rect = sliderContainer.getBoundingClientRect();
+        const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+        const percentage = (x / rect.width) * 100;
+        
+        afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+    };
+
+    sliderContainer.addEventListener('mousemove', (e) => {
+        handleMouseOver(e.clientX);
+    });
+
+    sliderDots.addEventListener('click', (e) => {
+        if (e.target.classList.contains('dot')) {
+            const newIndex = parseInt(e.target.dataset.index);
+            if (!isNaN(newIndex) && newIndex !== currentImageIndex) {
+                currentImageIndex = newIndex;
+                updateSlider(currentImageIndex);
+                afterImage.style.clipPath = `inset(0 100% 0 0)`;
+            }
+        }
+    });
+});
+
     </script>
 </body>
 </html>
