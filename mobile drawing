@@ -80,7 +80,7 @@
       </div>
 
       <div class="flex-shrink-0 w-full flex justify-center pt-4">
-        <div class="flex flex-nowrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
+        <div class="flex flex-wrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
           <div class="flex items-center gap-1">
             <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
               <i data-lucide="pen-line" class="w-4 h-4"></i>
@@ -90,12 +90,16 @@
             </button>
           </div>
           <button id="undo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Undo">
-            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            <i data-lucide="undo-2" class="w-4 h-4"></i>
           </button>
-          <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">
-            <span id="icon-sun"><i data-lucide="sun" class="w-4 h-4"></i></span>
-            <span id="icon-moon" class="hidden"><i data-lucide="moon" class="w-4 h-4"></i></span>
-          </button>
+          <button id="redo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Redo">
+  <i data-lucide="redo-2" class="w-4 h-4"></i>
+</button>
+        
+       <!--      <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">-->  
+  <!--        <span id="icon-sun"><i data-lucide="sun" class="w-4 h-4"></i></span> -->  
+    <!--           <span id="icon-moon" class="hidden"><i data-lucide="moon" class="w-4 h-4"></i></span> -->  
+       <!--      </button>-->  
           <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
             <i data-lucide="file-plus" class="w-4 h-4"></i>
           </button>
@@ -109,7 +113,7 @@
 
   <div id="save-prompt">
     <div id="save-prompt-content">
-      <h2 class="text-2xl font-bold mb-4">Dein Meisterwerk wurde gespeichert!</h2>
+      <h2 class="text-2xl font-bold mb-4">Speichere dein Meisterwerk!</h2>
       <p class="text-gray-600 mb-4">Wähle eine Option:</p>
       <div class="button-group">
         <button id="copy-url-btn" class="prompt-btn prompt-btn-primary" title="Upload & Get Link">
@@ -171,15 +175,15 @@
 
     const uploadVideo = document.getElementById('upload-video');
     const uploadingOverlay = document.getElementById('uploading-overlay');
-
+const redoBtn = document.getElementById('redo-btn');
     const penToolBtn = document.getElementById('tool-pen');
     const eraserToolBtn = document.getElementById('tool-eraser');
     const undoBtn = document.getElementById('undo-btn');
     const clearBtn = document.getElementById('clear-canvas');
     const saveBtn = document.getElementById('save-btn');
     const toggleBgBtn = document.getElementById('toggle-background');
-    const iconSun = document.getElementById('icon-sun');
-    const iconMoon = document.getElementById('icon-moon');
+//    const iconSun = document.getElementById('icon-sun');
+//    const iconMoon = document.getElementById('icon-moon'); 
     const appContainer = document.getElementById('drawing-app-container');
     const savePrompt = document.getElementById('save-prompt');
 
@@ -253,6 +257,7 @@
 
     function updateHistoryButtons() {
       undoBtn.disabled = historyIndex <= 0;
+      redoBtn.disabled = historyIndex >= history.length - 1;
     }
 
     function drawImageToCanvas(img) {
@@ -400,14 +405,27 @@
     penToolBtn.addEventListener('click', ()=>setActiveTool('pen'));
     eraserToolBtn.addEventListener('click', ()=>setActiveTool('eraser'));
     undoBtn.addEventListener('click', ()=>loadHistory(historyIndex>0?--historyIndex:-1));
+    
+redoBtn.addEventListener('click', () => {
+    if (historyIndex < history.length - 1) {
+        historyIndex++;
+        loadHistory(historyIndex);
+    }
+});
+    
+    
     clearBtn.addEventListener('click', ()=>{ drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); history = []; historyIndex = -1; pushHistory(); });
-    toggleBgBtn.addEventListener('click', ()=>{
-      isWhiteBackground = !isWhiteBackground;
-      iconSun.classList.toggle('hidden', !isWhiteBackground);
-      iconMoon.classList.toggle('hidden', isWhiteBackground);
-      paintBackground(); updatePenColorForBackground();
-      appContainer.classList.toggle('dark-mode', !isWhiteBackground);
-    });
+    
+    
+    
+    
+//    toggleBgBtn.addEventListener('click', ()=>{
+//      isWhiteBackground = !isWhiteBackground;
+//      iconSun.classList.toggle('hidden', !isWhiteBackground);
+//      iconMoon.classList.toggle('hidden', isWhiteBackground);
+//      paintBackground(); updatePenColorForBackground();
+//      appContainer.classList.toggle('dark-mode', !isWhiteBackground);
+//    });
     saveBtn.addEventListener('click', ()=>{ if(!saveBtn.disabled) savePrompt.style.display='flex'; });
 
     // ✅ This is the key change to handle the upload video
