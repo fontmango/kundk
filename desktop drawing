@@ -185,7 +185,7 @@
           <i data-lucide="file-plus" class="w-4 h-4"></i>
         </button>
         <button id="save-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Save PNG">
-          <i data-lucide="save" class="w-4 h-4"></i>
+          <i data-lucide="download" class="w-4 h-4"></i>
         </button>
         <button id="upload-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Upload">
           <i data-lucide="upload-cloud" class="w-4 h-4"></i>
@@ -546,7 +546,7 @@ copyLinkBtn.addEventListener('click', () => {
         document.execCommand('copy');
         document.body.removeChild(tempInput);
         
-        showPopup('In Zwischenablage kopiert.');
+        showPopup('Link in Zwischenablage kopiert.');
     }
 });
 
