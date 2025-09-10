@@ -158,17 +158,25 @@
     <!-- Controls -->
     <div class="flex-shrink-0 w-full flex justify-center pt-4" id="controls-bar">
       <div class="flex flex-nowrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
+        
         <div class="flex items-center gap-1">
           <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
-            <i data-lucide="pen-line" class="w-4 h-4"></i>
+            <i data-lucide="pen-line" class="w-4 h-4"></i>  
           </button>
+          
           <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser">
             <i data-lucide="eraser" class="w-4 h-4"></i>
           </button>
         </div>
+        
         <button id="undo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Undo">
-          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          <i data-lucide="undo-2" class="w-4 h-4"></i>
         </button>
+
+        <button id="redo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Redo">
+  <i data-lucide="redo-2" class="w-4 h-4"></i>
+</button>
+        
         <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">
           <span id="icon-sun"><i data-lucide="sun" class="w-4 h-4"></i></span>
           <span id="icon-moon" class="hidden"><i data-lucide="moon" class="w-4 h-4"></i></span>
@@ -195,6 +203,7 @@ const videoPopupContainer = document.getElementById('video-popup-container');
 const uploadVideo = document.getElementById('upload-video');
 const downloadVideoContainer = document.getElementById('download-video-container');
 const downloadVideo = document.getElementById('download-video');
+const redoBtn = document.getElementById('redo-btn');
 
 const bgCanvas = document.getElementById('bg-canvas');
 const drawCanvas = document.getElementById('draw-canvas');
@@ -312,6 +321,9 @@ function updateButtonStates() {
     saveBtn.disabled = isCanvasEmpty;
     uploadBtn.disabled = isCanvasEmpty;
     copyLinkBtn.disabled = currentUrl === null;
+
+    undoBtn.disabled = historyIndex <= 0;
+    redoBtn.disabled = historyIndex >= history.length - 1;
 }
 
 function sizeCanvases() {
@@ -443,6 +455,7 @@ drawCanvas.addEventListener('touchend', e => { endDraw(); e.preventDefault(); },
 // Tool buttons
 penToolBtn.addEventListener('click', () => setActiveTool('pen'));
 eraserToolBtn.addEventListener('click', () => setActiveTool('eraser'));
+
 undoBtn.addEventListener('click', () => { if(historyIndex>0){historyIndex--;loadHistory(historyIndex);} });
 clearBtn.addEventListener('click', () => { 
     drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); 
@@ -451,6 +464,13 @@ clearBtn.addEventListener('click', () => {
     pushHistory();
     currentUrl = null;
     updateButtonStates();
+});
+
+redoBtn.addEventListener('click', () => {
+    if (historyIndex < history.length - 1) {
+        historyIndex++;
+        loadHistory(historyIndex);
+    }
 });
 
 toggleBgBtn.addEventListener('click', () => {
