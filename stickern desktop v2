@@ -5690,6 +5690,21 @@ function updateUndoRedoButtons() {
             });
         }
 
+
+
+
+   paletteContainer.addEventListener('wheel', (event) => {
+    // Prevent the default vertical scrolling behavior
+    event.preventDefault();
+
+    // Scroll the container horizontally
+    // event.deltaY is the vertical scroll amount,
+    // so we use it to scroll the horizontal axis
+    paletteContainer.scrollLeft += event.deltaY;
+});
+
+
+
    colorPaletteContainer.addEventListener('wheel', (event) => {
     // Prevent the default vertical scrolling behavior
     event.preventDefault();
