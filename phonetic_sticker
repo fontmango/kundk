@@ -1047,6 +1047,13 @@ button.active {
   }
 }
 
+#folder-total-price {
+    text-align: right;
+    font-weight: bold;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    font-size: 16px;
+}
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -1107,7 +1114,13 @@ button.active {
         <div class="color-palette" id="color-palette"></div>
     </div>
         <div id="sticker-overlay-container"></div>
- <div id="folder-overlay"></div> 
+
+ <div id="folder-overlay">
+  <div id="folder-total-price">
+    Total: $<span id="folder-price-value">0.00</span>
+  </div>
+ </div> 
+
     <div id="group-overlay-container" ></div>
 
     <!-- Email Popup -->
@@ -1182,6 +1195,7 @@ button.active {
     }
 ]
 
+const folderPriceValue = document.getElementById('folder-price-value');
 const folder = document.getElementById('folder');
 const folderCount = document.getElementById('folder-count');
 let folderUrls = [];
@@ -1282,10 +1296,22 @@ const spinBtn = document.getElementById("spin-sticker-btn");
 ];
 
 function getStickerPrice(count) {
-    if (count <= 1) return pricingTiers[0].price;
-    if (count <= 5) return pricingTiers[1].price;
-    if (count <= 15) return pricingTiers[2].price;
-    return pricingTiers[3].price;
+    for (let tier of pricingTiers) {
+        if (count <= tier.max) return tier.price;
+    }
+    return 0;
+}
+
+function updateFolderTotalPrice() {
+    const priceSpan = document.getElementById("folder-price-value");
+    if (!priceSpan) return;
+
+    let total = 0;
+    folderUrls.forEach((url, index) => {
+        total += getStickerPrice(index + 1);
+    });
+
+    priceSpan.textContent = total.toFixed(2);
 }
 
 function showPriceNotification(price) {
@@ -1417,11 +1443,12 @@ function addToFolder(stickerUrl, stickerEl) {
         stickerEl.remove();
     }
 
-    const newStickerCount = folderUrls.length + 1;
-    const addedPrice = getStickerPrice(newStickerCount);
-
     // Add to cart array
     folderUrls.push(stickerUrl);
+
+    // Calculate price for the sticker just added
+    const newStickerCount = folderUrls.length;
+    const addedPrice = getStickerPrice(newStickerCount);
 
     // Update cart UI
     folderCount.textContent = `${folderUrls.length}`;
@@ -1431,56 +1458,88 @@ function addToFolder(stickerUrl, stickerEl) {
     // Show floating price notification
     showPriceNotification(addedPrice);
 
-    // ✅ Save the state including cart for undo/redo
+    // Update total price in folder overlay
+    updateFolderTotalPrice();
+
+    // Save state including cart for undo/redo
     saveState();
 }
-
-
 
 
 function renderFolderOverlay() {
     folderOverlay.innerHTML = "";
     document.querySelector(".controls").classList.add("disabled");
+
+    // --- HEADER (sticky) ---
+    const header = document.createElement("div");
+    header.className = "overlay-header";
+    header.style.position = "sticky";
+    header.style.top = "0";
+    header.style.background = "white";
+    header.style.zIndex = "5";
+    header.style.display = "flex";
+    header.style.alignItems = "center";
+    header.style.justifyContent = "space-between";
+    header.style.padding = "10px";
+
+    // Save button (left)
     const saveBtn = document.createElement("button");
-    saveBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7zM12 19a2 2 0 1 1 0-4 
-            2 2 0 0 1 0 4zm3-10H5V5h10z"/>
-        </svg>
-    `;
     saveBtn.className = "overlay-save";
-    saveBtn.disabled = true;
+    saveBtn.disabled = folderUrls.length === 0;
+    saveBtn.textContent = "Save";
     saveBtn.addEventListener("click", () => {
-        if (folderUrls.length === 0) return;
-        console.log("💾 Save button clicked");
+        if (!folderUrls.length) return;
         popup.classList.remove("hidden");
     });
-    folderOverlay.appendChild(saveBtn);
 
-    function updateSaveButton() {
-        saveBtn.disabled = folderUrls.length === 0;
-    }
-    updateSaveButton();
+    // Total price (center)
+    const priceDiv = document.createElement("div");
+    priceDiv.style.flex = "1";
+    priceDiv.style.textAlign = "center";
+    priceDiv.innerHTML = `Total: $<span id="folder-price-value">0.00</span>`;
+
+    // Close button (right)
     const closeBtn = document.createElement("button");
-    closeBtn.textContent = "×";
     closeBtn.className = "overlay-close";
+    closeBtn.textContent = "×";
     closeBtn.addEventListener("click", () => {
         folderOverlay.style.display = "none";
         document.querySelector(".controls").classList.remove("disabled");
         enablePaletteStickers();
     });
-    folderOverlay.appendChild(closeBtn);
-    if (folderUrls.length === 0) {
+
+    header.appendChild(saveBtn);
+    header.appendChild(priceDiv);
+    header.appendChild(closeBtn);
+    folderOverlay.appendChild(header);
+
+   
+
+    // --- Stickers container ---
+    const stickersContainer = document.createElement("div");
+    stickersContainer.style.overflowY = "auto";
+    stickersContainer.style.flex = "1";
+    stickersContainer.style.display = "grid";
+    stickersContainer.style.gridTemplateColumns = "repeat(auto-fill, minmax(100px, 1fr))";
+    stickersContainer.style.gap = "12px";
+    stickersContainer.style.marginTop = "10px";
+    stickersContainer.style.paddingBottom = "10px";
+    stickersContainer.style.maxHeight = "calc(100% - 70px)"; // leave space for header + separator
+
+    if (!folderUrls.length) {
         const emptyMsg = document.createElement("p");
         emptyMsg.className = "empty-msg";
-        folderOverlay.appendChild(emptyMsg);
+        emptyMsg.textContent = "Nothing added yet.";
+        stickersContainer.appendChild(emptyMsg);
     } else {
         folderUrls.forEach((url, index) => {
             const wrapper = document.createElement("div");
             wrapper.className = "overlay-sticker-wrapper";
+
             const img = document.createElement("img");
             img.src = url;
             img.className = "overlay-sticker";
+
             const delBtn = document.createElement("button");
             delBtn.textContent = "–";
             delBtn.className = "delete-sticker-btn";
@@ -1490,15 +1549,28 @@ function renderFolderOverlay() {
                 saveFolderDataToWix(folderUrls);
                 updateFolderUI();
                 renderFolderOverlay();
+                updateFolderTotalPrice();
             });
+
             wrapper.appendChild(img);
             wrapper.appendChild(delBtn);
-            folderOverlay.appendChild(wrapper);
+            stickersContainer.appendChild(wrapper);
         });
     }
-    folderOverlay.style.display = "grid";
-    disablePaletteStickers();
+
+    folderOverlay.appendChild(stickersContainer);
+
+    // Show overlay
+    folderOverlay.style.display = "flex";
+    folderOverlay.style.flexDirection = "column";
+    folderOverlay.style.height = "80%";
+    folderOverlay.style.width = "80%";
+
+    updateFolderTotalPrice();
 }
+
+
+
 
 folderOverlay.addEventListener("dragover", (e) => {
     e.preventDefault();
