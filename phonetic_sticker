@@ -624,12 +624,21 @@ button.active {
 }
 
 #folder-count {
-    font-size: 12px;
-    color: #555;
-    margin-top: 5px;
-    font-weight: 500;
+  position: absolute;
+  top: -8px;     /* move a bit higher to account for size */
+  right: -8px;   /* move more right to overlap nicely */
+  background: white;
+  font-size: 14px;
+  font-weight: bold;
+  min-width: 24px; /* wider so numbers like 10+ fit */
+  height: 24px;
+  line-height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
 }
-
 #folder-overlay {
   display: none;
   position: fixed;
@@ -1001,22 +1010,41 @@ button.active {
 
 
 #price-notification {
-    position: absolute;
-    bottom: 60px; /* Adjust to be above your cart icon */
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-    z-index: 100;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: #28a745; /* ✅ Green */
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
 }
 
 #price-notification.show {
+  animation: floatUp 1.8s ease-out forwards; /* slightly slower */
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(0) scale(0.9);
+  }
+  15% {
     opacity: 1;
+    transform: translateX(-50%) translateY(-10px) scale(1.05);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-40px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-55px) scale(1);
+  }
 }
 
     </style>
@@ -1028,9 +1056,9 @@ button.active {
 
 
     <div id="canvas-container">
-
+  <div id="stickers-layer"></div>
   <div id="folder" title="Drop stickers here to add to cart">
-    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" 
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" 
       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cart-icon lucide-shopping-cart">
       <circle cx="9" cy="21" r="1" />
       <circle cx="20" cy="21" r="1" />
@@ -1261,7 +1289,7 @@ function getStickerPrice(count) {
 }
 
 function showPriceNotification(price) {
-    priceNotification.textContent = `+ $${price.toFixed(2)} added to cart`;
+    priceNotification.textContent = `+ $${price.toFixed(2)}`;
     priceNotification.classList.remove('hidden');
     priceNotification.classList.add('show');
 
@@ -1389,23 +1417,24 @@ function addToFolder(stickerUrl, stickerEl) {
         stickerEl.remove();
     }
 
-     const newStickerCount = folderUrls.length + 1;
+    const newStickerCount = folderUrls.length + 1;
     const addedPrice = getStickerPrice(newStickerCount);
 
+    // Add to cart array
     folderUrls.push(stickerUrl);
+
+    // Update cart UI
     folderCount.textContent = `${folderUrls.length}`;
     saveFolderDataToWix(folderUrls);
     updateFolderUI();
 
-        showPriceNotification(addedPrice);
+    // Show floating price notification
+    showPriceNotification(addedPrice);
 
-
-    // ⛔️ The fix: Clear the undo/redo history after adding to the folder.
-    // This prevents the back button from bringing the sticker back.
-    history = [];
-    redoStack = [];
-    updateUndoRedoButtons();
+    // ✅ Save the state including cart for undo/redo
+    saveState();
 }
+
 
 
 
@@ -1554,7 +1583,10 @@ function updateFolderUI() {
 function saveState() {
     if (isRestoring) return;
     const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-    const currentState = { stickers: [] };
+    const currentState = {
+        stickers: [],
+        folder: [...folderUrls] // ✅ track cart contents too
+    };
 
     stickersOnCanvas.forEach(sticker => {
         const stickerImg = sticker.querySelector('img');
@@ -1566,8 +1598,7 @@ function saveState() {
                 width: sticker.offsetWidth,
                 height: sticker.offsetHeight,
                 locked: sticker.classList.contains('locked'),
-                // ✅ Add the group name here
-                groupName: sticker.dataset.group 
+                groupName: sticker.dataset.group
             });
         }
     });
@@ -1581,22 +1612,50 @@ function saveState() {
     updateUndoRedoButtons();
 }
 
+
 function loadState(state) {
     isRestoring = true;
-    canvas.innerHTML = '';
+
+    const stickersLayer = document.getElementById('stickers-layer');
+    stickersLayer.innerHTML = '';
+
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+
     state.stickers.forEach(data => {
-        // ✅ Change 'groupName' to 'group' to match the addSticker function's parameter name
-        const newSticker = addSticker(data.url, data.x, data.y, data.width, data.height, {
-            suppressSave: true,
-            group: data.groupName 
-        });
-        if (data.locked) {
-            newSticker.classList.add('locked');
+        const newSticker = addSticker(
+            data.url,
+            data.x,
+            data.y,
+            data.width,
+            data.height,
+            { suppressSave: true, group: data.groupName }
+        );
+        if (data.locked) newSticker.classList.add('locked');
+
+        // If this sticker was previously in the cart (folder) but now back on canvas:
+        if (!state.folder.includes(data.url)) {
+            // Place it in center
+            newSticker.style.left = `${(canvasWidth - data.width) / 2}px`;
+            newSticker.style.top = `${(canvasHeight - data.height) / 2}px`;
         }
+
+        stickersLayer.appendChild(newSticker);
     });
+
+    // Restore folder/cart
+    folderUrls = [...state.folder];
+    folderCount.textContent = folderUrls.length;
+    updateFolderUI();
+
     isRestoring = false;
     updateUndoRedoButtons();
 }
+
+
+
+
+
         function deselectAllStickers() {
             document.querySelectorAll('.sticker').forEach(s => {
                 s.classList.remove('selected');
@@ -1997,6 +2056,9 @@ sticker.appendChild(groupBtn);
             stickerRect.top < folderRect.bottom;
 
         if (isOverFolder) {
+
+            
+
             if (folderUrls.length >= MAX_FOLDER_IMAGES) {
                 folder.classList.add("full", "shake");
                 setTimeout(() => folder.classList.remove("full", "shake"), 600);
@@ -2265,13 +2327,20 @@ sticker.appendChild(groupBtn);
 
 
         undoBtn.addEventListener('click', () => {
-            if (history.length > 1) {
-                const lastState = history.pop();
-                redoStack.push(lastState); // 👈 save for redo
-                loadState(history[history.length - 1]);
-                updateUndoRedoButtons();
-            }
-        });
+    if (history.length > 1) {
+        const currentState = history.pop();
+        redoStack.push(currentState);
+
+        const previousState = history[history.length - 1];
+
+        // ✅ Remove all current stickers first
+        const stickersLayer = document.getElementById('stickers-layer');
+        stickersLayer.innerHTML = '';
+
+        // ✅ Load the previous state
+        loadState(previousState);
+    }
+});
 
         redoBtn.addEventListener('click', () => {
             if (redoStack.length > 0) {
@@ -2283,45 +2352,41 @@ sticker.appendChild(groupBtn);
         });
 
 function addOrReplaceSticker(newUrl, groupName = null) {
-    // Deselect any previously selected sticker
-    const currentlySelected = document.querySelector('.sticker.selected');
-    if (currentlySelected) {
-        currentlySelected.classList.remove('selected');
-    }
+    const stickersLayer = document.getElementById('stickers-layer') || canvas;
 
-    const unlockedSticker = document.querySelector('.sticker:not(.locked)');
+    // Deselect any previously selected sticker
+    const currentlySelected = stickersLayer.querySelector('.sticker.selected');
+    if (currentlySelected) currentlySelected.classList.remove('selected');
+
+    const unlockedSticker = stickersLayer.querySelector('.sticker:not(.locked)');
     const stickerSize = 120;
-    const canvasWidth = canvas.offsetWidth;
-    const canvasHeight = canvas.offsetHeight;
-    const centerX = (canvasWidth / 2) - (stickerSize / 2);
-    const centerY = (canvasHeight / 2) - (stickerSize / 2);
+    const centerX = (canvas.offsetWidth / 2) - (stickerSize / 2);
+    const centerY = (canvas.offsetHeight / 2) - (stickerSize / 2);
 
     if (unlockedSticker) {
+        // ✅ Replace image and properties without removing the element
         const stickerImg = unlockedSticker.querySelector('img');
         stickerImg.src = newUrl;
-
         unlockedSticker.style.width = `${stickerSize}px`;
         unlockedSticker.style.height = `${stickerSize}px`;
         unlockedSticker.style.left = `${centerX}px`;
         unlockedSticker.style.top = `${centerY}px`;
 
-        if (groupName) {
-            unlockedSticker.dataset.group = groupName;
-        } else if (!unlockedSticker.dataset.group) {
+        if (groupName) unlockedSticker.dataset.group = groupName;
+        else if (!unlockedSticker.dataset.group)
             unlockedSticker.dataset.group = stickerGroups[0]?.name || 'default';
-        }
 
         stickerImg.onload = () => {
             unlockedSticker.style.opacity = '1';
         };
 
-        console.log('[addOrReplaceSticker] Replaced sticker group:', unlockedSticker.dataset.group);
     } else {
         const newGroup = groupName || stickerGroups[0]?.name || 'default';
-        addSticker(newUrl, centerX, centerY, stickerSize, stickerSize, { group: newGroup });
-        console.log('[addOrReplaceSticker] Created new sticker with group:', newGroup);
+        const newSticker = addSticker(newUrl, centerX, centerY, stickerSize, stickerSize, { group: newGroup });
+        stickersLayer.appendChild(newSticker);
     }
-    
+
+    // ✅ Save state only after the final sticker exists
     saveState();
 }
 
@@ -2335,18 +2400,44 @@ addStickerBtn.addEventListener('click', () => {
     addOrReplaceSticker(randomUrl, randomGroup.name);
 });
 
-    newBtn.addEventListener('click', () => {
-    // Clear the canvas
-    canvas.innerHTML = '';
-    
-    // Add the empty state to the history
-    // This allows the user to undo the "new" action.
+newBtn.addEventListener('click', () => {
+    // 1️⃣ Clear canvas stickers
+    const stickers = canvas.querySelectorAll('.sticker');
+    stickers.forEach(s => s.remove());
+
+    // 2️⃣ Clear overlays
+    const stickerOverlay = document.getElementById('sticker-overlay-container');
+    if (stickerOverlay) stickerOverlay.innerHTML = '';
+
+    const groupOverlay = document.getElementById('group-overlay-container');
+    if (groupOverlay) groupOverlay.innerHTML = '';
+
+    // 3️⃣ Clear cart overlay DOM
+    const folderOverlay = document.getElementById('folder-overlay');
+    if (folderOverlay) folderOverlay.innerHTML = '';
+
+    // 4️⃣ Clear cart data
+    folderUrls = [];
+
+    // 5️⃣ Reset cart UI
+    const folderCount = document.getElementById('folder-count');
+    folderCount.textContent = '0';
+    const folder = document.getElementById('folder');
+    folder.classList.remove('full', 'success', 'shake');
+    folder.style.display = 'flex';
+
+    // 6️⃣ Clear floating price notification
+    const priceNotification = document.getElementById('price-notification');
+    priceNotification.classList.remove('show');
+    priceNotification.classList.add('hidden');
+    priceNotification.textContent = '';
+
+    // 7️⃣ Save empty state for undo
     saveState();
-    
-    // Reset any other relevant flags
+
+    // 8️⃣ Reset flags
     firstStickerAdded = false;
 });
-        
 
 window.addEventListener('load', () => {
     if (window.lucide) {
