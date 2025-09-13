@@ -5,409 +5,587 @@
     <title>Sticker Canvas</title>
     <style>
       
-    img.protected {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+      img.protected {
+  -webkit-touch-callout: none; /* disable "Save Image" on iOS Safari */
+  -webkit-user-select: none;   /* prevent text/image selection */
+  -webkit-user-drag: none;     /* prevent dragging image to new tab */
   user-select: none;
-  pointer-events: none; /* <- Optional: makes the image "unclickable" */
 }
       
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+  .sticker-btn {
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: #c2bebeff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 101;
+    padding: 0;
+    outline: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s, background-color 0.2s;
+}
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            box-sizing: border-box;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+/* Show buttons on hover or selected sticker */
+.sticker:hover > .sticker-btn,
+.sticker.selected > .sticker-btn {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Specific button positions */
+.delete-btn {
+    top: 5%;
+    right: 5%;
+}
+
+.copy-btn {
+    top: 5%;
+    left: 5%;
+}
+
+.group-btn:hover {
+    background-color: #2be7d8; /* A subtle hover color */
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.group-btn {
+    bottom: 5%;
+    right: 5%;
+}
+
+/* Hover effects */
+.sticker-btn:hover {
+    transform: scale(1.1);
+   
+}
+
+.sticker.locked .lock-btn {
+    background-color: #ff9933; /* Override to orange when locked */
+}
+
+
+/* SVG sizing inside buttons */
+.sticker-btn svg {
+    width: 60%;
+    height: 60%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    box-sizing: border-box;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#canvas-container {
+    width: 90%;
+    max-width: 600px;
+    height: 80vh;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    position: relative;
+    margin-top: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    touch-action: none;
+}
       
-        }
+      @media (max-width: 768px) {
+    #canvas-container {
+        /* On mobile, make the height 50% of the screen's height */
+  
+        /* You can also make it take the full width for more space */
+        width: 100%;
+    }
+}
 
-        #canvas-container {
-             position: relative; 
-            width: 90%;
-            max-width: 600px;
-            height: 80vh;  
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            position: relative;
-            margin-top: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 16px;
-            touch-action: none;
-        }
-        
-        .sticker {
-            position: absolute;
-            height: auto;
-            cursor: grab;
-            user-select: none;
-            transition: transform 0.1s ease-in-out;
-            box-sizing: border-box;
-            touch-action: none;
-        }
+.sticker {
+    position: absolute;
+    height: auto;
+    cursor: grab;
+    user-select: none;
+    box-sizing: border-box;
+    touch-action: none;
+}
 
-        .sticker img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+.sticker img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
-        .sticker:active {
-            cursor: grabbing;
-            z-index: 100;
-        }
-        
-        .sticker:focus {
-            outline: none;
-        }
+.sticker:active {
+    cursor: grabbing;
+    z-index: 100;
+}
 
-        .sticker:hover > .delete-btn,
-        .sticker:hover > .copy-btn,
-        .sticker:hover > .lock-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.sticker.locked {
+    cursor: grab;
+}
 
-        .sticker.selected > .delete-btn,
-        .sticker.selected > .copy-btn,
-        .sticker.selected > .lock-btn {
-            display: flex;
-        }
+.sticker.locked:active {
+    cursor: grabbing;
+}
 
-        .controls {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        
-        .bucket-active .sticker {
-            border: none !important;
-            transition: none !important;
-        }
+.sticker:focus {
+    outline: none;
+}
 
-         .bucket-active .sticker .delete-btn,
-        .bucket-active .sticker .copy-btn,
-        .bucket-active .sticker .lock-btn {
-            display: none !important;
-        }
+/* Base styles for buttons, with transitions for smooth fading */
+.copy-btn,
+.group-btn,
+.delete-btn,
+.lock-btn {
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: #c2bebeff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 101;
+    padding: 0;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+
+    /* These are the crucial lines for hiding and transitioning */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s, background-color 0.2s;
+}
+
+/* Specific button positions */
+.delete-btn {
+    top: 5%;
+    right: 5%;
+}
+
+.copy-btn {
+    top: 5%;
+    left: 5%;
+}
 
 
-        .bucket-active .sticker:active,
-        .bucket-active .sticker:hover {
-            cursor: crosshair;
-        }
+.group-btn svg {
+    width: 16px;
+    height: 16px;
+}
 
-        .ghost-sticker {
-            position: fixed;
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0.7;
-            width: 100px;
-            height: auto;
-            transform: translate(-50%, -50%);
-        }
+/* Show buttons on hover or when the sticker has the 'selected' class */
+.sticker:hover > .delete-btn,
+.sticker:hover > .copy-btn,
+.sticker:hover > .lock-btn,
+.sticker.selected > .delete-btn,
+.sticker.selected > .copy-btn,
+.sticker.selected > .lock-btn {
+    opacity: 1;
+    visibility: visible;
+}
 
-        button {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            background: none;
-            cursor: pointer;
-            color: #333;
-            transition: transform 0.2s, color 0.2s;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+/* Hover effects for buttons */
+.copy-btn:hover {
+    background-color: #6aa84fff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
-        button:focus, button:active {
-            outline: 0 !important;
-            box-shadow: none !important;
-        }
-        
-        button:hover {
-            color: #000;
-            transform: scale(1.1);
-        }
-        
-        button.active {
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            transform: scale(1.05);
-        }
+.delete-btn:hover {
+    background-color: #f26262ff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
-        .icon {
-            width: 1.4em;
-            height: 1.4em;
-            stroke: currentColor;
-        }
+.lock-btn:hover {
+    transform: scale(1.1);
+   
+    
+}
 
-        .color-palette-container {
-            width: 90%;
-            max-width: 600px;
-            overflow-x: scroll;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            touch-action: pan-y;
-        }
 
-        .color-palette-container::-webkit-scrollbar {
-            display: none;  
-        }
 
-        .color-palette {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 8px;
-            margin-top: 10px;
-            padding: 3px;
-            width: max-content;
-        }
+/* Bucket mode-specific overrides */
+.bucket-active .sticker {
+    border: none !important;
+    transition: none !important;
+}
 
-        .color-swatch {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: transform 0.2s, border-color 0.2s;
-            flex-shrink: 0;
-            outline: 0 !important;
-            box-shadow: none !important;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: none;
-        }
+.bucket-active .sticker .delete-btn,
+.bucket-active .sticker .copy-btn,
+.bucket-active .sticker .lock-btn,
+.bucket-active .sticker .group-btn {
+    display: none !important;
+}
 
-        .color-swatch.active {
-            border-color: #333;
-            transform: scale(1.1);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        #sticker-palette-container {
-            display: none;
-        }
+.bucket-active .sticker:active,
+.bucket-active .sticker:hover {
+    cursor: crosshair;
+}
 
-        /* Overlay box (popup wrapper) */
+/* ... (rest of your CSS) ... */
+
+/* Remaining CSS from your provided code */
+.controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.ghost-sticker {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.7;
+    width: 100px;
+    height: auto;
+    transform: translate(-50%, -50%);
+}
+
+button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #333;
+    transition: transform 0.2s, color 0.2s;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus,
+button:active {
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+
+button:hover {
+    color: #000;
+    transform: scale(1.1);
+}
+
+button.active {
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    transform: scale(1.05);
+}
+
+.icon {
+    width: 1.4em;
+    height: 1.4em;
+    stroke: currentColor;
+}
+
+.color-palette-container {
+    width: 90%;
+    max-width: 600px;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: pan-y;
+}
+
+.color-palette-container::-webkit-scrollbar {
+    display: none;
+}
+
+.color-palette {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 3px;
+    width: max-content;
+}
+
+.color-swatch {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+    outline: 0 !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+}
+
+.color-swatch.active {
+    transform: scale(1.2);
+    border-color: #000000;
+}
+
+#sticker-palette-container {
+    display: none;
+}
+
 .overlay {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.95);
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  display: none;          /* <- start hidden */
-  z-index: 200;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  width: 80%;
-  height: 90%;
-  overflow-y: auto;
-
-  /* grid layout for children */
-  display: none;          /* important: no grid by default */
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    display: none;
+    z-index: 200;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 80%;
+   
+    overflow-y: auto;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
 }
 
-.close-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  font-size: 18px;
-  cursor: pointer;
-  z-index: 300;
-}
 
-.close-btn:hover {
-  transform: scale(1.1);
-}
-
-/* Show overlay */
 .overlay.active {
-  display: block;
+    display: block;
 }
 
-/* Content inside overlay (grid of groups or stickers) */
 .overlay-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  overflow-y: auto;
-  height: calc(100% - 40px); /* leave space for close button */
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    overflow-y: auto;
+    height: calc(100% - 40px);
+    width: 100%;
 }
 
-/* Group icons */
 .overlay-icon {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1/1;
-  object-fit: contain;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: transform 0.2s;
+   
+    max-width: 100%; /* Ensures it scales down on smaller screens */
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.2s;
+    transform: scale(1);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-focus-ring-color: transparent;
+    outline: none;
 }
 
 .overlay-icon:hover {
-  transform: scale(1.05);
+    transform: scale(1.1);
 }
 
-/* Stickers */
+
+
 .overlay-sticker {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1/1;
-  object-fit: contain;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: transform 0.2s;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.2s;
+ -webkit-tap-highlight-color: transparent; /* iOS/Android WebKit */
+  -webkit-focus-ring-color: transparent;    /* iOS Safari */
+  outline: none;      
+  
 }
+
+.overlay-sticker.active {
+  position: relative;
+}
+
+.overlay-sticker.active::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 12px; /* adjust to match sticker shape */
+  border: 2px solid #00bfff; /* pulse color */
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+
 
 .overlay-sticker:hover {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }
-        
-        .copy-btn-icon {
-            width: 100%;
-            height: 100%;
-            fill: white;
-            stroke: white;
-        }
 
-      .lock-btn-icon {
-            width: 60%;
-            height: 60%;
-            fill: white;
-            stroke: white;
-        }
+.copy-btn-icon {
+    width: 100%;
+    height: 100%;
+    fill: white;
+    stroke: white;
+}
 
-        .delete-btn:focus,
-        .copy-btn:focus,
-        .lock-btn:focus,
-        .delete-btn:active,
-        .copy-btn:active,
-        .lock-btn:active {
-            outline: none;
-            box-shadow: none;
-        }
+.lock-btn-icon {
+    width: 60%;
+    height: 60%;
+    fill: white;
+    stroke: white;
+}
 
-        .delete-btn-icon {
-            width: 100%;
-            height: 100%;
-            fill: white;
-            stroke: white;
-        }
-        
-        .delete-btn {
-            position: absolute;
-            top: 5%;
-            right: 5%;
-            width: 20%;
-            height: 20%;
-            border-radius: 50%;
-            background-color: #c2bebeff;
-            color: white;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 101;
-            padding: 0;
-            transition: transform 0.2s, background-color 0.2s;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+.delete-btn-icon {
+    width: 100%;
+    height: 100%;
+    fill: white;
+    stroke: white;
+}
 
-        .copy-btn {
-            position: absolute;
-            top: 5%;
-            left: 5%;
-            width: 20%;
-            height: 20%;
-            border-radius: 50%;
-            background-color: #c2bebeff;
-            color: white;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 101;
-            padding: 0;
-            transition: transform 0.2s, background-color 0.2s;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        .lock-btn {
-            position: absolute;
-            bottom: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20%;
-            height: 20%;
-            border-radius: 50%;
-            background-color: #c2bebeff;
-            color: white;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 101;
-            padding: 0;
-            transition: transform 0.2s, background-color 0.2s;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
 
-        .lock-btn:hover {
-            transform: scale(1.1) translateX(-50%);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
+.copy-btn:hover {
+    background-color: #6aa84fff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
-        .sticker.locked .lock-btn {
-            background-color: #ff9933; /* Orange when locked */
-            transform: scale(1.1) translateX(-50%);
-        }
+.delete-btn:hover {
+    background-color: #f26262ff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
-        .copy-btn:hover {
-            background-color: #6aa84fff;
-            transform: scale(1.1);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        }
+.pulse-effect {
+  animation: pulse 0.5s ease-in-out;
+}
 
-        .delete-btn:hover {
-            background-color: #f26262ff;
-            transform: scale(1.1);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        }
 
-    #folder {
+#sticker-overlay-container {
+    /* Main overlay styles */
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+   
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    padding: 0; /* Remove padding here, add it to the content wrapper */
+    z-index: 300;
+    
+    /* Crucial for centering and stacking header/content */
+    display: none; /* Hide by default */
+    flex-direction: column; 
+  
+}
+
+/* Other CSS remains the same */
+
+.overlay-stickers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 10px;
+    padding: 5px;
+    max-height: 70vh; /* Adjust as needed */
+    overflow-y: auto;
+}
+
+.overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    border-bottom: 1px solid #ccc;
+    flex-shrink: 0;
+}
+
+
+.close-btn {
+    position: absolute;
+   
+    
+    color: #555;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.close-btn {
+    right: 0;
+}
+
+.overlay-close-btn:hover {
+    transform: scale(1.1);
+}
+
+#group-overlay-container {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    display: none;
+    z-index: 200;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    
+    /* Change to flexbox for vertical stacking */
+    display: none;
+    flex-direction: column;
+}
+
+.overlay-icons-grid {
+    /* Apply grid properties to the new container for icons */
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 10px;
+    padding: 10px 0; /* Adjust padding as needed */
+}
+
+.overlay-title {
+    flex-grow: 1;
+    text-align: center;
+    /* This is the key change: remove the default margin from the title */
+    margin: 0;
+    font-size: 16px; /* Adjust font size as needed */
+    font-weight: 600;
+}
+
+ #folder {
     position: absolute;
     bottom: 20px;
     right: 20px;
@@ -551,7 +729,6 @@
   color: red;
   font-weight: bold;
 }
-
 
 @keyframes shake {
   0% { transform: translateX(0); }
@@ -842,21 +1019,17 @@
     opacity: 1;
 }
 
-
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-   
-    
+  
 
-   
 
-   <div id="canvas-container">
-  <div id="sticker-layer"></div>
+    <div id="canvas-container">
 
-<div id="folder" title="Drop stickers here to add to cart">
+  <div id="folder" title="Drop stickers here to add to cart">
     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" 
       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cart-icon lucide-shopping-cart">
       <circle cx="9" cy="21" r="1" />
@@ -867,41 +1040,49 @@
 
   </div>
 </div>
-
+    <div id="overlay-container"></div>
 <div id="price-notification" class="hidden"></div>
 
 
-     <div class="controls">
-
-     <button id="spin-sticker-btn" title="Spin Random">
+  <div class="controls">
+  
+   <button id="spin-sticker-btn" title="Spin Random">
   <i data-lucide="dice-6" class="icon"></i>
 </button>
-
+    
         <button id="add-sticker-btn" title="Add Random">
-            <i data-lucide="shuffle" class="icon"></i>
+            <i data-lucide="plus" class="icon"></i>
         </button>
-        
+
         <button id="sticker-picker-btn" title="Choose Sticker">
             <i data-lucide="sticker" class="icon"></i>
         </button>
-        
+
         <button id="undo-btn" title="Undo">
             <i data-lucide="undo-2" class="icon"></i>
         </button>
 
         <button id="redo-btn" title="Redo">
-        <i data-lucide="redo-2" class="icon"></i>
-    </button>
-   
-       
+            <i data-lucide="redo-2" class="icon"></i>
+        </button>
+        
+         <button id="new-btn" title="Neu">
+            <i data-lucide="file-plus-2" class="icon"></i>
+        </button>
+
+     
+
     </div>
-    <div id="group-overlay-container" class="overlay"></div>
-    <div id="sticker-overlay-container" class="overlay"></div>
-    <div id="folder-overlay"></div> 
+  
+  
+    <div class="color-palette-container">
+        <div class="color-palette" id="color-palette"></div>
+    </div>
+        <div id="sticker-overlay-container"></div>
+ <div id="folder-overlay"></div> 
+    <div id="group-overlay-container" ></div>
 
-    
-
-<!-- Email Popup -->
+    <!-- Email Popup -->
 <div id="email-popup" class="email-popup hidden">
   <h3>Enter your email</h3>
   <input type="email" id="email-input" placeholder="your@email.com" required />
@@ -927,143 +1108,149 @@
 </div>
 
     <script>
-        const stickerGroups = [
-            {
-name: "muerto",
-urls: [
-
-"https://static.wixstatic.com/media/990059_03a221fd165d4a89b5124370626486ad~mv2.png",
-"https://static.wixstatic.com/media/990059_682d393f5d77435da4ab7096708cb8d7~mv2.png",
-"https://static.wixstatic.com/media/990059_4349efbaa2d24be8b017e957daad4a9e~mv2.png",
-"https://static.wixstatic.com/media/990059_49720d322ef24087999ba4d482275662~mv2.png",
-"https://static.wixstatic.com/media/990059_b18489e8975a47d5a487241d0d9f35f0~mv2.png",
-"https://static.wixstatic.com/media/990059_a8d0533c108f494aa845b9ff80c4fc84~mv2.png",
-"https://static.wixstatic.com/media/990059_dba27be6d625437e966be5841737db29~mv2.png",
-"https://static.wixstatic.com/media/990059_e8c8d6ac987448cb8889c4f597c014fb~mv2.png",
-"https://static.wixstatic.com/media/990059_23c7997d627c400da2a4f931d2df4a51~mv2.png",
-"https://static.wixstatic.com/media/990059_e0c4743c307045e9aabf7b57f68b4b7e~mv2.png",
-"https://static.wixstatic.com/media/990059_5adc058fc36e4080b7cee077a0174f59~mv2.png",
-"https://static.wixstatic.com/media/990059_f2b8533239eb42cdaa89579bef97fd42~mv2.png",
-"https://static.wixstatic.com/media/990059_0a066802fe8f4113acf9d74073af28f3~mv2.png",
-"https://static.wixstatic.com/media/990059_46267e59e16f4d6b9b0985f4546c58f0~mv2.png",
-"https://static.wixstatic.com/media/990059_a22468d7506a4094b48e9709f436d886~mv2.png",
-"https://static.wixstatic.com/media/990059_4f26d9e09d3541108934a89f95419ef8~mv2.png",
-"https://static.wixstatic.com/media/990059_ddd1138a462a4214b3f011f6f070e4ff~mv2.png",
-"https://static.wixstatic.com/media/990059_b2e189bef2084da5b2cc54fae201da06~mv2.png",
-"https://static.wixstatic.com/media/990059_f31737e926ba42d48db52abd305e88f8~mv2.png",
-"https://static.wixstatic.com/media/990059_28a8ca536ea84c9c8179e5ef06f8b0ad~mv2.png",
-"https://static.wixstatic.com/media/990059_7ee0ac7365db45ee9fba4bad3bf804dc~mv2.png",
-"https://static.wixstatic.com/media/990059_7190e1e630b34197bee6f5925a073b07~mv2.png",
-"https://static.wixstatic.com/media/990059_d5099b5806d1487eb7f6f37a0dab8ee1~mv2.png",
-"https://static.wixstatic.com/media/990059_7779fdbeca784abf975cdd9c90297fa7~mv2.png",
-"https://static.wixstatic.com/media/990059_45c15098a4cd468bb58cd67bb0ec8ddd~mv2.png",
-"https://static.wixstatic.com/media/990059_079cbe0471204f59bc373fca7ed5bb8a~mv2.png",
-"https://static.wixstatic.com/media/990059_034576676e974d128a6af3b901050979~mv2.png",
-"https://static.wixstatic.com/media/990059_7c98bbc20aab4bccafb8729ce192c67f~mv2.png",
-"https://static.wixstatic.com/media/990059_bc3de2f513594c86917b0e2326efcf8a~mv2.png",
-"https://static.wixstatic.com/media/990059_79a921a872224dc7b6d04de5c55bda2b~mv2.png",
-"https://static.wixstatic.com/media/990059_5f395576e10d4fbf8c7379f7ea89d6d4~mv2.png",
-"https://static.wixstatic.com/media/990059_d0a92839ce0049c1aa89b97943d394d1~mv2.png",
-"https://static.wixstatic.com/media/990059_08ef2737f12c4b31b89ea2a1651eb6e1~mv2.png",
-"https://static.wixstatic.com/media/990059_281fd072e0e04f4e8cf1569188b8a30a~mv2.png",
-"https://static.wixstatic.com/media/990059_395b8ec40a6945579ff1a493ab9483ac~mv2.png"
-
+           
+                 
+                    const stickerGroups = [
+   
+    {
+        "name": "dia de los muerstos sticker",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_018f7140-17fb-427f-8d4e-e9d937d35912.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_043b10f9-ae16-4ffa-a84d-ab4eb4f4c3e6.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_0f54dae6-7218-4d0e-a07e-a9fcacb6854c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_14501777-c72d-4e47-a2cf-904e41d5e3eb.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_3093434e-c31e-4fd6-b98b-61a7a02fb701.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_323a0239-234e-46bf-be96-8d072e9d37e6.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_326472f5-ea67-4ba1-b861-347910730bd9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_3c7f26a1-8aeb-4f2f-9784-8cdd80a10cd2.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_3d6ae4e9-416b-4fbb-8138-4dcbf28a73b3.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_412565e9-f3c6-48f8-a7ec-b5abb985dba4.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_4a73b5b1-5f28-4e7c-9882-57c265b835e9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_531b4ef5-0b7d-4456-8617-8f285580cda9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_57a57795-a766-4c62-87fa-d3f68a162a6c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_71adb5c1-da91-42bb-a95c-7841ad9e9aaa.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_75d97df2-bc42-4261-89f3-c1708e013cd2.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_786c01bd-5560-4318-82f8-d0b03afae60b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_7b29b5e1-c0e7-4c95-8b08-c481f1903969.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_7dbbbaad-0689-4d0a-ab7c-52e6ac25e3f3.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_8a1a5ac9-82f1-4a34-b817-6be798b7eabf.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_923133f2-c758-4176-81ce-a2a524103d5c.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_9685c75a-b4eb-4a80-bb68-cad194927555.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_a6b95520-d474-4d7d-91e4-d1e1ed8ebe99.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_ab6f7dfd-41b9-42fe-a442-12d435a6c1b1.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_b33bafca-c4b5-4a65-91dd-8beb7af4ec3b.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_be97c247-8244-4746-a744-3e9b79f300d1.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_c48bc274-0799-4414-9c70-92cfef5b3bfc.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_c666c06f-8f5a-4120-be6e-078188bc982a.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_d03c3f7a-9db6-48da-9516-9887040be166.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_d58dcc29-a179-4223-835e-de1dd916f02d.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_e4ced13d-2836-44fe-bdd7-6ba0832fe85f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_eba76029-c40a-4ad4-bc25-09904f622dfd.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_efacc4d9-2e13-4f23-bfa3-fdc3584d3241.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_f16105e7-ee73-48af-ad87-820f8425355f.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_f3d426fe-4667-4b25-99f6-18b025aad3b9.png",
+            "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_f9c72608-0033-4d63-8a3f-99a80ecefc7c.png"
+        ]
+    }
 ]
-},
-{
-name: "zulu",
-urls: [
-
-"https://static.wixstatic.com/media/990059_ebcddfd98c1e4dc0b62ae280d13400d4~mv2.png",
-"https://static.wixstatic.com/media/990059_fb28597b3e934901b24ea56c70cd251e~mv2.png",
-"https://static.wixstatic.com/media/990059_4dc9f12ccdc444f6b513c3ef52daee78~mv2.png",
-"https://static.wixstatic.com/media/990059_e40835c13c4a44e0a14736238061a772~mv2.png",
-"https://static.wixstatic.com/media/990059_0a9b16bed516447094cc67917789195d~mv2.png",
-"https://static.wixstatic.com/media/990059_b52f919a40d24c8b9a34ab71888ca857~mv2.png",
-"https://static.wixstatic.com/media/990059_15b6a3bc8e84440d9583d1b83e3d598c~mv2.png",
-"https://static.wixstatic.com/media/990059_0bfcc3bb23bc4c8b9b37acdaf3e6b2d6~mv2.png",
-"https://static.wixstatic.com/media/990059_8ebfac4726aa43f48c2374d7fb6bc70c~mv2.png",
-"https://static.wixstatic.com/media/990059_5e9a398270f24cca981a1b7a98b25e65~mv2.png",
-"https://static.wixstatic.com/media/990059_b6f2f99e235444e98295484404827f3b~mv2.png",
-"https://static.wixstatic.com/media/990059_0376999057424754a2b98167ec6a6f99~mv2.png",
-"https://static.wixstatic.com/media/990059_b5a6a1789b6f4edf80a187e580181b68~mv2.png",
-"https://static.wixstatic.com/media/990059_8f8f53abd6bb49e8977b51ca7a72a6d8~mv2.png",
-"https://static.wixstatic.com/media/990059_5263a42c53764f85810b51e49509a481~mv2.png",
-"https://static.wixstatic.com/media/990059_9626fa28ca104b3981ac427f911bd124~mv2.png",
-"https://static.wixstatic.com/media/990059_c6d1ba9e3e59474d9e4613104727c664~mv2.png",
-"https://static.wixstatic.com/media/990059_02fad7d56aa34422a2f2f5009d79c6ee~mv2.png",
-"https://static.wixstatic.com/media/990059_e5f3629b5b2a4fb58b3fcb6d66db0656~mv2.png",
-"https://static.wixstatic.com/media/990059_ce84e83c7cf64054ab9a3d14a8727eee~mv2.png",
-"https://static.wixstatic.com/media/990059_70703e8f4eb2400bb3a2794a9d2b30a1~mv2.png",
-"https://static.wixstatic.com/media/990059_7bb16089e07b4a87824ee66326eec83d~mv2.png",
-"https://static.wixstatic.com/media/990059_3741222f3ad044869262fc8a3de0f2a9~mv2.png",
-"https://static.wixstatic.com/media/990059_b5ea812823a1417880ed7957c8d869ff~mv2.png",
-"https://static.wixstatic.com/media/990059_c82cda1fbd024e73bf3ebc202ca98f1e~mv2.png",
-"https://static.wixstatic.com/media/990059_dea51e1b23aa4d37961a76d4167be966~mv2.png",
-"https://static.wixstatic.com/media/990059_82ddb672dfca4aaaa506708a8e81136f~mv2.png",
-"https://static.wixstatic.com/media/990059_b9cd82b4f836457e84aaf7bdf6855909~mv2.png",
-"https://static.wixstatic.com/media/990059_b1a74d918acf41c0ba210ea84572f089~mv2.png",
-"https://static.wixstatic.com/media/990059_e7c337369b8f440ca612b1d4092b78e2~mv2.png",
-"https://static.wixstatic.com/media/990059_bf7b64bb50804119ab5b14b9e1c7c6ce~mv2.png",
-"https://static.wixstatic.com/media/990059_5d7ef870b2f4406c8601f64d5b4e2d0c~mv2.png",
-"https://static.wixstatic.com/media/990059_f7d42b9e0fd7488ba09fd62a84a03cbc~mv2.png",
-"https://static.wixstatic.com/media/990059_3580839d05684e54a4ee289c790e30ea~mv2.png",
-"https://static.wixstatic.com/media/990059_a7766ba179fc42728328c6e273d3dcd0~mv2.png"
-
-]
-},            
-            
-        ];
-const spinBtn = document.getElementById("spin-sticker-btn");
-const saveBtn = document.getElementById("save-btn");
-const popup = document.getElementById("email-popup");
-const cancelBtn = document.getElementById("cancel-btn");
-const sendBtn = document.getElementById("send-btn");
-const emailInput = document.getElementById("email-input");
 
 const folder = document.getElementById('folder');
 const folderCount = document.getElementById('folder-count');
 let folderUrls = [];
 const MAX_FOLDER_IMAGES = 25;
 const folderOverlay = document.getElementById('folder-overlay');
-
-const canvas = document.getElementById('canvas-container');
-const addStickerBtn = document.getElementById('add-sticker-btn');
-const undoBtn = document.getElementById('undo-btn');
-const redoBtn = document.getElementById('redo-btn');
-
-const colorPalette = document.getElementById('color-palette');
-const history = [];
-
-const stickerPickerBtn = document.getElementById('sticker-picker-btn');
-const groupOverlayContainer = document.getElementById('group-overlay-container');
-const stickerOverlayContainer = document.getElementById('sticker-overlay-container');
-
-let bucketMode = false;
-let activeSticker = null;
-let activePaletteSticker = null;
-let selectedColor = null;
-let isRestoring = false;
-let redoStack = [];
-
-let initialX, initialY, offsetX, offsetY;
-let initialTouchDistance = 0;
-let initialStickerWidth = 0;
-let initialStickerHeight = 0;
-
-let initialCenter = { x: 0, y: 0 };
-let firstStickerAdded = false;
+const saveBtn = document.getElementById("save-btn");
+const popup = document.getElementById("email-popup");
+const cancelBtn = document.getElementById("cancel-btn");
+const sendBtn = document.getElementById("send-btn");
+const emailInput = document.getElementById("email-input");
 
 folderCount.textContent = `0`
-
 const priceNotification = document.getElementById("price-notification");
-
 // Our pricing tiers
 const pricingTiers = [
     { max: 1, price: 0.50 },
     { max: 5, price: 0.25 },
     { max: 15, price: 0.15 },
     { max: 25, price: 0.10 }
+];
+
+const spinBtn = document.getElementById("spin-sticker-btn");
+
+        const canvas = document.getElementById('canvas-container');
+        const addStickerBtn = document.getElementById('add-sticker-btn');
+        const undoBtn = document.getElementById('undo-btn');
+        const redoBtn = document.getElementById('redo-btn');
+        const swatch = document.querySelector('.color-swatch');
+        const colorPicker = document.getElementById('color-picker');
+                const newBtn = document.getElementById('new-btn');
+
+
+        const colorPalette = document.getElementById('color-palette');
+        const history = [];
+
+        const stickerPickerBtn = document.getElementById('sticker-picker-btn');
+        const groupOverlayContainer = document.getElementById('group-overlay-container');
+        const stickerOverlayContainer = document.getElementById('sticker-overlay-container');
+
+        let bucketMode = false;
+        let activeSticker = null;
+        let activePaletteSticker = null;
+        let selectedColor = null;
+        let isRestoring = false;
+        let redoStack = [];
+
+        let initialX, initialY, offsetX, offsetY;
+        let initialTouchDistance = 0;
+        let initialStickerWidth = 0;
+        let initialStickerHeight = 0;
+
+        let initialCenter = {
+            x: 0,
+            y: 0
+        };
+        let firstStickerAdded = false;
+
+       const colors = [
+    // Skin tones
+    '#8d5524', '#c68642', '#e0ac69', '#f1c27d', '#ffdbac',
+
+    // Reds
+    '#FF0000', '#FF6347', '#D2691E', '#CD5C5C', '#800020', // burgundy added
+
+    // Oranges & Yellows
+    '#FFA500', '#FF8C00', '#FFD700', '#FFFF00', '#FFC04C', '#a67c00', 
+    '#FF7F50', // coral
+    '#DAA520', // goldenrod
+    '#C2B280', // sand beige
+
+    // Greens
+    '#008000', '#3CB371', '#9ACD32', '#ADFF2F',
+    '#013220', // deep forest green
+    '#808000', // olive green
+
+    // Blues
+    '#0000FF', '#4169E1', '#1E90FF', '#87CEFA',
+    '#000080', // navy
+    '#008080', // teal
+    '#40E0D0', // turquoise
+
+    // Purples
+    '#800080', '#4B0082', '#BA55D3', '#DA70D6',
+
+    // Pinks & Browns
+    '#FFC0CB', '#FF69B4', '#FA8072', '#A52A2A', '#8B4513',
+
+    // Grays & Neutrals
+    '#C0C0C0', '#808080', 
+    '#A9A9A9', // dark gray / stone gray
+
+    // Brights
+    '#ff71ce', '#01cdfe', '#05ffa1', '#b967ff', '#fffb96',
+
+    // Pastels
+    '#ffb3ba', '#ffdfba', '#ffffba', '#baffc9', '#bae1ff',
+    '#ffdef2', '#f2e2ff', '#e2eeff', '#ddfffc', '#ffffe3'
 ];
 
 function getStickerPrice(count) {
@@ -1087,29 +1274,7 @@ function showPriceNotification(price) {
         }, 500);
     }, 2000); // Display for 2 seconds
 }
-
-// This function now correctly handles replacing the sticker and centering it
-function addOrReplaceSticker(newUrl) {
-    const existingSticker = document.querySelector('#canvas-container .sticker');
-    if (existingSticker) {
-        existingSticker.querySelector('img').src = newUrl;
-        saveState();
-        return existingSticker; // ✅ return it
-    } else {
-        const stickerSize = 120;
-        const canvasWidth = canvas.offsetWidth;
-        const canvasHeight = canvas.offsetHeight;
-        const centerX = (canvasWidth / 2) - (stickerSize / 2);
-        const centerY = (canvasHeight / 2) - (stickerSize / 2);
-        const newSticker = addSticker(newUrl, centerX, centerY, stickerSize);
-        saveState();
-        return newSticker; // ✅ return the new element
-    }
-}
-
-
-
-
+     
 // Your new function to handle saving the data
 async function saveFolderDataToWix(urls) {
     try {
@@ -1219,9 +1384,6 @@ folder.addEventListener("drop", (e) => {
 });
 
 
-
-
-
 function addToFolder(stickerUrl, stickerEl) {
     if (stickerEl) {
         stickerEl.remove();
@@ -1245,75 +1407,7 @@ function addToFolder(stickerUrl, stickerEl) {
     updateUndoRedoButtons();
 }
 
-function getRandomStickerUrlFromGroups() {
-    if (!stickerGroups || stickerGroups.length === 0) {
-        console.log("⚠️ No stickerGroups available");
-        return null;
-    }
 
-    const allStickers = stickerGroups.flatMap(group => group.urls);
-
-    if (allStickers.length === 0) {
-        console.log("⚠️ No stickers in groups");
-        return null;
-    }
-
-    const randomIndex = Math.floor(Math.random() * allStickers.length);
-    const chosen = allStickers[randomIndex];
-
-    return chosen;
-}
-
-spinBtn.addEventListener("click", () => {
-   
-
-    let sticker = document.querySelector('#canvas-container .sticker img');
-    if (!sticker) {
-        console.log("ℹ️ No sticker found, adding first one");
-        const firstUrl = getRandomStickerUrlFromGroups(); 
-        if (firstUrl) {
-            addOrReplaceSticker(firstUrl);
-            sticker = document.querySelector('#canvas-container .sticker img');
-        } else {
-            console.warn("⚠️ No valid sticker URL was returned. Cannot add a sticker.");
-            return;
-        }
-    }
-    if (!sticker) {
-        console.warn("⚠️ Still no sticker, aborting spin");
-        return;
-    }
-
-    let spinCount = 0;
-    const maxSpins = 15 + Math.floor(Math.random() * 10);
-
-    const spinInterval = setInterval(() => {
-        const nextUrl = getRandomStickerUrlFromGroups(); 
-        if (nextUrl) {
-          
-            sticker.src = nextUrl;
-        }
-        
-        spinCount++;
-        if (spinCount >= maxSpins) {
-            clearInterval(spinInterval);
-          
-            
-            // Add the pulse effect to the parent sticker div
-            const stickerDiv = sticker.closest('.sticker');
-            if (stickerDiv) {
-                stickerDiv.classList.add('pulse-effect');
-                
-                // OPTIONAL: Remove the class after a few seconds
-                setTimeout(() => {
-                    stickerDiv.classList.remove('pulse-effect');
-                }, 3000); // Removes the effect after 3 seconds
-            }
-
-            saveState();
-        }
-    }, 100);
-});
 
 function renderFolderOverlay() {
     folderOverlay.innerHTML = "";
@@ -1432,37 +1526,48 @@ function updateFolderUI() {
     }
 }
 
-function setBucketMode(enabled) {
-    bucketMode = enabled;
-    if (bucketMode) {
-        document.body.classList.add('bucket-active');
-        canvas.style.cursor = 'crosshair';
-        document.querySelectorAll('.color-swatch').forEach(swatch => {
-            swatch.draggable = false;
-        });
-    } else {
-        document.body.classList.remove('bucket-active');
-        canvas.style.cursor = 'default';
-        document.querySelectorAll('.color-swatch').forEach(swatch => {
-            swatch.draggable = true;
-        });
-    }
-}
+
+
+
+
+
+
+
+
+        function setBucketMode(enabled) {
+            bucketMode = enabled;
+            if (bucketMode) {
+                document.body.classList.add('bucket-active');
+                canvas.style.cursor = 'crosshair';
+                document.querySelectorAll('.color-swatch').forEach(swatch => {
+                    swatch.draggable = false;
+                });
+            } else {
+                document.body.classList.remove('bucket-active');
+                canvas.style.cursor = 'default';
+                document.querySelectorAll('.color-swatch').forEach(swatch => {
+                    swatch.draggable = true;
+                });
+            }
+        }
 
 function saveState() {
     if (isRestoring) return;
-
     const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
-    const currentState = {
-        stickers: []
-    };
+    const currentState = { stickers: [] };
 
     stickersOnCanvas.forEach(sticker => {
         const stickerImg = sticker.querySelector('img');
         if (stickerImg) {
             currentState.stickers.push({
-                url: stickerImg.src
-                // no x, y, width, height, locked anymore
+                url: stickerImg.src,
+                x: sticker.offsetLeft,
+                y: sticker.offsetTop,
+                width: sticker.offsetWidth,
+                height: sticker.offsetHeight,
+                locked: sticker.classList.contains('locked'),
+                // ✅ Add the group name here
+                groupName: sticker.dataset.group 
             });
         }
     });
@@ -1473,53 +1578,163 @@ function saveState() {
     }
 
     redoStack = [];
-    updateUndoButton();
+    updateUndoRedoButtons();
 }
 
 function loadState(state) {
     isRestoring = true;
-
-    // Clear only stickers from canvas
-    document.querySelectorAll('#canvas-container .sticker').forEach(sticker => {
-        canvas.removeChild(sticker);
-    });
-
-    // Recreate stickers centered (or however you prefer)
+    canvas.innerHTML = '';
     state.stickers.forEach(data => {
-        const stickerSize = 120;
-        const canvasWidth = canvas.offsetWidth;
-        const canvasHeight = canvas.offsetHeight;
-        const centerX = (canvasWidth / 2) - (stickerSize / 2);
-        const centerY = (canvasHeight / 2) - (stickerSize / 2);
-
-        addSticker(data.url, centerX, centerY, stickerSize, stickerSize, {
-            suppressSave: true
+        // ✅ Change 'groupName' to 'group' to match the addSticker function's parameter name
+        const newSticker = addSticker(data.url, data.x, data.y, data.width, data.height, {
+            suppressSave: true,
+            group: data.groupName 
         });
+        if (data.locked) {
+            newSticker.classList.add('locked');
+        }
     });
-
     isRestoring = false;
     updateUndoRedoButtons();
 }
+        function deselectAllStickers() {
+            document.querySelectorAll('.sticker').forEach(s => {
+                s.classList.remove('selected');
+            });
+        }
+
+        function getTouchDistance(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+   
+function getRandomStickerUrlFromGroups() {
+    if (!stickerGroups || stickerGroups.length === 0) return null;
+
+    const firstStickers = stickerGroups
+        .filter(group => group.urls && group.urls.length > 0)
+        .map(group => ({ url: group.urls[0], group: group.name }));
+
+    if (firstStickers.length === 0) return null;
+
+    const randomIndex = Math.floor(Math.random() * firstStickers.length);
+    return firstStickers[randomIndex]; // ✅ now always first sticker of group
+}
 
 
-function deselectAllStickers() {
-    document.querySelectorAll('.sticker').forEach(s => {
-        s.classList.remove('selected');
+spinBtn.addEventListener("click", async () => {
+    console.log("🎰 Spin button clicked");
+
+    const allStickers = document.querySelectorAll('.sticker');
+    let targetStickerDiv = null;
+
+    if (allStickers.length === 0) {
+        console.log("ℹ️ Canvas is empty, adding a new sticker.");
+        const randomStickerData = getRandomStickerUrlFromGroups();
+        if (randomStickerData) {
+            addSticker(randomStickerData.url, 120, 120, 120, 120, { 
+                group: randomStickerData.group, 
+                letter: randomStickerData.letter 
+            });
+            targetStickerDiv = document.querySelector('.sticker');
+        }
+    } else {
+        targetStickerDiv = document.querySelector('.sticker:not(.locked)');
+        
+        if (!targetStickerDiv) {
+            console.log("ℹ️ All stickers are locked, adding a new one.");
+            const randomStickerData = getRandomStickerUrlFromGroups();
+            if (randomStickerData) {
+                addSticker(randomStickerData.url, 120, 120, 120, 120, { 
+                    group: randomStickerData.group, 
+                    letter: randomStickerData.letter 
+                });
+                targetStickerDiv = document.querySelector('.sticker:not(.locked)');
+            }
+        }
+    }
+    
+    if (!targetStickerDiv) {
+        console.warn("⚠️ No unlocked sticker found. Aborting spin.");
+        return;
+    }
+    
+    // --- UPDATED LOGIC HERE ---
+    const stickerPool = [];
+    stickerGroups.forEach(group => {
+        // Now, take the first URL from the `urls` array directly
+        if (group.urls && group.urls.length > 0) {
+            stickerPool.push({
+                url: group.urls[0], // Access the first element of the array
+                group: group.name
+            });
+        }
     });
+
+    console.log(`⏳ Preloading a small subset of stickers (${stickerPool.length})...`);
+    await preloadStickers(stickerPool.map(s => s.url));
+    console.log("✅ Preloading complete. Starting spin.");
+    
+    // --- END UPDATED LOGIC ---
+
+    const stickerImg = targetStickerDiv.querySelector('img');
+    const stickerSize = targetStickerDiv.offsetWidth;
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
+    
+    targetStickerDiv.style.left = `${centerX}px`;
+    targetStickerDiv.style.top = `${centerY}px`;
+    
+    let spinCount = 0;
+    const maxSpins = 15 + Math.floor(Math.random() * 10);
+    const spinInterval = setInterval(() => {
+        const randomIndex = Math.floor(Math.random() * stickerPool.length);
+        const nextStickerData = stickerPool[randomIndex];
+
+        if (nextStickerData) {
+            stickerImg.src = nextStickerData.url;
+            targetStickerDiv.dataset.group = nextStickerData.group;
+        }
+
+        spinCount++;
+        if (spinCount >= maxSpins) {
+            clearInterval(spinInterval);
+            targetStickerDiv.classList.add('pulse-effect');
+            saveState();
+        }
+    }, 100);
+});
+
+// A function to preload images
+function preloadStickers(urls) {
+    const promises = urls.map(url => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = resolve;
+            img.onerror = reject;
+        });
+    });
+    return Promise.all(promises);
 }
 
-function getTouchDistance(touches) {
-    const dx = touches[0].clientX - touches[1].clientX;
-    const dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-}
 
 function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
-    const { suppressSave = false } = opts;
+    const { suppressSave = false, group } = opts;
+
     const sticker = document.createElement('div');
+    const groupName = group || 'default';
+    sticker.dataset.group = groupName;
+    console.log('[addSticker] Creating sticker with group:', groupName);
+
     sticker.classList.add('sticker');
     sticker.style.width = width + 'px';
-    sticker.style.height = 'auto';
+    sticker.style.height = height + 'px';
+
     const stickerImg = document.createElement('img');
     stickerImg.crossOrigin = "Anonymous";
     stickerImg.src = url;
@@ -1527,33 +1742,33 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     stickerImg.classList.add("protected");
     sticker.appendChild(stickerImg);
 
-    const canvasWidth = canvas.offsetWidth;
-    const canvasHeight = canvas.offsetHeight;
-    const centerX = (canvasWidth - width) / 2;
-    const centerY = (canvasHeight - height) / 2;
-
-    sticker.style.left = `${centerX}px`;
-    sticker.style.top = `${centerY}px`;
-    
     if (x !== undefined && y !== undefined) {
         sticker.style.left = `${x}px`;
         sticker.style.top = `${y}px`;
     }
 
-    
+    // --- Interaction and Event Listener Variables ---
+    let activeSticker = null;
+    let initialX, initialY, offsetX, offsetY;
+    let initialPinchDistance = 0;
+    let initialStickerWidth = 0;
+    let initialStickerHeight = 0;
+    let initialRect = null;
 
+    // --- Interaction Buttons and Handlers ---
     const copyBtn = document.createElement('div');
     copyBtn.classList.add('copy-btn');
     copyBtn.innerHTML = `<svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="12" y1="8" x2="12" y2="16" />
-        <line x1="8" y1="12" x2="16" y2="12" />
-    </svg>`;
+<line x1="12" y1="8" x2="12" y2="16" />
+<line x1="8" y1="12" x2="16" y2="12" />
+</svg>`;
     copyBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const stickerWidth = sticker.offsetWidth;
         const stickerHeight = sticker.offsetHeight;
         let newX = parseInt(sticker.style.left) + 10;
         let newY = parseInt(sticker.style.top) + 10;
+
         function isOverlapping(x, y) {
             const stickers = document.querySelectorAll('.sticker');
             return Array.from(stickers).some(s => {
@@ -1574,14 +1789,21 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
             attempts++;
         }
         saveState();
-        addSticker(stickerImg.src, newX, newY, sticker.offsetWidth);
-    });
+addSticker(
+    stickerImg.src,
+    newX,
+    newY,
+    sticker.offsetWidth,
+    sticker.offsetHeight,
+    { group: sticker.dataset.group }
+);   
+ });
 
     const deleteBtn = document.createElement('div');
     deleteBtn.classList.add('delete-btn');
     deleteBtn.innerHTML = `<svg class="delete-btn-icon" viewBox="0 0 24 24">
-        <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
-    </svg>`;
+<line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
+</svg>`;
     deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         saveState();
@@ -1589,59 +1811,103 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     });
 
     const lockBtn = document.createElement('div');
+    lockBtn.classList.add('lock-btn');
     lockBtn.innerHTML = `<svg class="lock-btn-icon" data-lucide="lock" viewBox="0 0 24 24">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-    </svg>`;
-    lockBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
+<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>`;
+lockBtn.addEventListener('click', (e) => {
+    // Prevent the click event from bubbling up and affecting the canvas or sticker
+    e.stopPropagation();
+
+    // Find the closest parent element with the class 'sticker'
+    const sticker = e.target.closest('.sticker');
+
+    if (sticker) {
+        // This line toggles the 'locked' class on the sticker.
         sticker.classList.toggle('locked');
+        
+        // This is a good practice to ensure the sticker is no longer "selected"
+        // if it was, which helps manage button visibility after the lock/unlock action.
+        sticker.classList.remove('selected');
+
+        // Save the state of the canvas after the change
         saveState();
-    });
+    }
+});
 
     sticker.appendChild(deleteBtn);
     sticker.appendChild(copyBtn);
     sticker.appendChild(lockBtn);
 
-    function startInteraction(e) {
-        if (e.target.closest('.delete-btn') || e.target.closest('.copy-btn') || e.target.closest('.lock-btn')) {
-            return;
-        }
-        if (bucketMode && (!e.touches || e.touches.length < 2)) {
-            return;
-        }
-        activeSticker = sticker;
-        deselectAllStickers();
-        sticker.classList.add('selected');
-        saveState();
-        if (e.touches && e.touches.length === 2) {
-            e.preventDefault();
-            const touch1 = e.touches[0];
-            const touch2 = e.touches[1];
-            initialPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
-            initialStickerWidth = sticker.offsetWidth;
-            initialStickerHeight = sticker.offsetHeight;
-            initialRect = sticker.getBoundingClientRect();
-            document.addEventListener('touchmove', handleMove, { passive: false });
-        } else if (e.touches && e.touches.length === 1) {
-            const touch = e.touches[0];
-            initialX = touch.clientX;
-            initialY = touch.clientY;
-            offsetX = sticker.offsetLeft;
-            offsetY = sticker.offsetTop;
-            document.addEventListener('touchmove', handleMove, { passive: false });
-        } else {
-            initialX = e.clientX;
-            initialY = e.clientY;
-            offsetX = sticker.offsetLeft;
-            offsetY = sticker.offsetTop;
-            document.addEventListener('mousemove', handleMove);
-        }
-        document.addEventListener('mouseup', handleEnd);
-        document.addEventListener('touchend', handleEnd);
+const groupBtn = document.createElement('div');
+groupBtn.classList.add('sticker-btn', 'group-btn');
+groupBtn.innerHTML = `
+<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 6h16M4 12h16M4 18h16"/>
+</svg>`;
+
+
+// On click, open overlay with this sticker's group
+groupBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const stickerGroup = sticker.dataset.group;
+    const group = stickerGroups.find(g => g.name === stickerGroup);
+    if (group) {
+        // Pass both the URLs and the group name
+        showStickerOverlay(group.urls, group.name); 
+    }
+});
+
+sticker.appendChild(groupBtn);
+
+   function startInteraction(e) {
+ if (e.target.closest('.delete-btn, .copy-btn, .lock-btn, .group-btn')) return;
+
+    if (bucketMode && (!e.touches || e.touches.length < 2)) {
+        return;
     }
 
-    function handleMove(e) {
+    activeSticker = sticker;
+    deselectAllStickers();
+    sticker.classList.add('selected');
+    saveState();
+
+    if (e.touches && e.touches.length === 2) {
+        // Two-finger gesture (resizing)
+        e.preventDefault(); 
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        initialPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+        initialStickerWidth = sticker.offsetWidth;
+        initialStickerHeight = sticker.offsetHeight;
+        initialRect = sticker.getBoundingClientRect();
+        
+        document.addEventListener('touchmove', handleMove, { passive: false });
+    } else if (e.touches && e.touches.length === 1) {
+        // Single-finger gesture (dragging)
+        const touch = e.touches[0];
+        initialX = touch.clientX;
+        initialY = touch.clientY;
+        offsetX = sticker.offsetLeft;
+        offsetY = sticker.offsetTop;
+        
+        document.addEventListener('touchmove', handleMove, { passive: false });
+    } else {
+        // Mouse interaction (dragging)
+        initialX = e.clientX;
+        initialY = e.clientY;
+        offsetX = sticker.offsetLeft;
+        offsetY = sticker.offsetTop;
+        
+        document.addEventListener('mousemove', handleMove);
+    }
+
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchend', handleEnd);
+}
+
+ function handleMove(e) {
     if (!activeSticker) return;
 
     if (e.touches && e.touches.length === 2) {
@@ -1779,9 +2045,12 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     saveState();
 }
 
+    // --- Event Listeners ---
     sticker.addEventListener('mousedown', startInteraction);
     sticker.addEventListener('touchstart', startInteraction);
+
     sticker.addEventListener('wheel', (e) => {
+        // Desktop Resizing Logic
         e.preventDefault();
         saveState();
         const parent = sticker;
@@ -1791,15 +2060,18 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
         const initialHeight = initialRect.height;
         const newSize = initialWidth + (delta * 10);
         const minSize = 30;
+
         if (newSize >= minSize) {
             const newHeight = newSize / (initialWidth / initialHeight);
             const canvasRect = canvas.getBoundingClientRect();
             let adjustedLeft = initialRect.left;
             let adjustedTop = initialRect.top;
             const isShrinking = newSize < initialWidth;
+
             if (isShrinking) {
                 adjustedLeft = initialRect.left + (initialWidth / 2) - (newSize / 2);
                 adjustedTop = initialRect.top + (initialHeight / 2) - (newHeight / 2);
+
                 if (adjustedLeft < canvasRect.left) adjustedLeft = canvasRect.left;
                 if (adjustedTop < canvasRect.top) adjustedTop = canvasRect.top;
                 if (adjustedLeft + newSize > canvasRect.right) adjustedLeft = canvasRect.right - newSize;
@@ -1808,6 +2080,7 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
                 adjustedLeft = initialRect.left - (newSize - initialWidth) / 2;
                 adjustedTop = initialRect.top - (newHeight - initialHeight) / 2;
             }
+
             parent.style.width = `${newSize}px`;
             parent.style.height = `${newHeight}px`;
             parent.style.left = `${adjustedLeft - canvasRect.left}px`;
@@ -1828,55 +2101,194 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
 
     const updateButtonSizes = () => {
         const btnSize = sticker.offsetWidth * 0.2;
-        [deleteBtn, copyBtn, lockBtn].forEach(btn => {
+        [deleteBtn, copyBtn, lockBtn, groupBtn].forEach(btn => {
             btn.style.width = btnSize + 'px';
             btn.style.height = btnSize + 'px';
         });
         deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
         copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
+         lockBtn.style.bottom = lockBtn.style.left = `${btnSize * 0.25}px`;
+        groupBtn.style.bottom = groupBtn.style.right = `${btnSize * 0.25}px`;
     };
+
     updateButtonSizes();
     const observer = new ResizeObserver(updateButtonSizes);
     observer.observe(sticker);
     canvas.appendChild(sticker);
+
     if (window.lucide) {
         lucide.createIcons();
     }
+
     if (!suppressSave && !isRestoring) {
         saveState();
     }
+
     return sticker;
 }
 
-function updateUndoButton() {
-    undoBtn.disabled = history.length <= 1;
+     
+    
+        function hexToRgb(hex) {
+            hex = hex.replace(/^#/, "");
+            const bigint = parseInt(hex, 16);
+            return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+        }
+
+  
+        function recolorSticker(stickerImg, fillColor, clickX, clickY) {
+    const canvasEl = document.createElement("canvas");
+    const ctx = canvasEl.getContext("2d", { willReadFrequently: true });
+    canvasEl.width = stickerImg.naturalWidth;
+    canvasEl.height = stickerImg.naturalHeight;
+    ctx.drawImage(stickerImg, 0, 0);
+
+    const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+    const data = imgData.data;
+    const { width, height } = canvasEl;
+
+
+    // --- Inlined helper functions for performance ---
+    const blackThreshold = 30;
+    const tolerance = 30;
+
+    const startIndex = (clickY * width + clickX) * 4;
+    const targetColor = [
+        data[startIndex],
+        data[startIndex + 1],
+        data[startIndex + 2],
+        data[startIndex + 3]
+    ];
+    
+    // Early exit if the clicked pixel is a border
+    if (targetColor[3] > 0 && targetColor[0] < blackThreshold && targetColor[1] < blackThreshold && targetColor[2] < blackThreshold) {
+        return; 
+    }
+
+    const visited = new Uint8Array(width * height);
+    let touchesEdge = false;
+
+    const stack = [[clickX, clickY]];
+
+    // --- OPTIMIZATION 1: Run synchronously in a single loop ---
+    while (stack.length) {
+        let [x, y] = stack.pop();
+
+        let left = x;
+        while (left >= 0 && !visited[y * width + left] && isFillable(left, y)) {
+            left--;
+        }
+        left++;
+
+        let right = x;
+        while (right < width && !visited[y * width + right] && isFillable(right, y)) {
+            right++;
+        }
+        right--;
+
+        // Fill the span
+        for (let i = left; i <= right; i++) {
+            const idx = y * width + i;
+            visited[idx] = 1;
+            const dataIndex = idx * 4;
+
+            if (isEraser) {
+                data[dataIndex + 3] = 0;
+            } else {
+                data[dataIndex] = r;
+                data[dataIndex + 1] = g;
+                data[dataIndex + 2] = b;
+                data[dataIndex + 3] = 255;
+            }
+
+            if (i === 0 || i === width - 1 || y === 0 || y === height - 1) {
+                touchesEdge = true;
+            }
+        }
+
+        // --- OPTIMIZATION 2: Efficiently find and add new scanlines ---
+        scan(y - 1, left, right); // Scan row above
+        scan(y + 1, left, right); // Scan row below
+    }
+
+    // Helper to check if a pixel should be filled
+    function isFillable(px, py) {
+        if (px < 0 || px >= width || py < 0 || py >= height) return false;
+        
+        const idx = (py * width + px) * 4;
+        const R = data[idx];
+        const G = data[idx + 1];
+        const B = data[idx + 2];
+        const A = data[idx + 3];
+
+        // Check if it's a border pixel
+        if (A > 0 && R < blackThreshold && G < blackThreshold && B < blackThreshold) {
+            return false;
+        }
+
+        // Check if it matches the target color
+        return (
+            Math.abs(R - targetColor[0]) <= tolerance &&
+            Math.abs(G - targetColor[1]) <= tolerance &&
+            Math.abs(B - targetColor[2]) <= tolerance &&
+            Math.abs(A - targetColor[3]) <= tolerance
+        );
+    }
+    
+    // Helper to find new spans to add to the stack
+    function scan(y, lx, rx) {
+        if (y < 0 || y >= height) return;
+        for (let x = lx; x <= rx; x++) {
+            if (!visited[y * width + x] && isFillable(x, y)) {
+                // We found a new, uncolored span. Push it and skip the rest of this span.
+                stack.push([x, y]);
+                // Fast-forward past the rest of this colored span
+                while (x <= rx && isFillable(x, y)) {
+                    x++;
+                }
+            }
+        }
+    }
+
+    if (!touchesEdge) {
+        ctx.putImageData(imgData, 0, 0);
+        stickerImg.src = canvasEl.toDataURL();
+       saveState(); 
+    }
 }
 
-undoBtn.addEventListener('click', () => {
-    if (history.length > 1) {
-        const lastState = history.pop();
-        redoStack.push(lastState);
-        loadState(history[history.length - 1]);
-        updateUndoRedoButtons();
+
+        function updateUndoRedoButtons() {
+            undoBtn.disabled = history.length <= 1;
+            redoBtn.disabled = redoStack.length === 0;
+        }
+
+
+        undoBtn.addEventListener('click', () => {
+            if (history.length > 1) {
+                const lastState = history.pop();
+                redoStack.push(lastState); // 👈 save for redo
+                loadState(history[history.length - 1]);
+                updateUndoRedoButtons();
+            }
+        });
+
+        redoBtn.addEventListener('click', () => {
+            if (redoStack.length > 0) {
+                const nextState = redoStack.pop();
+                history.push(nextState);
+                loadState(nextState);
+                updateUndoRedoButtons();
+            }
+        });
+
+function addOrReplaceSticker(newUrl, groupName = null) {
+    // Deselect any previously selected sticker
+    const currentlySelected = document.querySelector('.sticker.selected');
+    if (currentlySelected) {
+        currentlySelected.classList.remove('selected');
     }
-});
 
-redoBtn.addEventListener('click', () => {
-    if (redoStack.length > 0) {
-        const nextState = redoStack.pop();
-        history.push(nextState);
-        loadState(nextState);
-        updateUndoRedoButtons();
-    }
-});
-
-function updateUndoRedoButtons() {
-    undoBtn.disabled = history.length <= 1;
-    redoBtn.disabled = redoStack.length === 0;
-}
-
-// MODIFIED: This function now correctly handles replacing the sticker and centering it
-  function addOrReplaceSticker(newUrl) {
     const unlockedSticker = document.querySelector('.sticker:not(.locked)');
     const stickerSize = 120;
     const canvasWidth = canvas.offsetWidth;
@@ -1885,161 +2297,239 @@ function updateUndoRedoButtons() {
     const centerY = (canvasHeight / 2) - (stickerSize / 2);
 
     if (unlockedSticker) {
-        // Hide the sticker temporarily
-        unlockedSticker.style.opacity = '0';
-        
-        // Update the sticker's properties
-        unlockedSticker.querySelector('img').src = newUrl;
+        const stickerImg = unlockedSticker.querySelector('img');
+        stickerImg.src = newUrl;
+
         unlockedSticker.style.width = `${stickerSize}px`;
-        unlockedSticker.style.height = 'auto';
+        unlockedSticker.style.height = `${stickerSize}px`;
         unlockedSticker.style.left = `${centerX}px`;
         unlockedSticker.style.top = `${centerY}px`;
-        
-        // Use an event listener to show the sticker only after the image has loaded
-        unlockedSticker.querySelector('img').onload = () => {
+
+        if (groupName) {
+            unlockedSticker.dataset.group = groupName;
+        } else if (!unlockedSticker.dataset.group) {
+            unlockedSticker.dataset.group = stickerGroups[0]?.name || 'default';
+        }
+
+        stickerImg.onload = () => {
             unlockedSticker.style.opacity = '1';
         };
 
+        console.log('[addOrReplaceSticker] Replaced sticker group:', unlockedSticker.dataset.group);
     } else {
-        // Create a brand new sticker if none are unlocked
-        addSticker(newUrl, centerX, centerY, stickerSize);
+        const newGroup = groupName || stickerGroups[0]?.name || 'default';
+        addSticker(newUrl, centerX, centerY, stickerSize, stickerSize, { group: newGroup });
+        console.log('[addOrReplaceSticker] Created new sticker with group:', newGroup);
     }
+    
     saveState();
 }
 
 addStickerBtn.addEventListener('click', () => {
-    const allUrls = stickerGroups.flatMap(group => group.urls);
-    const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
-    addOrReplaceSticker(randomUrl);
+    // Find a random group first
+    const randomGroup = stickerGroups[Math.floor(Math.random() * stickerGroups.length)];
+    // Find a random URL from that group
+    const randomUrl = randomGroup.urls[Math.floor(Math.random() * randomGroup.urls.length)];
+
+    // Pass both the URL AND the group name to the function
+    addOrReplaceSticker(randomUrl, randomGroup.name);
 });
 
-
-addStickerBtn.addEventListener('click', () => {
-    const allUrls = stickerGroups.flatMap(group => group.urls);
-    const randomUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
-    addOrReplaceSticker(randomUrl);
+    newBtn.addEventListener('click', () => {
+    // Clear the canvas
+    canvas.innerHTML = '';
+    
+    // Add the empty state to the history
+    // This allows the user to undo the "new" action.
+    saveState();
+    
+    // Reset any other relevant flags
+    firstStickerAdded = false;
 });
+        
 
 window.addEventListener('load', () => {
     if (window.lucide) {
         lucide.createIcons();
     }
     updateCanvasDrop();
+    const allStickers = document.querySelectorAll('.sticker');
+    if (allStickers.length === 0) {
+        const randomStickerData = getRandomStickerUrlFromGroups();
+        if (randomStickerData) {
+            // Pass the URL from the object to the function
+            addOrReplaceSticker(randomStickerData.url, randomStickerData.group);
+        }
+    }
 });
 
-let isDragging = false;
-let startX;
-let scrollLeft;
-let isSwiping = false;
-let initialTap = { clientX: 0 };
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+        let isSwiping = false;
+        let initialTap = {
+            clientX: 0
+        };
 
-function addSwipeFunctionality() {
-    const handleStart = (e) => {
-        isDragging = true;
-        startX = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
-        scrollLeft = paletteContainer.scrollLeft;
-        initialTap.clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-    };
-    const handleMove = (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
-        const walk = (x - startX) * 1.5;
-        paletteContainer.scrollLeft = scrollLeft - walk;
-        if (Math.abs(e.clientX - initialTap.clientX) > 10) {
-            isSwiping = true;
+        function addSwipeFunctionality() {
+            const paletteContainer = document.querySelector('.color-palette-container');
+            const palette = document.querySelector('.color-palette');
+
+            const handleStart = (e) => {
+                isDragging = true;
+                startX = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+                scrollLeft = paletteContainer.scrollLeft;
+                initialTap.clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            };
+
+            const handleMove = (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+                const walk = (x - startX) * 1.5;
+                paletteContainer.scrollLeft = scrollLeft - walk;
+                if (Math.abs(e.clientX - initialTap.clientX) > 10) {
+                    isSwiping = true;
+                }
+            };
+
+            const handleEnd = () => {
+                isDragging = false;
+                setTimeout(() => {
+                    isSwiping = false;
+                }, 100);
+            };
+
+            [paletteContainer, palette].forEach(element => {
+                element.addEventListener('mousedown', handleStart);
+                element.addEventListener('mousemove', handleMove);
+                element.addEventListener('mouseup', handleEnd);
+                element.addEventListener('mouseleave', handleEnd);
+
+                element.addEventListener('touchstart', handleStart);
+                element.addEventListener('touchmove', handleMove, {
+                    passive: false
+                });
+                element.addEventListener('touchend', handleEnd);
+            });
         }
-    };
-    const handleEnd = () => {
-        isDragging = false;
-        setTimeout(() => {
-            isSwiping = false;
-        }, 100);
-    };
-    [paletteContainer, palette].forEach(element => {
-        element.addEventListener('mousedown', handleStart);
-        element.addEventListener('mousemove', handleMove);
-        element.addEventListener('mouseup', handleEnd);
-        element.addEventListener('mouseleave', handleEnd);
-        element.addEventListener('touchstart', handleStart);
-        element.addEventListener('touchmove', handleMove, { passive: false });
-        element.addEventListener('touchend', handleEnd);
-    });
-}
 
-function hideOverlays() {
-    groupOverlayContainer.style.display = 'none';
-    stickerOverlayContainer.style.display = 'none';
-}
+        function populateColorPalette() {
+            colorPalette.innerHTML = '';
+            colors.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.classList.add('color-swatch');
+                swatch.style.backgroundColor = color;
+                if (color === selectedColor) {
+                    swatch.classList.add('active');
+                }
+                swatch.addEventListener('click', (e) => {
+                    if (isSwiping) {
+                        return;
+                    }
+                    const wasActive = swatch.classList.contains('active');
 
+                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+
+                    if (!wasActive) {
+                        swatch.classList.add('active');
+                        selectedColor = color;
+                        setBucketMode(true);
+                    } else {
+                        selectedColor = null;
+                        setBucketMode(false);
+                    }
+                });
+                colorPalette.appendChild(swatch);
+            });
+        }
+
+        function hideOverlays() {
+
+            groupOverlayContainer.style.display = 'none';
+            stickerOverlayContainer.style.display = 'none';
+        }
+
+// Function to show the initial group selection overlay
 function showGroupOverlay() {
-    hideOverlays();
+     hideOverlays();
     groupOverlayContainer.innerHTML = '';
+
+    // Create the header with the title and close button
+    const header = document.createElement('div');
+    header.classList.add('overlay-header');
+    
+    const title = document.createElement('h2');
+    title.textContent = "Sticker auswählen";
+    title.classList.add('overlay-title');
+    header.appendChild(title);
+    
+    // Create and append the close button to the header
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '✕';
     closeBtn.classList.add('close-btn');
     closeBtn.addEventListener('click', hideOverlays);
-    groupOverlayContainer.appendChild(closeBtn);
-    stickerGroups.forEach(group => {
+    header.appendChild(closeBtn);
+    
+    // Create a separate container for the icons
+    const iconsGrid = document.createElement('div');
+    iconsGrid.classList.add('overlay-icons-grid');
+
+      // Set grid styles directly in JavaScript
+    iconsGrid.style.display = 'grid';
+    iconsGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(40px, 1fr))';
+    iconsGrid.style.gap = '10px';
+    iconsGrid.style.padding = '10px';
+    iconsGrid.style.overflowY = 'auto';
+
+    // Append both the header and the icons grid to the main container
+    groupOverlayContainer.appendChild(header);
+    groupOverlayContainer.appendChild(iconsGrid);
+
+    // Show the main container and give it a vertical layout
+    groupOverlayContainer.style.display = 'flex';
+    groupOverlayContainer.style.flexDirection = 'column';
+
+    // ✅ NEW: Load and add group icons one-by-one
+    stickerGroups.forEach((group, index) => {
         const groupIcon = document.createElement('img');
-        groupIcon.src = group.urls[0];
         groupIcon.classList.add('overlay-icon');
         groupIcon.title = group.name;
+
+        // Add a listener to wait for the image to load, then fade it in
+        groupIcon.onload = () => {
+            groupIcon.style.opacity = '1';
+        };
+        
+        // Initially hide the icon to prevent a blank box
+        groupIcon.style.opacity = '0'; 
+        groupIcon.style.transition = 'opacity 0.5s ease-in-out';
+
+        // Add contextmenu listener
+        groupIcon.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // Call showStickerOverlay directly
         groupIcon.addEventListener('click', () => {
-            showStickerOverlay(group.urls);
+            showStickerOverlay(group.urls, group.name);
         });
-        groupOverlayContainer.appendChild(groupIcon);
+        
+        // Append to the DOM before setting the src to trigger the load
+        iconsGrid.appendChild(groupIcon);
+
+
+
+        // Use a short delay before setting the src for each icon
+        setTimeout(() => {
+            if (group.urls && group.urls.length > 0) {
+                groupIcon.src = group.urls[0];
+            }
+        }, index * 50); // 50ms delay for each icon
     });
-    groupOverlayContainer.style.display = 'grid';
 }
 
-function updateCanvasDrop() {
-    const canvas = document.getElementById('canvas-container');
-    canvas.removeEventListener('dragover', (e) => {
-        e.preventDefault();
-    });
-    canvas.removeEventListener('drop', handleCanvasDrop);
-    canvas.addEventListener('drop', handleCanvasDrop);
-}
-
-function handleCanvasDrop(e) {
-    e.preventDefault();
-    const data = e.dataTransfer.getData('application/json');
-    if (data) {
-        const { url, width } = JSON.parse(data);
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left - (width / 2);
-        const y = e.clientY - rect.top - (width / 2);
-        saveState();
-        addSticker(url, x, y, width);
-    }
-}
-
-let activeTouchSticker = null;
-let touchOffsetX = 0;
-let touchOffsetY = 0;
-
-function showStickerOverlay(urls) {
-    hideOverlays();
-    stickerOverlayContainer.innerHTML = '';
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = '✕';
-    closeBtn.classList.add('close-btn');
-    closeBtn.addEventListener('click', hideOverlays);
-    stickerOverlayContainer.appendChild(closeBtn);
-    urls.forEach(url => {
-        const sticker = document.createElement('img');
-        sticker.src = url;
-        sticker.classList.add('overlay-sticker');
-        sticker.addEventListener('click', () => {
-            addOrReplaceSticker(url);
-            hideOverlays();
-        });
-        stickerOverlayContainer.appendChild(sticker);
-    });
-    stickerOverlayContainer.style.display = 'grid';
-}
-
+// Ensure the main event listener is also not async
 stickerPickerBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (groupOverlayContainer.style.display === 'grid') {
@@ -2049,48 +2539,145 @@ stickerPickerBtn.addEventListener('click', (e) => {
     }
 });
 
-document.addEventListener('click', (e) => {
-    if (!groupOverlayContainer.contains(e.target) && !stickerOverlayContainer.contains(e.target) && !stickerPickerBtn.contains(e.target)) {
-        hideOverlays();
-    }
-});
 
-canvas.removeEventListener('dragover', (e) => {
-    e.preventDefault();
-});
 
-canvas.removeEventListener('drop', (e) => {
-    e.preventDefault();
-    const data = e.dataTransfer.getData('application/json');
-    if (data) {
-        const { url, width } = JSON.parse(data);
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        function updateCanvasDrop() {
+            const canvas = document.getElementById('canvas-container');
+            canvas.removeEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+            canvas.removeEventListener('drop', handleCanvasDrop);
+            canvas.addEventListener('drop', handleCanvasDrop);
+        }
+
+        function handleCanvasDrop(e) {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('application/json');
+            if (data) {
+                const {
+                    url,
+                    width
+                } = JSON.parse(data);
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left - (width / 2);
+                const y = e.clientY - rect.top - (width / 2);
+                saveState();
+                addSticker(url, x, y, width);
+            }
+        }
+
+        let activeTouchSticker = null;
+        let touchOffsetX = 0;
+        let touchOffsetY = 0;
+
+// This function is now responsible for opening the overlay and handling the loading effect.
+function showStickerOverlay(urls, groupName) {
+    hideOverlays();
+    
+    // Save the current scroll position before clearing
+    const scrollPosition = stickerOverlayContainer.scrollTop;
+    
+    stickerOverlayContainer.innerHTML = '';
+    
+    // Create the header and content wrapper
+    const header = document.createElement('div');
+    header.classList.add('overlay-header');
+    
+    const title = document.createElement('h2');
+    title.textContent = groupName;
+    title.classList.add('overlay-title');
+    header.appendChild(title);
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.classList.add('close-btn');
+    closeBtn.addEventListener('click', hideOverlays);
+    header.appendChild(closeBtn);
+    
+    const contentWrapper = document.createElement('div');
+    contentWrapper.classList.add('overlay-stickers-grid');
+    stickerOverlayContainer.appendChild(header);
+    stickerOverlayContainer.appendChild(contentWrapper);
+    
+    // Show the container
+    stickerOverlayContainer.style.display = 'flex';
+    
+    // Load and add stickers
+    urls.forEach((url, index) => {
+        const sticker = document.createElement('img');
+        sticker.classList.add('overlay-sticker');
+        sticker.draggable = true;
+        sticker.dataset.url = url;
+        
+        sticker.style.opacity = '0';
+        sticker.style.transition = 'opacity 0.5s ease-in-out';
+
+        sticker.addEventListener('contextmenu', (e) => e.preventDefault());
+        sticker.addEventListener('dragstart', (e) => {
+            const stickerData = { url: url, width: 120 };
+            e.dataTransfer.setData('application/json', JSON.stringify(stickerData));
+        });
+        
+        sticker.addEventListener('click', () => {
+            const group = stickerGroups.find(g => g.urls.includes(url));
+            addOrReplaceSticker(url, group ? group.name : null);
+            hideOverlays();
+        });
+
+        sticker.onload = () => {
+            sticker.style.opacity = '1';
+        };
+
+        contentWrapper.appendChild(sticker);
+        
+        setTimeout(() => {
+            sticker.src = url;
+        }, index * 50);
+    });
+    
+    // ✅ The key fix: Set the scroll position after a short delay
+    setTimeout(() => {
+        stickerOverlayContainer.scrollTop = scrollPosition;
+    }, 200); // 200ms delay to give the browser time to render all images
+}
+       
+
+        document.addEventListener('click', (e) => {
+            if (!groupOverlayContainer.contains(e.target) && !stickerOverlayContainer.contains(e.target) && !stickerPickerBtn.contains(e.target)) {
+                hideOverlays();
+            }
+        });
+
+        canvas.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('application/json');
+            if (data) {
+                const {
+                    url,
+                    width
+                } = JSON.parse(data);
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                saveState();
+                addSticker(url, x, y, width);
+            }
+        });
+
+        addSwipeFunctionality();
         saveState();
-        addSticker(url, x, y, width);
-    }
-});
-
-addSwipeFunctionality();
-populateColorPalette();
-saveState();
-
-// Block long-press save menu on mobile
-document.addEventListener("touchstart", function(e) {
-    if (e.target.tagName === "IMG" && e.target.classList.contains("protected")) {
-        e.preventDefault();
-    }
-}, { passive: false });
-
+      
 document.addEventListener("contextmenu", function(e) {
-    if (e.target.tagName === "IMG" && e.target.classList.contains("protected")) {
-        e.preventDefault();
-    }
+  if (e.target.tagName === "IMG" && e.target.classList.contains("protected")) {
+    e.preventDefault();
+  }
 }, false);
 
-
-      
+        
     </script>
 </body>
 </html>
