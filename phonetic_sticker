@@ -587,10 +587,10 @@ button.active {
 
  #folder {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
+    bottom: 30px;
+    right: 30px;
+    width: 45px;
+    height: 45px;
     
     border: 2px dotted #ccc;
     border-radius: 12px;
@@ -602,6 +602,8 @@ button.active {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, transform 0.3s, border-color 0.3s;
     z-index: 100;
+    -webkit-tap-highlight-color: transparent; /* removes blue highlight on mobile */
+    outline: none;  
 }
 
 #folder:hover {
@@ -639,23 +641,29 @@ button.active {
   justify-content: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.4);
 }
+
 #folder-overlay {
-  display: none;
+  display: none;              /* column layout */
+  flex-direction: column;
   position: fixed;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
   height: 80%;
   background: white;
   border-radius: 12px;
-  padding: 20px;
-  overflow-y: auto;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 12px;
+  border: 1px solid #ccc;
   z-index: 10000;
-   border: 1px solid #ccc;
-            border-radius: 8px;
+}
+
+#folder-sticker-grid {
+  flex: 1; /* fills remaining height */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); /* ✅ more per row */
+  gap: 8px;
+  padding: 10px;
+  overflow-y: auto; /* scroll only the stickers */
 }
 
 #folder-overlay .overlay-close {
@@ -1065,7 +1073,7 @@ button.active {
     <div id="canvas-container">
   <div id="stickers-layer"></div>
   <div id="folder" title="Drop stickers here to add to cart">
-    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" 
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" 
       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cart-icon lucide-shopping-cart">
       <circle cx="9" cy="21" r="1" />
       <circle cx="20" cy="21" r="1" />
@@ -1115,11 +1123,12 @@ button.active {
     </div>
         <div id="sticker-overlay-container"></div>
 
- <div id="folder-overlay">
+<div id="folder-overlay">
   <div id="folder-total-price">
     Total: $<span id="folder-price-value">0.00</span>
   </div>
- </div> 
+  <div id="folder-sticker-grid"></div>
+</div>
 
     <div id="group-overlay-container" ></div>
 
@@ -1535,12 +1544,17 @@ function addToFolder(stickerUrl, stickerEl) {
     saveState();
 }
 
-
 function renderFolderOverlay() {
     folderOverlay.innerHTML = "";
+    folderOverlay.style.display = "flex";
+    folderOverlay.style.flexDirection = "column";
+    folderOverlay.style.height = "80vh";
+    folderOverlay.style.width = "80vw";
+    folderOverlay.style.maxHeight = "90vh";
+
     document.querySelector(".controls").classList.add("disabled");
 
-    // --- HEADER (sticky) ---
+    // --- HEADER ---
     const header = document.createElement("div");
     header.className = "overlay-header";
     header.style.position = "sticky";
@@ -1551,75 +1565,38 @@ function renderFolderOverlay() {
     header.style.alignItems = "center";
     header.style.justifyContent = "space-between";
     header.style.padding = "10px";
+    header.style.borderBottom = "1px solid #ccc";
 
-   const checkoutBtn = document.createElement("button");
-checkoutBtn.className = "overlay-checkout";
-checkoutBtn.style.background = "none";
-checkoutBtn.style.border = "none";
-checkoutBtn.style.cursor = folderUrls.length === 0 ? "not-allowed" : "pointer"; // cursor
-checkoutBtn.style.padding = "0";
-checkoutBtn.disabled = folderUrls.length === 0; // disable if no stickers
-
-// Add cart icon SVG
-checkoutBtn.innerHTML = `
-   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" 
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cart-icon lucide-shopping-cart">
-      <circle cx="9" cy="21" r="1" />
-      <circle cx="20" cy="21" r="1" />
-      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-    </svg>
-`;
-
-// Enable/disable dynamically whenever overlay is rendered
-checkoutBtn.disabled = folderUrls.length === 0;
-checkoutBtn.style.cursor = folderUrls.length === 0 ? "not-allowed" : "pointer";
-
+    // --- Checkout button (left)
+    const checkoutBtn = document.createElement("button");
+    checkoutBtn.className = "overlay-checkout";
+    checkoutBtn.style.background = "none";
+    checkoutBtn.style.border = "none";
+    checkoutBtn.style.cursor = folderUrls.length === 0 ? "not-allowed" : "pointer";
+    checkoutBtn.style.padding = "0";
+    checkoutBtn.disabled = folderUrls.length === 0;
+    checkoutBtn.innerHTML = `
+       <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" 
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cart-icon lucide-shopping-cart">
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+        </svg>
+    `;
     checkoutBtn.addEventListener("click", () => {
         if (!folderUrls.length) return;
 
         document.getElementById("loading-popup").classList.remove("hidden");
-
-        // Send URLs to backend via postMessage
-        window.parent.postMessage({
-            type: "saveStickers",
-            urls: folderUrls
-        }, "*");
+        window.parent.postMessage({ type: "saveStickers", urls: folderUrls }, "*");
     });
 
-    // Listen for backend response
-    window.addEventListener("message", async (event) => {
-        if (event.data.type === "saveSuccess") {
-            document.getElementById("loading-popup").classList.add("hidden");
-
-            const uuid = event.data.uuid;
-            const count = folderUrls.length;
-
-            console.log("✅ Stickers saved with UUID:", uuid);
-
-            // Populate the hidden Wix checkout field
-            $w("#sticker_ids").value = uuid;
-
-            // Show success popup
-            document.getElementById("success-message").textContent =
-                `Saved ${count} stickers successfully! UUID: ${uuid}`;
-            document.getElementById("uuid-text").textContent = uuid;
-            document.getElementById("uuid-container").classList.remove("hidden");
-            document.getElementById("success-popup").classList.remove("hidden");
-        }
-
-        if (event.data.type === "saveError") {
-            document.getElementById("loading-popup").classList.add("hidden");
-            alert("❌ Something went wrong: " + event.data.error);
-        }
-    });
-
-    // Total price (center)
+    // --- Total price (center)
     const priceDiv = document.createElement("div");
     priceDiv.style.flex = "1";
     priceDiv.style.textAlign = "center";
     priceDiv.innerHTML = `Total: $<span id="folder-price-value">0.00</span>`;
 
-    // Close button (right)
+    // --- Close button (right)
     const closeBtn = document.createElement("button");
     closeBtn.className = "overlay-close";
     closeBtn.textContent = "×";
@@ -1639,80 +1616,76 @@ checkoutBtn.style.cursor = folderUrls.length === 0 ? "not-allowed" : "pointer";
     stickersContainer.style.overflowY = "auto";
     stickersContainer.style.flex = "1";
     stickersContainer.style.marginTop = "10px";
-    stickersContainer.style.paddingBottom = "10px";
+    stickersContainer.style.padding = "10px";
     stickersContainer.style.maxHeight = "calc(100% - 70px)";
+    stickersContainer.style.display = "grid";
+    stickersContainer.style.gridTemplateColumns = "repeat(3, 1fr)"; // ✅ always 4 per row
+    stickersContainer.style.gap = "12px";
+    stickersContainer.style.justifyItems = "center";
 
-    // --- Counter ---
-    const counterMsg = document.createElement("p");
-    counterMsg.className = "overlay-counter";
-    counterMsg.style.fontSize = "2rem";
-    counterMsg.style.color = "#cccccc";
-    counterMsg.style.fontWeight = "bold";
-    counterMsg.style.textAlign = "center";
-    counterMsg.style.width = "100%";
-    counterMsg.style.marginBottom = "10px";
 
-    function updateCounter() {
-        counterMsg.textContent = `${folderUrls.length} / 25`;
+    // --- Show stickers ---
+    if (folderUrls.length === 0) {
+       stickersContainer.style.display = "flex";
+    stickersContainer.style.justifyContent = "center";
+    stickersContainer.style.alignItems = "center";
+    stickersContainer.style.height = "100%"; // fill the overlay
 
-        if (folderUrls.length === 0) {
-            // Center in middle
-            stickersContainer.style.display = "flex";
-            stickersContainer.style.justifyContent = "center";
-            stickersContainer.style.alignItems = "center";
-            stickersContainer.style.height = "100%";
-        } else {
-            // Grid layout for stickers
-            stickersContainer.style.display = "grid";
-            stickersContainer.style.gridTemplateColumns = "repeat(auto-fill, minmax(100px, 1fr))";
-            stickersContainer.style.gap = "12px";
-            stickersContainer.style.alignItems = "start";
-            stickersContainer.style.height = "auto";
-        }
-    }
+    const emptyMsg = document.createElement("p");
+    emptyMsg.textContent = "0 / 25"; // counter message
+    emptyMsg.style.fontSize = "1.5rem";
+    emptyMsg.style.color = "#ccc";
+    emptyMsg.style.fontWeight = "bold";
+    emptyMsg.style.textAlign = "center";
+    stickersContainer.appendChild(emptyMsg);
+    } 
+    else {
 
-    stickersContainer.appendChild(counterMsg);
-    updateCounter();
+       folderUrls.forEach((url, index) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "overlay-sticker-wrapper";
+    wrapper.style.display = "flex";
+    wrapper.style.flexDirection = "column";
+    wrapper.style.alignItems = "center";
+    wrapper.style.gap = "4px";
 
-    // --- Render stickers ---
-    folderUrls.forEach((url, index) => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "overlay-sticker-wrapper";
+    const img = document.createElement("img");
+    img.src = url;
+    img.style.width = "60px";   // ⬅️ Smaller stickers
+    img.style.height = "60px";
+    img.style.objectFit = "contain";
 
-        const img = document.createElement("img");
-        img.src = url;
-        img.className = "overlay-sticker";
+    // Make sure image doesn't open download or drag popup
+    img.style.pointerEvents = "auto"; // allow clicks for custom actions
+    img.addEventListener("click", (e) => e.preventDefault()); // prevent default click
+    img.addEventListener("contextmenu", (e) => e.preventDefault()); // prevent right-click
+    img.addEventListener("mousedown", (e) => e.preventDefault()); // prevent drag
 
-        img.addEventListener("contextmenu", (e) => e.preventDefault());
-        img.addEventListener("touchstart", (e) => e.preventDefault());
-        img.addEventListener("mousedown", (e) => e.preventDefault());
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "–";
+    delBtn.className = "delete-sticker-btn";
+    delBtn.style.fontSize = "1rem";
+    delBtn.style.width = "20px";
+    delBtn.style.height = "20px";
 
-        const delBtn = document.createElement("button");
-        delBtn.textContent = "–";
-        delBtn.className = "delete-sticker-btn";
-        delBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            folderUrls.splice(index, 1);
-            updateFolderUI();
-            renderFolderOverlay();
-            updateFolderTotalPrice();
-        });
-
-        wrapper.appendChild(img);
-        wrapper.appendChild(delBtn);
-        stickersContainer.appendChild(wrapper);
+    delBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        folderUrls.splice(index, 1);
+        updateFolderUI();
+        renderFolderOverlay();
+        updateFolderTotalPrice();
     });
 
+    wrapper.appendChild(img);
+    wrapper.appendChild(delBtn);
+    stickersContainer.appendChild(wrapper);
+});
+    }
+
     folderOverlay.appendChild(stickersContainer);
-
-    // Show overlay
-    folderOverlay.style.display = "flex";
-    folderOverlay.style.flexDirection = "column";
-    folderOverlay.style.height = "80%";
-    folderOverlay.style.width = "80%";
-
     updateFolderTotalPrice();
 }
+
 
 
 
