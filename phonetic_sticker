@@ -1168,6 +1168,7 @@ button.active {
    
     {
         "name": "dia de los muerstos sticker",
+        "purchaseUrl": "https://sirsilhouette.etsy.com/de-en/listing/1799228365/day-of-the-dead-digital-design-for",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_018f7140-17fb-427f-8d4e-e9d937d35912.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_043b10f9-ae16-4ffa-a84d-ab4eb4f4c3e6.png",
@@ -1626,6 +1627,8 @@ priceDiv.innerHTML = `Total: $<span id="folder-price-value">0.00</span>`;
         document.querySelector(".controls").classList.remove("disabled");
         enablePaletteStickers();
     });
+
+    
 
     header.appendChild(checkoutBtn);
     header.appendChild(priceDiv);
@@ -2875,41 +2878,75 @@ stickerPickerBtn.addEventListener('click', (e) => {
 function showStickerOverlay(urls, groupName) {
     hideOverlays();
     
-    // Save the current scroll position before clearing
     const scrollPosition = stickerOverlayContainer.scrollTop;
-    
     stickerOverlayContainer.innerHTML = '';
     
-    // Create the header and content wrapper
+    // Create header
     const header = document.createElement('div');
     header.classList.add('overlay-header');
-    
+    header.style.display = 'flex';
+    header.style.alignItems = 'center';
+    header.style.justifyContent = 'space-between';
+    header.style.padding = '10px';
+
+   // --- Purchase cart button (top-left) ---
+    const group = stickerGroups.find(g => g.name === groupName);
+    if (group && group.purchaseUrl) {
+        const purchaseBtn = document.createElement('a');
+        purchaseBtn.href = group.purchaseUrl;
+        purchaseBtn.target = '_blank';
+        purchaseBtn.title = 'Buy this sticker set';
+        purchaseBtn.style.display = 'flex';
+        purchaseBtn.style.alignItems = 'center';
+        purchaseBtn.style.justifyContent = 'center';
+        purchaseBtn.style.width = '32px';
+        purchaseBtn.style.height = '32px';
+        purchaseBtn.style.marginRight = '10px';
+        purchaseBtn.style.textDecoration = 'none';
+        purchaseBtn.style.color = 'black';
+
+        // Add SVG cart icon
+        purchaseBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" fill="none" 
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+        `;
+
+        header.appendChild(purchaseBtn);
+    }
+
+    // Title
     const title = document.createElement('h2');
     title.textContent = groupName;
     title.classList.add('overlay-title');
+    title.style.flex = '1'; // center title
+    title.style.textAlign = 'center';
     header.appendChild(title);
-    
+
+    // Close button
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '✕';
     closeBtn.classList.add('close-btn');
     closeBtn.addEventListener('click', hideOverlays);
     header.appendChild(closeBtn);
-    
+
+    // Content wrapper for stickers
     const contentWrapper = document.createElement('div');
     contentWrapper.classList.add('overlay-stickers-grid');
+
     stickerOverlayContainer.appendChild(header);
     stickerOverlayContainer.appendChild(contentWrapper);
-    
-    // Show the container
     stickerOverlayContainer.style.display = 'flex';
-    
-    // Load and add stickers
+
+    // Load stickers
     urls.forEach((url, index) => {
         const sticker = document.createElement('img');
         sticker.classList.add('overlay-sticker');
         sticker.draggable = true;
         sticker.dataset.url = url;
-        
         sticker.style.opacity = '0';
         sticker.style.transition = 'opacity 0.5s ease-in-out';
 
@@ -2918,9 +2955,8 @@ function showStickerOverlay(urls, groupName) {
             const stickerData = { url: url, width: 120 };
             e.dataTransfer.setData('application/json', JSON.stringify(stickerData));
         });
-        
+
         sticker.addEventListener('click', () => {
-            const group = stickerGroups.find(g => g.urls.includes(url));
             addOrReplaceSticker(url, group ? group.name : null);
             hideOverlays();
         });
@@ -2930,17 +2966,15 @@ function showStickerOverlay(urls, groupName) {
         };
 
         contentWrapper.appendChild(sticker);
-        
-        setTimeout(() => {
-            sticker.src = url;
-        }, index * 50);
+        setTimeout(() => { sticker.src = url; }, index * 50);
     });
-    
-    // ✅ The key fix: Set the scroll position after a short delay
+
+    // Restore scroll
     setTimeout(() => {
         stickerOverlayContainer.scrollTop = scrollPosition;
-    }, 200); // 200ms delay to give the browser time to render all images
+    }, 200);
 }
+
        
 
         document.addEventListener('click', (e) => {
