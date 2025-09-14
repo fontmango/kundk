@@ -1362,28 +1362,31 @@ function updateFolderTotalPrice() {
 
 let priceNotificationTimeout;
 
+
 function showPriceNotification(price) {
     const priceNotification = document.getElementById("price-notification");
     priceNotification.textContent = `+ $${price.toFixed(2)}`;
 
-    // Remove any previous animation
+    // Remove previous animation and force reflow to restart
     priceNotification.classList.remove('show');
     void priceNotification.offsetWidth; // Force reflow
     priceNotification.classList.add('show');
     priceNotification.classList.remove('hidden');
 
     // Clear any previous timeout
-    if (priceNotificationTimeout) {
-        clearTimeout(priceNotificationTimeout);
-    }
+    if (priceNotificationTimeout) clearTimeout(priceNotificationTimeout);
 
-    // Hide the notification after a few seconds
+    // Show longer on mobile (adjust as needed)
+    const displayTime = /Mobi|Android/i.test(navigator.userAgent) ? 3500 : 2500;
+
     priceNotificationTimeout = setTimeout(() => {
         priceNotification.classList.remove('show');
+
+        // Smooth fade-out
         setTimeout(() => {
             priceNotification.classList.add('hidden');
-        }, 500); // smooth fade-out
-    }, 2000); // Display for 2 seconds
+        }, 700); // slightly longer for mobile
+    }, displayTime);
 }
      
 
