@@ -1360,18 +1360,29 @@ function updateFolderTotalPrice() {
     priceSpan.textContent = total.toFixed(2);
 }
 
+let priceNotificationTimeout;
+
 function showPriceNotification(price) {
+    const priceNotification = document.getElementById("price-notification");
     priceNotification.textContent = `+ $${price.toFixed(2)}`;
-    priceNotification.classList.remove('hidden');
+
+    // Remove any previous animation
+    priceNotification.classList.remove('show');
+    void priceNotification.offsetWidth; // Force reflow
     priceNotification.classList.add('show');
+    priceNotification.classList.remove('hidden');
+
+    // Clear any previous timeout
+    if (priceNotificationTimeout) {
+        clearTimeout(priceNotificationTimeout);
+    }
 
     // Hide the notification after a few seconds
-    setTimeout(() => {
+    priceNotificationTimeout = setTimeout(() => {
         priceNotification.classList.remove('show');
-        // You can add a slight delay before re-adding hidden for a smooth fade-out
         setTimeout(() => {
             priceNotification.classList.add('hidden');
-        }, 500);
+        }, 500); // smooth fade-out
     }, 2000); // Display for 2 seconds
 }
      
