@@ -668,8 +668,8 @@ button.active {
 
 #folder-overlay .overlay-close {
   position: absolute;
-  top: 8px;   /* move it further up */
-  right: 8px; /* move it further right */
+  top: 15px;   /* move it further up */
+  right: 15px; /* move it further right */
   z-index: 9999;
   background: #444;
   color: white;
@@ -1159,7 +1159,7 @@ button.active {
 
 <div id="loading-popup" class="hidden">
   <div class="popup-content">
-    <p>Sticker werden gespeichert<span class="dots"></span></p>
+    <p>Processing<span class="dots"></span></p>
   </div>
 </div>
 
@@ -2742,7 +2742,7 @@ function showGroupOverlay() {
     header.classList.add('overlay-header');
     
     const title = document.createElement('h2');
-    title.textContent = "Sticker auswählen";
+    title.textContent = "Choose sticker";
     title.classList.add('overlay-title');
     header.appendChild(title);
     
