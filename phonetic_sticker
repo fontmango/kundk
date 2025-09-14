@@ -589,8 +589,8 @@ button.active {
     position: absolute;
     bottom: 30px;
     right: 30px;
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
     
     border: 2px dotted #ccc;
     border-radius: 12px;
@@ -627,8 +627,8 @@ button.active {
 
 #folder-count {
   position: absolute;
-  top: -8px;     /* move a bit higher to account for size */
-  right: -8px;   /* move more right to overlap nicely */
+  top: -10px;     /* move a bit higher to account for size */
+  right: -10px;   /* move more right to overlap nicely */
   background: white;
   font-size: 14px;
   font-weight: bold;
@@ -1592,9 +1592,11 @@ function renderFolderOverlay() {
 
     // --- Total price (center)
     const priceDiv = document.createElement("div");
-    priceDiv.style.flex = "1";
-    priceDiv.style.textAlign = "center";
-    priceDiv.innerHTML = `Total: $<span id="folder-price-value">0.00</span>`;
+priceDiv.style.position = "absolute";
+priceDiv.style.left = "50%";
+priceDiv.style.transform = "translateX(-50%)";
+priceDiv.style.fontWeight = "bold";
+priceDiv.innerHTML = `Total: $<span id="folder-price-value">0.00</span>`;
 
     // --- Close button (right)
     const closeBtn = document.createElement("button");
