@@ -1141,6 +1141,8 @@ button.active {
     <div id="uuid-container" class="hidden">
       <span id="uuid-text"></span>
       <button id="copy-uuid-btn">Copy</button>
+          <button id="go-to-url-btn" class="success-ok-btn">Go</button>
+
     </div>
     <button id="success-ok-btn" class="success-ok-btn">OK</button>
   </div>
@@ -1198,6 +1200,39 @@ button.active {
         ]
     }
 ]
+
+
+const redirectUrls = [
+  "", // index 0 unused, so urlAmount 1 = index 1
+  "https://example.com/1",
+  "https://example.com/2",
+  "https://example.com/3",
+  "https://example.com/4",
+  "https://example.com/5",
+  "https://example.com/6",
+  "https://example.com/7",
+  "https://example.com/8",
+  "https://example.com/9",
+  "https://example.com/10",
+  "https://example.com/11",
+  "https://example.com/12",
+  "https://example.com/13",
+  "https://example.com/14",
+  "https://example.com/15",
+  "https://example.com/16",
+  "https://example.com/17",
+  "https://example.com/18",
+  "https://example.com/19",
+  "https://example.com/20",
+  "https://example.com/21",
+  "https://example.com/22",
+  "https://example.com/23",
+  "https://example.com/24",
+  "https://example.com/25"
+];
+
+let currentRedirectUrl = ""; // store the URL for the button
+let currentUuid = "";        // store UUID for copy
 
 const folderPriceValue = document.getElementById('folder-price-value');
 const folder = document.getElementById('folder');
@@ -1346,16 +1381,21 @@ function isInsideFolder(x, y) {
 
 window.addEventListener("message", (event) => {
     if (event.data.type === "saveSuccess") {
+        // Hide loading screen
         document.getElementById("loading-popup").classList.add("hidden");
 
         const count = event.data.urlAmount || 0;
         const uuid = event.data.uuid || "N/A";
 
+        // Store UUID and determine redirect URL
+        currentUuid = uuid;
+        currentRedirectUrl = redirectUrls[count] || redirectUrls[redirectUrls.length - 1];
+
         // Update success message
         document.getElementById("success-message").textContent =
             `Saved ${count} stickers successfully!`;
 
-        // Show UUID and copy button
+        // Show UUID container
         const uuidContainer = document.getElementById("uuid-container");
         const uuidText = document.getElementById("uuid-text");
         uuidText.textContent = uuid;
@@ -1368,6 +1408,12 @@ window.addEventListener("message", (event) => {
     if (event.data.type === "saveError") {
         document.getElementById("loading-popup").classList.add("hidden");
         alert("❌ Something went wrong: " + event.data.error);
+    }
+});
+
+document.getElementById("go-to-url-btn").addEventListener("click", () => {
+    if (currentRedirectUrl) {
+        window.open(currentRedirectUrl, "_blank");
     }
 });
 
