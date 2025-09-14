@@ -921,6 +921,7 @@ button.active {
   
 }
 
+
 .hidden {
   display: none !important;
 }
@@ -1150,8 +1151,8 @@ button.active {
     <div id="uuid-container" class="hidden">
       <span id="uuid-text"></span>
       <button id="copy-go-btn" class="success-ok-btn">Copy & Go</button>
+      <button id="success-ok-btn" class="success-ok-btn">OK</button>
     </div>
-    <button id="success-ok-btn" class="success-ok-btn">OK</button>
   </div>
 </div>
 
@@ -1415,7 +1416,7 @@ window.addEventListener("message", (event) => {
 
         // Update success message
         document.getElementById("success-message").textContent =
-            `Saved ${count} stickers successfully!`;
+            `Processed ${count} stickers successfully!`;
 
         // Show UUID container
         const uuidContainer = document.getElementById("uuid-container");
@@ -1433,35 +1434,60 @@ window.addEventListener("message", (event) => {
     }
 });
 
-document.getElementById("copy-go-btn").addEventListener("click", () => {
-    const uuid = document.getElementById("uuid-text").textContent;
+async function copyTextToClipboard(text) {
+    // Try modern Clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+            await navigator.clipboard.writeText(text);
+            return true;
+        } catch (err) {
+            console.warn("Clipboard API failed, falling back to execCommand.", err);
+        }
+    }
 
-    // Copy UUID
-    const tempInput = document.createElement("input");
-    tempInput.value = uuid;
-    document.body.appendChild(tempInput);
-
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // Mobile support
+    // Fallback for mobile / Wix if Clipboard API fails
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed"; // prevents scrolling
+    textarea.style.opacity = "0";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
 
     try {
-        const success = document.execCommand("copy");
-        if (!success) {
-            alert("Failed to copy UUID");
-            return;
-        }
+        const successful = document.execCommand("copy");
+        document.body.removeChild(textarea);
+        return successful;
     } catch (err) {
-        alert("Failed to copy UUID: " + err);
+        document.body.removeChild(textarea);
+        return false;
+    }
+}
+
+document.getElementById("copy-go-btn").addEventListener("click", async () => {
+    const uuid = document.getElementById("uuid-text").textContent;
+
+    const copied = await copyTextToClipboard(uuid);
+    if (!copied) {
+        alert("Failed to copy UUID. Please copy manually.");
         return;
     }
 
-    document.body.removeChild(tempInput);
+    console.log(`UUID copied: ${uuid}`);
 
-    // Open link
+    // Open redirect URL
     if (currentRedirectUrl) {
-        window.open(currentRedirectUrl, "_blank");
+        // On mobile Safari, sometimes window.open after async fails, so delay slightly
+        setTimeout(() => {
+            window.open(currentRedirectUrl, "_blank");
+        }, 50);
     }
+
+    document.getElementById("success-popup").classList.add("hidden");
 });
+
+
 
 
 
