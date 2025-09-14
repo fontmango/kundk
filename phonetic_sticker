@@ -1552,16 +1552,15 @@ function renderFolderOverlay() {
     header.style.justifyContent = "space-between";
     header.style.padding = "10px";
 
-  // Checkout button (left) as cart icon
-const checkoutBtn = document.createElement("button");
+   const checkoutBtn = document.createElement("button");
 checkoutBtn.className = "overlay-checkout";
-checkoutBtn.disabled = folderUrls.length === 0;
 checkoutBtn.style.background = "none";
 checkoutBtn.style.border = "none";
-checkoutBtn.style.cursor = "pointer";
+checkoutBtn.style.cursor = folderUrls.length === 0 ? "not-allowed" : "pointer"; // cursor
 checkoutBtn.style.padding = "0";
+checkoutBtn.disabled = folderUrls.length === 0; // disable if no stickers
 
-// Add a cart icon (SVG)
+// Add cart icon SVG
 checkoutBtn.innerHTML = `
    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" 
       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cart-icon lucide-shopping-cart">
@@ -1571,45 +1570,48 @@ checkoutBtn.innerHTML = `
     </svg>
 `;
 
-checkoutBtn.addEventListener("click", () => {
-    if (!folderUrls.length) return;
+// Enable/disable dynamically whenever overlay is rendered
+checkoutBtn.disabled = folderUrls.length === 0;
+checkoutBtn.style.cursor = folderUrls.length === 0 ? "not-allowed" : "pointer";
 
-    // Show loading screen
-    document.getElementById("loading-popup").classList.remove("hidden");
+    checkoutBtn.addEventListener("click", () => {
+        if (!folderUrls.length) return;
 
-    // Send URLs to Wix backend via postMessage
-    window.parent.postMessage({
-        type: "saveStickers",
-        urls: folderUrls
-    }, "*");
-});
+        document.getElementById("loading-popup").classList.remove("hidden");
 
-// Listen for the backend response (from wix code)
-window.addEventListener("message", async (event) => {
-    if (event.data.type === "saveSuccess") {
-        document.getElementById("loading-popup").classList.add("hidden");
+        // Send URLs to backend via postMessage
+        window.parent.postMessage({
+            type: "saveStickers",
+            urls: folderUrls
+        }, "*");
+    });
 
-        const uuid = event.data.uuid;
-        const count = folderUrls.length;
+    // Listen for backend response
+    window.addEventListener("message", async (event) => {
+        if (event.data.type === "saveSuccess") {
+            document.getElementById("loading-popup").classList.add("hidden");
 
-        console.log("✅ Stickers saved with UUID:", uuid);
+            const uuid = event.data.uuid;
+            const count = folderUrls.length;
 
-        // Populate the hidden Wix checkout field
-        $w("#sticker_ids").value = uuid;
+            console.log("✅ Stickers saved with UUID:", uuid);
 
-        // Update success popup
-        document.getElementById("success-message").textContent =
-            `Saved ${count} stickers successfully! UUID: ${uuid}`;
-        document.getElementById("uuid-text").textContent = uuid;
-        document.getElementById("uuid-container").classList.remove("hidden");
-        document.getElementById("success-popup").classList.remove("hidden");
-    }
+            // Populate the hidden Wix checkout field
+            $w("#sticker_ids").value = uuid;
 
-    if (event.data.type === "saveError") {
-        document.getElementById("loading-popup").classList.add("hidden");
-        alert("❌ Something went wrong: " + event.data.error);
-    }
-});
+            // Show success popup
+            document.getElementById("success-message").textContent =
+                `Saved ${count} stickers successfully! UUID: ${uuid}`;
+            document.getElementById("uuid-text").textContent = uuid;
+            document.getElementById("uuid-container").classList.remove("hidden");
+            document.getElementById("success-popup").classList.remove("hidden");
+        }
+
+        if (event.data.type === "saveError") {
+            document.getElementById("loading-popup").classList.add("hidden");
+            alert("❌ Something went wrong: " + event.data.error);
+        }
+    });
 
     // Total price (center)
     const priceDiv = document.createElement("div");
@@ -1632,70 +1634,74 @@ window.addEventListener("message", async (event) => {
     header.appendChild(closeBtn);
     folderOverlay.appendChild(header);
 
-   
-
     // --- Stickers container ---
     const stickersContainer = document.createElement("div");
     stickersContainer.style.overflowY = "auto";
     stickersContainer.style.flex = "1";
-    stickersContainer.style.display = "grid";
-    stickersContainer.style.gridTemplateColumns = "repeat(auto-fill, minmax(100px, 1fr))";
-    stickersContainer.style.gap = "12px";
     stickersContainer.style.marginTop = "10px";
     stickersContainer.style.paddingBottom = "10px";
-    stickersContainer.style.maxHeight = "calc(100% - 70px)"; // leave space for header + separator
+    stickersContainer.style.maxHeight = "calc(100% - 70px)";
 
-    if (!folderUrls.length) {
-        const counterMsg = document.createElement("p");
-    counterMsg.className = "empty-counter";
-    counterMsg.textContent = `0 / 25`;
-
-    // Center it in the container
-    stickersContainer.style.display = "flex";
-    stickersContainer.style.justifyContent = "center";
-    stickersContainer.style.alignItems = "center";
-    stickersContainer.style.height = "100%";
-
-    // Style the text
-    counterMsg.style.fontSize = "2rem";       // bigger font
-    counterMsg.style.color = "#cccccc";       // light grey
+    // --- Counter ---
+    const counterMsg = document.createElement("p");
+    counterMsg.className = "overlay-counter";
+    counterMsg.style.fontSize = "2rem";
+    counterMsg.style.color = "#cccccc";
     counterMsg.style.fontWeight = "bold";
+    counterMsg.style.textAlign = "center";
+    counterMsg.style.width = "100%";
+    counterMsg.style.marginBottom = "10px";
+
+    function updateCounter() {
+        counterMsg.textContent = `${folderUrls.length} / 25`;
+
+        if (folderUrls.length === 0) {
+            // Center in middle
+            stickersContainer.style.display = "flex";
+            stickersContainer.style.justifyContent = "center";
+            stickersContainer.style.alignItems = "center";
+            stickersContainer.style.height = "100%";
+        } else {
+            // Grid layout for stickers
+            stickersContainer.style.display = "grid";
+            stickersContainer.style.gridTemplateColumns = "repeat(auto-fill, minmax(100px, 1fr))";
+            stickersContainer.style.gap = "12px";
+            stickersContainer.style.alignItems = "start";
+            stickersContainer.style.height = "auto";
+        }
+    }
 
     stickersContainer.appendChild(counterMsg);
+    updateCounter();
 
-    } else {
-        folderUrls.forEach((url, index) => {
-            const wrapper = document.createElement("div");
-            wrapper.className = "overlay-sticker-wrapper";
+    // --- Render stickers ---
+    folderUrls.forEach((url, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "overlay-sticker-wrapper";
 
-            const img = document.createElement("img");
-            img.src = url;
-            img.className = "overlay-sticker";
+        const img = document.createElement("img");
+        img.src = url;
+        img.className = "overlay-sticker";
 
-            // ✅ Prevent long-press download / context menu
-img.addEventListener("contextmenu", (e) => e.preventDefault());
-img.addEventListener("touchstart", (e) => {
-    // Prevent long press from triggering save dialog
-    e.preventDefault();
-});
-img.addEventListener("mousedown", (e) => e.preventDefault());
+        img.addEventListener("contextmenu", (e) => e.preventDefault());
+        img.addEventListener("touchstart", (e) => e.preventDefault());
+        img.addEventListener("mousedown", (e) => e.preventDefault());
 
-            const delBtn = document.createElement("button");
-            delBtn.textContent = "–";
-            delBtn.className = "delete-sticker-btn";
-            delBtn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                folderUrls.splice(index, 1);
-                updateFolderUI();
-                renderFolderOverlay();
-                updateFolderTotalPrice();
-            });
-
-            wrapper.appendChild(img);
-            wrapper.appendChild(delBtn);
-            stickersContainer.appendChild(wrapper);
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "–";
+        delBtn.className = "delete-sticker-btn";
+        delBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            folderUrls.splice(index, 1);
+            updateFolderUI();
+            renderFolderOverlay();
+            updateFolderTotalPrice();
         });
-    }
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(delBtn);
+        stickersContainer.appendChild(wrapper);
+    });
 
     folderOverlay.appendChild(stickersContainer);
 
@@ -1707,6 +1713,7 @@ img.addEventListener("mousedown", (e) => e.preventDefault());
 
     updateFolderTotalPrice();
 }
+
 
 
 
