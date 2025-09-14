@@ -1,5 +1,4 @@
 import wixData from "wix-data";
-import { runTrigger } from 'backend/triggerAutomation';
 
 function generateUUID() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
@@ -9,15 +8,13 @@ function generateUUID() {
     });
 }
 
-export async function saveStickersToFolder(urls,email) {
+export async function saveStickersToFolder(urls) {
     try {
-        // generate uuid ONCE
         const newUuid = generateUUID();
 
         const item = {
             stickerUrls: urls,
             uuid: newUuid,
-            email: email, 
             url_amount: urls.length,
             createdDate: new Date()
         };
@@ -25,14 +22,7 @@ export async function saveStickersToFolder(urls,email) {
         const result = await wixData.insert("stickerFolders", item);
         console.log("✅ CMS entry created:", result);
 
-        // reuse same uuid for trigger payload
-        await runTrigger({
-            uuid: newUuid,
-            email: email, 
-            url_amount: urls.length,
-        });
-
-        return result;
+        return { ...result, uuid: newUuid };
     } catch (err) {
         console.error("❌ Error saving to CMS:", err);
         throw err;
