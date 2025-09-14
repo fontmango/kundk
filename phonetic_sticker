@@ -1204,7 +1204,7 @@ button.active {
 
 const redirectUrls = [
   "", // index 0 unused, so urlAmount 1 = index 1
-  "https://example.com/1",
+  "https://www.fontmango.com/product-page/stickers-by-fontmango-com?origin=shopping+cart",
   "https://example.com/2",
   "https://example.com/3",
   "https://example.com/4",
@@ -1552,23 +1552,63 @@ function renderFolderOverlay() {
     header.style.justifyContent = "space-between";
     header.style.padding = "10px";
 
-    // Save button (left)
-    const saveBtn = document.createElement("button");
-    saveBtn.className = "overlay-save";
-    saveBtn.disabled = folderUrls.length === 0;
-    saveBtn.textContent = "Save";
-  
-  saveBtn.addEventListener("click", () => {
+  // Checkout button (left) as cart icon
+const checkoutBtn = document.createElement("button");
+checkoutBtn.className = "overlay-checkout";
+checkoutBtn.disabled = folderUrls.length === 0;
+checkoutBtn.style.background = "none";
+checkoutBtn.style.border = "none";
+checkoutBtn.style.cursor = "pointer";
+checkoutBtn.style.padding = "0";
+
+// Add a cart icon (SVG)
+checkoutBtn.innerHTML = `
+   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" 
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cart-icon lucide-shopping-cart">
+      <circle cx="9" cy="21" r="1" />
+      <circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+    </svg>
+`;
+
+checkoutBtn.addEventListener("click", () => {
     if (!folderUrls.length) return;
 
     // Show loading screen
     document.getElementById("loading-popup").classList.remove("hidden");
 
-    // Send URLs to Wix backend
+    // Send URLs to Wix backend via postMessage
     window.parent.postMessage({
         type: "saveStickers",
         urls: folderUrls
     }, "*");
+});
+
+// Listen for the backend response (from wix code)
+window.addEventListener("message", async (event) => {
+    if (event.data.type === "saveSuccess") {
+        document.getElementById("loading-popup").classList.add("hidden");
+
+        const uuid = event.data.uuid;
+        const count = folderUrls.length;
+
+        console.log("✅ Stickers saved with UUID:", uuid);
+
+        // Populate the hidden Wix checkout field
+        $w("#sticker_ids").value = uuid;
+
+        // Update success popup
+        document.getElementById("success-message").textContent =
+            `Saved ${count} stickers successfully! UUID: ${uuid}`;
+        document.getElementById("uuid-text").textContent = uuid;
+        document.getElementById("uuid-container").classList.remove("hidden");
+        document.getElementById("success-popup").classList.remove("hidden");
+    }
+
+    if (event.data.type === "saveError") {
+        document.getElementById("loading-popup").classList.add("hidden");
+        alert("❌ Something went wrong: " + event.data.error);
+    }
 });
 
     // Total price (center)
@@ -1587,7 +1627,7 @@ function renderFolderOverlay() {
         enablePaletteStickers();
     });
 
-    header.appendChild(saveBtn);
+    header.appendChild(checkoutBtn);
     header.appendChild(priceDiv);
     header.appendChild(closeBtn);
     folderOverlay.appendChild(header);
@@ -1606,10 +1646,23 @@ function renderFolderOverlay() {
     stickersContainer.style.maxHeight = "calc(100% - 70px)"; // leave space for header + separator
 
     if (!folderUrls.length) {
-        const emptyMsg = document.createElement("p");
-        emptyMsg.className = "empty-msg";
-        emptyMsg.textContent = "Nothing added yet.";
-        stickersContainer.appendChild(emptyMsg);
+        const counterMsg = document.createElement("p");
+    counterMsg.className = "empty-counter";
+    counterMsg.textContent = `0 / 25`;
+
+    // Center it in the container
+    stickersContainer.style.display = "flex";
+    stickersContainer.style.justifyContent = "center";
+    stickersContainer.style.alignItems = "center";
+    stickersContainer.style.height = "100%";
+
+    // Style the text
+    counterMsg.style.fontSize = "2rem";       // bigger font
+    counterMsg.style.color = "#cccccc";       // light grey
+    counterMsg.style.fontWeight = "bold";
+
+    stickersContainer.appendChild(counterMsg);
+
     } else {
         folderUrls.forEach((url, index) => {
             const wrapper = document.createElement("div");
