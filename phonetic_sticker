@@ -1329,14 +1329,6 @@ function showPriceNotification(price) {
     }, 2000); // Display for 2 seconds
 }
      
-// Your new function to handle saving the data
-async function saveFolderDataToWix(urls) {
-    try {
-        console.log("Saving to Wix CMS:", urls);
-    } catch (error) {
-        console.error("Failed to save stickers to Wix CMS:", error);
-    }
-}
 
 function isInsideFolder(x, y) {
     const rect = folder.getBoundingClientRect();
@@ -1376,26 +1368,15 @@ document.getElementById("success-ok-btn").addEventListener("click", () => {
 });
 
 sendBtn.addEventListener("click", () => {
-    const email = emailInput.value.trim();
-    const errorDiv = document.getElementById("email-error");
-    const popup = document.getElementById("email-popup");
-    if (!email || !email.includes("@")) {
-        emailInput.classList.add("error");
-        errorDiv.textContent = "Please enter a valid email.";
-        return;
-    }
-    emailInput.classList.remove("error");
-    errorDiv.textContent = "";
-    popup.classList.add("hidden");
-    document.getElementById("loading-popup").classList.remove("hidden");
-    document.querySelector(".controls").classList.remove("disabled");
-    enablePaletteStickers();
+
+    // ✅ Only trigger save here
     window.parent.postMessage({
         type: "saveStickers",
-        urls: folderUrls,
-        email: email
+        urls: folderUrls
     }, "*");
 });
+
+
 
 // --- Desktop Drag & Drop ---
 folder.addEventListener('dragover', (e) => {
@@ -1452,7 +1433,6 @@ function addToFolder(stickerUrl, stickerEl) {
 
     // Update cart UI
     folderCount.textContent = `${folderUrls.length}`;
-    saveFolderDataToWix(folderUrls);
     updateFolderUI();
 
     // Show floating price notification
@@ -1487,10 +1467,19 @@ function renderFolderOverlay() {
     saveBtn.className = "overlay-save";
     saveBtn.disabled = folderUrls.length === 0;
     saveBtn.textContent = "Save";
-    saveBtn.addEventListener("click", () => {
-        if (!folderUrls.length) return;
-        popup.classList.remove("hidden");
-    });
+  
+  saveBtn.addEventListener("click", () => {
+    if (!folderUrls.length) return;
+
+    // Show loading screen
+    document.getElementById("loading-popup").classList.remove("hidden");
+
+    // Send URLs to Wix backend
+    window.parent.postMessage({
+        type: "saveStickers",
+        urls: folderUrls
+    }, "*");
+});
 
     // Total price (center)
     const priceDiv = document.createElement("div");
@@ -1546,7 +1535,6 @@ function renderFolderOverlay() {
             delBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
                 folderUrls.splice(index, 1);
-                saveFolderDataToWix(folderUrls);
                 updateFolderUI();
                 renderFolderOverlay();
                 updateFolderTotalPrice();
@@ -1584,7 +1572,6 @@ folderOverlay.addEventListener("drop", (e) => {
             const { url } = JSON.parse(jsonData);
             if (url && !folderUrls.includes(url)) {
                 folderUrls.push(url);
-                saveFolderDataToWix(folderUrls);
                 updateFolderUI();
                 renderFolderOverlay();
             }
@@ -1598,7 +1585,6 @@ folderOverlay.addEventListener("drop", (e) => {
         const draggedEl = document.getElementById(stickerId);
         if (draggedEl && draggedEl.src && !folderUrls.includes(draggedEl.src)) {
             folderUrls.push(draggedEl.src);
-            saveFolderDataToWix(folderUrls);
             updateFolderUI();
             renderFolderOverlay();
         }
