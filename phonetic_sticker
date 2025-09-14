@@ -1502,12 +1502,19 @@ folder.addEventListener('dragleave', () => {
 
 folder.addEventListener("drop", (e) => {
     e.preventDefault();
+
+    // Remove glow immediately to prevent sticking
     folder.classList.remove("drag-over");
+
+    // Optional: trigger a smooth fade-out
+    folder.style.transition = "box-shadow 0.3s, background 0.3s";
+    
     if (folderUrls.length >= MAX_FOLDER_IMAGES) {
         updateFolderUI();
         console.warn("🚫 Folder limit reached");
         return;
     }
+
     const jsonData = e.dataTransfer.getData("application/json");
     if (jsonData) {
         try {
@@ -1518,6 +1525,7 @@ folder.addEventListener("drop", (e) => {
         }
         return;
     }
+
     const stickerDivId = e.dataTransfer.getData("text/plain");
     if (stickerDivId) {
         const stickerToMove = document.getElementById(stickerDivId);
@@ -1528,8 +1536,8 @@ folder.addEventListener("drop", (e) => {
     }
 });
 
-
 function addToFolder(stickerUrl, stickerEl) {
+     folder.classList.remove("drag-over");
     if (stickerEl) {
         stickerEl.remove();
     }
