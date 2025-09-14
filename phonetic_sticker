@@ -1138,7 +1138,11 @@ button.active {
 <div id="success-popup" class="hidden">
   <div class="success-box">
     <p id="success-message">Stickers saved successfully!</p>
-     <button id="success-ok-btn" class="success-ok-btn">OK</button>
+    <div id="uuid-container" class="hidden">
+      <span id="uuid-text"></span>
+      <button id="copy-uuid-btn">Copy</button>
+    </div>
+    <button id="success-ok-btn" class="success-ok-btn">OK</button>
   </div>
 </div>
 
@@ -1343,16 +1347,56 @@ function isInsideFolder(x, y) {
 window.addEventListener("message", (event) => {
     if (event.data.type === "saveSuccess") {
         document.getElementById("loading-popup").classList.add("hidden");
+
         const count = event.data.urlAmount || 0;
+        const uuid = event.data.uuid || "N/A";
+
+        // Update success message
         document.getElementById("success-message").textContent =
             `Saved ${count} stickers successfully!`;
+
+        // Show UUID and copy button
+        const uuidContainer = document.getElementById("uuid-container");
+        const uuidText = document.getElementById("uuid-text");
+        uuidText.textContent = uuid;
+        uuidContainer.classList.remove("hidden");
+
+        // Show success popup
         document.getElementById("success-popup").classList.remove("hidden");
     }
+
     if (event.data.type === "saveError") {
         document.getElementById("loading-popup").classList.add("hidden");
         alert("❌ Something went wrong: " + event.data.error);
     }
 });
+
+document.getElementById("copy-uuid-btn").addEventListener("click", () => {
+    const uuid = document.getElementById("uuid-text").textContent;
+
+    // Create a temporary input
+    const tempInput = document.createElement("input");
+    tempInput.value = uuid;
+    document.body.appendChild(tempInput);
+
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile
+
+    try {
+        const success = document.execCommand("copy");
+        if (success) {
+            alert(`UUID copied: ${uuid}`);
+        } else {
+            alert("Failed to copy UUID");
+        }
+    } catch (err) {
+        alert("Failed to copy UUID: " + err);
+    }
+
+    document.body.removeChild(tempInput);
+});
+
+
 
 // Cancel hides popup
 cancelBtn.addEventListener("click", () => {
