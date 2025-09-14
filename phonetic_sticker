@@ -1149,9 +1149,7 @@ button.active {
     <p id="success-message">Stickers saved successfully!</p>
     <div id="uuid-container" class="hidden">
       <span id="uuid-text"></span>
-      <button id="copy-uuid-btn">Copy</button>
-          <button id="go-to-url-btn" class="success-ok-btn">Go</button>
-
+      <button id="copy-go-btn" class="success-ok-btn">Copy & Go</button>
     </div>
     <button id="success-ok-btn" class="success-ok-btn">OK</button>
   </div>
@@ -1420,35 +1418,34 @@ window.addEventListener("message", (event) => {
     }
 });
 
-document.getElementById("go-to-url-btn").addEventListener("click", () => {
-    if (currentRedirectUrl) {
-        window.open(currentRedirectUrl, "_blank");
-    }
-});
-
-document.getElementById("copy-uuid-btn").addEventListener("click", () => {
+document.getElementById("copy-go-btn").addEventListener("click", () => {
     const uuid = document.getElementById("uuid-text").textContent;
 
-    // Create a temporary input
+    // Copy UUID
     const tempInput = document.createElement("input");
     tempInput.value = uuid;
     document.body.appendChild(tempInput);
 
     tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile
+    tempInput.setSelectionRange(0, 99999); // Mobile support
 
     try {
         const success = document.execCommand("copy");
-        if (success) {
-            alert(`UUID copied: ${uuid}`);
-        } else {
+        if (!success) {
             alert("Failed to copy UUID");
+            return;
         }
     } catch (err) {
         alert("Failed to copy UUID: " + err);
+        return;
     }
 
     document.body.removeChild(tempInput);
+
+    // Open link
+    if (currentRedirectUrl) {
+        window.open(currentRedirectUrl, "_blank");
+    }
 });
 
 
