@@ -1573,6 +1573,14 @@ function renderFolderOverlay() {
             img.src = url;
             img.className = "overlay-sticker";
 
+            // ✅ Prevent long-press download / context menu
+img.addEventListener("contextmenu", (e) => e.preventDefault());
+img.addEventListener("touchstart", (e) => {
+    // Prevent long press from triggering save dialog
+    e.preventDefault();
+});
+img.addEventListener("mousedown", (e) => e.preventDefault());
+
             const delBtn = document.createElement("button");
             delBtn.textContent = "–";
             delBtn.className = "delete-sticker-btn";
