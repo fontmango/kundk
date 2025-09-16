@@ -1,3 +1,4 @@
+// backend/stickerService.jsw
 import wixData from "wix-data";
 
 function generateUUID() {
@@ -8,6 +9,10 @@ function generateUUID() {
     });
 }
 
+/**
+ * Save stickers to CMS with UUID.
+ * No sessionId or userId needed anymore.
+ */
 export async function saveStickersToFolder(urls) {
     try {
         const newUuid = generateUUID();
@@ -16,7 +21,8 @@ export async function saveStickersToFolder(urls) {
             stickerUrls: urls,
             uuid: newUuid,
             url_amount: urls.length,
-            createdDate: new Date()
+            createdDate: new Date(),
+            orderId: null // will be filled when order is completed
         };
 
         const result = await wixData.insert("stickerFolders", item);
