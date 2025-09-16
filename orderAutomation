@@ -1,0 +1,81 @@
+// backend/orderAutomation.jsw
+import wixData from 'wix-data';
+import { customTrigger } from '@wix/automations';
+import { auth } from '@wix/essentials';
+
+export async function triggerStickerEmailOnPurchase(order) {
+    try {
+        console.log("📩 Trigger called with order:", JSON.stringify(order, null, 2));
+
+        // 1️⃣ Get UUID(s) from the order's custom field
+        const stickerUUIDs = order.customFields?.['sticker_ids'];
+        if (!stickerUUIDs) {
+            console.warn("⚠️ No sticker UUIDs found in order.customFields. Skipping.");
+            return;
+        }
+
+        const uuids = stickerUUIDs.split(',').map(u => u.trim());
+        const buyerEmail = order.buyerInfo?.email || null;
+
+        if (!buyerEmail) {
+            console.warn("⚠️ No buyer email found on order. Email will still be triggered but may not send.");
+        }
+
+        // 2️⃣ Query the CMS for each UUID and update orderId + buyerEmail
+        const stickers = [];
+        for (const uuid of uuids) {
+            const result = await wixData.query('stickerFolders')
+                .eq('uuid', uuid)
+                .find();
+
+            if (result.items.length > 0) {
+                const folder = result.items[0];
+
+                // Update CMS entry with orderId and buyer email
+                folder.orderId = order._id;
+                if (buyerEmail) folder.buyerEmail = buyerEmail;
+                await wixData.update('stickerFolders', folder);
+
+                stickers.push(folder);
+            } else {
+                console.warn(`⚠️ No stickerFolder found for UUID: ${uuid}`);
+            }
+        }
+
+        if (stickers.length === 0) {
+            console.warn("⚠️ No matching stickerFolders found. Skipping automation trigger.");
+            return;
+        }
+
+        // 3️⃣ Flatten sticker URLs into HTML for email template
+        const urlsHtml = stickers
+            .map(s => (s.stickerUrls || [])
+                .map(url => `<li><a href="${url}">${url}</a></li>`).join(''))
+            .join('');
+
+        const stickersHtml = urlsHtml ? `<ul>${urlsHtml}</ul>` : 'No stickers found';
+
+        // 4️⃣ Build payload for the Wix Automation
+        const payload = {
+            email: buyerEmail,
+            variables: {
+                stickersHtml,        // {{stickersHtml}} in email template
+                orderId: order._id,
+                stickerCount: stickers.length,
+                buyerEmail           // {{buyerEmail}} in email template (optional)
+            }
+        };
+
+        // 5️⃣ Trigger the automation with elevated permissions
+        const triggerMethod = auth.elevate(customTrigger.runTrigger);
+        await triggerMethod({
+            triggerId: 'f473f89b-1af3-4aef-ad0d-5efb5838ea7c', // your automation ID
+            payload
+        });
+
+        console.log(`✅ Automation triggered and CMS updated for order ${order._id} (buyer: ${buyerEmail || 'unknown'})`);
+
+    } catch (err) {
+        console.error('❌ Failed to trigger sticker email automation:', err);
+    }
+}
