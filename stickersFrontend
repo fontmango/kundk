@@ -1,0 +1,27 @@
+import { saveStickersToFolder } from 'backend/stickerService.jsw';
+
+$w.onReady(function () {
+    $w('#mobileHtml1').onMessage(async (event) => {
+        const { type, urls } = event.data;
+
+        if (type === "saveStickers") {
+            try {
+                const result = await saveStickersToFolder(urls);
+                console.log("✅ Saved successfully:", result);
+
+                // return uuid and url count to HTML
+                $w('#mobileHtml1').postMessage({
+                    type: "saveSuccess",
+                    uuid: result.uuid,
+                    urlAmount: urls.length
+                });
+            } catch (err) {
+                console.error("❌ Failed saving:", err);
+                $w('#mobileHtml1').postMessage({
+                    type: "saveError",
+                    error: err.message
+                });
+            }
+        }
+    });
+});
