@@ -838,7 +838,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleWheelResize(e) { e.preventDefault(); const sticker = e.currentTarget; if (sticker.classList.contains('locked')) return; const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1; const newWidth = Math.max(30, sticker.offsetWidth * scaleFactor); sticker.style.width = `${newWidth}px`; sticker.style.height = `auto`; saveState(); }
     
     // --- FIX: High-performance enclosure check ---
-    function computeEnclosedMask(startX, startY, canvas) {
+   function computeEnclosedMask(startX, startY, canvas) {
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         const { width, height } = canvas;
         if (width === 0 || height === 0) return null;
@@ -848,8 +848,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const startIndex = (startY * width + startX) * 4;
 
         const r = data[startIndex], g = data[startIndex + 1], b = data[startIndex + 2], a = data[startIndex + 3];
-        if ((r < 50 && g < 50 && b < 50 && a > 50) || a < 10) {
-            return null; // Don't start on a black line or fully transparent area
+        
+        // --- FIX: The ONLY invalid starting point is a black line. ---
+        // We no longer reject clicks on transparent areas.
+        const isBlack = r < 50 && g < 50 && b < 50 && a > 50;
+        if (isBlack) {
+            return null; // You cannot start a stroke on a line.
         }
 
         const mask = new Uint8Array(width * height);
@@ -860,20 +864,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const [x, y] = stack.pop();
             const neighbors = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]];
             for (const [nx, ny] of neighbors) {
+                // Fail condition: The scan reached the edge of the canvas, so it's not enclosed.
                 if (nx < 0 || nx >= width || ny < 0 || ny >= height) {
-                    return null; // Leaks outside, so it's not enclosed
+                    return null; 
                 }
                 const idx = ny * width + nx;
                 if (mask[idx]) continue;
                 const di = idx * 4;
                 const R = data[di], G = data[di + 1], B = data[di + 2], A = data[di + 3];
-                const isBoundary = (R < 50 && G < 50 && B < 50 && A > 50) || (A < 10);
+                
+                // Boundary condition: The scan is stopped only by black lines.
+                // It is allowed to explore both white and transparent pixels.
+                const isBoundary = (R < 50 && G < 50 && B < 50 && A > 50);
+                
                 if (!isBoundary) {
                     mask[idx] = 1;
                     stack.push([nx, ny]);
                 }
             }
         }
+
+        // If the loop completes, the area was successfully contained by black lines.
         return mask;
     }
 
