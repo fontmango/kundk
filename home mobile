@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kiwiundknoedel - Persönliche Geschenke mit Kinderzeichnungen</title>
+    <meta name="description" content="Verwandeln Sie Kinderzeichnungen in einzigartige, personalisierte Geschenke wie T-Shirts. Einfach Zeichnung hochladen, Entwurf erhalten und bestellen.">
+    <meta name="keywords" content="kiwiundknoedel, Kinderzeichnungen, Geschenke, T-Shirt, personalisiert, Kunstwerke, Vatertag, Muttertag, Geburtstag, Weihnachten">
+    <meta name="author" content="kiwiundknoedel">
+    
+    <!-- Open Graph Tags for Social Media -->
+    <meta property="og:title" content="kiwiundknoedel - Persönliche Geschenke mit Kinderzeichnungen">
+    <meta property="og:description" content="Verwandeln Sie Kinderzeichnungen in einzigartige, personalisierte Geschenke wie T-Shirts. Einfach Zeichnung hochladen, Entwurf erhalten und bestellen.">
+    <meta property="og:image" content="https://placehold.co/1200x630/dbe4d5/3a3a3a?text=kiwi+%26+kn%C3%B6del">
+    <meta property="og:url" content="https://www.kiwiundknoedel.de">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="kiwiundknoedel - Persönliche Geschenke mit Kinderzeichnungen">
+    <meta name="twitter:description" content="Verwandeln Sie Kinderzeichnungen in einzigartige, personalisierte Geschenke wie T-Shirts. Einfach Zeichnung hochladen, Entwurf erhalten und bestellen.">
+    <meta name="twitter:image" content="https://placehold.co/1200x630/dbe4d5/3a3a3a?text=kiwi+%26+kn%C3%B6del">
+    
+    <!-- SEO: JSON-LD Markup für Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "kiwiundknoedel",
+      "url": "https://www.kiwiundknoedel.de",
+      "description": "Verwandeln Sie Kinderzeichnungen in einzigartige, personalisierte Geschenke wie T-Shirts. Einfach Zeichnung hochladen, Entwurf erhalten und bestellen.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://www.kiwiundknoedel.de/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Use "Permanent Marker" for logo and "Caveat" for the headline -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-light-green: #dbe4d5; /* Lighter green from logo */
+            --secondary-dark: #3a3a3a; /* Darker text color */
+            --button-dark: #4f6b3e; /* Darker green for contrast */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: white;
+        }
+
+        .logo-font {
+            font-family: 'Permanent Marker', cursive;
+        }
+        
+        .headline-font {
+            font-family: 'Caveat', cursive;
+        }
+
+        /* Benutzerdefinierte Stile für den Bild-Slider */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px; /* Reduced max-width for smaller slider */
+            height: auto;
+            overflow: hidden;
+            user-select: none;
+            cursor: ew-resize; /* Zeiger, der auf das Verschieben hinweist */
+            border-radius: 1.5rem; /* Abgerundete Ecken */
+        }
+
+        .slider-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            pointer-events: none; /* Ignoriert Maus-Events auf den Bildern */
+        }
+
+        .slider-image.after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            clip-path: inset(0 100% 0 0); /* Startet mit 100% Clip, d.h. es ist unsichtbar */
+        }
+
+        .label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+
+        .after-label {
+            left: auto;
+            right: 20px;
+        }
+
+        .drawing-canvas-container {
+            display: none;
+        }
+        
+        .drawing-canvas {
+            background-color: #fff;
+            cursor: crosshair;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* Farbverlauf für den Button "Jetzt ansehen" */
+        .gradient-button {
+            background: linear-gradient(90deg, #6c8a5a 0%, #4f6b3e 100%);
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: #e5e7eb; /* Inactive dot color */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--secondary-dark); /* Active dot color */
+        }
+        
+        /* Animation für den Puls-Effekt */
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(219, 228, 213, 0.5); /* New light green color */
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(219, 228, 213, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(219, 228, 213, 0);
+            }
+        }
+        
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+
+#feedbackModal {
+    /* Change position from fixed to absolute */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%; /* Use min-height to ensure it covers the content */
+
+    /* The rest of the overlay styles are fine */
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    z-index: 1000;
+}
+/* Modal content box */
+.modal-content {
+    background-color: #fff;
+    padding: 2.5rem 2rem;
+    border-radius: 1.5rem;
+    text-align: center;
+    max-width: 90%;
+    
+    /* Add margin to push it down from the very top edge */
+    margin-top: 50px;
+
+    /* This scales the content for a nice effect */
+    transform: scale(0.9);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Class to make the modal visible */
+#feedbackModal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+
+/* When the modal shows, scale up the content for a nice effect */
+#feedbackModal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-content .status-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    color: #aaa;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+main {
+    position: static;
+}
+
+/* Loading Screen Styles */
+#loadingScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Higher than the modal so it appears on top */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#loadingScreen.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loading-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This makes the video cover the full container without distortion */
+}
+    </style>
+</head>
+
+<body class="bg-white text-secondary-dark">
+
+
+  
+
+        <!-- Hauptinhaltsbereich -->
+        <main class="flex-grow flex justify-center p-6 md:p-12">
+            <div class="flex flex-col lg:flex-row items-center justify-center w-full max-w-7xl space-y-12 lg:space-y-0 lg:space-x-12">
+
+                <!-- Linke Spalte (Text & Buttons) -->
+                <div class="flex-1 text-center lg:text-left space-y-6">
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight text-secondary-dark headline-font">
+                        Kinderkunst zum Anziehen
+                    </h1>
+                    <p class="text-base sm:text-lg text-secondary-dark max-w-xl mx-auto lg:mx-0">
+                        Verwandle die Zeichnungen deines Kindes in ein einzigartiges, nachhaltiges Geschenk. So ein personalisiertes Geschenk habt ihr noch nie gemacht - garantiert emotional.  
+                    </p>
+                    <div class="flex flex-row items-center justify-center lg:justify-start space-x-4 mt-8">
+                        <!-- Upload-Button mit Puls-Animation und Kamera-Symbol -->
+                        <button id="uploadBtn" title="Eigene Zeichnung hochladen" class="flex items-center justify-center w-16 h-16 sm:w-auto sm:px-8 sm:py-3 font-semibold text-white rounded-full gradient-button hover:shadow-lg transition transform hover:scale-105 animate-pulse-glow">
+                            <span class="hidden sm:inline">Zeichnung hochladen</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/>
+                                <circle cx="12" cy="13" r="3"/>
+                            </svg>
+                        </button>
+                         <!-- Zeichnen-Button linking out -->
+<a href="https://www.kiwiundknoedel.de/zeichnen" target="_parent" rel="noopener noreferrer">
+    <button id="drawBtn" title="Selbst zeichnen" class="flex items-center justify-center w-16 h-16 sm:w-auto sm:px-8 sm:py-3 font-semibold text-secondary-dark bg-transparent border-2 border-secondary-dark rounded-full hover:bg-secondary-dark transition transform hover:scale-105 hover:shadow-lg">
+        <span class="hidden sm:inline">Zeichnen</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+        </svg>
+    </button>
+</a>
+                    </div>
+                    <div class="mt-8 pt-4 space-y-2 text-sm text-secondary-dark font-medium">
+                        <p>Emotionen verschenken war noch nie so einfach</p>
+                        <p>über 1.000 Kinderzeichnungen verarbeitet</p>
+                    </div>
+
+  
+                </div>
+
+                <!-- Rechte Spalte (Bild-Slider) -->
+                <div>
+                    <div class="bg-white rounded-3xl shadow-2xl p-4 md:p-6 lg:p-8">
+                        <div id="sliderContainer" class="slider-container relative overflow-hidden">
+                            <!-- Zeichenfläche für das Zeichnen -->
+                            <div id="drawingContainer" class="drawing-canvas-container absolute top-0 left-0 w-full h-full">
+                                <canvas id="drawingCanvas" class="drawing-canvas w-full h-full"></canvas>
+                                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex space-x-2">
+                                    <button id="clearCanvasBtn" class="px-4 py-2 text-sm font-medium bg-red-500 text-white rounded-full hover:bg-red-600 transition">Löschen</button>
+                                    <button id="saveCanvasBtn" class="px-4 py-2 text-sm font-medium bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">Zeichnung speichern</button>
+                                </div>
+                            </div>
+                            <!-- Vorher/Nachher-Bilder -->
+                            <div id="imageSlider" class="relative">
+                                <img src="https://static.wixstatic.com/media/990059_85541759629848b1a95b16c08f3fd6b5~mv2.jpg" alt="Vorher-Bild" class="slider-image before rounded-3xl">
+                                <img src="https://static.wixstatic.com/media/990059_0a26adc0fe454f4f8569ab2fd7ef1116~mv2.png" alt="Nachher-Bild" class="slider-image after rounded-3xl">
+                                <span class="label">Zeichnung</span>
+                                <span class="label after-label">T-Shirt</span>
+                            </div>
+                        </div>
+                        <!-- Navigationspunkte -->
+                        <div id="sliderDots" class="flex space-x-2 mt-6 justify-center">
+                            <span class="dot active" data-index="0"></span>
+                            <span class="dot" data-index="1"></span>
+                            <span class="dot" data-index="2"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Wie es funktioniert Sektion -->
+        <section class="py-4 md:py-6 bg-white text-secondary-dark">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center space-y-12">
+                <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-secondary-dark headline-font">
+                    So funktioniert's
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Schritt 1 -->
+                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <div class="w-16 h-16 bg-button-dark rounded-full flex items-center justify-center text-2xl font-bold logo-font">1</div>
+                        <h3 class="text-2xl font-bold headline-font">Zeichnung hochladen</h3>
+                        <p class="text-secondary-dark">Lade eine Zeichnung hoch oder nutze die Zeichenfunktion, um uns euer Kunstwerk zukommen zu lassen.</p>
+                    </div>
+                    <!-- Schritt 2 -->
+                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <div class="w-16 h-16 bg-button-dark rounded-full flex items-center justify-center text-2xl font-bold logo-font">2</div>
+                        <h3 class="text-2xl font-bold headline-font">Wir zaubern ein Beispiel</h3>
+                        <p class="text-secondary-dark">Innerhalb von 24 Stunden melden wir uns bei dir mit einem Beispiel, wie eure Zeichnung auf einem T-Shirt aussehen könnte.</p>
+                    </div>
+                    <!-- Schritt 3 -->
+                    <div class="flex flex-col items-center p-8 bg-gray-50 rounded-3xl shadow-md space-y-4 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <div class="w-16 h-16 bg-button-dark rounded-full flex items-center justify-center text-2xl font-bold logo-font">3</div>
+                        <h3 class="text-2xl font-bold headline-font">Bestellung abschicken</h3>
+                        <p class="text-secondary-dark">Wenn dir das Ergebnis gefällt, bestellst du ein T-Shirt in passender Farbe & Größe und das einzigartige Geschenk macht sich auf den Weg zu dir!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Sektion -->
+        <section class="py-16 md:py-24 bg-white text-secondary-dark">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-12">
+                <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-center text-secondary-dark headline-font">
+                    Das beschäftigt unsere Kund:innen
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- FAQ Frage 1 -->
+                    <div class="p-6 bg-gray-50 rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Wie schnell ist das T-Shirt bei mir?</h4>
+                        <p class="text-secondary-dark">Sobald wir uns auf das Motiv geeinigt haben machen wir uns an die Bearbeitung. Inklusive Versand ist das T-Shirt spätestens in 4 - 5 Tagen bei euch. Meldet euch wenn es dringender ist.</p>
+                    </div>
+                    
+                    <!-- FAQ Frage 2 -->
+                     <div class="p-6 bg-gray-50 rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Wie kann ich die Bestellung aufgeben?</h4>
+                        <p class="text-secondary-dark">Wenn dir das Beispiel gefällt bestellst du einfach das T-Shirt in gewünschter Farbe und Größe. Die Zuordnung machen wir über die E-Mail Kommunikation.</p>
+                    </div>
+                  
+                    <!-- FAQ Frage 3 -->
+                      <div class="p-6 bg-gray-50 rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Welche Art von Zeichnungen kann ich hochladen?</h4>
+                        <p class="text-secondary-dark">Alles mögliche. Wir geben euch zu jeder Zeichnung Feedback, ob es klappt oder nicht - bisher hat noch alles geklappt.</p>
+                    </div>
+
+                   
+                    <!-- FAQ Frage 4 -->
+                    <div class="p-6 bg-gray-50 rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Gehen auch bunte Zeichnungen?</h4>
+                        <p class="text-secondary-dark">Unsere Folien sind aktuell entweder schwarz oder weiß. Ihr könnt uns dennoch bunte Zeichnungen schicken, wir zeichnen sie für euch entsprechend nach.</p>
+                    </div>
+                    <!-- FAQ Frage 5 -->
+                    <div class="p-6 bg-gray-50 rounded-3xl shadow-md space-y-2 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h4 class="text-lg font-bold text-secondary-dark">Kann man die T-Shirts waschen?</h4>
+                        <p class="text-secondary-dark">Ja, dreht sie aber bitte auf links und bei 30 Grad.</p>
+                    </div>
+                  
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="loadingScreen" class="loading-screen">
+    <video id="loadingVideo" class="loading-video" autoplay muted loop>
+        </video>
+</div>
+
+    <div id="feedbackModal" class="modal-backdrop">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+        <div class="flex justify-center mb-4">
+            <svg id="modalIcon" class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            </svg>
+        </div>
+        <h2 id="modalStatus" class="text-3xl font-bold mb-2"></h2>
+        <p id="modalMessage" class="text-lg"></p>
+    </div>
+</div>
+
+    <!-- Verstecktes Dateieingabefeld zum Hochladen -->
+    <input type="file" id="fileInput" class="hidden" accept="image/*">
+
+   
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const drawBtn = document.getElementById('drawBtn');
+    const clearCanvasBtn = document.getElementById('clearCanvasBtn');
+    const saveCanvasBtn = document.getElementById('saveCanvasBtn');
+
+    const sliderContainer = document.getElementById('sliderContainer');
+    const afterImage = document.querySelector('.slider-image.after');
+    const beforeImage = document.querySelector('.slider-image.before');
+    const drawingContainer = document.getElementById('drawingContainer');
+    const drawingCanvas = document.getElementById('drawingCanvas');
+    const sliderDots = document.getElementById('sliderDots');
+    const imageSlider = document.getElementById('imageSlider');
+
+    const modal = document.getElementById('feedbackModal');
+    const modalStatus = document.getElementById('modalStatus');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalIcon = document.getElementById('modalIcon');
+    const loadingScreen = document.getElementById('loadingScreen');
+    const loadingVideo = document.getElementById('loadingVideo');
+
+    // === Video Loading Screen ===
+    const videoUrl = "https://your-video-url.mp4"; // Ersetzen
+    loadingVideo.src = videoUrl;
+
+    const showLoadingScreen = () => loadingScreen.classList.add('show');
+    const hideLoadingScreen = () => loadingScreen.classList.remove('show');
+
+    // === Canvas Setup ===
+    const ctx = drawingCanvas.getContext('2d');
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    const resizeCanvas = () => {
+        if (!beforeImage.naturalWidth) return;
+        drawingCanvas.width = beforeImage.offsetWidth;
+        drawingCanvas.height = drawingCanvas.width * (beforeImage.naturalHeight / beforeImage.naturalWidth);
+        ctx.lineWidth = Math.max(2, drawingCanvas.width / 200);
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#000';
+    };
+    window.addEventListener('load', resizeCanvas);
+    window.addEventListener('resize', resizeCanvas);
+
+    // === Slider Logic ===
+    let currentImageIndex = 0;
+    const images = [
+        { before: 'https://static.wixstatic.com/media/990059_85541759629848b1a95b16c08f3fd6b5~mv2.jpg', after: 'https://static.wixstatic.com/media/990059_0a26adc0fe454f4f8569ab2fd7ef1116~mv2.png' },
+        { before: 'https://static.wixstatic.com/media/990059_e6700b74cc0c450e8612ebd50a3070e8~mv2.jpg', after: 'https://static.wixstatic.com/media/990059_c4ffa1ce76684b2697399a58b454ee42~mv2.png' },
+        { before: 'https://static.wixstatic.com/media/990059_028a00154c7c4cf9aed4a46d6ecaa54d~mv2.jpg', after: 'https://static.wixstatic.com/media/990059_71e9ca0adde145e8bffd89ff90c78675~mv2.png' }
+    ];
+
+    const updateSlider = (index) => {
+        beforeImage.src = images[index].before;
+        afterImage.src = images[index].after;
+        document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === index));
+        afterImage.style.clipPath = `inset(0 100% 0 0)`;
+    };
+
+    const handleMove = (clientX) => {
+        const rect = sliderContainer.getBoundingClientRect();
+        const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+        const percentage = (x / rect.width) * 100;
+        afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+    };
+
+    sliderContainer.addEventListener('mousemove', e => handleMove(e.clientX));
+    sliderContainer.addEventListener('touchmove', e => {
+        if (e.touches.length > 0) handleMove(e.touches[0].clientX);
+    });
+
+    sliderDots.addEventListener('click', e => {
+        if (e.target.classList.contains('dot')) {
+            const newIndex = parseInt(e.target.dataset.index);
+            if (!isNaN(newIndex) && newIndex !== currentImageIndex) {
+                currentImageIndex = newIndex;
+                updateSlider(currentImageIndex);
+            }
+        }
+    });
+
+    // === Modal ===
+    const showModal = (message, isSuccess) => {
+        modalStatus.textContent = isSuccess ? 'Erfolgreich!' : 'Fehler!';
+        modalMessage.textContent = message;
+        modalIcon.innerHTML = isSuccess
+            ? `<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />`
+            : `<path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M12 2a10 10 0 100 20 10 10 0 000-20z" />`;
+        modal.classList.add('show');
+    };
+    window.closeModal = () => modal.classList.remove('show');
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+    // === File Upload ===
+    uploadBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = event => {
+                const fileData = { name: file.name, data: event.target.result };
+                window.parent.postMessage(fileData, '*');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // === Draw Button ===
+    drawBtn.addEventListener('click', () => {
+        const isVisible = drawingContainer.style.display === 'block';
+        imageSlider.style.display = isVisible ? 'block' : 'none';
+        drawingContainer.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) resizeCanvas();
+    });
+
+    // === Canvas Drawing ===
+    const draw = (x, y) => {
+        if (!isDrawing) return;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        [lastX, lastY] = [x, y];
+    };
+
+    const getCanvasCoords = (e) => {
+        const rect = drawingCanvas.getBoundingClientRect();
+        if (e.touches) return [e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top];
+        return [e.offsetX, e.offsetY];
+    };
+
+    drawingCanvas.addEventListener('mousedown', e => { isDrawing = true; [lastX, lastY] = getCanvasCoords(e); });
+    drawingCanvas.addEventListener('mousemove', e => draw(...getCanvasCoords(e)));
+    drawingCanvas.addEventListener('mouseup', () => isDrawing = false);
+    drawingCanvas.addEventListener('mouseout', () => isDrawing = false);
+
+    drawingCanvas.addEventListener('touchstart', e => { e.preventDefault(); isDrawing = true; [lastX, lastY] = getCanvasCoords(e); });
+    drawingCanvas.addEventListener('touchmove', e => { e.preventDefault(); draw(...getCanvasCoords(e)); });
+    drawingCanvas.addEventListener('touchend', () => isDrawing = false);
+    drawingCanvas.addEventListener('touchcancel', () => isDrawing = false);
+
+    clearCanvasBtn.addEventListener('click', () => ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height));
+    saveCanvasBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.href = drawingCanvas.toDataURL('image/png');
+        link.download = 'meine-zeichnung.png';
+        link.click();
+    });
+
+    // === Listen for parent messages (loading, success, error) ===
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data.status) {
+            const { status, message } = event.data;
+            if (status === 'loading') showLoadingScreen();
+            else if (status === 'success') { hideLoadingScreen(); showModal(message, true); }
+            else if (status === 'error') { hideLoadingScreen(); showModal(message, false); }
+        }
+    });
+
+    // === Initialize Slider ===
+    updateSlider(currentImageIndex);
+});
+</script>
+
+
+</body>
+</html>
