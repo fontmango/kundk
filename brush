@@ -652,8 +652,8 @@ button.active {
     <div id="group-overlay-container"></div>
 
     <script>
-    
-document.addEventListener('DOMContentLoaded', () => {
+  
+    document.addEventListener('DOMContentLoaded', () => {
 
     // --- Element Selectors ---
     const canvas = document.getElementById('canvas-container');
@@ -691,25 +691,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const transparentColor = { type: 'erase' };
 
     // --- Sticker & Color Data ---
-   
 
-    const stickerGroups = [
+   const stickerGroups = [
       { 
-   name: "Kids",
-                 urls: [
-                   
-                   "https://static.wixstatic.com/media/990059_cff7ab1b0c9848f7b2a118d9947ba1f2~mv2.png",               
-                   "https://static.wixstatic.com/media/990059_e82d3988155f491e8eccd350a96c8474~mv2.png",
-"https://static.wixstatic.com/media/990059_b5d619b163ad4c92ac030ee02dd81156~mv2.png",
-"https://static.wixstatic.com/media/990059_c7513aaacb8f480ab18fa0644fdead37~mv2.png",
-"https://static.wixstatic.com/media/990059_c41b8293c1ca448abbd7aabe3a0f5b01~mv2.png",
-"https://static.wixstatic.com/media/990059_e69b4981274e46a180888db9a034c333~mv2.png",
-"https://static.wixstatic.com/media/990059_e45fc6d5053f4b5f9817162bdd19dd83~mv2.png",
-"https://static.wixstatic.com/media/990059_5bec1b1a0f4e4eb6be3b3816f3e50bee~mv2.png"
-                   ]
+  name: "Banane",
+urls: [
+
+"https://static.wixstatic.com/shapes/990059_34b518b8a1114c1f8f6c92e302faaffb.svg",
+"https://static.wixstatic.com/shapes/990059_4821fa0787a84b4a96316b1d8b329109.svg",
+"https://static.wixstatic.com/shapes/990059_adbb570b52b94dd0bc980ffc55f8a20c.svg",
+"https://static.wixstatic.com/shapes/990059_48e01454c41349b5a87fee4dcfdf9363.svg",
+"https://static.wixstatic.com/shapes/990059_8e1b6b1e15124681ab56d69233075a99.svg",
+"https://static.wixstatic.com/shapes/990059_2011db88f2c744afb0ac452a2592222b.svg",
+"https://static.wixstatic.com/shapes/990059_5f88575004f2449d884c7ff9545d7240.svg",
+"https://static.wixstatic.com/shapes/990059_c00ddc9609e640978abff29f373f2e61.svg",
+"https://static.wixstatic.com/shapes/990059_13be911b4fea49408aac3a3e98ce5bb4.svg",
+"https://static.wixstatic.com/shapes/990059_f4424ba62c1d458dbdfcedc3b046ec9e.svg",
+"https://static.wixstatic.com/shapes/990059_c9e3e2112efd4bdea681138fa263bc31.svg",
+"https://static.wixstatic.com/shapes/990059_3d23fcf17c73401cb2bf118e268fddf1.svg",
+"https://static.wixstatic.com/shapes/990059_5bc9307377ac47188b281ab43c756c7c.svg",
+"https://static.wixstatic.com/shapes/990059_ad818be126204a6f9c64a00fe95837bf.svg",
+"https://static.wixstatic.com/shapes/990059_86e3840f43be4c3f927dd1f135364d96.svg",
+"https://static.wixstatic.com/shapes/990059_1ee19d9afd5a40649e2f60a7bf1eadad.svg",
+"https://static.wixstatic.com/shapes/990059_e89f33acb604455d960e7e6cd4a51f8d.svg",
+"https://static.wixstatic.com/shapes/990059_dd06e12d30174c4cbdd66fd437fa171b.svg",
+"https://static.wixstatic.com/shapes/990059_046ec335d69e49369df569c2a4824a31.svg",
+"https://static.wixstatic.com/shapes/990059_6e185c6cf88e45aeab28eb7c83bf6c2b.svg",
+"https://static.wixstatic.com/shapes/990059_6936a14cbe5a4c6a9de75169cb0ecc5c.svg",
+"https://static.wixstatic.com/shapes/990059_fed08251352842bf91e5329954fe2fe1.svg",
+"https://static.wixstatic.com/shapes/990059_89b12039cbcb4315a01fff91958c8773.svg",
+"https://static.wixstatic.com/shapes/990059_e165589453304aa1a711ae676d5a2e61.svg",
+"https://static.wixstatic.com/shapes/990059_b7e9be36ddf443548060e1890c3a45ce.svg",
+"https://static.wixstatic.com/shapes/990059_b28ee76be182425593b87242a159f5d9.svg",
+"https://static.wixstatic.com/shapes/990059_6cf8d7575dd4479fba40ea202e4c278e.svg",
+"https://static.wixstatic.com/shapes/990059_67982800ef5b491095f6b60295597f61.svg",
+"https://static.wixstatic.com/shapes/990059_5687e3486ffa4de1921a413cd1caf55f.svg",
+"https://static.wixstatic.com/shapes/990059_a4d94004ffe14913bb10595defe41287.svg",
+"https://static.wixstatic.com/shapes/990059_f629a421102f4b9e98363b64ab80d0aa.svg",
+"https://static.wixstatic.com/shapes/990059_676102c45d65485cb110385547f69ccc.svg",
+"https://static.wixstatic.com/shapes/990059_c51abf816dcf4440a1cdc0bcf1545fae.svg",
+"https://static.wixstatic.com/shapes/990059_73e641b464e547f4b2bdc6faece344a0.svg",
+"https://static.wixstatic.com/shapes/990059_67a7366a6dbb429aa9904dbf8cdafca6.svg"
+
+]
 },
     ]
-    
+
+
     const colors = ['#800020', '#A52A2A', '#ff4040', '#FF0000', '#FF6347', '#FF7F50', '#f08080', '#FA8072', '#ff7373', '#ff1493', '#FF69B4', '#ff00ff', '#ff80ed', '#ff71ce', '#FFC0CB', '#ffb3ba', '#ffe4e1', '#a67c00', '#D2691E', '#CD5C5C', '#FFA500', '#FF8C00', '#FFC04C', '#FFD700', '#FFFF00', '#ffff66', '#fffb96', '#065535', '#013220', '#008000', '#808000', '#3CB371', '#9ACD32', '#ADFF2F', '#05ffa1', '#b4eeb4', '#000080', '#0e2f44', '#0000FF', '#4169E1', '#1E90FF', '#0a75ad', '#6897bb', '#b0e0e6', '#87CEFA', '#01cdfe', '#40E0D0', '#008080', '#00ffff', '#ddfffc', '#4B0082', '#660066', '#800080', '#8a2be2', '#b967ff', '#BA55D3', '#DA70D6', '#e6e6fa', '#ccccff', '#333333', '#666666', '#808080', '#A9A9A9', '#C0C0C0', '#cccccc', '#dddddd', '#CBBEB5', '#c39797', '#ffdab9', '#faebd7', ];
 
     // --- Core Interaction & Tooling Functions ---
@@ -733,10 +761,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (lastX === -1) {
             const currentIdx = Math.round(currentY) * activeCanvas.width + Math.round(currentX);
             if (currentTool === 'eraser' || (insideMask && insideMask[currentIdx])) {
-                 lastX = currentX;
-                 lastY = currentY;
+                lastX = currentX;
+                lastY = currentY;
             } else {
-                return; // Don't resume drawing if re-entering an invalid area
+                return;
             }
         }
 
@@ -750,13 +778,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const x = Math.round(lastX + (Math.cos(angle) * i));
             const y = Math.round(lastY + (Math.sin(angle) * i));
             const idx = y * activeCanvas.width + x;
+            
+            // --- FIX: Check against the pre-computed mask ---
             if (currentTool === 'brush' && (!insideMask || !insideMask[idx])) {
                 continue;
             }
             paintAt(x, y, imageDataToPaint, rgbColor);
         }
 
-        const cx = Math.round(currentX), cy = Math.round(currentY);
+        const cx = Math.round(currentX);
+        const cy = Math.round(currentY);
         const currentIdx = cy * activeCanvas.width + cx;
         if (currentTool === 'eraser' || (insideMask && insideMask[currentIdx])) {
             paintAt(cx, cy, imageDataToPaint, rgbColor);
@@ -769,9 +800,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getCanvasCoordinates(clientX, clientY, rect) { if (!activeCanvas) return [0, 0]; const imgRatio = activeCanvas.width / activeCanvas.height; const rectRatio = rect.width / rect.height; let scale, offsetX = 0, offsetY = 0; if (rectRatio > imgRatio) { const actualWidth = rect.height * imgRatio; scale = activeCanvas.height / rect.height; offsetX = (rect.width - actualWidth) / 2; } else { const actualHeight = rect.width / imgRatio; scale = activeCanvas.width / rect.width; offsetY = (rect.height - actualHeight) / 2; } const x = (clientX - rect.left - offsetX) * scale; const y = (clientY - rect.top - offsetY) * scale; return [x, y]; }
-    function paintAt(x, y, imageData, color) { const { width, data } = imageData; for (let i = -brushSize; i < brushSize; i++) { for (let j = -brushSize; j < brushSize; j++) { if (i * i + j * j < brushSize * brushSize) { const pixelX = Math.round(x + i); const pixelY = Math.round(y + j); if (pixelX < 0 || pixelX >= width || pixelY < 0 || pixelY >= imageData.height) continue; const originIndex = (pixelY * width + pixelX) * 4; if (strokeOriginImageData && originIndex >= 0 && originIndex < strokeOriginImageData.data.length) { const r = strokeOriginImageData.data[originIndex], g = strokeOriginImageData.data[originIndex + 1], b = strokeOriginImageData.data[originIndex + 2], a = strokeOriginImageData.data[originIndex + 3]; if (r < 50 && g < 50 && b < 50 && a > 50) continue; } const paintIndex = (pixelY * width + pixelX) * 4; if (currentTool === 'eraser') { data[paintIndex + 3] = 0; } else { data[paintIndex] = color[0]; data[paintIndex + 1] = color[1]; data[paintIndex + 2] = color[2]; data[paintIndex + 3] = 255; } } } } }
+    function paintAt(x, y, imageData, color) { const { width, data } = imageData; for (let i = -brushSize; i < brushSize; i++) { for (let j = -brushSize; j < brushSize; j++) { if (i * i + j * j < brushSize * brushSize) { const pixelX = Math.round(x + i); const pixelY = Math.round(y + j); if (pixelX < 0 || pixelX >= width || pixelY < 0 || pixelY >= imageData.height) continue; const idx = (pixelY * width + pixelX); if (currentTool === 'brush' && (!insideMask || !insideMask[idx])) { continue; } const paintIndex = idx * 4; if (currentTool === 'eraser') { data[paintIndex + 3] = 0; } else { data[paintIndex] = color[0]; data[paintIndex + 1] = color[1]; data[paintIndex + 2] = color[2]; data[paintIndex + 3] = 255; } } } } }
     function addSticker(url, x, y, width = 200, height = 200, opts = {}) { const { suppressSave = false, group } = opts; const sticker = document.createElement('div'); sticker.className = 'sticker'; sticker.style.width = `${width}px`; sticker.style.height = `${height}px`; sticker.style.left = `${x}px`; sticker.style.top = `${y}px`; sticker.dataset.group = group || 'default'; const stickerImg = document.createElement('img'); stickerImg.crossOrigin = "Anonymous"; stickerImg.src = url; stickerImg.draggable = false; stickerImg.className = "protected"; sticker.appendChild(stickerImg); addInteractionButtons(sticker, stickerImg); sticker.addEventListener('mousedown', startInteraction); sticker.addEventListener('touchstart', startInteraction, { passive: false }); sticker.addEventListener('wheel', handleWheelResize, { passive: false }); canvas.appendChild(sticker); if (!suppressSave && !isRestoring) { saveState(); } return sticker; }
-    function addInteractionButtons(sticker, stickerImg) { const copyBtn = document.createElement('div'); copyBtn.className = 'copy-btn sticker-btn'; copyBtn.innerHTML = `<svg class="copy-btn-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>`; copyBtn.addEventListener('click', (e) => { e.stopPropagation(); addSticker(stickerImg.src, parseInt(sticker.style.left) + 20, parseInt(sticker.style.top) + 20, sticker.offsetWidth, sticker.offsetHeight, { group: sticker.dataset.group }); }); const deleteBtn = document.createElement('div'); deleteBtn.className = 'delete-btn sticker-btn'; deleteBtn.innerHTML = `<svg class="delete-btn-icon" viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>`; deleteBtn.addEventListener('click', (e) => { e.stopPropagation(); saveState(); sticker.remove(); }); const lockBtn = document.createElement('div'); lockBtn.className = 'lock-btn sticker-btn'; lockBtn.innerHTML = `<svg class="lock-btn-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`; lockBtn.addEventListener('click', (e) => { e.stopPropagation(); sticker.classList.toggle('locked'); sticker.classList.remove('selected'); saveState(); }); const groupBtn = document.createElement('div'); groupBtn.className = 'group-btn sticker-btn'; groupBtn.innerHTML = `<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>`; groupBtn.addEventListener('click', (e) => { e.stopPropagation(); const group = stickerGroups.find(g => g.name === sticker.dataset.group); if (group) showStickerOverlay(group.urls, group.name); }); sticker.appendChild(deleteBtn); sticker.appendChild(copyBtn); sticker.appendChild(lockBtn); sticker.appendChild(groupBtn); }
+    function addInteractionButtons(sticker, stickerImg) { const copyBtn = document.createElement('div'); copyBtn.className = 'copy-btn sticker-btn'; copyBtn.innerHTML = `<svg class="copy-btn-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>`; copyBtn.addEventListener('click', (e) => { e.stopPropagation(); addSticker(stickerImg.src, parseInt(sticker.style.left) + 20, parseInt(sticker.style.top) + 20, sticker.offsetWidth, sticker.offsetHeight, { group: sticker.dataset.group }); }); const deleteBtn = document.createElement('div'); deleteBtn.className = 'delete-btn sticker-btn'; deleteBtn.innerHTML = `<svg class="delete-btn-icon" viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>`; deleteBtn.addEventListener('click', (e) => { e.stopPropagation(); saveState(); sticker.remove(); }); const lockBtn = document.createElement('div'); lockBtn.className = 'lock-btn sticker-btn'; lockBtn.innerHTML = `<svg class="lock-btn-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`; lockBtn.addEventListener('click', (e) => { e.stopPropagation(); sticker.classList.toggle('locked'); sticker.classList.remove('selected'); saveState(); }); const groupBtn = document.createElement('div'); groupBtn.className = 'group-btn sticker-btn'; groupBtn.innerHTML = `<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>`; groupBtn.addEventListener('click', (e) => { e.stopPropagation(); const group = stickerGroups.find(g => g.name === sticker.dataset.group); if (group) showStickerOverlay(group.urls, group.name); }); sticker.appendChild(deleteBtn); sticker.appendChild(copyBtn); sticker.appendChild(lockBtn); sticker.appendChild(groupBtn); }
     function addOrReplaceSticker(newUrl, groupName = null) { const unlockedSticker = document.querySelector('.sticker:not(.locked)'); const stickerSize = 150; const centerX = (canvas.offsetWidth / 2) - (stickerSize / 2); const centerY = (canvas.offsetHeight / 2) - (stickerSize / 2); if (unlockedSticker) { const stickerImg = unlockedSticker.querySelector('img'); stickerImg.src = newUrl; unlockedSticker.style.width = `${stickerSize}px`; unlockedSticker.style.height = `${stickerSize}px`; unlockedSticker.style.left = `${centerX}px`; unlockedSticker.style.top = `${centerY}px`; if (groupName) unlockedSticker.dataset.group = groupName; } else { addSticker(newUrl, centerX, centerY, stickerSize, stickerSize, { group: groupName }); } saveState(); }
     
     // --- Unified Interaction Handlers ---
@@ -846,7 +877,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isDrawing = false; isInteracting = false; activeSticker = null; activeCanvas = null; activeCtx = null;
         lastX = 0; lastY = 0;
         strokeOriginImageData = null; 
-        insideMask = null; // Clear the mask
+        insideMask = null;
         document.removeEventListener('mousemove', handleMove); document.removeEventListener('mouseup', handleEnd);
         document.removeEventListener('touchmove', handleMove); document.removeEventListener('touchend', handleEnd);
         document.removeEventListener('mousemove', draw); document.removeEventListener('touchmove', draw);
@@ -854,8 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleWheelResize(e) { e.preventDefault(); const sticker = e.currentTarget; if (sticker.classList.contains('locked')) return; const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1; const newWidth = Math.max(30, sticker.offsetWidth * scaleFactor); sticker.style.width = `${newWidth}px`; sticker.style.height = `auto`; saveState(); }
     
-    // --- FIX: High-performance enclosure check ---
-   function computeEnclosedMask(startX, startY, canvas) {
+    function computeEnclosedMask(startX, startY, canvas) {
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         const { width, height } = canvas;
         if (width === 0 || height === 0) return null;
@@ -865,13 +895,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const startIndex = (startY * width + startX) * 4;
 
         const r = data[startIndex], g = data[startIndex + 1], b = data[startIndex + 2], a = data[startIndex + 3];
-        
-        // --- FIX: The ONLY invalid starting point is a black line. ---
-        // We no longer reject clicks on transparent areas.
         const isBlack = r < 50 && g < 50 && b < 50 && a > 50;
-        if (isBlack) {
-            return null; // You cannot start a stroke on a line.
-        }
+        if (isBlack) return null;
 
         const mask = new Uint8Array(width * height);
         const stack = [[startX, startY]];
@@ -881,27 +906,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const [x, y] = stack.pop();
             const neighbors = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]];
             for (const [nx, ny] of neighbors) {
-                // Fail condition: The scan reached the edge of the canvas, so it's not enclosed.
                 if (nx < 0 || nx >= width || ny < 0 || ny >= height) {
-                    return null; 
+                    return null;
                 }
                 const idx = ny * width + nx;
                 if (mask[idx]) continue;
                 const di = idx * 4;
                 const R = data[di], G = data[di + 1], B = data[di + 2], A = data[di + 3];
-                
-                // Boundary condition: The scan is stopped only by black lines.
-                // It is allowed to explore both white and transparent pixels.
                 const isBoundary = (R < 50 && G < 50 && B < 50 && A > 50);
-                
                 if (!isBoundary) {
                     mask[idx] = 1;
                     stack.push([nx, ny]);
                 }
             }
         }
-
-        // If the loop completes, the area was successfully contained by black lines.
         return mask;
     }
 
@@ -939,7 +957,7 @@ document.addEventListener('DOMContentLoaded', () => {
     saveState();
     if (window.lucide) { lucide.createIcons(); }
 });
-    
+
     </script>
 </body>
 </html>
