@@ -3831,13 +3831,16 @@ function startInteraction(e) {
     e.preventDefault();
     activeSticker = sticker;
 
-    // --- 1. Handle the two-finger pinch gesture first ---
+    // --- 1. Handle pinch gesture (always allowed) ---
     if (e.touches && e.touches.length === 2) {
         isInteracting = true;
         deselectAllStickers();
         activeSticker.classList.add('selected');
         initialInteractionData = {
-            pinchDistance: Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY),
+            pinchDistance: Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            ),
             width: activeSticker.offsetWidth,
             height: activeSticker.offsetHeight,
             left: activeSticker.offsetLeft,
@@ -3845,135 +3848,133 @@ function startInteraction(e) {
         };
         document.addEventListener('touchmove', handleMove, { passive: false });
         document.addEventListener('touchend', handleEnd);
-        return; // Exit since this is a distinct gesture
+        return; // 🔑 exit — pinch handled separately
     }
 
-    // --- 2. Prepare for a single-touch action (tap, drag, or brush) ---
+    // --- 2. Single-touch pointer ---
     const pointer = e.touches ? e.touches[0] : e;
     const stickerImg = activeSticker.querySelector('img');
-    
-    // Store initial data needed for both moving and tap detection
+
     initialInteractionData = {
         x: pointer.clientX,
         y: pointer.clientY,
         offsetX: activeSticker.offsetLeft,
         offsetY: activeSticker.offsetTop,
-        time: Date.now() // Record start time to differentiate tap vs. drag
+        time: Date.now()
     };
 
-    // If the brush tool is active, prepare the canvas for drawing
+    // --- 2a. Brush tool active → paint only, no move ---
     if (currentTool === 'brush' && selectedColor) {
-    isDrawing = false; // initially false
-    const setupBrush = () => {
-        activeCanvas = document.createElement('canvas');
-        activeCanvas.width = stickerImg.naturalWidth;
-        activeCanvas.height = stickerImg.naturalHeight;
-        activeCtx = activeCanvas.getContext('2d', { willReadFrequently: true });
-        activeCtx.drawImage(stickerImg, 0, 0);
-        const rect = stickerImg.getBoundingClientRect();
-        const [startX, startY] = getCanvasCoordinates(pointer.clientX, pointer.clientY, rect);
-        insideMask = computeEnclosedMask(Math.round(startX), Math.round(startY), activeCanvas);
+        isDrawing = false;
+        const setupBrush = () => {
+            activeCanvas = document.createElement('canvas');
+            activeCanvas.width = stickerImg.naturalWidth;
+            activeCanvas.height = stickerImg.naturalHeight;
+            activeCtx = activeCanvas.getContext('2d', { willReadFrequently: true });
+            activeCtx.drawImage(stickerImg, 0, 0);
 
-        if (!insideMask) {
-            activeSticker = null;
-            activeCanvas = null;
-            return;
-        }
+            const rect = stickerImg.getBoundingClientRect();
+            const [startX, startY] = getCanvasCoordinates(pointer.clientX, pointer.clientY, rect);
+            insideMask = computeEnclosedMask(Math.round(startX), Math.round(startY), activeCanvas);
+            if (!insideMask) {
+                activeSticker = null;
+                activeCanvas = null;
+                return;
+            }
 
-        strokeOriginImageData = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
-        [lastX, lastY] = [startX, startY];
+            strokeOriginImageData = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
+            [lastX, lastY] = [startX, startY];
 
-        // Now safe to start drawing
-        isDrawing = true;
-        isInteracting = false; // prevent moving while painting
+            isDrawing = true;
+            isInteracting = false; // 🔑 disable moving while painting
 
-        document.addEventListener('mousemove', draw);
-        document.addEventListener('touchmove', draw, { passive: false });
+            document.addEventListener('mousemove', draw);
+            document.addEventListener('touchmove', draw, { passive: false });
 
-        draw(e); // paint first point
-    };
+            draw(e);
+        };
 
-    if (stickerImg.complete && stickerImg.naturalWidth > 0) setupBrush();
-    else stickerImg.onload = setupBrush;
+        if (stickerImg.complete && stickerImg.naturalWidth > 0) setupBrush();
+        else stickerImg.onload = setupBrush;
 
-} else {
+        // 🔑 STOP HERE — don’t set up move listeners
+        return;
+    }
+
+    // --- 2b. Otherwise: move/drag mode ---
     isInteracting = true;
-}
-
-    // --- 3. Add listeners for all single-touch actions ---
     deselectAllStickers();
     activeSticker.classList.add('selected');
     document.addEventListener('mousemove', handleMove);
     document.addEventListener('touchmove', handleMove, { passive: false });
     document.addEventListener('mouseup', handleEnd);
     document.addEventListener('touchend', handleEnd);
-    document.addEventListener('mousemove', draw);
-    document.addEventListener('touchmove', draw, { passive: false });
 }
- 
+
 
 
     function handleMove(e) {
-        if (!activeSticker || (!isInteracting && !isDrawing)) return;
-        e.preventDefault();
+    if (!activeSticker || (!isInteracting && !isDrawing)) return;
+    e.preventDefault();
 
-        if (isInteracting) {
-            if (e.touches) {
-                if (e.touches.length === 1) {
-                    const touch = e.touches[0];
-                    const dx = touch.clientX - initialInteractionData.x;
-                    const dy = touch.clientY - initialInteractionData.y;
-                    activeSticker.style.left = `${initialInteractionData.offsetX + dx}px`;
-                    activeSticker.style.top = `${initialInteractionData.offsetY + dy}px`;
-                // In your handleMove(e) function...
+    // --- Pinch gesture (always allowed) ---
+    if (e.touches && e.touches.length === 2) {
+        const currentPinch = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+        );
+        const scaleFactor = currentPinch / initialInteractionData.pinchDistance;
+        const newWidth = Math.max(30, initialInteractionData.width * scaleFactor);
+        const newHeight = (newWidth / initialInteractionData.width) * initialInteractionData.height;
+        const deltaWidth = newWidth - initialInteractionData.width;
+        const deltaHeight = newHeight - initialInteractionData.height;
 
-// In your handleMove(e) function...
+        let newLeft = initialInteractionData.left - (deltaWidth / 2);
+        let newTop = initialInteractionData.top - (deltaHeight / 2);
 
-} else if (e.touches.length === 2) {
-    // --- Standard resize-from-center logic ---
-    const currentPinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    const scaleFactor = currentPinch / initialInteractionData.pinchDistance;
-    const newWidth = Math.max(30, initialInteractionData.width * scaleFactor);
-    const newHeight = (newWidth / initialInteractionData.width) * initialInteractionData.height;
-    const deltaWidth = newWidth - initialInteractionData.width;
-    const deltaHeight = newHeight - initialInteractionData.height;
+        // --- Keep centered if shrinking and off-canvas ---
+        const canvasWidth = canvas.offsetWidth;
+        const canvasHeight = canvas.offsetHeight;
+        const isReducing = newWidth < initialInteractionData.width;
+        const isOffCanvas =
+            newLeft < 0 || newTop < 0 ||
+            (newLeft + newWidth) > canvasWidth ||
+            (newTop + newHeight) > canvasHeight;
 
-    // We use 'let' now because the position may be overridden
-    let newLeft = initialInteractionData.left - (deltaWidth / 2);
-    let newTop = initialInteractionData.top - (deltaHeight / 2);
+        if (isReducing && isOffCanvas) {
+            newLeft = (canvasWidth - newWidth) / 2;
+            newTop = (canvasHeight - newHeight) / 2;
+        }
 
-    // ================== NEW LOGIC STARTS HERE ==================
-
-    // 1. Check if the user is shrinking the sticker.
-    const isReducing = newWidth < initialInteractionData.width;
-
-    // 2. Get canvas dimensions and see if the sticker is off-canvas.
-    const canvasWidth = canvas.offsetWidth;
-    const canvasHeight = canvas.offsetHeight;
-    const isOffCanvas = newLeft < 0 || newTop < 0 || (newLeft + newWidth) > canvasWidth || (newTop + newHeight) > canvasHeight;
-
-    // 3. If both are true, override the position to center the sticker.
-    if (isReducing && isOffCanvas) {
-        newLeft = (canvasWidth - newWidth) / 2;
-        newTop = (canvasHeight - newHeight) / 2;
+        activeSticker.style.width = `${newWidth}px`;
+        activeSticker.style.height = `${newHeight}px`;
+        activeSticker.style.left = `${newLeft}px`;
+        activeSticker.style.top = `${newTop}px`;
+        return; // ✅ done with pinch
     }
 
-    // =================== NEW LOGIC ENDS HERE ===================
+    // --- Block dragging if painting tool is active ---
+    if ((currentTool === 'brush' || currentTool === 'bucket' || currentTool === 'eraser') && selectedColor) {
+        return; // ❌ don’t move sticker in paint mode
+    }
 
-    // Apply the final calculated styles
-    activeSticker.style.width = `${newWidth}px`;
-    activeSticker.style.height = `${newHeight}px`;
-    activeSticker.style.left = `${newLeft}px`;
-    activeSticker.style.top = `${newTop}px`;
-}
-            } else {
-                const dx = e.clientX - initialInteractionData.x;
-                const dy = e.clientY - initialInteractionData.y;
-                activeSticker.style.left = `${initialInteractionData.offsetX + dx}px`;
-                activeSticker.style.top = `${initialInteractionData.offsetY + dy}px`;
-            }
+    // --- Normal drag (mouse or single touch) ---
+    if (isInteracting) {
+        if (e.touches && e.touches.length === 1) {
+            const touch = e.touches[0];
+            const dx = touch.clientX - initialInteractionData.x;
+            const dy = touch.clientY - initialInteractionData.y;
+            activeSticker.style.left = `${initialInteractionData.offsetX + dx}px`;
+            activeSticker.style.top = `${initialInteractionData.offsetY + dy}px`;
+        } else if (!e.touches) {
+            const dx = e.clientX - initialInteractionData.x;
+            const dy = e.clientY - initialInteractionData.y;
+            activeSticker.style.left = `${initialInteractionData.offsetX + dx}px`;
+            activeSticker.style.top = `${initialInteractionData.offsetY + dy}px`;
         }
     }
+}
+
 
 function handleEnd(e) {
     const pointer = e.changedTouches ? e.changedTouches[0] : e;
@@ -4132,19 +4133,20 @@ colorPalette.addEventListener('click', (e) => {
     if (!clickedSwatch.classList.contains('color-swatch')) return;
 
     // Deselect same swatch
-    if (activeSwatch === clickedSwatch) {
-        selectedColor = null;
-        activeSwatch.classList.remove('active');
-        activeSwatch = null;
-        bucketBtn.classList.remove('active');
-        brushBtn.classList.remove('active');
+   if (activeSwatch === clickedSwatch) {
+    selectedColor = null;
+    activeSwatch.classList.remove('active');
+    activeSwatch = null;
 
-        // Only switch to move mode if currently in move/eraser and not drawing
-        if ((currentTool === 'move' || currentTool === 'eraser') && !isDrawing) {
-    if (lastPaintTool) setActiveTool(lastPaintTool);
+    // Clear any paint tool state
+    bucketBtn.classList.remove('active');
+    brushBtn.classList.remove('active');
+
+    // Always go back to move tool
+    setActiveTool('move');
+    return;
 }
-        return;
-    }
+
 
     // Deselect previous swatch
     if (activeSwatch) activeSwatch.classList.remove('active');
