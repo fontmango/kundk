@@ -115,6 +115,22 @@
             transition: none !important;
         }
 
+        
+
+        .brush-active .sticker .delete-btn,
+        .brush-active .sticker .copy-btn,
+        .brush-active .sticker .group-btn ,
+        .brush-active .sticker .resize-handle {
+            
+            display: none !important;
+        }
+
+        .brush-active .sticker:active,
+        .brush-active .sticker:hover {
+            cursor: crosshair;
+        }
+
+
         .bucket-active .sticker .delete-btn,
         .bucket-active .sticker .copy-btn,
         .bucket-active .sticker .group-btn ,
