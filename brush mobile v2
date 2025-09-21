@@ -619,6 +619,11 @@ button.active {
     display: none;
 }
 
+#add-sticker-btn {
+    display: none;
+}
+
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -632,6 +637,11 @@ button.active {
 
   <div class="controls">
 
+   
+   <button id="spin-sticker-btn" title="Spin Random">
+  <i data-lucide="dice-6" class="icon"></i>
+</button>
+    
   
       <button id="brush-btn" class="">🖌️</button>
     <button id="bucket-btn" class="active">🥒</button>
@@ -642,11 +652,7 @@ button.active {
     </div>
 
 
-  
-   <button id="spin-sticker-btn" title="Spin Random">
-  <i data-lucide="dice-6" class="icon"></i>
-</button>
-    
+ 
         <button id="add-sticker-btn" title="Add Random">
             <i data-lucide="plus" class="icon"></i>
         </button>
