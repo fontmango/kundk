@@ -3288,7 +3288,7 @@ urls: [
         let lastX = 0, lastY = 0;
         let strokeOriginImageData = null;
         let insideMask = null; 
-        //ADDED FOR BRUSH
+        //END FOR BRUSH
 
 
 
@@ -3496,44 +3496,6 @@ urls: [
     }
 
 
-function addInteractionButtons(sticker, stickerImg) {
-        const copyBtn = document.createElement('div');
-        copyBtn.className = 'copy-btn sticker-btn';
-        copyBtn.innerHTML = `<svg class="copy-btn-icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>`;
-        copyBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            addSticker(stickerImg.src, parseInt(sticker.style.left) + 20, parseInt(sticker.style.top) + 20, sticker.offsetWidth, sticker.offsetHeight, { group: sticker.dataset.group });
-        });
-        const deleteBtn = document.createElement('div');
-        deleteBtn.className = 'delete-btn sticker-btn';
-        deleteBtn.innerHTML = `<svg class="delete-btn-icon" viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>`;
-        deleteBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            saveState();
-            sticker.remove();
-        });
-        const lockBtn = document.createElement('div');
-        lockBtn.className = 'lock-btn sticker-btn';
-        lockBtn.innerHTML = `<svg class="lock-btn-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
-        lockBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sticker.classList.toggle('locked');
-            sticker.classList.remove('selected');
-            saveState();
-        });
-        const groupBtn = document.createElement('div');
-        groupBtn.className = 'group-btn sticker-btn';
-        groupBtn.innerHTML = `<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>`;
-        groupBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const group = stickerGroups.find(g => g.name === sticker.dataset.group);
-            if (group) showStickerOverlay(group.urls, group.name);
-        });
-        sticker.appendChild(deleteBtn);
-        sticker.appendChild(copyBtn);
-        sticker.appendChild(lockBtn);
-        sticker.appendChild(groupBtn);
-    }
 
 
  function startInteraction(e) {
@@ -4397,11 +4359,15 @@ function preloadStickers() {
     }
 });
 
-        function hexToRgb(hex) {
-            hex = hex.replace(/^#/, "");
-            const bigint = parseInt(hex, 16);
-            return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+         function hexToRgb(colorStr) {
+        if (!colorStr) return null;
+        if (colorStr.startsWith('rgb')) {
+            const parts = colorStr.match(/\d+/g);
+            return [parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2])];
         }
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(colorStr);
+        return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
+    }
 
 function recolorSticker(stickerImg, fillColor, e) {
     // --- Step 0: Compute accurate click coordinates accounting for letterboxing ---
