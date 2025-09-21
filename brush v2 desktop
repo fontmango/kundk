@@ -3716,17 +3716,23 @@ document.addEventListener("click", () => {
         setActiveTool('brush');
     });
 
-     colorPalette.addEventListener('click', (e) => {
-        if (e.target.classList.contains('color-swatch')) {
-            const clickedColor = e.target.style.backgroundColor;
-            if (selectedColor === clickedColor && currentTool === 'bucket') {
-                setActiveTool('move');
-            } else {
-                selectedColor = clickedColor;
-                setActiveTool('bucket');
-            }
+    colorPalette.addEventListener('click', (e) => {
+    if (e.target.classList.contains('color-swatch')) {
+        const clickedColor = e.target.style.backgroundColor;
+        selectedColor = clickedColor;
+
+        // Only switch to bucket if no tool is currently active
+        if (!currentTool || currentTool === 'move') {
+            setActiveTool('bucket');
         }
-    });
+
+        // Update the UI for the active color
+        document.querySelectorAll('.color-swatch').forEach(swatch => 
+            swatch.classList.remove('active')
+        );
+        e.target.classList.add('active');
+    }
+});
 
 
 //END FOR BRUSH
