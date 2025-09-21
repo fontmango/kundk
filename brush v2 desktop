@@ -3752,21 +3752,24 @@ colorPalette.addEventListener('click', (e) => {
     const clickedColor = e.target.style.backgroundColor;
 
     if (selectedColor === clickedColor) {
-        setActiveTool('move');
+        // --- Deselect the color like eraser does ---
+        selectedColor = null;              // clear tool state
+        setActiveTool('move');             // switch to move tool
         return;
     }
 
+    // Otherwise, select the new color
     selectedColor = clickedColor;
 
+    // If we were in eraser or no tool, restore previous tool or default to bucket
     if (currentTool === "" || currentTool === "eraser") {
-        // restore previous coloring tool
         setActiveTool(previousTool || "bucket");
     } else {
-        document.querySelectorAll('.color-swatch.active').forEach(swatch => swatch.classList.remove('active'));
+        // Update UI only
+        document.querySelectorAll('.color-swatch.active').forEach(s => s.classList.remove('active'));
         e.target.classList.add('active');
     }
 });
-
 
 
 //END FOR BRUSH
@@ -4748,21 +4751,40 @@ function updateUndoRedoButtons() {
                     swatch.classList.add('active');
                 }
 
-                swatch.addEventListener('click', (e) => {
-                    if (isSwiping) return;
-                    
-                    document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+   swatch.addEventListener('click', (e) => {
+    if (isSwiping) return;
 
-                    const wasActive = swatch.classList.contains('active');
-                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-                    
-                    if (!wasActive) {
-                        swatch.classList.add('active');
-                        selectedColor = color;
-                    } else {
-                        selectedColor = null;
-                    }
-                });
+    const wasActive = swatch.classList.contains('active');
+    console.log("Swatch clicked:", color, "Was active before click?", wasActive);
+    
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+
+    if (!wasActive) {
+        swatch.classList.add('active');
+        selectedColor = color;
+        console.log("Selected color:", selectedColor);
+
+        // If coming from no tool or move, switch to bucket
+        if (currentTool === "" || currentTool === "move") {
+            console.log("Switching tool to bucket because currentTool is", currentTool);
+            setActiveTool("bucket");
+        } else {
+            console.log("Tool remains as", currentTool);
+        }
+
+    } else {
+        // Deselect
+        selectedColor = null;
+        console.log("Deselected color. Switching to move tool.");
+
+        // Switch to move tool properly
+        setActiveTool("move");
+    }
+
+    console.log("currentTool after click:", currentTool, "selectedColor:", selectedColor);
+});
+
 
                 colorPalette.appendChild(swatch);
             });
