@@ -3520,6 +3520,7 @@ urls: [
         const bucketOption = document.getElementById("bucket-option");
         const brushOption = document.getElementById("brush-option");
 
+        let activeSwatch = null;
 
         let currentTool = ""; // default
 
@@ -3819,117 +3820,78 @@ function setActiveTool(tool) {
 
 
 
-
- function startInteraction(e) {
+function startInteraction(e) {
     const sticker = e.currentTarget;
-    if (sticker.classList.contains('locked') || e.target.closest('.sticker-btn')) return;
+    if (e.target.closest('.sticker-btn')) return;
     e.preventDefault();
     activeSticker = sticker;
 
-    const stickerImg = activeSticker.querySelector('img');
-
-    // ================== FIX STARTS HERE ==================
-    // Prioritize pinch-to-zoom for mobile to allow resizing even when a color is selected.
+    // --- 1. Handle the two-finger pinch gesture first ---
     if (e.touches && e.touches.length === 2) {
-    isInteracting = true;
-    deselectAllStickers();
-    activeSticker.classList.add('selected');
+        isInteracting = true;
+        deselectAllStickers();
+        activeSticker.classList.add('selected');
+        initialInteractionData = {
+            pinchDistance: Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY),
+            width: activeSticker.offsetWidth,
+            height: activeSticker.offsetHeight,
+            left: activeSticker.offsetLeft,
+            top: activeSticker.offsetTop,
+        };
+        document.addEventListener('touchmove', handleMove, { passive: false });
+        document.addEventListener('touchend', handleEnd);
+        return; // Exit since this is a distinct gesture
+    }
 
-    // Store the full initial state for centered scaling
+    // --- 2. Prepare for a single-touch action (tap, drag, or brush) ---
+    const pointer = e.touches ? e.touches[0] : e;
+    const stickerImg = activeSticker.querySelector('img');
+    
+    // Store initial data needed for both moving and tap detection
     initialInteractionData = {
-        pinchDistance: Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY),
-        width: activeSticker.offsetWidth,
-        height: activeSticker.offsetHeight,
-        left: activeSticker.offsetLeft,
-        top: activeSticker.offsetTop,
+        x: pointer.clientX,
+        y: pointer.clientY,
+        offsetX: activeSticker.offsetLeft,
+        offsetY: activeSticker.offsetTop,
+        time: Date.now() // Record start time to differentiate tap vs. drag
     };
 
-    document.addEventListener('touchmove', handleMove, { passive: false });
-    document.addEventListener('touchend', handleEnd);
-    
-    return;
-}
-    // =================== FIX ENDS HERE ===================
-
-
-    // Eraser behaves exactly like bucket
-     if (currentTool === 'eraser' || currentTool === 'bucket') {
-        if (selectedColor) {
-
-            // ================== FIX STARTS HERE ==================
-            // Normalize the event object for mobile touch.
-            // The recolorSticker function likely expects e.clientX/Y, which only exists on mouse events.
-            // For touch events, we copy the coordinates from the `touches` array.
-            const pointerEvent = e.touches ? e.touches[0] : e;
-            // =================== FIX ENDS HERE ===================
-
-            // Pass the normalized pointer event to the function
-            recolorSticker(stickerImg, selectedColor, pointerEvent);
-
-            // Manually save and clean up the state
-            saveState();
-            activeSticker = null;
-        }
-        return;
-    }
-    if (currentTool === 'brush') {
-        const setupBrush = (img, event) => {
+    // If the brush tool is active, prepare the canvas for drawing
+    if (currentTool === 'brush' && selectedColor) {
+        isDrawing = true; // Set the drawing flag
+        const setupBrush = () => {
             activeCanvas = document.createElement('canvas');
-            activeCanvas.width = img.naturalWidth;
-            activeCanvas.height = img.naturalHeight;
+            activeCanvas.width = stickerImg.naturalWidth;
+            activeCanvas.height = stickerImg.naturalHeight;
             activeCtx = activeCanvas.getContext('2d', { willReadFrequently: true });
-            activeCtx.drawImage(img, 0, 0);
-
-            const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-            const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+            activeCtx.drawImage(stickerImg, 0, 0);
             const rect = stickerImg.getBoundingClientRect();
-            const [startX, startY] = getCanvasCoordinates(clientX, clientY, rect);
-
+            const [startX, startY] = getCanvasCoordinates(pointer.clientX, pointer.clientY, rect);
             insideMask = computeEnclosedMask(Math.round(startX), Math.round(startY), activeCanvas);
-            if (!insideMask) {
-                activeSticker = null; activeCanvas = null; return;
-            }
-
+            if (!insideMask) { activeSticker = null; activeCanvas = null; return; }
             strokeOriginImageData = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
-            isDrawing = true;
             [lastX, lastY] = [startX, startY];
-            draw(event);
-
-            document.addEventListener('mousemove', draw);
-            document.addEventListener('touchmove', draw, { passive: false });
-            document.addEventListener('mouseup', handleEnd);
-            document.addEventListener('touchend', handleEnd);
+            draw(e); // Start drawing immediately
         };
-
-        if (stickerImg.complete && stickerImg.naturalWidth > 0) {
-            setupBrush(stickerImg, e);
-        } else {
-            stickerImg.onload = () => setupBrush(stickerImg, e);
-        }
-        return;
+        // Ensure image is loaded before setting up the brush
+        if (stickerImg.complete && stickerImg.naturalWidth > 0) setupBrush();
+        else stickerImg.onload = setupBrush;
+    } else {
+        // For all other cases (bucket, eraser, or move), prepare for interaction
+        isInteracting = true;
     }
 
-    // Default: move (now correctly handles single-touch drag and mouse drag)
-    isInteracting = true;
+    // --- 3. Add listeners for all single-touch actions ---
     deselectAllStickers();
     activeSticker.classList.add('selected');
-
-    if (e.touches) {
-        // This branch is now only for a single touch point
-        if (e.touches.length === 1) {
-            const touch = e.touches[0];
-            initialInteractionData = { x: touch.clientX, y: touch.clientY, offsetX: activeSticker.offsetLeft, offsetY: activeSticker.offsetTop };
-        } 
-        // Note: The e.touches.length === 2 case is already handled above
-    } else {
-        initialInteractionData = { x: e.clientX, y: e.clientY, offsetX: activeSticker.offsetLeft, offsetY: activeSticker.offsetTop };
-    }
-
     document.addEventListener('mousemove', handleMove);
     document.addEventListener('touchmove', handleMove, { passive: false });
     document.addEventListener('mouseup', handleEnd);
     document.addEventListener('touchend', handleEnd);
+    document.addEventListener('mousemove', draw);
+    document.addEventListener('touchmove', draw, { passive: false });
 }
+ 
 
 
     function handleMove(e) {
@@ -3994,29 +3956,57 @@ function setActiveTool(tool) {
         }
     }
 
- function handleEnd() {
-        if (isInteracting && activeSticker) {
-            activeSticker.classList.remove('selected');
+function handleEnd(e) {
+    const pointer = e.changedTouches ? e.changedTouches[0] : e;
+    const dx = pointer.clientX - initialInteractionData.x;
+    const dy = pointer.clientY - initialInteractionData.y;
+    const distance = Math.hypot(dx, dy);
+    const duration = Date.now() - initialInteractionData.time;
+
+    const isTap = distance < 10 && duration < 500;
+
+    // --- NEW SELECTION LOGIC IS HERE ---
+
+    if (isTap && activeSticker) {
+        if (currentTool === 'bucket' || currentTool === 'eraser') {
+            // If a color tool is active, color the sticker
+            const stickerImg = activeSticker.querySelector('img');
+            recolorSticker(stickerImg, selectedColor, pointer);
+        } else {
+            // If NO color tool is active, this is a selection tap
+            // First, deselect any other sticker
+            const currentlySelected = document.querySelector('.sticker-wrapper.selected');
+            if (currentlySelected) {
+                currentlySelected.classList.remove('selected');
+            }
+            // Then, select the one that was just tapped
+            activeSticker.classList.add('selected');
         }
-        if (isDrawing || isInteracting) {
-            saveState();
-        }
-        isDrawing = false;
-        isInteracting = false;
-        activeSticker = null;
-        activeCanvas = null;
-        activeCtx = null;
-        lastX = 0;
-        lastY = 0;
-        strokeOriginImageData = null;
-        insideMask = null;
-        document.removeEventListener('mousemove', handleMove);
-        document.removeEventListener('mouseup', handleEnd);
-        document.removeEventListener('touchmove', handleMove);
-        document.removeEventListener('touchend', handleEnd);
-        document.removeEventListener('mousemove', draw);
-        document.removeEventListener('touchmove', draw);
     }
+
+    // --- Standard cleanup and state saving ---
+    if (isDrawing || isInteracting) {
+        saveState();
+    }
+    
+    // The 'selected' class is no longer removed here, so the sticker stays selected
+    isDrawing = false;
+    isInteracting = false;
+    activeSticker = null;
+    activeCanvas = null;
+    activeCtx = null;
+    lastX = 0;
+    lastY = 0;
+    strokeOriginImageData = null;
+    insideMask = null;
+
+    document.removeEventListener('mousemove', handleMove);
+    document.removeEventListener('mouseup', handleEnd);
+    document.removeEventListener('touchmove', handleMove);
+    document.removeEventListener('touchend', handleEnd);
+    document.removeEventListener('mousemove', draw);
+    document.removeEventListener('touchmove', draw);
+}
 
       function computeEnclosedMask(startX, startY, canvas) {
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -4056,49 +4046,51 @@ function setActiveTool(tool) {
         return mask;
     }
 
-
+// Add this new listener to your script
+canvas.addEventListener('click', (e) => {
+    // If the user clicks on the canvas container itself (not a sticker)
+    if (e.target === canvas) {
+        // Find any currently selected sticker and deselect it
+        const selected = document.querySelector('.sticker-wrapper.selected');
+        if (selected) {
+            selected.classList.remove('selected');
+        }
+    }
+});
  /**
  * REVISED color palette listener with corrected logic.
  */
 colorPalette.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('color-swatch')) return;
+    const clickedSwatch = e.target;
+    if (!clickedSwatch.classList.contains('color-swatch')) return;
 
-    const clickedColor = e.target.style.backgroundColor;
-
-    // Case: clicked the same color → deselect
-    if (selectedColor === clickedColor) {
+    // Case 1: The user clicked the currently active swatch to deselect it.
+    if (activeSwatch === clickedSwatch) {
         selectedColor = null;
-
-        document.querySelectorAll('.color-swatch.active')
-            .forEach(s => s.classList.remove('active'));
+        activeSwatch.classList.remove('active');
+        activeSwatch = null; // Forget the active swatch
 
         bucketBtn.classList.remove('active');
         brushBtn.classList.remove('active');
-
-        setActiveTool('move'); // allow dragging
+        setActiveTool('move'); // Switch back to move tool
         return;
     }
 
-    // New color selected
-    selectedColor = clickedColor;
-
-    // If no tool was ever selected (fresh start), default to bucket
-    if (!lastPaintTool) {
-        setActiveTool('bucket');
+    // Case 2: The user clicked a new color swatch.
+    // First, remove the highlight from the previously active swatch, if there was one.
+    if (activeSwatch) {
+        activeSwatch.classList.remove('active');
     }
-    // If move or eraser is active, restore last paint tool
-    else if (currentTool === 'move' || currentTool === 'eraser') {
-        setActiveTool(lastPaintTool);
+    
+    // Set the new active swatch and color
+    activeSwatch = clickedSwatch;
+    activeSwatch.classList.add('active');
+    selectedColor = activeSwatch.style.backgroundColor;
+
+    // Set the appropriate paint tool
+    if (currentTool === 'move' || currentTool === 'eraser' || !currentTool) {
+        setActiveTool(lastPaintTool || 'bucket');
     }
-    // Else: brush/bucket already active → stay
-
-    // Update swatch highlight
-    document.querySelectorAll('.color-swatch.active').forEach(s => s.classList.remove('active'));
-    e.target.classList.add('active');
-
-    // Ensure correct tool button shows active
-    if (currentTool === 'bucket' && selectedColor) bucketBtn.classList.add('active');
-    if (currentTool === 'brush' && selectedColor) brushBtn.classList.add('active');
 });
 
 
