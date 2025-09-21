@@ -115,12 +115,30 @@
             transition: none !important;
         }
 
+
+        .brush-active .sticker .delete-btn,
+        .brush-active .sticker .delete-btn,
+        .brush-active .sticker .copy-btn,
+        .brush-active .sticker .group-btn ,
+        .brush-active .sticker .resize-handle {
+            
+            display: none !important;
+        }
+
+
+        .bucket-active .sticker .delete-btn,
         .bucket-active .sticker .delete-btn,
         .bucket-active .sticker .copy-btn,
         .bucket-active .sticker .group-btn ,
         .bucket-active .sticker .resize-handle {
             
             display: none !important;
+        }
+
+        
+        .brush-active .sticker:active,
+        .brush-active .sticker:hover {
+            cursor: crosshair;
         }
 
         .bucket-active .sticker:active,
@@ -219,6 +237,7 @@
             transform: scale(1.2);
             border-color: #000000;
         }
+
 
   #sticker-palette-container {
     width: 100%;
@@ -439,6 +458,12 @@
 #brush-btn {
     display: none;
 }
+
+.controls button.active {
+    transform: scale(1.2);
+    border: 2px solid #000;
+}
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -449,7 +474,7 @@
 
     
       <button id="brush-btn" class="">🖌️</button>
-    <button id="bucket-btn" class="active">🥒</button>
+    <button id="bucket-btn" class="">🥒</button>
 
     <div id="tool-options" style="display: none; position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 5px;">
         <button id="bucket-option">🥒 Bucket</button>
@@ -3328,6 +3353,7 @@ urls: [
 
         const newBtn = document.getElementById('new-btn');
         const eraserBtn = document.getElementById('eraser-btn');
+        
         const paletteContainer = document.getElementById('sticker-palette-container');
         const overlayContainer = document.getElementById('overlay-container');
         const colorPalette = document.getElementById('color-palette');
@@ -3384,11 +3410,14 @@ urls: [
   eraserBtn.addEventListener('click', () => {
     if (currentTool === 'eraser') {
         setActiveTool('move');
+          eraserBtn.classList.toggle('active');
     } else {
         previousTool = currentTool === "" ? "bucket" : currentTool; // save previous
         setActiveTool('eraser');
     }
 });
+
+
 
 // Show mini menu
 bucketBtn.addEventListener("click", (e) => {
@@ -3442,7 +3471,7 @@ function setActiveTool(tool) {
             break;
         case 'brush':
             document.body.classList.add('brush-active');
-            bucketBtn.classList.add('active');
+            brushBtn.classList.add('active');
             break;
         case 'eraser':
             document.body.classList.add('bucket-active'); // use bucket cursor for eraser
@@ -3988,7 +4017,7 @@ function addSticker(url, x, y, width = 120, height = 120, opts = {}) {
             sticker.appendChild(stickerImg);
 
             sticker.addEventListener('click', (e) => {
-                if (bucketMode && selectedColor) {
+                if (selectedColor) {
                     e.stopPropagation();
                     const rect = sticker.getBoundingClientRect();
                     const clickX = Math.floor((e.clientX - rect.left) * (stickerImg.naturalWidth / rect.width));
@@ -4748,41 +4777,31 @@ function updateUndoRedoButtons() {
                 swatch.style.backgroundColor = color;
                 
                 if (selectedColor === color) {
-                    swatch.classList.add('active');
                 }
 
-   swatch.addEventListener('click', (e) => {
+  swatch.addEventListener('click', (e) => {
     if (isSwiping) return;
 
     const wasActive = swatch.classList.contains('active');
     console.log("Swatch clicked:", color, "Was active before click?", wasActive);
-    
+
+    // Clear active state from all swatches
     document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
 
     if (!wasActive) {
+        // Activate this swatch
         swatch.classList.add('active');
         selectedColor = color;
-        console.log("Selected color:", selectedColor);
 
-        // If coming from no tool or move, switch to bucket
         if (currentTool === "" || currentTool === "move") {
-            console.log("Switching tool to bucket because currentTool is", currentTool);
             setActiveTool("bucket");
-        } else {
-            console.log("Tool remains as", currentTool);
         }
-
     } else {
-        // Deselect
+        // Explicitly *deselect this swatch visually too*
+        swatch.classList.remove('active');
         selectedColor = null;
-        console.log("Deselected color. Switching to move tool.");
-
-        // Switch to move tool properly
         setActiveTool("move");
     }
-
-    console.log("currentTool after click:", currentTool, "selectedColor:", selectedColor);
 });
 
 
