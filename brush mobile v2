@@ -3673,11 +3673,11 @@ document.addEventListener("click", () => {
  * This function now simply SETS the tool state, it doesn't toggle it.
  */
 function setActiveTool(tool) {
-    if (currentTool === tool) return; // no change
+    if (currentTool === tool) return; // No change
 
     currentTool = tool;
 
-    // Reset tool-specific UI classes
+    // Reset all tool-related body classes and button active states
     document.body.classList.remove('bucket-active', 'brush-active', 'move-active');
     bucketBtn.classList.remove('active');
     brushBtn.classList.remove('active');
@@ -3689,16 +3689,20 @@ function setActiveTool(tool) {
             document.body.classList.add('bucket-active');
             bucketBtn.classList.add('active');
             break;
+
         case 'brush':
             lastPaintTool = 'brush';
             document.body.classList.add('brush-active');
             brushBtn.classList.add('active');
             break;
+
         case 'eraser':
-            document.body.classList.add('bucket-active'); // keep bucket cursor for eraser
+            // Keep cursor consistent with bucket for eraser
+            document.body.classList.add('bucket-active');
             eraserBtn.classList.add('active');
-            selectedColor = transparentColor;
+            selectedColor = transparentColor; // eraser paints transparent
             break;
+
         case 'move':
         default:
             document.body.classList.add('move-active');
@@ -3706,68 +3710,80 @@ function setActiveTool(tool) {
             break;
     }
 
-    // Highlight active color swatch if applicable
-    if ((currentTool === 'bucket' || currentTool === 'brush') && selectedColor && typeof selectedColor === 'string') {
+    // Highlight the active color swatch if a color is selected
+    if ((currentTool === 'bucket' || currentTool === 'brush') && selectedColor) {
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
         const active = document.querySelector(`.color-swatch[style*="${selectedColor}"]`);
         if (active) active.classList.add('active');
     }
+
+    // Ensure sticker buttons show/hide correctly
+    document.querySelectorAll('.sticker').forEach(sticker => {
+        if (currentTool === 'bucket' || currentTool === 'brush') {
+            sticker.classList.remove('selected'); // hide buttons while coloring
+        }
+    });
 }
 
-    function draw(e) {
-        if (!isDrawing || !activeCtx || !activeSticker) return;
 
-        const stickerImg = activeSticker.querySelector('img');
-        const rect = stickerImg.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+   
+function draw(e) {
+    // Prevent coloring if resizing (two-finger pinch) or moving
+    if (isInteracting) return;
 
-        if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) {
-            lastX = -1;
+    if (!isDrawing || !activeCtx || !activeSticker) return;
+
+    const stickerImg = activeSticker.querySelector('img');
+    const rect = stickerImg.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) {
+        lastX = -1;
+        return;
+    }
+
+    const [currentX, currentY] = getCanvasCoordinates(clientX, clientY, rect);
+
+    if (lastX === -1) {
+        const currentIdx = Math.round(currentY) * activeCanvas.width + Math.round(currentX);
+        if (currentTool === 'eraser' || (insideMask && insideMask[currentIdx])) {
+            lastX = currentX;
+            lastY = currentY;
+        } else {
             return;
         }
-
-        const [currentX, currentY] = getCanvasCoordinates(clientX, clientY, rect);
-
-        if (lastX === -1) {
-            const currentIdx = Math.round(currentY) * activeCanvas.width + Math.round(currentX);
-            if (currentTool === 'eraser' || (insideMask && insideMask[currentIdx])) {
-                lastX = currentX;
-                lastY = currentY;
-            } else {
-                return;
-            }
-        }
-
-        const dist = Math.hypot(currentX - lastX, currentY - lastY);
-        const angle = Math.atan2(currentY - lastY, currentX - lastX);
-        const imageDataToPaint = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
-        const rgbColor = currentTool === 'eraser' ? [0, 0, 0, 0] : hexToRgb(selectedColor);
-        if (!rgbColor) return;
-
-        for (let i = 0; i < dist; i++) {
-            const x = Math.round(lastX + (Math.cos(angle) * i));
-            const y = Math.round(lastY + (Math.sin(angle) * i));
-            const idx = y * activeCanvas.width + x;
-            
-            // --- FIX: Check against the pre-computed mask ---
-            if (currentTool === 'brush' && (!insideMask || !insideMask[idx])) {
-                continue;
-            }
-            paintAt(x, y, imageDataToPaint, rgbColor);
-        }
-
-        const cx = Math.round(currentX);
-        const cy = Math.round(currentY);
-        const currentIdx = cy * activeCanvas.width + cx;
-        if (currentTool === 'eraser' || (insideMask && insideMask[currentIdx])) {
-            paintAt(cx, cy, imageDataToPaint, rgbColor);
-        }
-        
-        activeCtx.putImageData(imageDataToPaint, 0, 0);
-        stickerImg.src = activeCanvas.toDataURL();
-        lastX = currentX;
-        lastY = currentY;
     }
+
+    const dist = Math.hypot(currentX - lastX, currentY - lastY);
+    const angle = Math.atan2(currentY - lastY, currentX - lastX);
+    const imageDataToPaint = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
+    const rgbColor = currentTool === 'eraser' ? [0, 0, 0, 0] : hexToRgb(selectedColor);
+    if (!rgbColor) return;
+
+    for (let i = 0; i < dist; i++) {
+        const x = Math.round(lastX + (Math.cos(angle) * i));
+        const y = Math.round(lastY + (Math.sin(angle) * i));
+        const idx = y * activeCanvas.width + x;
+
+        if (currentTool === 'brush' && (!insideMask || !insideMask[idx])) continue;
+
+        paintAt(x, y, imageDataToPaint, rgbColor);
+    }
+
+    const cx = Math.round(currentX);
+    const cy = Math.round(currentY);
+    const currentIdx = cy * activeCanvas.width + cx;
+    if (currentTool === 'eraser' || (insideMask && insideMask[currentIdx])) {
+        paintAt(cx, cy, imageDataToPaint, rgbColor);
+    }
+
+    activeCtx.putImageData(imageDataToPaint, 0, 0);
+    stickerImg.src = activeCanvas.toDataURL();
+    lastX = currentX;
+    lastY = currentY;
+}
+
 
 
     function getCanvasCoordinates(clientX, clientY, rect) {
@@ -3825,48 +3841,56 @@ function setActiveTool(tool) {
 
 
 
-function startInteraction(e) {
+    function startInteraction(e) {
     const sticker = e.currentTarget;
-    if (e.target.closest('.sticker-btn')) return;
+    if (e.target.closest('.sticker-btn')) return; // ignore buttons
     e.preventDefault();
     activeSticker = sticker;
 
-    // --- 1. Handle pinch gesture (always allowed) ---
-    if (e.touches && e.touches.length === 2) {
+    const touches = e.touches || [];
+    const pointer = touches[0] || e;
+
+    // --- TWO-FINGER PINCH RESIZE ---
+    if (touches.length === 2) {
         isInteracting = true;
         deselectAllStickers();
         activeSticker.classList.add('selected');
+
         initialInteractionData = {
             pinchDistance: Math.hypot(
-                e.touches[0].clientX - e.touches[1].clientX,
-                e.touches[0].clientY - e.touches[1].clientY
+                touches[0].clientX - touches[1].clientX,
+                touches[0].clientY - touches[1].clientY
             ),
             width: activeSticker.offsetWidth,
             height: activeSticker.offsetHeight,
             left: activeSticker.offsetLeft,
             top: activeSticker.offsetTop,
         };
+
         document.addEventListener('touchmove', handleMove, { passive: false });
         document.addEventListener('touchend', handleEnd);
-        return; // 🔑 exit — pinch handled separately
+        return; // early exit, do NOT setup brush
     }
 
-    // --- 2. Single-touch pointer ---
-    const pointer = e.touches ? e.touches[0] : e;
-    const stickerImg = activeSticker.querySelector('img');
-
+    // --- SINGLE FINGER ---
     initialInteractionData = {
         x: pointer.clientX,
         y: pointer.clientY,
         offsetX: activeSticker.offsetLeft,
         offsetY: activeSticker.offsetTop,
-        time: Date.now()
+        time: Date.now(),
     };
 
-    // --- 2a. Brush tool active → paint only, no move ---
+    const stickerImg = activeSticker.querySelector('img');
+
+    // --- BRUSH SETUP ONLY IF COLOR SELECTED ---
     if (currentTool === 'brush' && selectedColor) {
         isDrawing = false;
+
         const setupBrush = () => {
+            // If multi-touch started after image load, block drawing
+            if (e.touches && e.touches.length > 1) return;
+
             activeCanvas = document.createElement('canvas');
             activeCanvas.width = stickerImg.naturalWidth;
             activeCanvas.height = stickerImg.naturalHeight;
@@ -3876,104 +3900,95 @@ function startInteraction(e) {
             const rect = stickerImg.getBoundingClientRect();
             const [startX, startY] = getCanvasCoordinates(pointer.clientX, pointer.clientY, rect);
             insideMask = computeEnclosedMask(Math.round(startX), Math.round(startY), activeCanvas);
-            if (!insideMask) {
-                activeSticker = null;
-                activeCanvas = null;
-                return;
-            }
+            if (!insideMask) return;
 
             strokeOriginImageData = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
             [lastX, lastY] = [startX, startY];
 
             isDrawing = true;
-            isInteracting = false; // 🔑 disable moving while painting
+            isInteracting = false; // prevent move while painting
 
             document.addEventListener('mousemove', draw);
             document.addEventListener('touchmove', draw, { passive: false });
-
-            draw(e);
+            draw(e); // first brush point
         };
 
         if (stickerImg.complete && stickerImg.naturalWidth > 0) setupBrush();
         else stickerImg.onload = setupBrush;
 
-        // 🔑 STOP HERE — don’t set up move listeners
-        return;
+    } else {
+        // MOVE STICKER IF NO COLOR SELECTED
+        isInteracting = true;
     }
 
-    // --- 2b. Otherwise: move/drag mode ---
-    isInteracting = true;
+    // Add standard listeners
     deselectAllStickers();
     activeSticker.classList.add('selected');
+
     document.addEventListener('mousemove', handleMove);
     document.addEventListener('touchmove', handleMove, { passive: false });
     document.addEventListener('mouseup', handleEnd);
     document.addEventListener('touchend', handleEnd);
+    document.addEventListener('mousemove', draw);
+    document.addEventListener('touchmove', draw, { passive: false });
 }
 
 
 
-    function handleMove(e) {
+
+   function handleMove(e) {
     if (!activeSticker || (!isInteracting && !isDrawing)) return;
     e.preventDefault();
 
-    // --- Pinch gesture (always allowed) ---
-    if (e.touches && e.touches.length === 2) {
+    const touches = e.touches || [];
+
+    // --- TWO-FINGER PINCH RESIZE ---
+    if (touches.length === 2) {
+        isDrawing = false; // block any drawing during pinch
+        isInteracting = true;
+
         const currentPinch = Math.hypot(
-            e.touches[0].clientX - e.touches[1].clientX,
-            e.touches[0].clientY - e.touches[1].clientY
+            touches[0].clientX - touches[1].clientX,
+            touches[0].clientY - touches[1].clientY
         );
         const scaleFactor = currentPinch / initialInteractionData.pinchDistance;
+
         const newWidth = Math.max(30, initialInteractionData.width * scaleFactor);
         const newHeight = (newWidth / initialInteractionData.width) * initialInteractionData.height;
-        const deltaWidth = newWidth - initialInteractionData.width;
-        const deltaHeight = newHeight - initialInteractionData.height;
 
-        let newLeft = initialInteractionData.left - (deltaWidth / 2);
-        let newTop = initialInteractionData.top - (deltaHeight / 2);
+        let newLeft = initialInteractionData.left - (newWidth - initialInteractionData.width) / 2;
+        let newTop = initialInteractionData.top - (newHeight - initialInteractionData.height) / 2;
 
-        // --- Keep centered if shrinking and off-canvas ---
+        // Prevent off-canvas positioning
         const canvasWidth = canvas.offsetWidth;
         const canvasHeight = canvas.offsetHeight;
-        const isReducing = newWidth < initialInteractionData.width;
-        const isOffCanvas =
-            newLeft < 0 || newTop < 0 ||
-            (newLeft + newWidth) > canvasWidth ||
-            (newTop + newHeight) > canvasHeight;
-
-        if (isReducing && isOffCanvas) {
-            newLeft = (canvasWidth - newWidth) / 2;
-            newTop = (canvasHeight - newHeight) / 2;
-        }
+        if (newLeft < 0) newLeft = 0;
+        if (newTop < 0) newTop = 0;
+        if (newLeft + newWidth > canvasWidth) newLeft = canvasWidth - newWidth;
+        if (newTop + newHeight > canvasHeight) newTop = canvasHeight - newHeight;
 
         activeSticker.style.width = `${newWidth}px`;
         activeSticker.style.height = `${newHeight}px`;
         activeSticker.style.left = `${newLeft}px`;
         activeSticker.style.top = `${newTop}px`;
-        return; // ✅ done with pinch
+
+        return; // exit early, no painting
     }
 
-    // --- Block dragging if painting tool is active ---
-    if ((currentTool === 'brush' || currentTool === 'bucket' || currentTool === 'eraser') && selectedColor) {
-        return; // ❌ don’t move sticker in paint mode
-    }
+    // --- SINGLE-FINGER MOVE ---
+    if (touches.length <= 1 && isInteracting) {
+        // Only allow move if NO color is selected
+        if (!selectedColor) {
+            const pointer = touches[0] || e;
+            const dx = pointer.clientX - initialInteractionData.x;
+            const dy = pointer.clientY - initialInteractionData.y;
 
-    // --- Normal drag (mouse or single touch) ---
-    if (isInteracting) {
-        if (e.touches && e.touches.length === 1) {
-            const touch = e.touches[0];
-            const dx = touch.clientX - initialInteractionData.x;
-            const dy = touch.clientY - initialInteractionData.y;
-            activeSticker.style.left = `${initialInteractionData.offsetX + dx}px`;
-            activeSticker.style.top = `${initialInteractionData.offsetY + dy}px`;
-        } else if (!e.touches) {
-            const dx = e.clientX - initialInteractionData.x;
-            const dy = e.clientY - initialInteractionData.y;
             activeSticker.style.left = `${initialInteractionData.offsetX + dx}px`;
             activeSticker.style.top = `${initialInteractionData.offsetY + dy}px`;
         }
     }
 }
+
 
 
 function handleEnd(e) {
@@ -4077,53 +4092,7 @@ canvas.addEventListener('click', (e) => {
         });
     }
 });
- /**
- * REVISED color palette listener with corrected logic.
- */
-/**
- * Corrected setActiveTool
- * Only updates tool state and UI; does NOT reset drawing/moving state
- */
-function setActiveTool(tool) {
-    if (currentTool === tool) return; // no change
-
-    currentTool = tool;
-
-    // Reset tool-specific UI classes
-    document.body.classList.remove('bucket-active', 'brush-active', 'move-active');
-    bucketBtn.classList.remove('active');
-    brushBtn.classList.remove('active');
-    eraserBtn.classList.remove('active');
-
-    switch (currentTool) {
-        case 'bucket':
-            lastPaintTool = 'bucket';
-            document.body.classList.add('bucket-active');
-            bucketBtn.classList.add('active');
-            break;
-        case 'brush':
-            lastPaintTool = 'brush';
-            document.body.classList.add('brush-active');
-            brushBtn.classList.add('active');
-            break;
-        case 'eraser':
-            document.body.classList.add('bucket-active'); // keep bucket cursor for eraser
-            eraserBtn.classList.add('active');
-            selectedColor = transparentColor;
-            break;
-        case 'move':
-        default:
-            document.body.classList.add('move-active');
-            selectedColor = null;
-            break;
-    }
-
-    // Highlight active color swatch if applicable
-    if ((currentTool === 'bucket' || currentTool === 'brush') && selectedColor && typeof selectedColor === 'string') {
-        const active = document.querySelector(`.color-swatch[style*="${selectedColor}"]`);
-        if (active) active.classList.add('active');
-    }
-}
+ 
 
 /**
  * Corrected color palette listener
@@ -4133,20 +4102,21 @@ colorPalette.addEventListener('click', (e) => {
     if (!clickedSwatch.classList.contains('color-swatch')) return;
 
     // Deselect same swatch
-   if (activeSwatch === clickedSwatch) {
-    selectedColor = null;
-    activeSwatch.classList.remove('active');
-    activeSwatch = null;
+    if (activeSwatch === clickedSwatch) {
+        selectedColor = null;
+        activeSwatch.classList.remove('active');
+        activeSwatch = null;
 
-    // Clear any paint tool state
-    bucketBtn.classList.remove('active');
-    brushBtn.classList.remove('active');
-
-    // Always go back to move tool
-    setActiveTool('move');
-    return;
-}
-
+        // Do NOT change currentTool; just update UI
+        bucketBtn.classList.remove('active');
+        brushBtn.classList.remove('active');
+        if (currentTool === 'bucket' || currentTool === 'brush') {
+            // Re-highlight the active tool button
+            if (currentTool === 'bucket') bucketBtn.classList.add('active');
+            else if (currentTool === 'brush') brushBtn.classList.add('active');
+        }
+        return;
+    }
 
     // Deselect previous swatch
     if (activeSwatch) activeSwatch.classList.remove('active');
@@ -4156,9 +4126,10 @@ colorPalette.addEventListener('click', (e) => {
     activeSwatch.classList.add('active');
     selectedColor = activeSwatch.style.backgroundColor;
 
-    // ONLY switch tool if currently in move or eraser (do NOT force bucket/brush)
-    if ((currentTool === 'move' || currentTool === 'eraser') && !isDrawing) {
-        setActiveTool(lastPaintTool || 'brush'); // default last paint tool
+    // Do NOT force tool change; use whatever tool is currently active
+    if ((currentTool === 'bucket' || currentTool === 'brush') && currentTool) {
+        if (currentTool === 'bucket') bucketBtn.classList.add('active');
+        else if (currentTool === 'brush') brushBtn.classList.add('active');
     }
 });
 
@@ -4916,27 +4887,34 @@ window.addEventListener('load', () => {
     document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
 
-    if (!wasActive) {
-        swatch.classList.add('active');
-        selectedColor = color;
-        console.log("Selected color:", selectedColor);
+  if (!wasActive) {
+    // Selecting a new color
+    swatch.classList.add('active');
+    selectedColor = color;
 
-        // If coming from no tool or move, switch to bucket
-        if (currentTool === "" || currentTool === "move") {
-            console.log("Switching tool to bucket because currentTool is", currentTool);
-            setActiveTool("bucket");
-        } else {
-            console.log("Tool remains as", currentTool);
-        }
-
-    } else {
-        // Deselect
-        selectedColor = null;
-        console.log("Deselected color. Switching to move tool.");
-
-        // Switch to move tool properly
-        setActiveTool("move");
+    // Use lastPaintTool if exists, else fallback to bucket
+    if (lastPaintTool) {
+        setActiveTool(lastPaintTool);
+    } else if (!currentTool) {
+        setActiveTool("bucket");
     }
+
+    // Hide sticker buttons while painting
+    if (activeSticker) activeSticker.classList.remove('selected');
+
+} else {
+    // Deselect color
+    selectedColor = null;
+    swatch.classList.remove('active');
+
+    // Restore sticker buttons
+    if (activeSticker) activeSticker.classList.add('selected');
+
+    // Switch to move
+    setActiveTool("move");
+}
+
+
 
     console.log("currentTool after click:", currentTool, "selectedColor:", selectedColor);
 });
