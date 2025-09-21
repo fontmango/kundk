@@ -3340,6 +3340,8 @@ urls: [
         let strokeOriginImageData = null;
         let insideMask = null; 
         let previousTool = "bucket";
+        let lastPaintTool = "bucket"; // default
+ 
         //END FOR BRUSH
 
 
@@ -3406,17 +3408,19 @@ urls: [
 
 //ADDED FOR BRUSH
 
-
-  eraserBtn.addEventListener('click', () => {
+eraserBtn.addEventListener('click', () => {
     if (currentTool === 'eraser') {
+        // Turn eraser off → go back to move
         setActiveTool('move');
-          eraserBtn.classList.toggle('active');
     } else {
-        previousTool = currentTool === "" ? "bucket" : currentTool; // save previous
+        // If we’re currently painting, remember the last paint tool
+        if (currentTool === 'bucket' || currentTool === 'brush') {
+            lastPaintTool = currentTool;
+        }
+        // Now switch to eraser
         setActiveTool('eraser');
     }
 });
-
 
 
 // Show mini menu
@@ -3471,7 +3475,7 @@ function setActiveTool(tool) {
             break;
         case 'brush':
             document.body.classList.add('brush-active');
-            brushBtn.classList.add('active');
+             bucketBtn.classList.add('active');
             break;
         case 'eraser':
             document.body.classList.add('bucket-active'); // use bucket cursor for eraser
@@ -3781,24 +3785,24 @@ colorPalette.addEventListener('click', (e) => {
     const clickedColor = e.target.style.backgroundColor;
 
     if (selectedColor === clickedColor) {
-        // --- Deselect the color like eraser does ---
-        selectedColor = null;              // clear tool state
-        setActiveTool('move');             // switch to move tool
+        // Deselect the color like eraser does
+        selectedColor = null;
+        setActiveTool('move');
         return;
     }
 
-    // Otherwise, select the new color
     selectedColor = clickedColor;
 
-    // If we were in eraser or no tool, restore previous tool or default to bucket
-    if (currentTool === "" || currentTool === "eraser") {
-        setActiveTool(previousTool || "bucket");
+    if (currentTool === "eraser" || currentTool === "") {
+        // Restore whichever paint tool was last used (bucket or brush)
+        setActiveTool(lastPaintTool || "bucket");
     } else {
-        // Update UI only
+        // Just update swatch highlight
         document.querySelectorAll('.color-swatch.active').forEach(s => s.classList.remove('active'));
         e.target.classList.add('active');
     }
 });
+
 
 
 //END FOR BRUSH
