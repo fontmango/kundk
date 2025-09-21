@@ -434,13 +434,31 @@
     transform: scale(1);
     }
 }
+
+
+#brush-btn {
+    display: none;
+}
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <div class="controls">
-    <button id="brush-btn">🖌️</button>
+
+
+    
+      <button id="brush-btn" class="">🖌️</button>
+    <button id="bucket-btn" class="active">🥒</button>
+
+    <div id="tool-options" style="display: none; position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 5px;">
+        <button id="bucket-option">🥒 Bucket</button>
+        <button id="brush-option">🖌️ Brush</button>
+    </div>
+
+
+
+
     <button id="spin-sticker-btn" title="Würfeln">
     <i data-lucide="dice-6" class="icon"></i>
 </button>
@@ -3278,7 +3296,16 @@ urls: [
         ];
         //ADDED FOR BRUSH
         const brushBtn = document.getElementById('brush-btn');
-        let currentTool = 'move';
+        const bucketBtn = document.getElementById("bucket-btn");
+        const toolOptions = document.getElementById("tool-options");
+        const bucketOption = document.getElementById("bucket-option");
+        const brushOption = document.getElementById("brush-option");
+
+
+        let currentTool = "bucket"; // default
+        bucketBtn.innerText = "🥒"; // default icon
+
+      //  let currentTool = 'move';
         let brushSize = 20;
         let isDrawing = false;
         let isInteracting = false;
@@ -3353,6 +3380,35 @@ urls: [
 
 
 //ADDED FOR BRUSH
+
+// Show mini menu
+bucketBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toolOptions.style.display = toolOptions.style.display === "none" ? "flex" : "none";
+    toolOptions.style.flexDirection = "column";
+    toolOptions.style.gap = "5px";
+});
+
+// Select bucket
+bucketOption.addEventListener("click", () => {
+    currentTool = "bucket";
+    bucketBtn.innerText = "🥒";
+    toolOptions.style.display = "none";
+});
+
+// Select brush
+brushOption.addEventListener("click", () => {
+    currentTool = "brush";
+    bucketBtn.innerText = "🖌️";
+    toolOptions.style.display = "none";
+});
+
+// Hide menu on outside click
+document.addEventListener("click", () => {
+    toolOptions.style.display = "none";
+});
+
+
   function setActiveTool(tool) {
         const newTool = (currentTool === tool && tool !== 'move') ? 'move' : tool;
         currentTool = newTool;
