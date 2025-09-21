@@ -3946,23 +3946,40 @@ function setActiveTool(tool) {
                     activeSticker.style.top = `${initialInteractionData.offsetY + dy}px`;
                 // In your handleMove(e) function...
 
+// In your handleMove(e) function...
+
 } else if (e.touches.length === 2) {
+    // --- Standard resize-from-center logic ---
     const currentPinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
     const scaleFactor = currentPinch / initialInteractionData.pinchDistance;
-
-    // Calculate the new width and height while maintaining aspect ratio
     const newWidth = Math.max(30, initialInteractionData.width * scaleFactor);
     const newHeight = (newWidth / initialInteractionData.width) * initialInteractionData.height;
-
-    // Calculate the change in size
     const deltaWidth = newWidth - initialInteractionData.width;
     const deltaHeight = newHeight - initialInteractionData.height;
 
-    // Adjust left/top by half the change in size to keep the center point fixed
-    const newLeft = initialInteractionData.left - (deltaWidth / 2);
-    const newTop = initialInteractionData.top - (deltaHeight / 2);
+    // We use 'let' now because the position may be overridden
+    let newLeft = initialInteractionData.left - (deltaWidth / 2);
+    let newTop = initialInteractionData.top - (deltaHeight / 2);
 
-    // Apply all new styles
+    // ================== NEW LOGIC STARTS HERE ==================
+
+    // 1. Check if the user is shrinking the sticker.
+    const isReducing = newWidth < initialInteractionData.width;
+
+    // 2. Get canvas dimensions and see if the sticker is off-canvas.
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const isOffCanvas = newLeft < 0 || newTop < 0 || (newLeft + newWidth) > canvasWidth || (newTop + newHeight) > canvasHeight;
+
+    // 3. If both are true, override the position to center the sticker.
+    if (isReducing && isOffCanvas) {
+        newLeft = (canvasWidth - newWidth) / 2;
+        newTop = (canvasHeight - newHeight) / 2;
+    }
+
+    // =================== NEW LOGIC ENDS HERE ===================
+
+    // Apply the final calculated styles
     activeSticker.style.width = `${newWidth}px`;
     activeSticker.style.height = `${newHeight}px`;
     activeSticker.style.left = `${newLeft}px`;
