@@ -3381,6 +3381,16 @@ urls: [
 //ADDED FOR BRUSH
 
 
+  eraserBtn.addEventListener('click', () => {
+    // Check if the eraser is already the active tool
+    if (currentTool === 'eraser') {
+        // If it is, switch to the 'move' tool to deselect it
+        setActiveTool('move');
+    } else {
+        // Otherwise, activate the eraser tool
+        setActiveTool('eraser');
+    }
+});
 
 // Show mini menu
 bucketBtn.addEventListener("click", (e) => {
@@ -3395,10 +3405,7 @@ bucketOption.addEventListener("click", () => {
     currentTool = "bucket";
     bucketBtn.innerText = "🥒";
     toolOptions.style.display = "none";
-    // If user has no color selected (or has eraser active), pick a default color.
-    if (!selectedColor || selectedColor.type === 'erase') {
-        selectedColor = colors[0]; // Set to the first color in your array
-    }
+   
     setActiveTool("bucket");
 });
 
@@ -3407,10 +3414,7 @@ brushOption.addEventListener("click", () => {
     currentTool = "brush";
     bucketBtn.innerText = "🖌️";
     toolOptions.style.display = "none";
-    // If user has no color selected (or has eraser active), pick a default color.
-    if (!selectedColor || selectedColor.type === 'erase') {
-        selectedColor = colors[0]; // Set to the first color in your array
-    }
+   
     setActiveTool("brush");
 });
 
@@ -3437,26 +3441,33 @@ function setActiveTool(tool) {
         case 'bucket':
             document.body.classList.add('bucket-active');
             bucketBtn.classList.add('active');
+            if (!selectedColor || selectedColor.type === 'erase') {
+                setActiveTool('move'); // Cannot use bucket without a color
+                return;
+            }
             break;
         case 'brush':
             document.body.classList.add('brush-active');
             bucketBtn.classList.add('active');
+            if (!selectedColor || selectedColor.type === 'erase') {
+                setActiveTool('move'); // Cannot use brush without a color
+                return;
+            }
             break;
         case 'eraser':
-            document.body.classList.add('brush-active'); // Eraser can use the brush cursor
+            // --- CHANGE: Use the bucket cursor for the eraser ---
+            document.body.classList.add('bucket-active'); 
             eraserBtn.classList.add('active');
-            selectedColor = transparentColor; // Use the special transparent object for erasing
+            selectedColor = transparentColor; // Set the special erase "color"
             break;
         case 'move':
         default:
             document.body.classList.add('move-active');
-            // When we enter move mode, we deselect the color.
             selectedColor = null;
             break;
     }
 
-    // After setting the tool, if it's a coloring tool and a color IS selected,
-    // make sure the correct color swatch has the 'active' class.
+    // Highlight the selected color swatch if applicable
     if ((currentTool === 'bucket' || currentTool === 'brush') && selectedColor && typeof selectedColor === 'string') {
         const activeSwatch = document.querySelector(`.color-swatch[style*="${selectedColor}"]`);
         if (activeSwatch) {
@@ -3584,7 +3595,7 @@ function setActiveTool(tool) {
         e.preventDefault();
         activeSticker = sticker;
 
-        if (currentTool === 'brush' || currentTool === 'eraser') {
+        if (currentTool === 'brush' ) {
             const stickerImg = activeSticker.querySelector('img');
             const setupBrush = (img, event) => {
                 activeCanvas = document.createElement('canvas');
@@ -3621,7 +3632,7 @@ function setActiveTool(tool) {
             } else {
                 stickerImg.onload = () => setupBrush(stickerImg, e);
             }
-        } else if (currentTool === 'bucket') {
+        } else if (currentTool === 'bucket' || currentTool === 'eraser') {
             if (selectedColor) { recolorSticker(activeSticker.querySelector('img'), selectedColor, e); }
         } else { // 'move' tool
             isInteracting = true;
@@ -4647,21 +4658,7 @@ function updateUndoRedoButtons() {
     firstStickerAdded = false;
 });
         
-        eraserBtn.addEventListener('click', () => {
-            setBucketMode(true);
-            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-            selectedColor = transparentColor;
-            
-            const wasActive = eraserBtn.classList.contains('active');
-            document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
-
-            if (!wasActive) {
-                eraserBtn.classList.add('active');
-            } else {
-                selectedColor = null;
-                setBucketMode(false);
-            }
-        });
+   
 
     addStickerBtn.addEventListener('click', () => {
         const randomSticker = getRandomStickerUrlFromGroups();
@@ -4775,10 +4772,8 @@ function updateUndoRedoButtons() {
                     if (!wasActive) {
                         swatch.classList.add('active');
                         selectedColor = color;
-                        setBucketMode(true);
                     } else {
                         selectedColor = null;
-                        setBucketMode(false);
                     }
                 });
 
