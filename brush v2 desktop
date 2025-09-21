@@ -3323,7 +3323,7 @@ urls: [
         let lastX = 0, lastY = 0;
         let strokeOriginImageData = null;
         let insideMask = null; 
-        let previousTool = "bucket";
+        let lastPaintTool = "bucket";
         //END FOR BRUSH
 
 
@@ -3394,7 +3394,7 @@ urls: [
     if (currentTool === 'eraser') {
                 eraserBtn.classList.remove('active');
 
-        setActiveTool('move');
+        setActiveTool(lastPaintTool);
     } else {
                 eraserBtn.classList.add('active');
 
@@ -3450,12 +3450,14 @@ function setActiveTool(tool) {
 
     switch (currentTool) {
         case 'bucket':
+             lastPaintTool = 'bucket';
             document.body.classList.add('bucket-active');
             bucketBtn.classList.add('active');
             break;
         case 'brush':
+            lastPaintTool = 'brush';
             document.body.classList.add('brush-active');
-            bucketBtn.classList.add('active');
+            brushBtn.classList.add('active');
             break;
         case 'eraser':
             document.body.classList.add('bucket-active'); // use bucket cursor for eraser
