@@ -3533,7 +3533,7 @@ urls: [
         let lastX = 0, lastY = 0;
         let strokeOriginImageData = null;
         let insideMask = null; 
-        let lastPaintTool = "bucket";
+        let lastPaintTool = "";
         //END FOR BRUSH
 
 const spinBtn = document.getElementById("spin-sticker-btn");
@@ -3650,6 +3650,7 @@ bucketOption.addEventListener("click", () => {
     bucketBtn.innerHTML = bucketSVG; // replace emoji with SVG
     toolOptions.style.display = "none";
     setActiveTool("bucket");
+    lastPaintTool = "bucket";
 });
 
 // Select brush
@@ -3658,6 +3659,7 @@ brushOption.addEventListener("click", () => {
     bucketBtn.innerHTML = brushSVG; // replace emoji with SVG
     toolOptions.style.display = "none";
     setActiveTool("brush");
+     lastPaintTool = "brush";
 });
 
 
@@ -3672,15 +3674,19 @@ document.addEventListener("click", () => {
  * This function now simply SETS the tool state, it doesn't toggle it.
  */
 function setActiveTool(tool) {
+    if (currentTool === tool) return; // no change
+
     currentTool = tool;
 
-    // Reset all UI states
-    document.body.className = '';
-    document.querySelectorAll('.color-swatch.active').forEach(s => s.classList.remove('active'));
+    // Reset tool-specific UI classes
+    document.body.classList.remove('bucket-active', 'brush-active', 'move-active');
+    bucketBtn.classList.remove('active');
+    brushBtn.classList.remove('active');
+    eraserBtn.classList.remove('active');
 
     switch (currentTool) {
         case 'bucket':
-             lastPaintTool = 'bucket';
+            lastPaintTool = 'bucket';
             document.body.classList.add('bucket-active');
             bucketBtn.classList.add('active');
             break;
@@ -3690,9 +3696,9 @@ function setActiveTool(tool) {
             brushBtn.classList.add('active');
             break;
         case 'eraser':
-            document.body.classList.add('bucket-active'); // use bucket cursor for eraser
+            document.body.classList.add('bucket-active'); // keep bucket cursor for eraser
             eraserBtn.classList.add('active');
-            selectedColor = transparentColor; // set erase color
+            selectedColor = transparentColor;
             break;
         case 'move':
         default:
@@ -3701,10 +3707,10 @@ function setActiveTool(tool) {
             break;
     }
 
-    // Highlight the selected color swatch if applicable
+    // Highlight active color swatch if applicable
     if ((currentTool === 'bucket' || currentTool === 'brush') && selectedColor && typeof selectedColor === 'string') {
-        const activeSwatch = document.querySelector(`.color-swatch[style*="${selectedColor}"]`);
-        if (activeSwatch) activeSwatch.classList.add('active');
+        const active = document.querySelector(`.color-swatch[style*="${selectedColor}"]`);
+        if (active) active.classList.add('active');
     }
 }
 
@@ -3858,28 +3864,42 @@ function startInteraction(e) {
 
     // If the brush tool is active, prepare the canvas for drawing
     if (currentTool === 'brush' && selectedColor) {
-        isDrawing = true; // Set the drawing flag
-        const setupBrush = () => {
-            activeCanvas = document.createElement('canvas');
-            activeCanvas.width = stickerImg.naturalWidth;
-            activeCanvas.height = stickerImg.naturalHeight;
-            activeCtx = activeCanvas.getContext('2d', { willReadFrequently: true });
-            activeCtx.drawImage(stickerImg, 0, 0);
-            const rect = stickerImg.getBoundingClientRect();
-            const [startX, startY] = getCanvasCoordinates(pointer.clientX, pointer.clientY, rect);
-            insideMask = computeEnclosedMask(Math.round(startX), Math.round(startY), activeCanvas);
-            if (!insideMask) { activeSticker = null; activeCanvas = null; return; }
-            strokeOriginImageData = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
-            [lastX, lastY] = [startX, startY];
-            draw(e); // Start drawing immediately
-        };
-        // Ensure image is loaded before setting up the brush
-        if (stickerImg.complete && stickerImg.naturalWidth > 0) setupBrush();
-        else stickerImg.onload = setupBrush;
-    } else {
-        // For all other cases (bucket, eraser, or move), prepare for interaction
-        isInteracting = true;
-    }
+    isDrawing = false; // initially false
+    const setupBrush = () => {
+        activeCanvas = document.createElement('canvas');
+        activeCanvas.width = stickerImg.naturalWidth;
+        activeCanvas.height = stickerImg.naturalHeight;
+        activeCtx = activeCanvas.getContext('2d', { willReadFrequently: true });
+        activeCtx.drawImage(stickerImg, 0, 0);
+        const rect = stickerImg.getBoundingClientRect();
+        const [startX, startY] = getCanvasCoordinates(pointer.clientX, pointer.clientY, rect);
+        insideMask = computeEnclosedMask(Math.round(startX), Math.round(startY), activeCanvas);
+
+        if (!insideMask) {
+            activeSticker = null;
+            activeCanvas = null;
+            return;
+        }
+
+        strokeOriginImageData = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
+        [lastX, lastY] = [startX, startY];
+
+        // Now safe to start drawing
+        isDrawing = true;
+        isInteracting = false; // prevent moving while painting
+
+        document.addEventListener('mousemove', draw);
+        document.addEventListener('touchmove', draw, { passive: false });
+
+        draw(e); // paint first point
+    };
+
+    if (stickerImg.complete && stickerImg.naturalWidth > 0) setupBrush();
+    else stickerImg.onload = setupBrush;
+
+} else {
+    isInteracting = true;
+}
 
     // --- 3. Add listeners for all single-touch actions ---
     deselectAllStickers();
@@ -4060,38 +4080,88 @@ canvas.addEventListener('click', (e) => {
  /**
  * REVISED color palette listener with corrected logic.
  */
+/**
+ * Corrected setActiveTool
+ * Only updates tool state and UI; does NOT reset drawing/moving state
+ */
+function setActiveTool(tool) {
+    if (currentTool === tool) return; // no change
+
+    currentTool = tool;
+
+    // Reset tool-specific UI classes
+    document.body.classList.remove('bucket-active', 'brush-active', 'move-active');
+    bucketBtn.classList.remove('active');
+    brushBtn.classList.remove('active');
+    eraserBtn.classList.remove('active');
+
+    switch (currentTool) {
+        case 'bucket':
+            lastPaintTool = 'bucket';
+            document.body.classList.add('bucket-active');
+            bucketBtn.classList.add('active');
+            break;
+        case 'brush':
+            lastPaintTool = 'brush';
+            document.body.classList.add('brush-active');
+            brushBtn.classList.add('active');
+            break;
+        case 'eraser':
+            document.body.classList.add('bucket-active'); // keep bucket cursor for eraser
+            eraserBtn.classList.add('active');
+            selectedColor = transparentColor;
+            break;
+        case 'move':
+        default:
+            document.body.classList.add('move-active');
+            selectedColor = null;
+            break;
+    }
+
+    // Highlight active color swatch if applicable
+    if ((currentTool === 'bucket' || currentTool === 'brush') && selectedColor && typeof selectedColor === 'string') {
+        const active = document.querySelector(`.color-swatch[style*="${selectedColor}"]`);
+        if (active) active.classList.add('active');
+    }
+}
+
+/**
+ * Corrected color palette listener
+ */
 colorPalette.addEventListener('click', (e) => {
     const clickedSwatch = e.target;
     if (!clickedSwatch.classList.contains('color-swatch')) return;
 
-    // Case 1: The user clicked the currently active swatch to deselect it.
+    // Deselect same swatch
     if (activeSwatch === clickedSwatch) {
         selectedColor = null;
         activeSwatch.classList.remove('active');
-        activeSwatch = null; // Forget the active swatch
-
+        activeSwatch = null;
         bucketBtn.classList.remove('active');
         brushBtn.classList.remove('active');
-        setActiveTool('move'); // Switch back to move tool
+
+        // Only switch to move mode if currently in move/eraser and not drawing
+        if ((currentTool === 'move' || currentTool === 'eraser') && !isDrawing) {
+    if (lastPaintTool) setActiveTool(lastPaintTool);
+}
         return;
     }
 
-    // Case 2: The user clicked a new color swatch.
-    // First, remove the highlight from the previously active swatch, if there was one.
-    if (activeSwatch) {
-        activeSwatch.classList.remove('active');
-    }
-    
-    // Set the new active swatch and color
+    // Deselect previous swatch
+    if (activeSwatch) activeSwatch.classList.remove('active');
+
+    // Select new swatch
     activeSwatch = clickedSwatch;
     activeSwatch.classList.add('active');
     selectedColor = activeSwatch.style.backgroundColor;
 
-    // Set the appropriate paint tool
-    if (currentTool === 'move' || currentTool === 'eraser' || !currentTool) {
-        setActiveTool(lastPaintTool || 'bucket');
+    // ONLY switch tool if currently in move or eraser (do NOT force bucket/brush)
+    if ((currentTool === 'move' || currentTool === 'eraser') && !isDrawing) {
+        setActiveTool(lastPaintTool || 'brush'); // default last paint tool
     }
 });
+
+
 
 
 //END FOR BRUSH
