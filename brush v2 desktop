@@ -3388,7 +3388,7 @@ urls: [
         const history = [];
         const colorPaletteContainer = document.querySelector('.color-palette-container');
 
-
+let activeSwatch = null;
 
         let activeSticker = null;
         let activePaletteSticker = null;
@@ -3824,44 +3824,36 @@ function setActiveTool(tool) {
  * REVISED color palette listener with corrected logic.
  */
 colorPalette.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('color-swatch')) return;
+    const clickedSwatch = e.target;
+    if (!clickedSwatch.classList.contains('color-swatch')) return;
 
-    const clickedColor = e.target.style.backgroundColor;
-
-    // Case: clicked the same color → deselect
-    if (selectedColor === clickedColor) {
+    // Case 1: The user clicked the currently active swatch to deselect it.
+    if (activeSwatch === clickedSwatch) {
         selectedColor = null;
-
-        document.querySelectorAll('.color-swatch.active')
-            .forEach(s => s.classList.remove('active'));
+        activeSwatch.classList.remove('active');
+        activeSwatch = null; // Forget the active swatch
 
         bucketBtn.classList.remove('active');
         brushBtn.classList.remove('active');
-
-        setActiveTool('move'); // allow dragging
+        setActiveTool('move'); // Switch back to move tool
         return;
     }
 
-    // New color selected
-    selectedColor = clickedColor;
-
-    // If no tool was ever selected (fresh start), default to bucket
-    if (!lastPaintTool) {
-        setActiveTool('bucket');
+    // Case 2: The user clicked a new color swatch.
+    // First, remove the highlight from the previously active swatch, if there was one.
+    if (activeSwatch) {
+        activeSwatch.classList.remove('active');
     }
-    // If move or eraser is active, restore last paint tool
-    else if (currentTool === 'move' || currentTool === 'eraser') {
-        setActiveTool(lastPaintTool);
+    
+    // Set the new active swatch and color
+    activeSwatch = clickedSwatch;
+    activeSwatch.classList.add('active');
+    selectedColor = activeSwatch.style.backgroundColor;
+
+    // Set the appropriate paint tool
+    if (currentTool === 'move' || currentTool === 'eraser' || !currentTool) {
+        setActiveTool(lastPaintTool || 'bucket');
     }
-    // Else: brush/bucket already active → stay
-
-    // Update swatch highlight
-    document.querySelectorAll('.color-swatch.active').forEach(s => s.classList.remove('active'));
-    e.target.classList.add('active');
-
-    // Ensure correct tool button shows active
-    if (currentTool === 'bucket' && selectedColor) bucketBtn.classList.add('active');
-    if (currentTool === 'brush' && selectedColor) brushBtn.classList.add('active');
 });
 
 
