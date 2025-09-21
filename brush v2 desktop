@@ -464,6 +464,7 @@
     padding: 4px; /* adjust so the circle fits nicely */
 }
 
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -473,14 +474,43 @@
 
 
     
-      <button id="brush-btn" class="">🖌️</button>
-    <button id="bucket-btn" class="active">🥒</button>
+    
+   <button id="brush-btn" class="">
+    <!-- Brush SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brush-icon lucide-brush">
+        <path d="m11 10 3 3"/>
+        <path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z"/>
+        <path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031"/>
+    </svg>
+</button>
 
-    <div id="tool-options" style="display: none; position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 5px;">
-        <button id="bucket-option">🥒 Bucket</button>
-        <button id="brush-option">🖌️ Brush</button>
-    </div>
+<button id="bucket-btn" class="">
+    <!-- Bucket SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paint-bucket-icon lucide-paint-bucket">
+        <path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/>
+        <path d="m5 2 5 5"/>
+        <path d="M2 13h15"/>
+        <path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/>
+    </svg>
+</button>
 
+<div id="tool-options" style="display: none; position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 5px;">
+    <button id="bucket-option">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paint-bucket-icon lucide-paint-bucket">
+            <path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/>
+            <path d="m5 2 5 5"/>
+            <path d="M2 13h15"/>
+            <path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/>
+        </svg>
+    </button>
+    <button id="brush-option">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brush-icon lucide-brush">
+            <path d="m11 10 3 3"/>
+            <path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z"/>
+            <path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031"/>
+        </svg>
+    </button>
+</div>
 
 
 
@@ -3328,7 +3358,6 @@ urls: [
 
 
         let currentTool = ""; // default
-        bucketBtn.innerText = "🥒"; // default icon
 
         let brushSize = 20;
         let isDrawing = false;
@@ -3428,21 +3457,38 @@ bucketBtn.addEventListener("click", (e) => {
     toolOptions.style.gap = "5px";
 });
 
+// Bucket SVG as string
+const bucketSVG = `
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paint-bucket-icon lucide-paint-bucket">
+    <path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/>
+    <path d="m5 2 5 5"/>
+    <path d="M2 13h15"/>
+    <path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/>
+</svg>
+`;
+
+// Brush SVG as string
+const brushSVG = `
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brush-icon lucide-brush">
+    <path d="m11 10 3 3"/>
+    <path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z"/>
+    <path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031"/>
+</svg>
+`;
+
 // Select bucket
 bucketOption.addEventListener("click", () => {
     currentTool = "bucket";
-    bucketBtn.innerText = "🥒";
+    bucketBtn.innerHTML = bucketSVG; // replace emoji with SVG
     toolOptions.style.display = "none";
-   
     setActiveTool("bucket");
 });
 
 // Select brush
 brushOption.addEventListener("click", () => {
     currentTool = "brush";
-    bucketBtn.innerText = "🖌️";
+    bucketBtn.innerHTML = brushSVG; // replace emoji with SVG
     toolOptions.style.display = "none";
-   
     setActiveTool("brush");
 });
 
@@ -3782,24 +3828,40 @@ colorPalette.addEventListener('click', (e) => {
 
     const clickedColor = e.target.style.backgroundColor;
 
+    // Case: clicked the same color → deselect
     if (selectedColor === clickedColor) {
-        // --- Deselect the color like eraser does ---
-        selectedColor = null;              // clear tool state
-        setActiveTool('move');             // switch to move tool
+        selectedColor = null;
+
+        document.querySelectorAll('.color-swatch.active')
+            .forEach(s => s.classList.remove('active'));
+
+        bucketBtn.classList.remove('active');
+        brushBtn.classList.remove('active');
+
+        setActiveTool('move'); // allow dragging
         return;
     }
 
-    // Otherwise, select the new color
+    // New color selected
     selectedColor = clickedColor;
 
-    // If we were in eraser or no tool, restore previous tool or default to bucket
-    if (currentTool === "" || currentTool === "eraser") {
-        setActiveTool(previousTool || "bucket");
-    } else {
-        // Update UI only
-        document.querySelectorAll('.color-swatch.active').forEach(s => s.classList.remove('active'));
-        e.target.classList.add('active');
+    // If no tool was ever selected (fresh start), default to bucket
+    if (!lastPaintTool) {
+        setActiveTool('bucket');
     }
+    // If move or eraser is active, restore last paint tool
+    else if (currentTool === 'move' || currentTool === 'eraser') {
+        setActiveTool(lastPaintTool);
+    }
+    // Else: brush/bucket already active → stay
+
+    // Update swatch highlight
+    document.querySelectorAll('.color-swatch.active').forEach(s => s.classList.remove('active'));
+    e.target.classList.add('active');
+
+    // Ensure correct tool button shows active
+    if (currentTool === 'bucket' && selectedColor) bucketBtn.classList.add('active');
+    if (currentTool === 'brush' && selectedColor) brushBtn.classList.add('active');
 });
 
 
