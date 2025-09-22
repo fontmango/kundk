@@ -622,7 +622,20 @@ button.active {
     display: none;
 }
 
+body.eyedropper-active {
+    cursor: crosshair; /* fallback */
+}
 
+.eyedropper-preview {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+}
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -631,11 +644,32 @@ button.active {
   
 
 
-    <div id="canvas-container"></div>
+<div id="canvas-container">
+
+    <!-- Eyedropper floating inside canvas top-left -->
+    <div id="eyedropper-container" style="position: absolute; top: 50px; left: 10px; display: flex; flex-direction: column; align-items: center; gap: 5px; z-index: 1000;">
+    
+        <button id="eyedropper-btn" style="background: none; border: none; cursor: pointer;">
+        
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; align-items: center; gap: 5px; z-index: 1000;">>
+                <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12"/>
+                <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z"/>
+                <path d="m2 22 .414-.414"/>
+            </svg>
+        </button>
+
+        <div id="picked-color" class="color-swatch" style="width: 24px; height: 24px; border: 2px solid #000; background-color: transparent;"></div>
+        
+    </div>
+</div>
+
+    
+    
+    
     <div id="overlay-container"></div>
 
-  <div class="controls">
 
+  <div class="controls">
    
    <button id="spin-sticker-btn" title="Spin Random">
   <i data-lucide="dice-6" class="icon"></i>
@@ -680,7 +714,6 @@ button.active {
 </div>
 
 
-
  
         <button id="add-sticker-btn" title="Add Random">
             <i data-lucide="plus" class="icon"></i>
@@ -704,14 +737,13 @@ button.active {
 
     </div>
   
-  
+
     <div class="color-palette-container">
         <div class="color-palette" id="color-palette"></div>
     </div>
         <div id="sticker-overlay-container"></div>
 
     <div id="group-overlay-container"></div>
-
     <script>
         const stickerGroups = [
                
@@ -3510,7 +3542,10 @@ urls: [
 
             
         ];
+        const canvasContainer = document.getElementById('canvas-container');
 
+		const eyedropperBtn = document.getElementById("eyedropper-btn");
+        canvasContainer.appendChild(eyedropperBtn);
            
         //ADDED FOR BRUSH
         const brushBtn = document.getElementById('brush-btn');
@@ -3535,7 +3570,7 @@ urls: [
         let lastPaintTool = "";
         //END FOR BRUSH
 
-const spinBtn = document.getElementById("spin-sticker-btn");
+		const spinBtn = document.getElementById("spin-sticker-btn");
 
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
@@ -3598,6 +3633,66 @@ const spinBtn = document.getElementById("spin-sticker-btn");
         const transparentColor = {
             type: 'erase'
         };
+        
+        
+        eyedropperBtn.addEventListener("click", () => {
+          setActiveTool("eyedropper");
+      });
+        
+        function enableEyedropper() {
+    setActiveTool("eyedropper");
+    document.body.classList.add("eyedropper-active");
+
+    document.addEventListener("mousemove", eyedropperMove);
+    document.addEventListener("touchmove", eyedropperMove, { passive: false });
+}
+
+function disableEyedropper() {
+    document.body.classList.remove("eyedropper-active");
+    eyedropperPreview.style.display = "none";
+
+    document.removeEventListener("mousemove", eyedropperMove);
+    document.removeEventListener("touchmove", eyedropperMove);
+}
+
+function eyedropperMove(e) {
+    if (!activeSticker || currentTool !== "eyedropper") return;
+
+    const stickerImg = activeSticker.querySelector("img");
+    if (!stickerImg) return;
+
+    const rect = stickerImg.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const [x, y] = getCanvasCoordinates(clientX, clientY, rect);
+
+    // Setup temp canvas to read pixels
+    const tmpCanvas = document.createElement("canvas");
+    tmpCanvas.width = stickerImg.naturalWidth;
+    tmpCanvas.height = stickerImg.naturalHeight;
+    const tmpCtx = tmpCanvas.getContext("2d");
+    tmpCtx.drawImage(stickerImg, 0, 0);
+
+    const pixel = tmpCtx.getImageData(Math.round(x), Math.round(y), 1, 1).data;
+    if (pixel[3] > 0) {
+        const color = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+
+        // Show preview circle
+        eyedropperPreview.style.display = "block";
+        eyedropperPreview.style.left = `${clientX + 15}px`;
+        eyedropperPreview.style.top = `${clientY + 15}px`;
+        eyedropperPreview.style.backgroundColor = color;
+    } else {
+        eyedropperPreview.style.display = "none";
+    }
+}
+        
+        
+        
+        
+        
+        
+        
 
         //ADDED FOR BRUSH
 
@@ -3694,6 +3789,11 @@ function setActiveTool(tool) {
             lastPaintTool = 'brush';
             document.body.classList.add('brush-active');
             brushBtn.classList.add('active');
+            break;
+            
+            case "eyedropper":
+            document.body.classList.add("eyedropper-active");
+            eyedropperBtn.classList.add("active");
             break;
 
         case 'eraser':
@@ -3841,7 +3941,7 @@ function draw(e) {
 
 
 
-    function startInteraction(e) {
+  function startInteraction(e) {
     const sticker = e.currentTarget;
     if (e.target.closest('.sticker-btn')) return; // ignore buttons
     e.preventDefault();
@@ -3849,6 +3949,21 @@ function draw(e) {
 
     const touches = e.touches || [];
     const pointer = touches[0] || e;
+
+    // --- EYEDROPPER MODE: do not move sticker ---
+    if (currentTool === "eyedropper") {
+        console.log("[Eyedropper] Tap started, waiting for handleEnd");
+        initialInteractionData = {
+            x: pointer.clientX,
+            y: pointer.clientY,
+            time: Date.now()
+        };
+
+        // add handleEnd listeners
+        document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('touchend', handleEnd, { passive: false });
+        return; // skip drag/move setup entirely
+    }
 
     // --- TWO-FINGER PINCH RESIZE ---
     if (touches.length === 2) {
@@ -3869,7 +3984,7 @@ function draw(e) {
 
         document.addEventListener('touchmove', handleMove, { passive: false });
         document.addEventListener('touchend', handleEnd);
-        return; // early exit, do NOT setup brush
+        return;
     }
 
     // --- SINGLE FINGER ---
@@ -3888,7 +4003,6 @@ function draw(e) {
         isDrawing = false;
 
         const setupBrush = () => {
-            // If multi-touch started after image load, block drawing
             if (e.touches && e.touches.length > 1) return;
 
             activeCanvas = document.createElement('canvas');
@@ -3906,22 +4020,20 @@ function draw(e) {
             [lastX, lastY] = [startX, startY];
 
             isDrawing = true;
-            isInteracting = false; // prevent move while painting
+            isInteracting = false;
 
             document.addEventListener('mousemove', draw);
             document.addEventListener('touchmove', draw, { passive: false });
-            draw(e); // first brush point
+            draw(e);
         };
 
         if (stickerImg.complete && stickerImg.naturalWidth > 0) setupBrush();
         else stickerImg.onload = setupBrush;
-
     } else {
         // MOVE STICKER IF NO COLOR SELECTED
         isInteracting = true;
     }
 
-    // Add standard listeners
     deselectAllStickers();
     activeSticker.classList.add('selected');
 
@@ -3932,6 +4044,8 @@ function draw(e) {
     document.addEventListener('mousemove', draw);
     document.addEventListener('touchmove', draw, { passive: false });
 }
+
+
 
 
 
@@ -3990,7 +4104,6 @@ function draw(e) {
 }
 
 
-
 function handleEnd(e) {
     const pointer = e.changedTouches ? e.changedTouches[0] : e;
     const dx = pointer.clientX - initialInteractionData.x;
@@ -4000,31 +4113,58 @@ function handleEnd(e) {
 
     const isTap = distance < 10 && duration < 500;
 
-    // --- NEW SELECTION LOGIC IS HERE ---
-
     if (isTap && activeSticker) {
-        if (currentTool === 'bucket' || currentTool === 'eraser') {
-            // If a color tool is active, color the sticker
-            const stickerImg = activeSticker.querySelector('img');
+        const stickerImg = activeSticker.querySelector('img');
+
+        // --- EYEDROPPER MODE ---
+        if (currentTool === "eyedropper") {
+    console.log("[Eyedropper] Active tool is eyedropper");
+
+    const rect = stickerImg.getBoundingClientRect();
+    // Map click to natural image coordinates
+    const scaleX = stickerImg.naturalWidth / rect.width;
+    const scaleY = stickerImg.naturalHeight / rect.height;
+    const x = (pointer.clientX - rect.left) * scaleX;
+    const y = (pointer.clientY - rect.top) * scaleY;
+    console.log("[Eyedropper] Tap at natural image coordinates:", x, y);
+
+    const tmpCanvas = document.createElement("canvas");
+    tmpCanvas.width = stickerImg.naturalWidth;
+    tmpCanvas.height = stickerImg.naturalHeight;
+    const tmpCtx = tmpCanvas.getContext("2d");
+    tmpCtx.drawImage(stickerImg, 0, 0);
+
+    const pixel = tmpCtx.getImageData(Math.round(x), Math.round(y), 1, 1).data;
+    console.log("[Eyedropper] Pixel RGBA:", pixel);
+
+    if (pixel[3] > 0) {
+        const pickedColor = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+        console.log("[Eyedropper] Picked color:", pickedColor);
+
+        selectedColor = pickedColor;
+        const pickedColorDiv = document.getElementById("picked-color");
+        if (pickedColorDiv) pickedColorDiv.style.backgroundColor = pickedColor;
+    } else {
+        console.log("[Eyedropper] Transparent pixel, nothing picked");
+    }
+}
+
+        // --- PAINTING TOOLS ---
+        else if (currentTool === "bucket" || currentTool === "eraser") {
             recolorSticker(stickerImg, selectedColor, pointer);
-        } else {
-            // If NO color tool is active, this is a selection tap
-            // First, deselect any other sticker
-            const currentlySelected = document.querySelector('.sticker-wrapper.selected');
-            if (currentlySelected) {
-                currentlySelected.classList.remove('selected');
-            }
-            // Then, select the one that was just tapped
-            activeSticker.classList.add('selected');
+        }
+
+        // --- SELECTION ---
+        else {
+            const currentlySelected = document.querySelector(".sticker-wrapper.selected");
+            if (currentlySelected) currentlySelected.classList.remove("selected");
+            activeSticker.classList.add("selected");
         }
     }
 
-    // --- Standard cleanup and state saving ---
-    if (isDrawing || isInteracting) {
-        saveState();
-    }
-    
-    // The 'selected' class is no longer removed here, so the sticker stays selected
+    // --- CLEANUP ---
+    if (isDrawing || isInteracting) saveState();
+
     isDrawing = false;
     isInteracting = false;
     activeSticker = null;
@@ -4035,13 +4175,35 @@ function handleEnd(e) {
     strokeOriginImageData = null;
     insideMask = null;
 
-    document.removeEventListener('mousemove', handleMove);
-    document.removeEventListener('mouseup', handleEnd);
-    document.removeEventListener('touchmove', handleMove);
-    document.removeEventListener('touchend', handleEnd);
-    document.removeEventListener('mousemove', draw);
-    document.removeEventListener('touchmove', draw);
+    document.removeEventListener("mousemove", handleMove);
+    document.removeEventListener("mouseup", handleEnd);
+    document.removeEventListener("touchmove", handleMove);
+    document.removeEventListener("touchend", handleEnd);
+    document.removeEventListener("mousemove", draw);
+    document.removeEventListener("touchmove", draw);
 }
+
+
+
+
+document.getElementById("picked-color").addEventListener("click", (e) => {
+    const swatch = e.target;
+    if (!swatch.style.backgroundColor) return;
+
+    selectedColor = swatch.style.backgroundColor;
+
+    // highlight it
+    document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+    swatch.classList.add("active");
+
+    // restore last paint tool if needed
+    if (lastPaintTool) {
+        setActiveTool(lastPaintTool);
+    } else {
+        setActiveTool("bucket");
+    }
+});
+
 
       function computeEnclosedMask(startX, startY, canvas) {
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
