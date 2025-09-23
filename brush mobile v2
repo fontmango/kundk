@@ -3653,6 +3653,7 @@ urls: [
         };
         
 
+        //EYEDROPPER
         
   function enableEyedropper() {
     setActiveTool("eyedropper");
@@ -3726,22 +3727,56 @@ function eyedropperMove(e) {
     }
 
     const color = `rgb(${r}, ${g}, ${b})`;
+
+    // --- Step 2: Update preview circle ---
     eyedropperPreview.style.display = "block";
     eyedropperPreview.style.left = `${clientX + 15}px`;
     eyedropperPreview.style.top = `${clientY + 15}px`;
     eyedropperPreview.style.backgroundColor = color;
 
+    // --- Step 3: Update picked-color swatch ---
     const pickedColorSwatch = document.getElementById("picked-color");
     if (pickedColorSwatch) pickedColorSwatch.style.backgroundColor = color;
+
+    // --- Step 4: Activate matching color in palette ---
+    activateColorInPalette(color);
+}
+
+// --- Helper to compare RGB colors robustly ---
+function rgbStringToArray(rgb) {
+    const match = rgb.match(/(\d+),\s*(\d+),\s*(\d+)/);
+    return match ? [parseInt(match[1]), parseInt(match[2]), parseInt(match[3])] : null;
+}
+
+function colorsMatch(c1, c2) {
+    const a1 = rgbStringToArray(c1);
+    const a2 = rgbStringToArray(c2);
+    if (!a1 || !a2) return false;
+    return a1[0] === a2[0] && a1[1] === a2[1] && a1[2] === a2[2];
+}
+
+function activateColorInPalette(color) {
+    const swatches = document.querySelectorAll('.color-swatch');
+
+    let matchedSwatch = null;
+
+    swatches.forEach(swatch => {
+        swatch.classList.remove('active');
+        if (colorsMatch(swatch.style.backgroundColor, color)) {
+            swatch.classList.add('active');
+            matchedSwatch = swatch;
+        }
+    });
+
+    selectedColor = color;
+
+    if (matchedSwatch) {
+        matchedSwatch.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
 }
 
 
 
-
-
-
-        
-        
 eyedropperBtn.addEventListener("click", () => {
     if (currentTool === "eyedropper") {
         // If already active, deactivate it
@@ -3755,8 +3790,8 @@ eyedropperBtn.addEventListener("click", () => {
     }
 });
         
-        
-        
+
+
         
         
 
@@ -4243,7 +4278,11 @@ function handleEnd(e) {
             if (pickedColorDiv) {
                 pickedColorDiv.style.backgroundColor = pickedColor;
                 console.log("[Eyedropper] Updated #picked-color swatch");
+
+
             }
+                            activateColorInPalette(pickedColor);
+
         }
     } else {
         console.log("[Eyedropper] Transparent pixel, nothing picked");
@@ -5188,7 +5227,7 @@ window.addEventListener('load', () => {
 
                 colorPalette.appendChild(swatch);
             });
-        }
+ }
 
         function hideOverlays() {
 
