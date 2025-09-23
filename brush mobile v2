@@ -239,18 +239,30 @@ body {
 }
 
  .brush-active .sticker .delete-btn,
-        .brush-active .sticker .copy-btn,
-        .brush-active .sticker .group-btn ,
-        .brush-active .sticker .lock-btn {
+ .brush-active .sticker .copy-btn,
+ .brush-active .sticker .group-btn ,
+ .brush-active .sticker .lock-btn {
             
-            display: none !important;
+   display: none !important;
         }
 
-        .brush-active .sticker:active,
-        .brush-active .sticker:hover {
-            cursor: crosshair;
+  .brush-active .sticker:active,
+   .brush-active .sticker:hover {
+   cursor: crosshair;
         }
 
+
+.eyedropper-active .sticker .delete-btn,
+.eyedropper-active .sticker .copy-btn,
+.eyedropper-active .sticker .lock-btn,
+.eyedropper-active .sticker .group-btn {
+    display: none !important;
+}
+
+.eyedropper-active .sticker:active,
+.eyedropper-active .sticker:hover {
+    cursor: crosshair;
+}
 
 
 .controls {
