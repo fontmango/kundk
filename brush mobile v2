@@ -3674,10 +3674,20 @@ function eyedropperMove(e) {
     tmpCtx.drawImage(stickerImg, 0, 0);
 
     const pixel = tmpCtx.getImageData(Math.round(x), Math.round(y), 1, 1).data;
-    if (pixel[3] > 0) {
-        const color = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
 
-        // Show preview circle
+    if (pixel[3] > 0) {
+        const r = pixel[0], g = pixel[1], b = pixel[2];
+        const brightness = (r + g + b) / 3;
+
+        // 🚫 Ignore near-black pixels (outlines)
+        if (brightness < 30) {
+            eyedropperPreview.style.display = "none";
+            return;
+        }
+
+        const color = `rgb(${r}, ${g}, ${b})`;
+
+        // ✅ Show preview circle only for valid colors
         eyedropperPreview.style.display = "block";
         eyedropperPreview.style.left = `${clientX + 15}px`;
         eyedropperPreview.style.top = `${clientY + 15}px`;
@@ -3686,6 +3696,7 @@ function eyedropperMove(e) {
         eyedropperPreview.style.display = "none";
     }
 }
+
         
         
         
@@ -4118,36 +4129,48 @@ function handleEnd(e) {
 
         // --- EYEDROPPER MODE ---
         if (currentTool === "eyedropper") {
-    console.log("[Eyedropper] Active tool is eyedropper");
+            console.log("[Eyedropper] Active tool is eyedropper");
 
-    const rect = stickerImg.getBoundingClientRect();
-    // Map click to natural image coordinates
-    const scaleX = stickerImg.naturalWidth / rect.width;
-    const scaleY = stickerImg.naturalHeight / rect.height;
-    const x = (pointer.clientX - rect.left) * scaleX;
-    const y = (pointer.clientY - rect.top) * scaleY;
-    console.log("[Eyedropper] Tap at natural image coordinates:", x, y);
+            const rect = stickerImg.getBoundingClientRect();
+            // Map click to natural image coordinates
+            const scaleX = stickerImg.naturalWidth / rect.width;
+            const scaleY = stickerImg.naturalHeight / rect.height;
+            const x = (pointer.clientX - rect.left) * scaleX;
+            const y = (pointer.clientY - rect.top) * scaleY;
+            console.log("[Eyedropper] Tap at natural image coordinates:", x, y);
 
-    const tmpCanvas = document.createElement("canvas");
-    tmpCanvas.width = stickerImg.naturalWidth;
-    tmpCanvas.height = stickerImg.naturalHeight;
-    const tmpCtx = tmpCanvas.getContext("2d");
-    tmpCtx.drawImage(stickerImg, 0, 0);
+            const tmpCanvas = document.createElement("canvas");
+            tmpCanvas.width = stickerImg.naturalWidth;
+            tmpCanvas.height = stickerImg.naturalHeight;
+            const tmpCtx = tmpCanvas.getContext("2d");
+            tmpCtx.drawImage(stickerImg, 0, 0);
 
-    const pixel = tmpCtx.getImageData(Math.round(x), Math.round(y), 1, 1).data;
-    console.log("[Eyedropper] Pixel RGBA:", pixel);
+            const pixel = tmpCtx.getImageData(Math.round(x), Math.round(y), 1, 1).data;
+            console.log("[Eyedropper] Pixel RGBA:", pixel);
 
-    if (pixel[3] > 0) {
-        const pickedColor = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
-        console.log("[Eyedropper] Picked color:", pickedColor);
+            if (pixel[3] > 0) {
+                const r = pixel[0], g = pixel[1], b = pixel[2];
+                const brightness = (r + g + b) / 3;
 
-        selectedColor = pickedColor;
-        const pickedColorDiv = document.getElementById("picked-color");
-        if (pickedColorDiv) pickedColorDiv.style.backgroundColor = pickedColor;
-    } else {
-        console.log("[Eyedropper] Transparent pixel, nothing picked");
-    }
-}
+                // 🚫 Skip outlines (pure black or near-black)
+                if (brightness < 30) {
+                    console.log("[Eyedropper] Ignored near-black pixel");
+                } else {
+                    const pickedColor = `rgb(${r}, ${g}, ${b})`;
+                    console.log("[Eyedropper] Picked color:", pickedColor);
+
+                    selectedColor = pickedColor;
+
+                    const pickedColorDiv = document.getElementById("picked-color");
+                    if (pickedColorDiv) {
+                        pickedColorDiv.style.backgroundColor = pickedColor;
+                        console.log("[Eyedropper] Updated #picked-color swatch");
+                    }
+                }
+            } else {
+                console.log("[Eyedropper] Transparent pixel, nothing picked");
+            }
+        }
 
         // --- PAINTING TOOLS ---
         else if (currentTool === "bucket" || currentTool === "eraser") {
