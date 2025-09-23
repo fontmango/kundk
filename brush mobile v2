@@ -252,9 +252,7 @@ body {
         }
 
 
-/* ... (rest of your CSS) ... */
 
-/* Remaining CSS from your provided code */
 .controls {
     display: flex;
     gap: 10px;
@@ -300,7 +298,7 @@ button:hover {
 button.active {
     border-radius: 50%;
     background-color: #e0e0e0;
-    transform: scale(1.05);
+    transform: scale(0.9);
 }
 
 .icon {
@@ -523,7 +521,6 @@ button.active {
   overflow: hidden;                    /* ✅ never scroll here */
 }
 
-/* Other CSS remains the same */
 
 .overlay-stickers-grid {
   display: grid;
@@ -636,6 +633,8 @@ body.eyedropper-active {
     z-index: 9999;
     display: none;
 }
+
+
     </style>
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -643,25 +642,32 @@ body.eyedropper-active {
 <body>
   
 
-
 <div id="canvas-container">
 
-    <!-- Eyedropper floating inside canvas top-left -->
-    <div id="eyedropper-container" style="position: absolute; top: 50px; left: 10px; display: flex; flex-direction: column; align-items: center; gap: 5px; z-index: 1000;">
-    
-        <button id="eyedropper-btn" style="background: none; border: none; cursor: pointer;">
-        
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; align-items: center; gap: 5px; z-index: 1000;">>
-                <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12"/>
-                <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z"/>
-                <path d="m2 22 .414-.414"/>
-            </svg>
-        </button>
+  <!-- Eyedropper floating inside canvas top-left -->
+  <div id="eyedropper-container" 
+     style="position: absolute; top: 45px; left: 6px; display: flex; flex-direction: column; align-items: flex-start; gap: 5px; z-index: 1000;">
 
-        <div id="picked-color" class="color-swatch" style="width: 24px; height: 24px; border: 2px solid #000; background-color: transparent;"></div>
-        
-    </div>
+    
+    <button id="eyedropper-btn" style="cursor: pointer;" >
+    
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+           viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           class="lucide lucide-pipette-icon lucide-pipette">
+        <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12"/>
+        <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z"/>
+        <path d="m2 22 .414-.414"/>
+      </svg>
+    </button>
+
+ <div id="picked-color" 
+     style="border-radius: 50%; width: 24px; height: 24px; border: 2px solid #000; background-color: transparent; align-self: flex-start;">
 </div>
+    
+  </div>
+</div>
+
 
     
     
@@ -3634,10 +3640,13 @@ urls: [
             type: 'erase'
         };
         
-        
-        eyedropperBtn.addEventListener("click", () => {
-          setActiveTool("eyedropper");
-      });
+      eyedropperBtn.addEventListener("click", () => {
+    setActiveTool("eyedropper");
+
+    // Toggle visual highlight
+    document.querySelectorAll(".tool-btn").forEach(btn => btn.classList.remove("active"));
+    eyedropperBtn.classList.add("active");
+});
         
         function enableEyedropper() {
     setActiveTool("eyedropper");
@@ -3784,10 +3793,11 @@ function setActiveTool(tool) {
     currentTool = tool;
 
     // Reset all tool-related body classes and button active states
-    document.body.classList.remove('bucket-active', 'brush-active', 'move-active');
+    document.body.classList.remove('bucket-active', 'brush-active', 'move-active', 'eyedropper-active');
     bucketBtn.classList.remove('active');
     brushBtn.classList.remove('active');
     eraserBtn.classList.remove('active');
+    eyedropperBtn.classList.remove('active'); // 👈 reset this too
 
     switch (currentTool) {
         case 'bucket':
@@ -3802,16 +3812,15 @@ function setActiveTool(tool) {
             brushBtn.classList.add('active');
             break;
             
-            case "eyedropper":
-            document.body.classList.add("eyedropper-active");
-            eyedropperBtn.classList.add("active");
+        case 'eyedropper':
+            document.body.classList.add('eyedropper-active');
+            eyedropperBtn.classList.add('active');
             break;
 
         case 'eraser':
-            // Keep cursor consistent with bucket for eraser
-            document.body.classList.add('bucket-active');
+            document.body.classList.add('bucket-active'); // eraser uses same cursor
             eraserBtn.classList.add('active');
-            selectedColor = transparentColor; // eraser paints transparent
+            selectedColor = transparentColor;
             break;
 
         case 'move':
@@ -3835,6 +3844,7 @@ function setActiveTool(tool) {
         }
     });
 }
+
 
 
    
