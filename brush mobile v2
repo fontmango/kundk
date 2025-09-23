@@ -3679,38 +3679,66 @@ function eyedropperMove(e) {
     const rect = stickerImg.getBoundingClientRect();
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    const [x, y] = getCanvasCoordinates(clientX, clientY, rect);
 
-    // Setup temp canvas to read pixels
+    // --- Step 0: Compute accurate click coordinates accounting for letterboxing ---
+    const imgRatio = stickerImg.naturalWidth / stickerImg.naturalHeight;
+    const rectRatio = rect.width / rect.height;
+
+    let contentX = 0, contentY = 0, contentWidth = rect.width, contentHeight = rect.height;
+
+    if (rectRatio > imgRatio) {
+        contentHeight = rect.height;
+        contentWidth = rect.height * imgRatio;
+        contentX = (rect.width - contentWidth) / 2;
+    } else {
+        contentWidth = rect.width;
+        contentHeight = rect.width / imgRatio;
+        contentY = (rect.height - contentHeight) / 2;
+    }
+
+    let clickX = Math.floor(((clientX - rect.left - contentX) / contentWidth) * stickerImg.naturalWidth);
+    let clickY = Math.floor(((clientY - rect.top - contentY) / contentHeight) * stickerImg.naturalHeight);
+
+    // Clamp coordinates
+    clickX = Math.max(0, Math.min(clickX, stickerImg.naturalWidth - 1));
+    clickY = Math.max(0, Math.min(clickY, stickerImg.naturalHeight - 1));
+
+    // --- Step 1: Create temporary canvas to read pixel ---
     const tmpCanvas = document.createElement("canvas");
     tmpCanvas.width = stickerImg.naturalWidth;
     tmpCanvas.height = stickerImg.naturalHeight;
     const tmpCtx = tmpCanvas.getContext("2d");
     tmpCtx.drawImage(stickerImg, 0, 0);
 
-    const pixel = tmpCtx.getImageData(Math.round(x), Math.round(y), 1, 1).data;
+    const pixel = tmpCtx.getImageData(clickX, clickY, 1, 1).data;
 
-    if (pixel[3] > 0) {
-        const r = pixel[0], g = pixel[1], b = pixel[2];
-        const brightness = (r + g + b) / 3;
-
-        // 🚫 Ignore near-black pixels (outlines)
-        if (brightness < 30) {
-            eyedropperPreview.style.display = "none";
-            return;
-        }
-
-        const color = `rgb(${r}, ${g}, ${b})`;
-
-        // ✅ Show preview circle only for valid colors
-        eyedropperPreview.style.display = "block";
-        eyedropperPreview.style.left = `${clientX + 15}px`;
-        eyedropperPreview.style.top = `${clientY + 15}px`;
-        eyedropperPreview.style.backgroundColor = color;
-    } else {
+    if (pixel[3] === 0) { // transparent
         eyedropperPreview.style.display = "none";
+        return;
     }
+
+    const r = pixel[0], g = pixel[1], b = pixel[2];
+    const brightness = (r + g + b) / 3;
+
+    if (brightness < 30) { // near-black outline
+        eyedropperPreview.style.display = "none";
+        return;
+    }
+
+    const color = `rgb(${r}, ${g}, ${b})`;
+    eyedropperPreview.style.display = "block";
+    eyedropperPreview.style.left = `${clientX + 15}px`;
+    eyedropperPreview.style.top = `${clientY + 15}px`;
+    eyedropperPreview.style.backgroundColor = color;
+
+    const pickedColorSwatch = document.getElementById("picked-color");
+    if (pickedColorSwatch) pickedColorSwatch.style.backgroundColor = color;
 }
+
+
+
+
+
 
         
         
@@ -4156,49 +4184,72 @@ function handleEnd(e) {
         const stickerImg = activeSticker.querySelector('img');
 
         // --- EYEDROPPER MODE ---
-        if (currentTool === "eyedropper") {
-            console.log("[Eyedropper] Active tool is eyedropper");
+       if (currentTool === "eyedropper") {
+    console.log("[Eyedropper] Active tool is eyedropper");
 
-            const rect = stickerImg.getBoundingClientRect();
-            // Map click to natural image coordinates
-            const scaleX = stickerImg.naturalWidth / rect.width;
-            const scaleY = stickerImg.naturalHeight / rect.height;
-            const x = (pointer.clientX - rect.left) * scaleX;
-            const y = (pointer.clientY - rect.top) * scaleY;
-            console.log("[Eyedropper] Tap at natural image coordinates:", x, y);
+    const rect = stickerImg.getBoundingClientRect();
 
-            const tmpCanvas = document.createElement("canvas");
-            tmpCanvas.width = stickerImg.naturalWidth;
-            tmpCanvas.height = stickerImg.naturalHeight;
-            const tmpCtx = tmpCanvas.getContext("2d");
-            tmpCtx.drawImage(stickerImg, 0, 0);
+    // --- Correct mapping like recolorSticker ---
+    const imgRatio = stickerImg.naturalWidth / stickerImg.naturalHeight;
+    const rectRatio = rect.width / rect.height;
 
-            const pixel = tmpCtx.getImageData(Math.round(x), Math.round(y), 1, 1).data;
-            console.log("[Eyedropper] Pixel RGBA:", pixel);
+    let contentX = 0, contentY = 0, contentWidth = rect.width, contentHeight = rect.height;
 
-            if (pixel[3] > 0) {
-                const r = pixel[0], g = pixel[1], b = pixel[2];
-                const brightness = (r + g + b) / 3;
+    if (rectRatio > imgRatio) {
+        // Letterboxing on left/right
+        contentHeight = rect.height;
+        contentWidth = rect.height * imgRatio;
+        contentX = (rect.width - contentWidth) / 2;
+    } else {
+        // Letterboxing on top/bottom
+        contentWidth = rect.width;
+        contentHeight = rect.width / imgRatio;
+        contentY = (rect.height - contentHeight) / 2;
+    }
 
-                // 🚫 Skip outlines (pure black or near-black)
-                if (brightness < 30) {
-                    console.log("[Eyedropper] Ignored near-black pixel");
-                } else {
-                    const pickedColor = `rgb(${r}, ${g}, ${b})`;
-                    console.log("[Eyedropper] Picked color:", pickedColor);
+    let clickX = Math.floor(((pointer.clientX - rect.left - contentX) / contentWidth) * stickerImg.naturalWidth);
+    let clickY = Math.floor(((pointer.clientY - rect.top - contentY) / contentHeight) * stickerImg.naturalHeight);
 
-                    selectedColor = pickedColor;
+    // Clamp to image bounds
+    clickX = Math.max(0, Math.min(clickX, stickerImg.naturalWidth - 1));
+    clickY = Math.max(0, Math.min(clickY, stickerImg.naturalHeight - 1));
 
-                    const pickedColorDiv = document.getElementById("picked-color");
-                    if (pickedColorDiv) {
-                        pickedColorDiv.style.backgroundColor = pickedColor;
-                        console.log("[Eyedropper] Updated #picked-color swatch");
-                    }
-                }
-            } else {
-                console.log("[Eyedropper] Transparent pixel, nothing picked");
+    console.log("[Eyedropper] Tap at natural image coordinates:", clickX, clickY);
+
+    // --- Read pixel from temporary canvas ---
+    const tmpCanvas = document.createElement("canvas");
+    tmpCanvas.width = stickerImg.naturalWidth;
+    tmpCanvas.height = stickerImg.naturalHeight;
+    const tmpCtx = tmpCanvas.getContext("2d");
+    tmpCtx.drawImage(stickerImg, 0, 0);
+
+    const pixel = tmpCtx.getImageData(clickX, clickY, 1, 1).data;
+    console.log("[Eyedropper] Pixel RGBA:", pixel);
+
+    if (pixel[3] > 0) {
+        const r = pixel[0], g = pixel[1], b = pixel[2];
+        const brightness = (r + g + b) / 3;
+
+        // Skip near-black outlines
+        if (brightness < 30) {
+            console.log("[Eyedropper] Ignored near-black pixel");
+        } else {
+            const pickedColor = `rgb(${r}, ${g}, ${b})`;
+            console.log("[Eyedropper] Picked color:", pickedColor);
+
+            selectedColor = pickedColor;
+
+            const pickedColorDiv = document.getElementById("picked-color");
+            if (pickedColorDiv) {
+                pickedColorDiv.style.backgroundColor = pickedColor;
+                console.log("[Eyedropper] Updated #picked-color swatch");
             }
         }
+    } else {
+        console.log("[Eyedropper] Transparent pixel, nothing picked");
+    }
+}
+
 
         // --- PAINTING TOOLS ---
         else if (currentTool === "bucket" || currentTool === "eraser") {
@@ -4323,6 +4374,8 @@ colorPalette.addEventListener('click', (e) => {
         // Do NOT change currentTool; just update UI
         bucketBtn.classList.remove('active');
         brushBtn.classList.remove('active');
+        eyedropperBtn.classList.remove('active');
+
         if (currentTool === 'bucket' || currentTool === 'brush') {
             // Re-highlight the active tool button
             if (currentTool === 'bucket') bucketBtn.classList.add('active');
