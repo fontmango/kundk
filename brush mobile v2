@@ -3640,15 +3640,9 @@ urls: [
             type: 'erase'
         };
         
-      eyedropperBtn.addEventListener("click", () => {
-    setActiveTool("eyedropper");
 
-    // Toggle visual highlight
-    document.querySelectorAll(".tool-btn").forEach(btn => btn.classList.remove("active"));
-    eyedropperBtn.classList.add("active");
-});
         
-        function enableEyedropper() {
+  function enableEyedropper() {
     setActiveTool("eyedropper");
     document.body.classList.add("eyedropper-active");
 
@@ -3708,6 +3702,18 @@ function eyedropperMove(e) {
 
         
         
+eyedropperBtn.addEventListener("click", () => {
+    if (currentTool === "eyedropper") {
+        // If already active, deactivate it
+        eyedropperBtn.classList.remove("active");
+        setActiveTool(""); // or previousTool if you track it
+    } else {
+        // Activate eyedropper
+        document.querySelectorAll(".tool-btn").forEach(btn => btn.classList.remove("active"));
+        eyedropperBtn.classList.add("active");
+        setActiveTool("eyedropper");
+    }
+});
         
         
         
