@@ -4054,18 +4054,21 @@ function draw(e) {
 
     // --- EYEDROPPER MODE: do not move sticker ---
     if (currentTool === "eyedropper") {
-        console.log("[Eyedropper] Tap started, waiting for handleEnd");
-        initialInteractionData = {
-            x: pointer.clientX,
-            y: pointer.clientY,
-            time: Date.now()
-        };
+    console.log("[Eyedropper] Tap started, waiting for handleEnd");
+    initialInteractionData = {
+        x: pointer.clientX,
+        y: pointer.clientY,
+        time: Date.now()
+    };
 
-        // add handleEnd listeners
-        document.addEventListener('mouseup', handleEnd);
-        document.addEventListener('touchend', handleEnd, { passive: false });
-        return; // skip drag/move setup entirely
-    }
+    // Add handleEnd listeners
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchend', handleEnd, { passive: false });
+
+    // For single touch, do NOT move sticker
+    // For multi-touch, allow resize:
+    if (touches.length < 2) return;
+}
 
     // --- TWO-FINGER PINCH RESIZE ---
     if (touches.length === 2) {
