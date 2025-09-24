@@ -648,7 +648,7 @@ body.eyedropper-active {
 
 #picked-color.active {
     transform: scale(1.2);
-    border: 2px solid #000; /* black circle */
+    border: 2px solid #000;
 }
 
 
@@ -3661,7 +3661,8 @@ urls: [
 
         //EYEDROPPER
         
-  function enableEyedropper() {
+  // --- Eyedropper enable/disable ---
+function enableEyedropper() {
     setActiveTool("eyedropper");
     document.body.classList.add("eyedropper-active");
 
@@ -3677,6 +3678,7 @@ function disableEyedropper() {
     document.removeEventListener("touchmove", eyedropperMove);
 }
 
+// --- Eyedropper move ---
 function eyedropperMove(e) {
     if (!activeSticker || currentTool !== "eyedropper") return;
 
@@ -3687,12 +3689,10 @@ function eyedropperMove(e) {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-    // --- Step 0: Compute accurate click coordinates accounting for letterboxing ---
+    // Compute click coords accounting for letterboxing
     const imgRatio = stickerImg.naturalWidth / stickerImg.naturalHeight;
     const rectRatio = rect.width / rect.height;
-
     let contentX = 0, contentY = 0, contentWidth = rect.width, contentHeight = rect.height;
-
     if (rectRatio > imgRatio) {
         contentHeight = rect.height;
         contentWidth = rect.height * imgRatio;
@@ -3705,18 +3705,15 @@ function eyedropperMove(e) {
 
     let clickX = Math.floor(((clientX - rect.left - contentX) / contentWidth) * stickerImg.naturalWidth);
     let clickY = Math.floor(((clientY - rect.top - contentY) / contentHeight) * stickerImg.naturalHeight);
-
-    // Clamp coordinates
     clickX = Math.max(0, Math.min(clickX, stickerImg.naturalWidth - 1));
     clickY = Math.max(0, Math.min(clickY, stickerImg.naturalHeight - 1));
 
-    // --- Step 1: Create temporary canvas to read pixel ---
+    // Read pixel
     const tmpCanvas = document.createElement("canvas");
     tmpCanvas.width = stickerImg.naturalWidth;
     tmpCanvas.height = stickerImg.naturalHeight;
     const tmpCtx = tmpCanvas.getContext("2d");
     tmpCtx.drawImage(stickerImg, 0, 0);
-
     const pixel = tmpCtx.getImageData(clickX, clickY, 1, 1).data;
 
     if (pixel[3] === 0) { // transparent
@@ -3726,7 +3723,6 @@ function eyedropperMove(e) {
 
     const r = pixel[0], g = pixel[1], b = pixel[2];
     const brightness = (r + g + b) / 3;
-
     if (brightness < 30) { // near-black outline
         eyedropperPreview.style.display = "none";
         return;
@@ -3734,28 +3730,22 @@ function eyedropperMove(e) {
 
     const color = `rgb(${r}, ${g}, ${b})`;
 
-    // --- Step 2: Update preview circle ---
+    // Update preview circle
     eyedropperPreview.style.display = "block";
     eyedropperPreview.style.left = `${clientX + 15}px`;
     eyedropperPreview.style.top = `${clientY + 15}px`;
     eyedropperPreview.style.backgroundColor = color;
 
-    // --- Step 3: Update picked-color swatch ---
-   const pickedColorSwatch = document.getElementById("picked-color");
-if (pickedColorSwatch) {
-    pickedColorSwatch.style.backgroundColor = color;
-    pickedColorSwatch.classList.add("active"); // black circle
+    // Update picked-color swatch and mark active
+    const pickedColorDiv = document.getElementById("picked-color");
+    if (pickedColorDiv) {
+        pickedColorDiv.style.backgroundColor = color;
+    }
+
+    // Activate palette swatch without removing picked-color active
+    activateColorInPalette(color, true); // true = from eyedropper
 }
-
-
-// --- Step 4: Activate matching color in palette ---
-activateColorInPalette(color, true); // true = from eyedropper
-
-// --- Step 5: Mark picked-color as active (black circle) ---
-if (pickedColorSwatch) pickedColorSwatch.classList.add("active");
-}
-
-// --- Helper to compare RGB colors robustly ---
+// --- Convert RGB string to array ---
 function rgbStringToArray(rgb) {
     const match = rgb.match(/(\d+),\s*(\d+),\s*(\d+)/);
     return match ? [parseInt(match[1]), parseInt(match[2]), parseInt(match[3])] : null;
@@ -3768,67 +3758,78 @@ function colorsMatch(c1, c2) {
     return a1[0] === a2[0] && a1[1] === a2[1] && a1[2] === a2[2];
 }
 
+// --- Activate palette swatch ---
 function activateColorInPalette(color, fromEyedropper = false) {
     const swatches = document.querySelectorAll('.color-swatch');
     let matchedSwatch = null;
 
-    // Deselect all palette swatches only
-    swatches.forEach(swatch => swatch.classList.remove('active'));
+    // Deselect all palette swatches
+    swatches.forEach(s => s.classList.remove('active'));
 
-    // Only deactivate picked-color if NOT from eyedropper
-    const picked = document.getElementById("picked-color");
-    if (!fromEyedropper && picked) picked.classList.remove("active");
+    // Remove picked-color active only if NOT from eyedropper
+    const pickedColorDiv = document.getElementById("picked-color");
+    if (!fromEyedropper && pickedColorDiv) pickedColorDiv.classList.remove("active");
 
-    // Find matching palette swatch
-    swatches.forEach(swatch => {
-        if (colorsMatch(swatch.style.backgroundColor, color)) {
-            swatch.classList.add('active');
-            matchedSwatch = swatch;
+    // Activate matching swatch
+    swatches.forEach(s => {
+        if (colorsMatch(s.style.backgroundColor, color)) {
+            s.classList.add('active');
+            matchedSwatch = s;
         }
     });
 
     selectedColor = color;
 
-    // Scroll the matching palette swatch into view
+    // Scroll into view
     if (matchedSwatch) matchedSwatch.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 }
 
 
-
+// --- Picked-color click (toggle) ---
 const pickedColorDiv = document.getElementById("picked-color");
 
 pickedColorDiv.addEventListener("click", () => {
     if (!pickedColorDiv.style.backgroundColor || pickedColorDiv.style.backgroundColor === "transparent") return;
 
-    // Deselect all palette swatches
-    document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+    const isActive = pickedColorDiv.classList.contains("active");
 
-    // Toggle black circle on picked-color
-    pickedColorDiv.classList.add("active");
+    if (isActive) {
+        // Deactivate picked-color
+        pickedColorDiv.classList.remove("active");
+        selectedColor = null;
 
-    selectedColor = pickedColorDiv.style.backgroundColor;
+        // Deselect any palette swatch
+        document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+
+        console.log("[Picked-color] deactivated");
+    } else {
+        // Activate picked-color
+        selectedColor = pickedColorDiv.style.backgroundColor;
+
+        // Deselect any palette swatch
+        document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+
+        console.log("[Picked-color] activated, color:", selectedColor);
+    }
 
     // Restore last paint tool
     if (lastPaintTool) setActiveTool(lastPaintTool);
     else setActiveTool("bucket");
-
-    console.log("[Picked-color] active?", pickedColorDiv.classList.contains("active"), "color:", selectedColor);
 });
 
 
-
+// --- Eyedropper button ---
 eyedropperBtn.addEventListener("click", () => {
     if (currentTool === "eyedropper") {
-        // If already active, deactivate it
         eyedropperBtn.classList.remove("active");
-        setActiveTool(""); // or previousTool if you track it
+        setActiveTool("");
     } else {
-        // Activate eyedropper
         document.querySelectorAll(".tool-btn").forEach(btn => btn.classList.remove("active"));
         eyedropperBtn.classList.add("active");
         setActiveTool("eyedropper");
     }
 });
+
         
 
 
@@ -4454,8 +4455,8 @@ colorPalette.addEventListener('click', (e) => {
     if (!clickedSwatch.classList.contains('color-swatch')) return;
 
     const pickedColorDiv = document.getElementById("picked-color");
-    // Deactivate picked-color when user chooses a palette swatch
     if (pickedColorDiv) pickedColorDiv.classList.remove("active");
+    
 
     // Deselect same swatch (toggle off)
     if (activeSwatch === clickedSwatch) {
@@ -4546,20 +4547,25 @@ function saveState() {
 
 function loadState(state) {
     isRestoring = true;
-    canvas.innerHTML = '';
+
+    // Only remove stickers, keep eyedropper intact
+    canvas.querySelectorAll('.sticker').forEach(s => s.remove());
+
     state.stickers.forEach(data => {
-        // ✅ Change 'groupName' to 'group' to match the addSticker function's parameter name
         const newSticker = addSticker(data.url, data.x, data.y, data.width, data.height, {
             suppressSave: true,
             group: data.groupName 
         });
-        if (data.locked) {
-            newSticker.classList.add('locked');
-        }
+        if (data.locked) newSticker.classList.add('locked');
     });
+
     isRestoring = false;
     updateUndoRedoButtons();
 }
+
+
+
+
         function deselectAllStickers() {
             document.querySelectorAll('.sticker').forEach(s => {
                 s.classList.remove('selected');
@@ -5093,23 +5099,44 @@ function recolorSticker(stickerImg, fillColor, e) {
 
        
 
-        undoBtn.addEventListener('click', () => {
-            if (history.length > 1) {
-                const lastState = history.pop();
-                redoStack.push(lastState); // 👈 save for redo
-                loadState(history[history.length - 1]);
-                updateUndoRedoButtons();
-            }
-        });
+  undoBtn.addEventListener('click', () => {
+    if (history.length > 1) {
+        const lastState = history.pop();
+        redoStack.push(lastState);
 
-        redoBtn.addEventListener('click', () => {
-            if (redoStack.length > 0) {
-                const nextState = redoStack.pop();
-                history.push(nextState);
-                loadState(nextState);
-                updateUndoRedoButtons();
-            }
-        });
+        // Save eyedropper container before loading state
+        const eyedropper = document.getElementById("eyedropper-container");
+
+        loadState(history[history.length - 1]);
+
+        // Reattach eyedropper container to canvas
+        if (eyedropper && !canvas.contains(eyedropper)) {
+            canvas.appendChild(eyedropper);
+        }
+
+        updateUndoRedoButtons();
+    }
+});
+
+redoBtn.addEventListener('click', () => {
+    if (redoStack.length > 0) {
+        const nextState = redoStack.pop();
+        history.push(nextState);
+
+        // Save eyedropper container before loading state
+        const eyedropper = document.getElementById("eyedropper-container");
+
+        loadState(nextState);
+
+        // Reattach eyedropper container to canvas
+        if (eyedropper && !canvas.contains(eyedropper)) {
+            canvas.appendChild(eyedropper);
+        }
+
+        updateUndoRedoButtons();
+    }
+});
+
 
 function addOrReplaceSticker(newUrl, groupName = null) {
     const unlockedSticker = document.querySelector('.sticker:not(.locked)');
