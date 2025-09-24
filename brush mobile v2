@@ -646,6 +646,12 @@ body.eyedropper-active {
     display: none;
 }
 
+#picked-color.active {
+    transform: scale(1.2);
+    border: 2px solid #000; /* black circle */
+}
+
+
 
     </style>
 
@@ -674,7 +680,7 @@ body.eyedropper-active {
     </button>
 
  <div id="picked-color" 
-     style="border-radius: 50%; width: 24px; height: 24px; border: 2px solid #000; background-color: transparent; align-self: flex-start;">
+     style="border-radius: 50%; width: 24px; height: 24px; background-color: transparent; align-self: flex-start;">
 </div>
     
   </div>
@@ -3735,11 +3741,18 @@ function eyedropperMove(e) {
     eyedropperPreview.style.backgroundColor = color;
 
     // --- Step 3: Update picked-color swatch ---
-    const pickedColorSwatch = document.getElementById("picked-color");
-    if (pickedColorSwatch) pickedColorSwatch.style.backgroundColor = color;
+   const pickedColorSwatch = document.getElementById("picked-color");
+if (pickedColorSwatch) {
+    pickedColorSwatch.style.backgroundColor = color;
+    pickedColorSwatch.classList.add("active"); // black circle
+}
 
-    // --- Step 4: Activate matching color in palette ---
-    activateColorInPalette(color);
+
+// --- Step 4: Activate matching color in palette ---
+activateColorInPalette(color, true); // true = from eyedropper
+
+// --- Step 5: Mark picked-color as active (black circle) ---
+if (pickedColorSwatch) pickedColorSwatch.classList.add("active");
 }
 
 // --- Helper to compare RGB colors robustly ---
@@ -3755,13 +3768,19 @@ function colorsMatch(c1, c2) {
     return a1[0] === a2[0] && a1[1] === a2[1] && a1[2] === a2[2];
 }
 
-function activateColorInPalette(color) {
+function activateColorInPalette(color, fromEyedropper = false) {
     const swatches = document.querySelectorAll('.color-swatch');
-
     let matchedSwatch = null;
 
+    // Deselect all palette swatches only
+    swatches.forEach(swatch => swatch.classList.remove('active'));
+
+    // Only deactivate picked-color if NOT from eyedropper
+    const picked = document.getElementById("picked-color");
+    if (!fromEyedropper && picked) picked.classList.remove("active");
+
+    // Find matching palette swatch
     swatches.forEach(swatch => {
-        swatch.classList.remove('active');
         if (colorsMatch(swatch.style.backgroundColor, color)) {
             swatch.classList.add('active');
             matchedSwatch = swatch;
@@ -3770,10 +3789,31 @@ function activateColorInPalette(color) {
 
     selectedColor = color;
 
-    if (matchedSwatch) {
-        matchedSwatch.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
+    // Scroll the matching palette swatch into view
+    if (matchedSwatch) matchedSwatch.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 }
+
+
+
+const pickedColorDiv = document.getElementById("picked-color");
+
+pickedColorDiv.addEventListener("click", () => {
+    if (!pickedColorDiv.style.backgroundColor || pickedColorDiv.style.backgroundColor === "transparent") return;
+
+    // Deselect all palette swatches
+    document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+
+    // Toggle black circle on picked-color
+    pickedColorDiv.classList.add("active");
+
+    selectedColor = pickedColorDiv.style.backgroundColor;
+
+    // Restore last paint tool
+    if (lastPaintTool) setActiveTool(lastPaintTool);
+    else setActiveTool("bucket");
+
+    console.log("[Picked-color] active?", pickedColorDiv.classList.contains("active"), "color:", selectedColor);
+});
 
 
 
@@ -4413,22 +4453,25 @@ colorPalette.addEventListener('click', (e) => {
     const clickedSwatch = e.target;
     if (!clickedSwatch.classList.contains('color-swatch')) return;
 
-    // Deselect same swatch
+    const pickedColorDiv = document.getElementById("picked-color");
+    // Deactivate picked-color when user chooses a palette swatch
+    if (pickedColorDiv) pickedColorDiv.classList.remove("active");
+
+    // Deselect same swatch (toggle off)
     if (activeSwatch === clickedSwatch) {
         selectedColor = null;
         activeSwatch.classList.remove('active');
         activeSwatch = null;
 
-        // Do NOT change currentTool; just update UI
+        // Keep current tool highlighted
         bucketBtn.classList.remove('active');
         brushBtn.classList.remove('active');
         eyedropperBtn.classList.remove('active');
 
-        if (currentTool === 'bucket' || currentTool === 'brush') {
-            // Re-highlight the active tool button
-            if (currentTool === 'bucket') bucketBtn.classList.add('active');
-            else if (currentTool === 'brush') brushBtn.classList.add('active');
-        }
+        if (currentTool === 'bucket') bucketBtn.classList.add('active');
+        else if (currentTool === 'brush') brushBtn.classList.add('active');
+
+        console.log("[Palette] Deselected same swatch, currentTool:", currentTool, "selectedColor:", selectedColor);
         return;
     }
 
@@ -4440,12 +4483,15 @@ colorPalette.addEventListener('click', (e) => {
     activeSwatch.classList.add('active');
     selectedColor = activeSwatch.style.backgroundColor;
 
-    // Do NOT force tool change; use whatever tool is currently active
-    if ((currentTool === 'bucket' || currentTool === 'brush') && currentTool) {
-        if (currentTool === 'bucket') bucketBtn.classList.add('active');
-        else if (currentTool === 'brush') brushBtn.classList.add('active');
-    }
+    // Keep current tool active
+    if (currentTool === 'bucket') bucketBtn.classList.add('active');
+    else if (currentTool === 'brush') brushBtn.classList.add('active');
+
+    console.log("[Palette] New swatch selected:", selectedColor, "tool:", currentTool);
 });
+
+
+
 
 
 
