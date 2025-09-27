@@ -3838,19 +3838,18 @@ eyedropperBtn.addEventListener("click", () => {
 
         //ADDED FOR BRUSH
 
-
- eraserBtn.addEventListener('click', () => {
+eraserBtn.addEventListener('click', () => {
     if (currentTool === 'eraser') {
-                eraserBtn.classList.remove('active');
-
-        setActiveTool(lastPaintTool);
+        // Turning eraser OFF → go to "move" (no paint tools active)
+        eraserBtn.classList.remove('active');
+        setActiveTool("move");
     } else {
-                eraserBtn.classList.add('active');
-
-        previousTool = currentTool === "" ? "bucket" : currentTool;
-        setActiveTool('eraser');
+        // Turning eraser ON
+        eraserBtn.classList.add('active');
+        setActiveTool("eraser");
     }
 });
+
 
 
 // Show mini menu
