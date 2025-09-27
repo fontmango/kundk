@@ -3563,9 +3563,9 @@ urls: [
 ]
 },
 
-
-            
+           
         ];
+
         const canvasContainer = document.getElementById('canvas-container');
 
 		const eyedropperBtn = document.getElementById("eyedropper-btn");
@@ -3910,7 +3910,7 @@ document.addEventListener("click", () => {
  * This function now simply SETS the tool state, it doesn't toggle it.
  */
 function setActiveTool(tool) {
-    if (currentTool === tool) return; // No change
+    if (currentTool === tool && selectedColor) return;
 
     currentTool = tool;
 
