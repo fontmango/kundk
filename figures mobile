@@ -1580,11 +1580,16 @@ function draw(e) {
         }
     }
 
+function getConnectedStickers(excludeSticker = null) {
+    const stickers = document.querySelectorAll('.sticker.connected');
+    return Array.from(stickers).filter(s => s !== excludeSticker);
+}
 
 function startInteraction(e) {
     const sticker = e.currentTarget;
-    if (e.target.closest('.sticker-btn')) return; // ignore buttons
+    if (e.target.closest('.sticker-btn')) return; // ignore button clicks
     e.preventDefault();
+
     activeSticker = sticker;
 
     const touches = e.touches || [];
@@ -1592,18 +1597,14 @@ function startInteraction(e) {
 
     // --- EYEDROPPER MODE: do not move sticker ---
     if (currentTool === "eyedropper") {
-        console.log("[Eyedropper] Tap started, waiting for handleEnd");
         initialInteractionData = {
             x: pointer.clientX,
             y: pointer.clientY,
             time: Date.now()
         };
-
-        // Only listen for release
         document.addEventListener('mouseup', handleEnd);
         document.addEventListener('touchend', handleEnd, { passive: false });
-
-        if (touches.length < 2) return; // single touch = tap only
+        if (touches.length < 2) return;
     }
 
     // --- TWO-FINGER PINCH RESIZE ---
@@ -1620,7 +1621,7 @@ function startInteraction(e) {
             width: activeSticker.offsetWidth,
             height: activeSticker.offsetHeight,
             left: activeSticker.offsetLeft,
-            top: activeSticker.offsetTop,
+            top: activeSticker.offsetTop
         };
 
         document.addEventListener('touchmove', handleMove, { passive: false });
@@ -1628,14 +1629,25 @@ function startInteraction(e) {
         return;
     }
 
-    // --- SINGLE FINGER ---
+    // --- SINGLE-FINGER MOVE ---
     initialInteractionData = {
         x: pointer.clientX,
         y: pointer.clientY,
         offsetX: activeSticker.offsetLeft,
         offsetY: activeSticker.offsetTop,
-        time: Date.now(),
+        time: Date.now()
     };
+
+    // --- Store starting positions of connected stickers ---
+    if (activeSticker.classList.contains("connected")) {
+        const connected = Array.from(document.querySelectorAll('.sticker.connected'))
+            .filter(s => s !== activeSticker);
+
+        connected.forEach(s => {
+            s.dataset.startLeft = s.offsetLeft;
+            s.dataset.startTop = s.offsetTop;
+        });
+    }
 
     const stickerImg = activeSticker.querySelector('img');
 
@@ -1656,11 +1668,9 @@ function startInteraction(e) {
             const [startX, startY] = getCanvasCoordinates(pointer.clientX, pointer.clientY, rect);
 
             if (currentTool === 'brush') {
-                // Only brush uses the mask
                 insideMask = computeEnclosedMask(Math.round(startX), Math.round(startY), activeCanvas);
                 if (!insideMask) return;
             } else {
-                // Eraser ignores mask → erases anywhere
                 insideMask = null;
             }
 
@@ -1677,6 +1687,7 @@ function startInteraction(e) {
 
         if (stickerImg.complete && stickerImg.naturalWidth > 0) setupPainting();
         else stickerImg.onload = setupPainting;
+
     } else {
         // MOVE STICKER IF NO COLOR SELECTED
         isInteracting = true;
@@ -1694,9 +1705,6 @@ function startInteraction(e) {
     document.addEventListener('mousemove', draw);
     document.addEventListener('touchmove', draw, { passive: false });
 }
-
-
-
 
 
 
@@ -1739,6 +1747,25 @@ function handleMove(e) {
         activeSticker.style.left = `${newLeft}px`;
         activeSticker.style.top = `${newTop}px`;
 
+        // --- Move connected stickers proportionally ---
+        if (activeSticker.classList.contains("connected")) {
+            const connected = Array.from(document.querySelectorAll('.sticker.connected'))
+                .filter(s => s !== activeSticker);
+
+            connected.forEach(sticker => {
+                const startLeft = parseFloat(sticker.dataset.startLeft || sticker.offsetLeft);
+                const startTop = parseFloat(sticker.dataset.startTop || sticker.offsetTop);
+
+                const widthRatio = newWidth / initialInteractionData.width;
+                const heightRatio = newHeight / initialInteractionData.height;
+
+                sticker.style.width = `${sticker.offsetWidth * widthRatio}px`;
+                sticker.style.height = `${sticker.offsetHeight * heightRatio}px`;
+                sticker.style.left = `${startLeft + dx}px`;
+                sticker.style.top = `${startTop + dy}px`;
+            });
+        }
+
         return; // exit early, no painting
     }
 
@@ -1750,8 +1777,26 @@ function handleMove(e) {
             const dx = pointer.clientX - initialInteractionData.x;
             const dy = pointer.clientY - initialInteractionData.y;
 
+            // Move active sticker
             activeSticker.style.left = `${initialInteractionData.offsetX + dx}px`;
             activeSticker.style.top = `${initialInteractionData.offsetY + dy}px`;
+
+            // Move connected stickers
+            if (activeSticker.classList.contains("connected")) {
+                const connected = Array.from(document.querySelectorAll('.sticker.connected'))
+                    .filter(s => s !== activeSticker);
+
+                connected.forEach(sticker => {
+                    // Save initial position on drag start
+                    if (!sticker.dataset.startLeft) {
+                        sticker.dataset.startLeft = sticker.offsetLeft;
+                        sticker.dataset.startTop = sticker.offsetTop;
+                    }
+
+                    sticker.style.left = `${parseFloat(sticker.dataset.startLeft) + dx}px`;
+                    sticker.style.top = `${parseFloat(sticker.dataset.startTop) + dy}px`;
+                });
+            }
         }
     }
 }
