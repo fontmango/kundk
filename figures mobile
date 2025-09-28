@@ -72,6 +72,10 @@
     background-color: #ff9933; /* Override to orange when locked */
 }
 
+.sticker.connect .connect-btn {
+    background-color: #2be7d8; /* Override to orange when locked */
+}
+
 
 /* SVG sizing inside buttons */
 .sticker-btn svg {
@@ -650,6 +654,9 @@ body.eyedropper-active {
     border: 2px solid #000;
 }
 
+.connect-btn.active {
+    background-color: #2be7d8; /* or any highlight color */
+}
 
 
     </style>
@@ -2317,6 +2324,7 @@ lockBtn.addEventListener('click', (e) => {
     sticker.appendChild(lockBtn);
 
 // --- Connect Button ---
+// --- Connect Button ---
 const connectBtn = document.createElement('div');
 connectBtn.classList.add('sticker-btn','connect-btn');
 connectBtn.innerHTML = `
@@ -2324,9 +2332,21 @@ connectBtn.innerHTML = `
 `;
 connectBtn.addEventListener('click', e => {
     e.stopPropagation();
+
+    const sticker = e.target.closest('.sticker');
+    if (!sticker) return;
+
+    // Toggle "connected" class on sticker
     sticker.classList.toggle('connected');
+
+    // Toggle "active" style on button (so it stays colored)
+    connectBtn.classList.toggle('active');
+
+    saveState();
 });
+
 sticker.appendChild(connectBtn);
+
 
 
 
@@ -2384,19 +2404,28 @@ stickerImg.addEventListener('click', (e) => {
 });
 
 
-    const updateButtonSizes = () => {
+const updateButtonSizes = () => {
     const btnSize = sticker.offsetWidth * 0.2;
+
     [deleteBtn, resizeBtn, lockBtn, connectBtn].forEach(btn => {
         btn.style.width = btnSize + 'px';
         btn.style.height = btnSize + 'px';
     });
 
-    // New CSS for the SVG icon
-    const iconSize = btnSize * 0.7; // Make icon 70% of button size
-    const iconStrokeWidth = btnSize * 0.05; // Make stroke 5% of button size
-    
-   
-    
+    // SVG icons
+    const iconSize = btnSize * 0.7;
+    const iconStrokeWidth = btnSize * 0.05;
+
+    [deleteBtn, resizeBtn, lockBtn, connectBtn].forEach(btn => {
+        const svg = btn.querySelector('svg');
+        if (svg) {
+            svg.style.width = iconSize + 'px';
+            svg.style.height = iconSize + 'px';
+            svg.style.strokeWidth = iconStrokeWidth + 'px';
+        }
+    });
+
+        // Position buttons
     deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
     resizeBtn.style.top = resizeBtn.style.left = `${btnSize * 0.25}px`;
     lockBtn.style.bottom = lockBtn.style.left = `${btnSize * 0.25}px`;
