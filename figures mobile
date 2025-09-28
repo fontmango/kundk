@@ -51,13 +51,13 @@
 }
 
 
-.group-btn:hover {
+.connect-btn:hover {
     background-color: #2be7d8; /* A subtle hover color */
     transform: scale(1.1);
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
-.group-btn {
+.connect-btn {
     bottom: 5%;
     right: 5%;
 }
@@ -150,7 +150,7 @@ body {
 
 /* Base styles for buttons, with transitions for smooth fading */
 .resize-btn,
-.group-btn,
+.connect-btn,
 .delete-btn,
 .lock-btn {
     position: absolute;
@@ -177,15 +177,17 @@ body {
 /* Specific button positions */
 
 
-.group-btn svg {
+.connect-btn svg {
     width: 16px;
     height: 16px;
 }
 
 /* Show buttons on hover or when the sticker has the 'selected' class */
+.sticker:hover > .connect-btn,
 .sticker:hover > .delete-btn,
 .sticker:hover > .resize-btn,
 .sticker:hover > .lock-btn,
+.sticker:selected > .connect-btn,
 .sticker.selected > .delete-btn,
 .sticker.selected > .resize-btn,
 .sticker.selected > .lock-btn {
@@ -226,7 +228,7 @@ body {
 .bucket-active .sticker .resize-btn,
 
 .bucket-active .sticker .lock-btn,
-.bucket-active .sticker .group-btn {
+.bucket-active .sticker .connect-btn {
     display: none !important;
 }
 
@@ -238,7 +240,7 @@ body {
  .brush-active .sticker .delete-btn,
   .brush-active .sticker .resize-btn,
 
- .brush-active .sticker .group-btn ,
+ .brush-active .sticker .connect-btn ,
  .brush-active .sticker .lock-btn {
             
    display: none !important;
@@ -254,7 +256,7 @@ body {
 .eyedropper-active .sticker .resize-btn,
 
 .eyedropper-active .sticker .lock-btn,
-.eyedropper-active .sticker .group-btn {
+.eyedropper-active .sticker .connect-btn {
     display: none !important;
 }
 
@@ -2314,25 +2316,17 @@ lockBtn.addEventListener('click', (e) => {
     sticker.appendChild(resizeBtn);
     sticker.appendChild(lockBtn);
 
-const groupBtn = document.createElement('div');
-groupBtn.classList.add('sticker-btn', 'group-btn');
-groupBtn.innerHTML = `
-<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 6h16M4 12h16M4 18h16"/>
-</svg>`;
-
-// On click, open overlay with this sticker's group
-groupBtn.addEventListener('click', (e) => {
+// --- Connect Button ---
+const connectBtn = document.createElement('div');
+connectBtn.classList.add('sticker-btn','connect-btn');
+connectBtn.innerHTML = `
+<svg class="connect-btn-icon" data-lucide="paperclip" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+`;
+connectBtn.addEventListener('click', e => {
     e.stopPropagation();
-    const stickerGroup = sticker.dataset.group;
-    const group = stickerGroups.find(g => g.name === stickerGroup);
-    if (group) {
-        // Pass both the URLs and the group name
-        showStickerOverlay(group.urls, group.name);
-    }
+    sticker.classList.toggle('connected');
 });
-
-sticker.appendChild(groupBtn);
+sticker.appendChild(connectBtn);
 
 
 
@@ -2392,7 +2386,7 @@ stickerImg.addEventListener('click', (e) => {
 
     const updateButtonSizes = () => {
     const btnSize = sticker.offsetWidth * 0.2;
-    [deleteBtn, resizeBtn, lockBtn, groupBtn].forEach(btn => {
+    [deleteBtn, resizeBtn, lockBtn, connectBtn].forEach(btn => {
         btn.style.width = btnSize + 'px';
         btn.style.height = btnSize + 'px';
     });
@@ -2401,18 +2395,12 @@ stickerImg.addEventListener('click', (e) => {
     const iconSize = btnSize * 0.7; // Make icon 70% of button size
     const iconStrokeWidth = btnSize * 0.05; // Make stroke 5% of button size
     
-    // Select the SVG and apply styles
-    const groupIconSVG = groupBtn.querySelector('svg');
-    if (groupIconSVG) {
-        groupIconSVG.style.width = iconSize + 'px';
-        groupIconSVG.style.height = iconSize + 'px';
-        groupIconSVG.style.strokeWidth = iconStrokeWidth + 'px';
-    }
-
+   
+    
     deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
     resizeBtn.style.top = resizeBtn.style.left = `${btnSize * 0.25}px`;
     lockBtn.style.bottom = lockBtn.style.left = `${btnSize * 0.25}px`;
-    groupBtn.style.bottom = groupBtn.style.right = `${btnSize * 0.25}px`;
+    connectBtn.style.bottom = connectBtn.style.right = `${btnSize * 0.25}px`;
 };
 
 updateButtonSizes();
@@ -2625,6 +2613,8 @@ function recolorSticker(stickerImg, fillColor, e) {
         updateUndoRedoButtons();
     }
 });
+
+
 
 redoBtn.addEventListener('click', () => {
     if (redoStack.length > 0) {
