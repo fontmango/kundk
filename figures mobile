@@ -1,0 +1,2765 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticker Canvas</title>
+    <style>
+      
+      img.protected {
+  -webkit-touch-callout: none; /* disable "Save Image" on iOS Safari */
+  -webkit-user-select: none;   /* prevent text/image selection */
+  -webkit-user-drag: none;     /* prevent dragging image to new tab */
+  user-select: none;
+}
+      
+  .sticker-btn {
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: #c2bebeff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 101;
+    padding: 0;
+    outline: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s, background-color 0.2s;
+}
+
+/* Show buttons on hover or selected sticker */
+.sticker:hover > .sticker-btn,
+.sticker.selected > .sticker-btn {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Specific button positions */
+.delete-btn {
+    top: 5%;
+    right: 5%;
+}
+
+.copy-btn {
+    top: 5%;
+    left: 5%;
+}
+
+.group-btn:hover {
+    background-color: #2be7d8; /* A subtle hover color */
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.group-btn {
+    bottom: 5%;
+    right: 5%;
+}
+
+/* Hover effects */
+.sticker-btn:hover {
+    transform: scale(1.1);
+   
+}
+
+.sticker.locked .lock-btn {
+    background-color: #ff9933; /* Override to orange when locked */
+}
+
+
+/* SVG sizing inside buttons */
+.sticker-btn svg {
+    width: 60%;
+    height: 60%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    box-sizing: border-box;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#canvas-container {
+    width: 90%;
+    max-width: 600px;
+    height: 80vh;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    position: relative;
+    margin-top: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    touch-action: none;
+}
+      
+      @media (max-width: 768px) {
+    #canvas-container {
+        /* On mobile, make the height 50% of the screen's height */
+  
+        /* You can also make it take the full width for more space */
+        width: 100%;
+    }
+}
+
+.sticker {
+    position: absolute;
+    height: auto;
+    cursor: grab;
+    user-select: none;
+    box-sizing: border-box;
+    touch-action: none;
+}
+
+.sticker img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.sticker:active {
+    cursor: grabbing;
+    z-index: 100;
+}
+
+.sticker.locked {
+    cursor: grab;
+}
+
+.sticker.locked:active {
+    cursor: grabbing;
+}
+
+.sticker:focus {
+    outline: none;
+}
+
+/* Base styles for buttons, with transitions for smooth fading */
+.copy-btn,
+.group-btn,
+.delete-btn,
+.lock-btn {
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: #c2bebeff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 101;
+    padding: 0;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+
+    /* These are the crucial lines for hiding and transitioning */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s, background-color 0.2s;
+}
+
+/* Specific button positions */
+.delete-btn {
+    top: 5%;
+    right: 5%;
+}
+
+.copy-btn {
+    top: 5%;
+    left: 5%;
+}
+
+
+.group-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Show buttons on hover or when the sticker has the 'selected' class */
+.sticker:hover > .delete-btn,
+.sticker:hover > .copy-btn,
+.sticker:hover > .lock-btn,
+.sticker.selected > .delete-btn,
+.sticker.selected > .copy-btn,
+.sticker.selected > .lock-btn {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Hover effects for buttons */
+.copy-btn:hover {
+    background-color: #6aa84fff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.delete-btn:hover {
+    background-color: #f26262ff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.lock-btn:hover {
+    transform: scale(1.1);
+   
+    
+}
+
+
+/* Bucket mode-specific overrides */
+.bucket-active .sticker {
+    border: none !important;
+    transition: none !important;
+}
+
+.bucket-active .sticker .delete-btn,
+.bucket-active .sticker .copy-btn,
+.bucket-active .sticker .lock-btn,
+.bucket-active .sticker .group-btn {
+    display: none !important;
+}
+
+.bucket-active .sticker:active,
+.bucket-active .sticker:hover {
+    cursor: crosshair;
+}
+
+ .brush-active .sticker .delete-btn,
+ .brush-active .sticker .copy-btn,
+ .brush-active .sticker .group-btn ,
+ .brush-active .sticker .lock-btn {
+            
+   display: none !important;
+        }
+
+  .brush-active .sticker:active,
+   .brush-active .sticker:hover {
+   cursor: crosshair;
+        }
+
+
+.eyedropper-active .sticker .delete-btn,
+.eyedropper-active .sticker .copy-btn,
+.eyedropper-active .sticker .lock-btn,
+.eyedropper-active .sticker .group-btn {
+    display: none !important;
+}
+
+.eyedropper-active .sticker:active,
+.eyedropper-active .sticker:hover {
+    cursor: crosshair;
+}
+
+
+.controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.ghost-sticker {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.7;
+    width: 100px;
+    height: auto;
+    transform: translate(-50%, -50%);
+}
+
+button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #333;
+    transition: transform 0.2s, color 0.2s;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus,
+button:active {
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+
+button:hover {
+    color: #000;
+    transform: scale(1.1);
+}
+
+button.active {
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    transform: scale(0.9);
+}
+
+.icon {
+    width: 1.4em;
+    height: 1.4em;
+    stroke: currentColor;
+}
+
+.color-palette-container {
+    width: 90%;
+    max-width: 600px;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: pan-y;
+}
+
+.color-palette-container::-webkit-scrollbar {
+    display: none;
+}
+
+.color-palette {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 3px;
+    width: max-content;
+}
+
+.color-swatch {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+    outline: 0 !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+}
+
+.color-swatch.active {
+    transform: scale(1.2);
+    border-color: #000000;
+}
+
+#sticker-palette-container {
+    display: none;
+}
+
+.overlay {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    display: none;
+    z-index: 200;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 80%;
+   
+    overflow-y: auto;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+
+.overlay.active {
+    display: block;
+}
+
+.overlay-grid {
+   
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    overflow-y: auto;
+    height: calc(100% - 40px);
+    width: 100%;
+}
+
+.overlay-icon {
+   
+    max-width: 100%; /* Ensures it scales down on smaller screens */
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.2s;
+    transform: scale(1);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-focus-ring-color: transparent;
+    outline: none;
+}
+
+
+.overlay-icon:hover {
+    animation: pulse 1.5s infinite;
+}
+
+.overlay-sticker {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.2s;
+ -webkit-tap-highlight-color: transparent; /* iOS/Android WebKit */
+  -webkit-focus-ring-color: transparent;    /* iOS Safari */
+  outline: none;      
+  
+}
+
+.overlay-sticker.active {
+  position: relative;
+}
+
+.overlay-sticker.active::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 12px; /* adjust to match sticker shape */
+  border: 2px solid #00bfff; /* pulse color */
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+
+.overlay-sticker:hover {
+    transform: scale(1.1);
+}
+
+.copy-btn-icon {
+    width: 100%;
+    height: 100%;
+    fill: white;
+    stroke: white;
+}
+
+.lock-btn-icon {
+    width: 60%;
+    height: 60%;
+    fill: white;
+    stroke: white;
+}
+
+.delete-btn-icon {
+    width: 100%;
+    height: 100%;
+    fill: white;
+    stroke: white;
+}
+
+
+.copy-btn:hover {
+    background-color: #6aa84fff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.delete-btn:hover {
+    background-color: #f26262ff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.pulse-effect {
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+#sticker-overlay-container {
+  position: fixed;                     /* modal */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  width: 90vw;
+  max-width: 500px;
+  max-height: 80vh;                    /* stays inside screen */
+  
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  z-index: 1100;
+  
+  display: none;
+  flex-direction: column;
+  overflow: hidden;                    /* ✅ never scroll here */
+}
+
+
+.overlay-stickers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 15px;
+  padding: 10px;
+  
+  flex: 1;                             /* take remaining space */
+  overflow-y: auto;                    /* ✅ scroll only here */
+  overflow-x: hidden;                  /* ✅ no horizontal scroll */
+  max-height: 100%;                    /* constrained by parent */
+}
+
+.overlay-icons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 10px;
+  padding: 10px;
+
+  flex: 1;
+  overflow-y: auto;    /* ✅ scroll only here */
+  overflow-x: hidden;  /* ✅ no x-scroll */
+}
+
+.overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    border-bottom: 1px solid #ccc;
+    flex-shrink: 0;
+}
+
+
+.close-btn {
+    position: absolute;
+   
+    
+    color: #555;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.close-btn {
+    right: 0;
+}
+
+.overlay-close-btn:hover {
+    transform: scale(1.1);
+}
+
+.overlay-title {
+    flex-grow: 1;
+    text-align: center;
+    /* This is the key change: remove the default margin from the title */
+    margin: 0;
+    font-size: 16px; /* Adjust font size as needed */
+    font-weight: 600;
+}
+
+#group-overlay-container {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    display: none;
+    z-index: 1100;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    
+    /* Change to flexbox for vertical stacking */
+    display: none;
+    flex-direction: column;
+}
+
+
+#brush-btn {
+    display: none;
+}
+
+#add-sticker-btn {
+    display: none;
+}
+
+body.eyedropper-active {
+    cursor: crosshair; /* fallback */
+}
+
+.eyedropper-preview {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3300;
+    display: none;
+}
+
+#picked-color.active {
+    transform: scale(1.2);
+    border: 2px solid #000;
+}
+
+
+
+    </style>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  
+
+<div id="canvas-container">
+
+  <!-- Eyedropper floating inside canvas top-left -->
+  <div id="eyedropper-container" 
+     style="position: absolute; top: 45px; left: 6px; display: flex; flex-direction: column; align-items: flex-start; gap: 5px; z-index: 3000;">
+
+    
+    <button id="eyedropper-btn" style="cursor: pointer;" >
+    
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+           viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           class="lucide lucide-pipette-icon lucide-pipette">
+        <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12"/>
+        <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z"/>
+        <path d="m2 22 .414-.414"/>
+      </svg>
+    </button>
+
+ <div id="picked-color" 
+     style="border-radius: 50%; width: 24px; height: 24px; background-color: transparent; align-self: flex-start;">
+</div>
+    
+  </div>
+</div>
+
+
+    
+    
+    
+    <div id="overlay-container"></div>
+
+
+  <div class="controls">
+   
+   <button id="spin-sticker-btn" title="Spin Random">
+  <i data-lucide="dice-6" class="icon"></i>
+</button>
+    
+  
+   <button id="brush-btn" class="">
+    <!-- Brush SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brush-icon lucide-brush">
+        <path d="m11 10 3 3"/>
+        <path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z"/>
+        <path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031"/>
+    </svg>
+</button>
+
+<button id="bucket-btn" class="">
+    <!-- Bucket SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paint-bucket-icon lucide-paint-bucket">
+        <path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/>
+        <path d="m5 2 5 5"/>
+        <path d="M2 13h15"/>
+        <path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/>
+    </svg>
+</button>
+
+<div id="tool-options" style="display: none; position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 5px;">
+    <button id="bucket-option">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paint-bucket-icon lucide-paint-bucket">
+            <path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/>
+            <path d="m5 2 5 5"/>
+            <path d="M2 13h15"/>
+            <path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/>
+        </svg>
+    </button>
+    <button id="brush-option">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brush-icon lucide-brush">
+            <path d="m11 10 3 3"/>
+            <path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z"/>
+            <path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031"/>
+        </svg>
+    </button>
+</div>
+
+
+ 
+        <button id="add-sticker-btn" title="Add Random">
+            <i data-lucide="plus" class="icon"></i>
+        </button>
+
+        <button id="sticker-picker-btn" title="Choose Sticker">
+            <i data-lucide="sticker" class="icon"></i>
+        </button>
+
+        <button id="undo-btn" title="Undo">
+            <i data-lucide="undo-2" class="icon"></i>
+        </button>
+
+        <button id="redo-btn" title="Redo">
+            <i data-lucide="redo-2" class="icon"></i>
+        </button>
+
+        <button id="eraser-btn" title="Erase">
+            <i data-lucide="eraser" class="icon"></i>
+        </button>
+
+    </div>
+  
+
+    <div class="color-palette-container">
+        <div class="color-palette" id="color-palette"></div>
+    </div>
+        <div id="sticker-overlay-container"></div>
+
+    <div id="group-overlay-container"></div>
+    <script>
+        const stickerGroups = [
+               
+              
+{
+name: "Zähne",
+urls: [
+"https://static.wixstatic.com/media/990059_0129f9b0bf81436ea35419d29dcddd16~mv2.png",
+"https://static.wixstatic.com/media/990059_4b0f72aa82744a5e847998fe1e850966~mv2.png",
+"https://static.wixstatic.com/media/990059_4e60300b83144faaaae36ad238419d2d~mv2.png",
+"https://static.wixstatic.com/media/990059_88f52044ee3a4523805ad4a93b3a059d~mv2.png",
+"https://static.wixstatic.com/media/990059_8d662ab7d4a4414497c09498ecdce7c3~mv2.png",
+"https://static.wixstatic.com/media/990059_06b4c1aafc994403aa832cca245f1fba~mv2.png",
+
+"https://static.wixstatic.com/media/990059_e6e76b1d59be41afa1995e6cb6c415ca~mv2.png",
+"https://static.wixstatic.com/media/990059_5fc6ff01603d4eb2bdee2b86011db13b~mv2.png",
+"https://static.wixstatic.com/media/990059_a7fe857a10514c68a0a153db8b3b9e33~mv2.png",
+"https://static.wixstatic.com/media/990059_db23a1e694a34e8e9001ad6cbfd6238f~mv2.png",
+"https://static.wixstatic.com/media/990059_e23cbdce643a4ffda20c1c26ea145734~mv2.png",
+"https://static.wixstatic.com/media/990059_db52184dcf5a4561adc382c7ffbcf03f~mv2.png",
+"https://static.wixstatic.com/media/990059_14ad91e9843044d99245a8454096df1a~mv2.png",
+"https://static.wixstatic.com/media/990059_6c22d369368c48899af2d4ba05e13494~mv2.png",
+"https://static.wixstatic.com/media/990059_c930bfd15fc44a22b60d6d59b2f792d8~mv2.png",
+"https://static.wixstatic.com/media/990059_d9f087b0699747e69d2f2cdb1f957843~mv2.png",
+"https://static.wixstatic.com/media/990059_60eb0545add448f7b4158f81ca9fdd91~mv2.png",
+"https://static.wixstatic.com/media/990059_74243e36657e4a26b0ae42b8c7f3cc30~mv2.png",
+"https://static.wixstatic.com/media/990059_0cdb68942364494682203038f1d5aad1~mv2.png",
+"https://static.wixstatic.com/media/990059_155cf18e76bf4995bfe37bf4fff37735~mv2.png",
+"https://static.wixstatic.com/media/990059_15d8dc9d7ee645a0803031a826dfe01a~mv2.png",
+"https://static.wixstatic.com/media/990059_fb0b3de62c824100a0acc686b856cd60~mv2.png",
+"https://static.wixstatic.com/media/990059_f475c53e43be4c1b94c46de4264dcb8a~mv2.png",
+"https://static.wixstatic.com/media/990059_689fb0e1a38f4bdab77d15139c534786~mv2.png",
+"https://static.wixstatic.com/media/990059_e48ef409337d402092b6000f068c6eee~mv2.png",
+"https://static.wixstatic.com/media/990059_9b00c28bc1a54a5092df0314d6b9879f~mv2.png",
+"https://static.wixstatic.com/media/990059_806f935f9c7544668c021840bdb42080~mv2.png",
+"https://static.wixstatic.com/media/990059_552ddfc1e40d4418849e21955edb1c11~mv2.png",
+"https://static.wixstatic.com/media/990059_dc02d2e7e0464aa39e9344f8cb6a9619~mv2.png",
+"https://static.wixstatic.com/media/990059_cfe824d561e1488a9dc8d2ef4ba32b57~mv2.png",
+"https://static.wixstatic.com/media/990059_41ac2bbb4579432e8a96779a9d3b8753~mv2.png",
+"https://static.wixstatic.com/media/990059_2185e328bf364e7ea045e9063be0ebd2~mv2.png",
+"https://static.wixstatic.com/media/990059_a0cf010dd5ff422a93da278ffc80298f~mv2.png",
+"https://static.wixstatic.com/media/990059_b1abcf3e3d524b5dbd05218d93491f49~mv2.png",
+"https://static.wixstatic.com/media/990059_0e939527e750481aae65eab4721bb40f~mv2.png"
+
+]
+},
+
+           
+        ];
+
+        const canvasContainer = document.getElementById('canvas-container');
+
+		const eyedropperBtn = document.getElementById("eyedropper-btn");
+        canvasContainer.appendChild(eyedropperBtn);
+           
+        //ADDED FOR BRUSH
+        const brushBtn = document.getElementById('brush-btn');
+        const bucketBtn = document.getElementById("bucket-btn");
+        const toolOptions = document.getElementById("tool-options");
+        const bucketOption = document.getElementById("bucket-option");
+        const brushOption = document.getElementById("brush-option");
+
+        let activeSwatch = null;
+
+        let currentTool = ""; // default
+
+        let brushSize = 20;
+        let isDrawing = false;
+        let isInteracting = false;
+        let activeCanvas = null;
+        let activeCtx = null;
+        let initialInteractionData = {};
+        let lastX = 0, lastY = 0;
+        let strokeOriginImageData = null;
+        let insideMask = null; 
+        let lastPaintTool = "";
+        //END FOR BRUSH
+
+		const spinBtn = document.getElementById("spin-sticker-btn");
+
+        const canvas = document.getElementById('canvas-container');
+        const addStickerBtn = document.getElementById('add-sticker-btn');
+        const undoBtn = document.getElementById('undo-btn');
+        const redoBtn = document.getElementById('redo-btn');
+        const swatch = document.querySelector('.color-swatch');
+        const colorPicker = document.getElementById('color-picker');
+
+        const colorPalette = document.getElementById('color-palette');
+        const history = [];
+        const eraserBtn = document.getElementById('eraser-btn');
+
+        const stickerPickerBtn = document.getElementById('sticker-picker-btn');
+        const groupOverlayContainer = document.getElementById('group-overlay-container');
+        const stickerOverlayContainer = document.getElementById('sticker-overlay-container');
+
+        let activeSticker = null;
+        let activePaletteSticker = null;
+        let selectedColor = null;
+        let isRestoring = false;
+        let redoStack = [];
+
+        let initialX, initialY, offsetX, offsetY;
+        let initialTouchDistance = 0;
+        let initialStickerWidth = 0;
+        let initialStickerHeight = 0;
+
+        let initialCenter = {
+            x: 0,
+            y: 0
+        };
+        let firstStickerAdded = false;
+
+        
+        const colors = [
+    // Reds
+    '#800020', '#A52A2A', '#ff4040', '#FF0000', '#FF6347', '#FF7F50', '#f08080', '#FA8072', '#ff7373',
+
+    // Pinks
+    '#ff1493', '#FF69B4', '#ff00ff', '#ff80ed', '#ff71ce', '#FFC0CB', '#ffb3ba', '#ffe4e1',
+
+    // Oranges & Yellows
+    '#a67c00', '#D2691E', '#CD5C5C', '#FFA500', '#FF8C00', '#FFC04C', '#FFD700', '#FFFF00', '#ffff66', '#fffb96',
+
+    // Greens
+    '#065535', '#013220', '#008000', '#808000', '#3CB371', '#9ACD32', '#ADFF2F', '#05ffa1', '#b4eeb4',
+
+    // Blues & Teals
+    '#000080', '#0e2f44', '#0000FF', '#4169E1', '#1E90FF', '#0a75ad', '#6897bb', '#b0e0e6', '#87CEFA', '#01cdfe', '#40E0D0', '#008080', '#00ffff', '#ddfffc',
+
+    // Purples
+    '#4B0082', '#660066', '#800080', '#8a2be2', '#b967ff', '#BA55D3', '#DA70D6', '#e6e6fa', '#ccccff',
+
+    // Grays & Neutrals
+    '#333333', '#666666', '#808080', '#A9A9A9', '#C0C0C0', '#cccccc', '#dddddd', '#CBBEB5', '#c39797', '#ffdab9', '#faebd7',
+];
+
+
+        // This is the special "erase" object that will be used by the eraser button.
+        const transparentColor = {
+            type: 'erase'
+        };
+        
+
+        //EYEDROPPER
+        
+  // --- Eyedropper enable/disable ---
+function enableEyedropper() {
+    setActiveTool("eyedropper");
+    document.body.classList.add("eyedropper-active");
+
+    document.addEventListener("mousemove", eyedropperMove);
+    document.addEventListener("touchmove", eyedropperMove, { passive: false });
+}
+
+function disableEyedropper() {
+    document.body.classList.remove("eyedropper-active");
+    eyedropperPreview.style.display = "none";
+
+    document.removeEventListener("mousemove", eyedropperMove);
+    document.removeEventListener("touchmove", eyedropperMove);
+}
+
+// --- Eyedropper move ---
+function eyedropperMove(e) {
+    if (!activeSticker || currentTool !== "eyedropper") return;
+
+    const stickerImg = activeSticker.querySelector("img");
+    if (!stickerImg) return;
+
+    const rect = stickerImg.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    // Compute click coords accounting for letterboxing
+    const imgRatio = stickerImg.naturalWidth / stickerImg.naturalHeight;
+    const rectRatio = rect.width / rect.height;
+    let contentX = 0, contentY = 0, contentWidth = rect.width, contentHeight = rect.height;
+    if (rectRatio > imgRatio) {
+        contentHeight = rect.height;
+        contentWidth = rect.height * imgRatio;
+        contentX = (rect.width - contentWidth) / 2;
+    } else {
+        contentWidth = rect.width;
+        contentHeight = rect.width / imgRatio;
+        contentY = (rect.height - contentHeight) / 2;
+    }
+
+    let clickX = Math.floor(((clientX - rect.left - contentX) / contentWidth) * stickerImg.naturalWidth);
+    let clickY = Math.floor(((clientY - rect.top - contentY) / contentHeight) * stickerImg.naturalHeight);
+    clickX = Math.max(0, Math.min(clickX, stickerImg.naturalWidth - 1));
+    clickY = Math.max(0, Math.min(clickY, stickerImg.naturalHeight - 1));
+
+    // Read pixel
+    const tmpCanvas = document.createElement("canvas");
+    tmpCanvas.width = stickerImg.naturalWidth;
+    tmpCanvas.height = stickerImg.naturalHeight;
+    const tmpCtx = tmpCanvas.getContext("2d");
+    tmpCtx.drawImage(stickerImg, 0, 0);
+    const pixel = tmpCtx.getImageData(clickX, clickY, 1, 1).data;
+
+    if (pixel[3] === 0) { // transparent
+        eyedropperPreview.style.display = "none";
+        return;
+    }
+
+    const r = pixel[0], g = pixel[1], b = pixel[2];
+    const brightness = (r + g + b) / 3;
+    if (brightness < 30) { // near-black outline
+        eyedropperPreview.style.display = "none";
+        return;
+    }
+
+    const color = `rgb(${r}, ${g}, ${b})`;
+
+    // Update preview circle
+    eyedropperPreview.style.display = "block";
+    eyedropperPreview.style.left = `${clientX + 15}px`;
+    eyedropperPreview.style.top = `${clientY + 15}px`;
+    eyedropperPreview.style.backgroundColor = color;
+
+    // Update picked-color swatch and mark active
+    const pickedColorDiv = document.getElementById("picked-color");
+    if (pickedColorDiv) {
+        pickedColorDiv.style.backgroundColor = color;
+    }
+
+    // Activate palette swatch without removing picked-color active
+    activateColorInPalette(color, true); // true = from eyedropper
+}
+// --- Convert RGB string to array ---
+function rgbStringToArray(rgb) {
+    const match = rgb.match(/(\d+),\s*(\d+),\s*(\d+)/);
+    return match ? [parseInt(match[1]), parseInt(match[2]), parseInt(match[3])] : null;
+}
+
+function colorsMatch(c1, c2) {
+    const a1 = rgbStringToArray(c1);
+    const a2 = rgbStringToArray(c2);
+    if (!a1 || !a2) return false;
+    return a1[0] === a2[0] && a1[1] === a2[1] && a1[2] === a2[2];
+}
+
+// --- Activate palette swatch ---
+function activateColorInPalette(color, fromEyedropper = false) {
+    const swatches = document.querySelectorAll('.color-swatch');
+    let matchedSwatch = null;
+
+    // Deselect all palette swatches
+    swatches.forEach(s => s.classList.remove('active'));
+
+    // Remove picked-color active only if NOT from eyedropper
+    const pickedColorDiv = document.getElementById("picked-color");
+    if (!fromEyedropper && pickedColorDiv) pickedColorDiv.classList.remove("active");
+
+    // Activate matching swatch
+    swatches.forEach(s => {
+        if (colorsMatch(s.style.backgroundColor, color)) {
+            s.classList.add('active');
+            matchedSwatch = s;
+        }
+    });
+
+    selectedColor = color;
+
+    // Scroll into view
+    if (matchedSwatch) matchedSwatch.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+
+// --- Picked-color click (toggle) ---
+const pickedColorDiv = document.getElementById("picked-color");
+
+pickedColorDiv.addEventListener("click", () => {
+    if (!pickedColorDiv.style.backgroundColor || pickedColorDiv.style.backgroundColor === "transparent") return;
+
+    const isActive = pickedColorDiv.classList.contains("active");
+
+    if (isActive) {
+        // Deactivate picked-color
+        pickedColorDiv.classList.remove("active");
+        selectedColor = null;
+
+        // Deselect any palette swatch
+        document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+
+        console.log("[Picked-color] deactivated");
+    } else {
+        // Activate picked-color
+        selectedColor = pickedColorDiv.style.backgroundColor;
+
+        // Deselect any palette swatch
+        document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+
+        console.log("[Picked-color] activated, color:", selectedColor);
+    }
+
+    // Restore last paint tool
+    if (lastPaintTool) setActiveTool(lastPaintTool);
+    else setActiveTool("bucket");
+});
+
+
+// --- Eyedropper button ---
+eyedropperBtn.addEventListener("click", () => {
+    if (currentTool === "eyedropper") {
+        eyedropperBtn.classList.remove("active");
+        setActiveTool("");
+    } else {
+        document.querySelectorAll(".tool-btn").forEach(btn => btn.classList.remove("active"));
+        eyedropperBtn.classList.add("active");
+        setActiveTool("eyedropper");
+    }
+});
+
+        
+
+
+        
+        
+
+        //ADDED FOR BRUSH
+
+eraserBtn.addEventListener('click', () => {
+    if (currentTool === 'eraser') {
+        // Turning eraser OFF → go to "move" (no paint tools active)
+        eraserBtn.classList.remove('active');
+        setActiveTool("move");
+    } else {
+        // Turning eraser ON
+        eraserBtn.classList.add('active');
+        setActiveTool("eraser");
+    }
+});
+
+
+
+// Show mini menu
+bucketBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toolOptions.style.display = toolOptions.style.display === "none" ? "flex" : "none";
+    toolOptions.style.flexDirection = "column";
+    toolOptions.style.gap = "5px";
+});
+
+// Bucket SVG as string
+const bucketSVG = `
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paint-bucket-icon lucide-paint-bucket">
+    <path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/>
+    <path d="m5 2 5 5"/>
+    <path d="M2 13h15"/>
+    <path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/>
+</svg>
+`;
+
+// Brush SVG as string
+const brushSVG = `
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brush-icon lucide-brush">
+    <path d="m11 10 3 3"/>
+    <path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z"/>
+    <path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031"/>
+</svg>
+`;
+
+// Select bucket
+bucketOption.addEventListener("click", () => {
+    currentTool = "bucket";
+    bucketBtn.innerHTML = bucketSVG; // replace emoji with SVG
+    toolOptions.style.display = "none";
+    setActiveTool("bucket");
+    lastPaintTool = "bucket";
+});
+
+// Select brush
+brushOption.addEventListener("click", () => {
+    currentTool = "brush";
+    bucketBtn.innerHTML = brushSVG; // replace emoji with SVG
+    toolOptions.style.display = "none";
+    setActiveTool("brush");
+     lastPaintTool = "brush";
+});
+
+
+// Hide menu on outside click
+document.addEventListener("click", () => {
+    toolOptions.style.display = "none";
+});
+
+
+ /**
+ * REVISED function to set the active tool and update the UI.
+ * This function now simply SETS the tool state, it doesn't toggle it.
+ */
+function setActiveTool(tool) {
+    if (currentTool === tool && selectedColor) return;
+
+    currentTool = tool;
+
+    // Reset all tool-related body classes and button active states
+    document.body.classList.remove('bucket-active', 'brush-active', 'move-active', 'eyedropper-active');
+    bucketBtn.classList.remove('active');
+    brushBtn.classList.remove('active');
+    eraserBtn.classList.remove('active');
+    eyedropperBtn.classList.remove('active'); // 👈 reset this too
+
+    switch (currentTool) {
+        case 'bucket':
+            lastPaintTool = 'bucket';
+            document.body.classList.add('bucket-active');
+            bucketBtn.classList.add('active');
+            break;
+
+        case 'brush':
+            lastPaintTool = 'brush';
+            document.body.classList.add('brush-active');
+            bucketBtn.classList.add('active');
+            break;
+            
+        case 'eyedropper':
+            document.body.classList.add('eyedropper-active');
+            eyedropperBtn.classList.add('active');
+            break;
+
+        case 'eraser':
+            document.body.classList.add('bucket-active'); // eraser uses same cursor
+            eraserBtn.classList.add('active');
+            selectedColor = transparentColor;
+            break;
+
+        case 'move':
+        default:
+            document.body.classList.add('move-active');
+            selectedColor = null;
+            break;
+    }
+
+    // Highlight the active color swatch if a color is selected
+    if ((currentTool === 'bucket' || currentTool === 'brush') && selectedColor) {
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        const active = document.querySelector(`.color-swatch[style*="${selectedColor}"]`);
+        if (active) active.classList.add('active');
+    }
+
+    // Ensure sticker buttons show/hide correctly
+    document.querySelectorAll('.sticker').forEach(sticker => {
+        if (currentTool === 'bucket' || currentTool === 'brush') {
+            sticker.classList.remove('selected'); // hide buttons while coloring
+        }
+    });
+}
+
+
+
+   
+function draw(e) {
+    // Prevent coloring if resizing (two-finger pinch) or moving
+    if (isInteracting) return;
+
+    if (!isDrawing || !activeCtx || !activeSticker) return;
+
+    const stickerImg = activeSticker.querySelector('img');
+    const rect = stickerImg.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) {
+        lastX = -1;
+        return;
+    }
+
+    const [currentX, currentY] = getCanvasCoordinates(clientX, clientY, rect);
+
+    if (lastX === -1) {
+        const currentIdx = Math.round(currentY) * activeCanvas.width + Math.round(currentX);
+        if (currentTool === 'eraser' || (insideMask && insideMask[currentIdx])) {
+            lastX = currentX;
+            lastY = currentY;
+        } else {
+            return;
+        }
+    }
+
+    const dist = Math.hypot(currentX - lastX, currentY - lastY);
+    const angle = Math.atan2(currentY - lastY, currentX - lastX);
+    const imageDataToPaint = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
+    const rgbColor = currentTool === 'eraser' ? [0, 0, 0, 0] : hexToRgb(selectedColor);
+    if (!rgbColor) return;
+
+    for (let i = 0; i < dist; i++) {
+        const x = Math.round(lastX + (Math.cos(angle) * i));
+        const y = Math.round(lastY + (Math.sin(angle) * i));
+        const idx = y * activeCanvas.width + x;
+
+        if (currentTool === 'brush' && (!insideMask || !insideMask[idx])) continue;
+
+        paintAt(x, y, imageDataToPaint, rgbColor);
+    }
+
+    const cx = Math.round(currentX);
+    const cy = Math.round(currentY);
+    const currentIdx = cy * activeCanvas.width + cx;
+    if (currentTool === 'eraser' || (insideMask && insideMask[currentIdx])) {
+        paintAt(cx, cy, imageDataToPaint, rgbColor);
+    }
+
+    activeCtx.putImageData(imageDataToPaint, 0, 0);
+    stickerImg.src = activeCanvas.toDataURL();
+    lastX = currentX;
+    lastY = currentY;
+}
+
+
+
+    function getCanvasCoordinates(clientX, clientY, rect) {
+        if (!activeCanvas) return [0, 0];
+        const imgRatio = activeCanvas.width / activeCanvas.height;
+        const rectRatio = rect.width / rect.height;
+        let scale, offsetX = 0, offsetY = 0;
+
+        if (rectRatio > imgRatio) {
+            const actualWidth = rect.height * imgRatio;
+            scale = activeCanvas.height / rect.height;
+            offsetX = (rect.width - actualWidth) / 2;
+        } else {
+            const actualHeight = rect.width / imgRatio;
+            scale = activeCanvas.width / rect.width;
+            offsetY = (rect.height - actualHeight) / 2;
+        }
+
+        const x = (clientX - rect.left - offsetX) * scale;
+        const y = (clientY - rect.top - offsetY) * scale;
+        return [x, y];
+    }
+
+
+    function paintAt(x, y, imageData, color) {
+        const { width, data } = imageData;
+        for (let i = -brushSize; i < brushSize; i++) {
+            for (let j = -brushSize; j < brushSize; j++) {
+                if (i * i + j * j < brushSize * brushSize) {
+                    const pixelX = Math.round(x + i);
+                    const pixelY = Math.round(y + j);
+                    
+                    if (pixelX < 0 || pixelX >= width || pixelY < 0 || pixelY >= imageData.height) continue;
+                    
+                    const idx = (pixelY * width + pixelX);
+                    
+                    if (currentTool === 'brush' && (!insideMask || !insideMask[idx])) {
+                        continue;
+                    }
+                    
+                    const paintIndex = idx * 4;
+                    
+                    if (currentTool === 'eraser') {
+                        data[paintIndex + 3] = 0;
+                    } else {
+                        data[paintIndex] = color[0];
+                        data[paintIndex + 1] = color[1];
+                        data[paintIndex + 2] = color[2];
+                        data[paintIndex + 3] = 255;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+  function startInteraction(e) {
+    const sticker = e.currentTarget;
+    if (e.target.closest('.sticker-btn')) return; // ignore buttons
+    e.preventDefault();
+    activeSticker = sticker;
+
+    const touches = e.touches || [];
+    const pointer = touches[0] || e;
+
+    // --- EYEDROPPER MODE: do not move sticker ---
+    if (currentTool === "eyedropper") {
+    console.log("[Eyedropper] Tap started, waiting for handleEnd");
+    initialInteractionData = {
+        x: pointer.clientX,
+        y: pointer.clientY,
+        time: Date.now()
+    };
+
+    // Add handleEnd listeners
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchend', handleEnd, { passive: false });
+
+    // For single touch, do NOT move sticker
+    // For multi-touch, allow resize:
+    if (touches.length < 2) return;
+}
+
+    // --- TWO-FINGER PINCH RESIZE ---
+    if (touches.length === 2) {
+        isInteracting = true;
+        deselectAllStickers();
+        activeSticker.classList.add('selected');
+
+        initialInteractionData = {
+            pinchDistance: Math.hypot(
+                touches[0].clientX - touches[1].clientX,
+                touches[0].clientY - touches[1].clientY
+            ),
+            width: activeSticker.offsetWidth,
+            height: activeSticker.offsetHeight,
+            left: activeSticker.offsetLeft,
+            top: activeSticker.offsetTop,
+        };
+
+        document.addEventListener('touchmove', handleMove, { passive: false });
+        document.addEventListener('touchend', handleEnd);
+        return;
+    }
+
+    // --- SINGLE FINGER ---
+    initialInteractionData = {
+        x: pointer.clientX,
+        y: pointer.clientY,
+        offsetX: activeSticker.offsetLeft,
+        offsetY: activeSticker.offsetTop,
+        time: Date.now(),
+    };
+
+    const stickerImg = activeSticker.querySelector('img');
+
+    // --- BRUSH SETUP ONLY IF COLOR SELECTED ---
+    if (currentTool === 'brush' && selectedColor) {
+        isDrawing = false;
+
+        const setupBrush = () => {
+            if (e.touches && e.touches.length > 1) return;
+
+            activeCanvas = document.createElement('canvas');
+            activeCanvas.width = stickerImg.naturalWidth;
+            activeCanvas.height = stickerImg.naturalHeight;
+            activeCtx = activeCanvas.getContext('2d', { willReadFrequently: true });
+            activeCtx.drawImage(stickerImg, 0, 0);
+
+            const rect = stickerImg.getBoundingClientRect();
+            const [startX, startY] = getCanvasCoordinates(pointer.clientX, pointer.clientY, rect);
+            insideMask = computeEnclosedMask(Math.round(startX), Math.round(startY), activeCanvas);
+            if (!insideMask) return;
+
+            strokeOriginImageData = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
+            [lastX, lastY] = [startX, startY];
+
+            isDrawing = true;
+            isInteracting = false;
+
+            document.addEventListener('mousemove', draw);
+            document.addEventListener('touchmove', draw, { passive: false });
+            draw(e);
+        };
+
+        if (stickerImg.complete && stickerImg.naturalWidth > 0) setupBrush();
+        else stickerImg.onload = setupBrush;
+    } else {
+        // MOVE STICKER IF NO COLOR SELECTED
+        isInteracting = true;
+    }
+
+    deselectAllStickers();
+    activeSticker.classList.add('selected');
+
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('touchmove', handleMove, { passive: false });
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchend', handleEnd);
+    document.addEventListener('mousemove', draw);
+    document.addEventListener('touchmove', draw, { passive: false });
+}
+
+
+
+
+
+
+function handleMove(e) {
+    if (!activeSticker || (!isInteracting && !isDrawing)) return;
+
+    // 🚫 Block movement and resize if sticker is locked
+    if (activeSticker.classList.contains("locked")) return;
+
+    e.preventDefault();
+    const touches = e.touches || [];
+
+    // --- TWO-FINGER PINCH RESIZE ---
+    if (touches.length === 2) {
+        isDrawing = false; // block any drawing during pinch
+        isInteracting = true;
+
+        const currentPinch = Math.hypot(
+            touches[0].clientX - touches[1].clientX,
+            touches[0].clientY - touches[1].clientY
+        );
+        const scaleFactor = currentPinch / initialInteractionData.pinchDistance;
+
+        const newWidth = Math.max(30, initialInteractionData.width * scaleFactor);
+        const newHeight = (newWidth / initialInteractionData.width) * initialInteractionData.height;
+
+        let newLeft = initialInteractionData.left - (newWidth - initialInteractionData.width) / 2;
+        let newTop = initialInteractionData.top - (newHeight - initialInteractionData.height) / 2;
+
+        // Prevent off-canvas positioning
+        const canvasWidth = canvas.offsetWidth;
+        const canvasHeight = canvas.offsetHeight;
+        if (newLeft < 0) newLeft = 0;
+        if (newTop < 0) newTop = 0;
+        if (newLeft + newWidth > canvasWidth) newLeft = canvasWidth - newWidth;
+        if (newTop + newHeight > canvasHeight) newTop = canvasHeight - newHeight;
+
+        activeSticker.style.width = `${newWidth}px`;
+        activeSticker.style.height = `${newHeight}px`;
+        activeSticker.style.left = `${newLeft}px`;
+        activeSticker.style.top = `${newTop}px`;
+
+        return; // exit early, no painting
+    }
+
+    // --- SINGLE-FINGER MOVE ---
+    if (touches.length <= 1 && isInteracting) {
+        // Only allow move if NO color is selected
+        if (!selectedColor) {
+            const pointer = touches[0] || e;
+            const dx = pointer.clientX - initialInteractionData.x;
+            const dy = pointer.clientY - initialInteractionData.y;
+
+            activeSticker.style.left = `${initialInteractionData.offsetX + dx}px`;
+            activeSticker.style.top = `${initialInteractionData.offsetY + dy}px`;
+        }
+    }
+}
+
+
+
+function handleEnd(e) {
+    const pointer = e.changedTouches ? e.changedTouches[0] : e;
+    const dx = pointer.clientX - initialInteractionData.x;
+    const dy = pointer.clientY - initialInteractionData.y;
+    const distance = Math.hypot(dx, dy);
+    const duration = Date.now() - initialInteractionData.time;
+
+    const isTap = distance < 10 && duration < 500;
+
+    if (isTap && activeSticker) {
+        const stickerImg = activeSticker.querySelector('img');
+
+        // --- EYEDROPPER MODE ---
+       if (currentTool === "eyedropper") {
+    console.log("[Eyedropper] Active tool is eyedropper");
+
+    const rect = stickerImg.getBoundingClientRect();
+
+    // --- Correct mapping like recolorSticker ---
+    const imgRatio = stickerImg.naturalWidth / stickerImg.naturalHeight;
+    const rectRatio = rect.width / rect.height;
+
+    let contentX = 0, contentY = 0, contentWidth = rect.width, contentHeight = rect.height;
+
+    if (rectRatio > imgRatio) {
+        // Letterboxing on left/right
+        contentHeight = rect.height;
+        contentWidth = rect.height * imgRatio;
+        contentX = (rect.width - contentWidth) / 2;
+    } else {
+        // Letterboxing on top/bottom
+        contentWidth = rect.width;
+        contentHeight = rect.width / imgRatio;
+        contentY = (rect.height - contentHeight) / 2;
+    }
+
+    let clickX = Math.floor(((pointer.clientX - rect.left - contentX) / contentWidth) * stickerImg.naturalWidth);
+    let clickY = Math.floor(((pointer.clientY - rect.top - contentY) / contentHeight) * stickerImg.naturalHeight);
+
+    // Clamp to image bounds
+    clickX = Math.max(0, Math.min(clickX, stickerImg.naturalWidth - 1));
+    clickY = Math.max(0, Math.min(clickY, stickerImg.naturalHeight - 1));
+
+    console.log("[Eyedropper] Tap at natural image coordinates:", clickX, clickY);
+
+    // --- Read pixel from temporary canvas ---
+    const tmpCanvas = document.createElement("canvas");
+    tmpCanvas.width = stickerImg.naturalWidth;
+    tmpCanvas.height = stickerImg.naturalHeight;
+    const tmpCtx = tmpCanvas.getContext("2d");
+    tmpCtx.drawImage(stickerImg, 0, 0);
+
+    const pixel = tmpCtx.getImageData(clickX, clickY, 1, 1).data;
+    console.log("[Eyedropper] Pixel RGBA:", pixel);
+
+    if (pixel[3] > 0) {
+        const r = pixel[0], g = pixel[1], b = pixel[2];
+        const brightness = (r + g + b) / 3;
+
+        // Skip near-black outlines
+        if (brightness < 30) {
+            console.log("[Eyedropper] Ignored near-black pixel");
+        } else {
+            const pickedColor = `rgb(${r}, ${g}, ${b})`;
+            console.log("[Eyedropper] Picked color:", pickedColor);
+
+            selectedColor = pickedColor;
+
+            const pickedColorDiv = document.getElementById("picked-color");
+            if (pickedColorDiv) {
+                pickedColorDiv.style.backgroundColor = pickedColor;
+                console.log("[Eyedropper] Updated #picked-color swatch");
+
+
+            }
+               activateColorInPalette(pickedColor);
+                // ✅ switch tool back to last painting mode
+        if (lastPaintTool) {
+            setActiveTool(lastPaintTool);
+        } else {
+            setActiveTool("bucket"); // fallback
+        }
+
+        }
+    } else {
+        console.log("[Eyedropper] Transparent pixel, nothing picked");
+    }
+}
+
+
+        // --- PAINTING TOOLS ---
+        else if (currentTool === "bucket" || currentTool === "eraser") {
+            recolorSticker(stickerImg, selectedColor, pointer);
+        }
+
+        // --- SELECTION ---
+        else {
+            const currentlySelected = document.querySelector(".sticker-wrapper.selected");
+            if (currentlySelected) currentlySelected.classList.remove("selected");
+            activeSticker.classList.add("selected");
+        }
+    }
+
+    // --- CLEANUP ---
+    if (isDrawing || isInteracting) saveState();
+
+    isDrawing = false;
+    isInteracting = false;
+    activeSticker = null;
+    activeCanvas = null;
+    activeCtx = null;
+    lastX = 0;
+    lastY = 0;
+    strokeOriginImageData = null;
+    insideMask = null;
+
+    document.removeEventListener("mousemove", handleMove);
+    document.removeEventListener("mouseup", handleEnd);
+    document.removeEventListener("touchmove", handleMove);
+    document.removeEventListener("touchend", handleEnd);
+    document.removeEventListener("mousemove", draw);
+    document.removeEventListener("touchmove", draw);
+}
+
+
+
+
+document.getElementById("picked-color").addEventListener("click", (e) => {
+    const swatch = e.target;
+    if (!swatch.style.backgroundColor) return;
+
+    selectedColor = swatch.style.backgroundColor;
+
+    // highlight it
+    document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+    swatch.classList.add("active");
+
+    // restore last paint tool if needed
+    if (lastPaintTool) {
+        setActiveTool(lastPaintTool);
+    } else {
+        setActiveTool("bucket");
+    }
+});
+
+
+      function computeEnclosedMask(startX, startY, canvas) {
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        const { width, height } = canvas;
+        if (width === 0 || height === 0) return null;
+
+        const imgData = ctx.getImageData(0, 0, width, height);
+        const data = imgData.data;
+        const startIndex = (startY * width + startX) * 4;
+
+        const r = data[startIndex], g = data[startIndex + 1], b = data[startIndex + 2], a = data[startIndex + 3];
+        const isBlack = r < 50 && g < 50 && b < 50 && a > 50;
+        if (isBlack) return null;
+
+        const mask = new Uint8Array(width * height);
+        const stack = [[startX, startY]];
+        mask[startY * width + startX] = 1;
+
+        while (stack.length) {
+            const [x, y] = stack.pop();
+            const neighbors = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]];
+            for (const [nx, ny] of neighbors) {
+                if (nx < 0 || nx >= width || ny < 0 || ny >= height) {
+                    return null;
+                }
+                const idx = ny * width + nx;
+                if (mask[idx]) continue;
+                const di = idx * 4;
+                const R = data[di], G = data[di + 1], B = data[di + 2], A = data[di + 3];
+                const isBoundary = (R < 50 && G < 50 && B < 50 && A > 50);
+                if (!isBoundary) {
+                    mask[idx] = 1;
+                    stack.push([nx, ny]);
+                }
+            }
+        }
+        return mask;
+    }
+
+// Add this new listener to your script
+canvas.addEventListener('click', (e) => {
+    if (e.target.closest('.sticker-btn')) {
+        return; // ignore clicks on any sticker buttons
+    }
+    if (e.target === canvas) {
+        document.querySelectorAll('.sticker.selected').forEach(s => {
+            s.classList.remove('selected');
+        });
+    }
+});
+ 
+
+/**
+ * Corrected color palette listener
+ */
+colorPalette.addEventListener('click', (e) => {
+    const clickedSwatch = e.target;
+    if (!clickedSwatch.classList.contains('color-swatch')) return;
+
+    const pickedColorDiv = document.getElementById("picked-color");
+    if (pickedColorDiv) pickedColorDiv.classList.remove("active");
+
+    // Deselect same swatch (toggle off)
+    if (activeSwatch === clickedSwatch) {
+        selectedColor = null;
+        activeSwatch.classList.remove('active');
+        activeSwatch = null;
+
+        // ✅ Just restore the current tool properly
+        setActiveTool(currentTool);
+
+        console.log("[Palette] Deselected same swatch, currentTool:", currentTool, "selectedColor:", selectedColor);
+        return;
+    }
+
+    // Deselect previous swatch
+    if (activeSwatch) activeSwatch.classList.remove('active');
+
+    // Select new swatch
+    activeSwatch = clickedSwatch;
+    activeSwatch.classList.add('active');
+    selectedColor = activeSwatch.style.backgroundColor;
+
+    // ✅ Restore correct active tool button
+    setActiveTool(currentTool);
+
+    console.log("[Palette] New swatch selected:", selectedColor, "tool:", currentTool);
+});
+
+
+
+
+
+
+
+
+//END FOR BRUSH
+
+     
+
+        // A function to preload images
+function preloadStickers(urls) {
+    const promises = urls.map(url => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = resolve;
+            img.onerror = reject;
+        });
+    });
+    return Promise.all(promises);
+}
+
+
+function saveState() {
+    if (isRestoring) return;
+    const stickersOnCanvas = document.querySelectorAll('#canvas-container .sticker');
+    const currentState = { stickers: [] };
+
+    stickersOnCanvas.forEach(sticker => {
+        const stickerImg = sticker.querySelector('img');
+        if (stickerImg) {
+            currentState.stickers.push({
+                url: stickerImg.src,
+                x: sticker.offsetLeft,
+                y: sticker.offsetTop,
+                width: sticker.offsetWidth,
+                height: sticker.offsetHeight,
+                locked: sticker.classList.contains('locked'),
+                // ✅ Add the group name here
+                groupName: sticker.dataset.group 
+            });
+        }
+    });
+
+    const prevState = history[history.length - 1];
+    if (JSON.stringify(prevState) !== JSON.stringify(currentState)) {
+        history.push(currentState);
+    }
+
+    redoStack = [];
+    updateUndoRedoButtons();
+}
+
+function loadState(state) {
+    isRestoring = true;
+
+    // Only remove stickers, keep eyedropper intact
+    canvas.querySelectorAll('.sticker').forEach(s => s.remove());
+
+    state.stickers.forEach(data => {
+        const newSticker = addSticker(data.url, data.x, data.y, data.width, data.height, {
+            suppressSave: true,
+            group: data.groupName 
+        });
+        if (data.locked) newSticker.classList.add('locked');
+    });
+
+    isRestoring = false;
+    updateUndoRedoButtons();
+}
+
+
+
+
+        function deselectAllStickers() {
+            document.querySelectorAll('.sticker').forEach(s => {
+                s.classList.remove('selected');
+            });
+        }
+
+        function getTouchDistance(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+   
+ function getRandomStickerUrlFromGroups() {
+    if (!stickerGroups || stickerGroups.length === 0) {
+        console.log("⚠️ No stickerGroups available");
+        return null;
+    }
+
+    // First, flatten the groups into a single array of objects
+    const allStickersWithGroups = stickerGroups.flatMap(group =>
+        group.urls.map(url => ({ url: url, group: group.name }))
+    );
+
+    if (allStickersWithGroups.length === 0) {
+        console.log("⚠️ No stickers in groups");
+        return null;
+    }
+
+    // Now, select a random object from the new flattened array
+    const randomIndex = Math.floor(Math.random() * allStickersWithGroups.length);
+    const chosenSticker = allStickersWithGroups[randomIndex];
+
+    // Return the object containing both url and group
+    return chosenSticker;
+}
+
+spinBtn.addEventListener("click", async () => {
+    console.log("🎰 Spin button clicked");
+
+    const allStickers = document.querySelectorAll('.sticker');
+    let targetStickerDiv = null;
+
+    if (allStickers.length === 0) {
+        console.log("ℹ️ Canvas is empty, adding a new sticker.");
+        const randomStickerData = getRandomStickerUrlFromGroups();
+        if (randomStickerData) {
+            addSticker(randomStickerData.url, 120, 120, 120, 120, { 
+                group: randomStickerData.group, 
+                letter: randomStickerData.letter 
+            });
+            targetStickerDiv = document.querySelector('.sticker');
+        }
+    } else {
+        targetStickerDiv = document.querySelector('.sticker:not(.locked)');
+        
+        if (!targetStickerDiv) {
+            console.log("ℹ️ All stickers are locked, adding a new one.");
+            const randomStickerData = getRandomStickerUrlFromGroups();
+            if (randomStickerData) {
+                addSticker(randomStickerData.url, 120, 120, 120, 120, { 
+                    group: randomStickerData.group, 
+                    letter: randomStickerData.letter 
+                });
+                targetStickerDiv = document.querySelector('.sticker:not(.locked)');
+            }
+        }
+    }
+    
+    if (!targetStickerDiv) {
+        console.warn("⚠️ No unlocked sticker found. Aborting spin.");
+        return;
+    }
+    
+    // --- UPDATED LOGIC HERE ---
+    const stickerPool = [];
+    stickerGroups.forEach(group => {
+        // Now, take the first URL from the `urls` array directly
+        if (group.urls && group.urls.length > 0) {
+            stickerPool.push({
+                url: group.urls[0], // Access the first element of the array
+                group: group.name
+            });
+        }
+    });
+
+    console.log(`⏳ Preloading a small subset of stickers (${stickerPool.length})...`);
+    await preloadStickers(stickerPool.map(s => s.url));
+    console.log("✅ Preloading complete. Starting spin.");
+    
+    // --- END UPDATED LOGIC ---
+
+    const stickerImg = targetStickerDiv.querySelector('img');
+    const stickerSize = targetStickerDiv.offsetWidth;
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
+    
+    targetStickerDiv.style.left = `${centerX}px`;
+    targetStickerDiv.style.top = `${centerY}px`;
+    
+    let spinCount = 0;
+    const maxSpins = 15 + Math.floor(Math.random() * 10);
+    const spinInterval = setInterval(() => {
+        const randomIndex = Math.floor(Math.random() * stickerPool.length);
+        const nextStickerData = stickerPool[randomIndex];
+
+        if (nextStickerData) {
+            stickerImg.src = nextStickerData.url;
+            targetStickerDiv.dataset.group = nextStickerData.group;
+        }
+
+        spinCount++;
+        if (spinCount >= maxSpins) {
+            clearInterval(spinInterval);
+            targetStickerDiv.classList.add('pulse-effect');
+            saveState();
+        }
+    }, 100);
+});
+
+function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
+    const { suppressSave = false, group } = opts;
+
+    const sticker = document.createElement('div');
+    const groupName = group || 'default';
+    sticker.dataset.group = groupName;
+    console.log('[addSticker] Creating sticker with group:', groupName);
+
+    sticker.classList.add('sticker');
+    sticker.style.width = width + 'px';
+    sticker.style.height = height + 'px';
+
+    const stickerImg = document.createElement('img');
+    stickerImg.crossOrigin = "Anonymous";
+    stickerImg.src = url;
+    stickerImg.draggable = false;
+    stickerImg.classList.add("protected");
+    sticker.appendChild(stickerImg);
+
+    if (x !== undefined && y !== undefined) {
+        sticker.style.left = `${x}px`;
+        sticker.style.top = `${y}px`;
+    }
+
+    // --- Interaction and Event Listener Variables ---
+    let activeSticker = null;
+    let initialX, initialY, offsetX, offsetY;
+    let initialPinchDistance = 0;
+    let initialStickerWidth = 0;
+    let initialStickerHeight = 0;
+    let initialRect = null;
+
+    // --- Interaction Buttons and Handlers ---
+    const copyBtn = document.createElement('div');
+    copyBtn.classList.add('sticker-btn','copy-btn');
+    copyBtn.innerHTML = `<svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="12" y1="8" x2="12" y2="16" />
+<line x1="8" y1="12" x2="16" y2="12" />
+</svg>`;
+    copyBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const stickerWidth = sticker.offsetWidth;
+        const stickerHeight = sticker.offsetHeight;
+        let newX = parseInt(sticker.style.left) + 10;
+        let newY = parseInt(sticker.style.top) + 10;
+
+        function isOverlapping(x, y) {
+            const stickers = document.querySelectorAll('.sticker');
+            return Array.from(stickers).some(s => {
+                const sx = parseInt(s.style.left);
+                const sy = parseInt(s.style.top);
+                const sw = s.offsetWidth;
+                const sh = s.offsetHeight;
+                return !(x + stickerWidth < sx || x > sx + sw || y + stickerHeight < sy || y > sy + sh);
+            });
+        }
+        const step = 10;
+        let attempts = 0;
+        while (isOverlapping(newX, newY) && attempts < 100) {
+            newX += step;
+            newY += step;
+            if (newX + stickerWidth > canvas.offsetWidth) newX = step;
+            if (newY + stickerHeight > canvas.offsetHeight) newY = step;
+            attempts++;
+        }
+        saveState();
+addSticker(
+    stickerImg.src,
+    newX,
+    newY,
+    sticker.offsetWidth,
+    sticker.offsetHeight,
+    { group: sticker.dataset.group }
+);   
+ });
+
+    const deleteBtn = document.createElement('div');
+    deleteBtn.classList.add('sticker-btn','delete-btn');
+    deleteBtn.innerHTML = `<svg class="delete-btn-icon" viewBox="0 0 24 24">
+<line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1" />
+</svg>`;
+    deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        saveState();
+        sticker.remove();
+    });
+
+    const lockBtn = document.createElement('div');
+    lockBtn.classList.add('sticker-btn','lock-btn');
+    lockBtn.innerHTML = `<svg class="lock-btn-icon" data-lucide="lock" viewBox="0 0 24 24">
+<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>`;
+lockBtn.addEventListener('click', (e) => {
+    // Prevent the click event from bubbling up and affecting the canvas or sticker
+    e.stopPropagation();
+
+    // Find the closest parent element with the class 'sticker'
+    const sticker = e.target.closest('.sticker');
+
+    if (sticker) {
+        // This line toggles the 'locked' class on the sticker.
+        sticker.classList.toggle('locked');
+        
+        // This is a good practice to ensure the sticker is no longer "selected"
+        // if it was, which helps manage button visibility after the lock/unlock action.
+        sticker.classList.remove('selected');
+
+        // Save the state of the canvas after the change
+        saveState();
+    }
+});
+
+    sticker.appendChild(deleteBtn);
+    sticker.appendChild(copyBtn);
+    sticker.appendChild(lockBtn);
+
+const groupBtn = document.createElement('div');
+groupBtn.classList.add('sticker-btn', 'group-btn');
+groupBtn.innerHTML = `
+<svg class="group-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 6h16M4 12h16M4 18h16"/>
+</svg>`;
+
+// On click, open overlay with this sticker's group
+groupBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const stickerGroup = sticker.dataset.group;
+    const group = stickerGroups.find(g => g.name === stickerGroup);
+    if (group) {
+        // Pass both the URLs and the group name
+        showStickerOverlay(group.urls, group.name);
+    }
+});
+
+sticker.appendChild(groupBtn);
+
+
+
+
+
+    // --- Event Listeners ---
+    sticker.addEventListener('mousedown', startInteraction);
+    sticker.addEventListener('touchstart', startInteraction);
+
+    sticker.addEventListener('wheel', (e) => {
+        // Desktop Resizing Logic
+        e.preventDefault();
+        saveState();
+        const parent = sticker;
+        const delta = Math.sign(e.deltaY);
+        const initialRect = parent.getBoundingClientRect();
+        const initialWidth = initialRect.width;
+        const initialHeight = initialRect.height;
+        const newSize = initialWidth + (delta * 10);
+        const minSize = 30;
+
+        if (newSize >= minSize) {
+            const newHeight = newSize / (initialWidth / initialHeight);
+            const canvasRect = canvas.getBoundingClientRect();
+            let adjustedLeft = initialRect.left;
+            let adjustedTop = initialRect.top;
+            const isShrinking = newSize < initialWidth;
+
+            if (isShrinking) {
+                adjustedLeft = initialRect.left + (initialWidth / 2) - (newSize / 2);
+                adjustedTop = initialRect.top + (initialHeight / 2) - (newHeight / 2);
+
+                if (adjustedLeft < canvasRect.left) adjustedLeft = canvasRect.left;
+                if (adjustedTop < canvasRect.top) adjustedTop = canvasRect.top;
+                if (adjustedLeft + newSize > canvasRect.right) adjustedLeft = canvasRect.right - newSize;
+                if (adjustedTop + newHeight > canvasRect.bottom) adjustedTop = canvasRect.bottom - newHeight;
+            } else {
+                adjustedLeft = initialRect.left - (newSize - initialWidth) / 2;
+                adjustedTop = initialRect.top - (newHeight - initialHeight) / 2;
+            }
+
+            parent.style.width = `${newSize}px`;
+            parent.style.height = `${newHeight}px`;
+            parent.style.left = `${adjustedLeft - canvasRect.left}px`;
+            parent.style.top = `${adjustedTop - canvasRect.top}px`;
+            saveState();
+        }
+    });
+
+stickerImg.addEventListener('click', (e) => {
+    if(bucketMode && selectedColor){
+        e.stopPropagation();
+        recolorSticker(stickerImg, selectedColor, e);
+    }
+});
+
+
+    const updateButtonSizes = () => {
+    const btnSize = sticker.offsetWidth * 0.2;
+    [deleteBtn, copyBtn, lockBtn, groupBtn].forEach(btn => {
+        btn.style.width = btnSize + 'px';
+        btn.style.height = btnSize + 'px';
+    });
+
+    // New CSS for the SVG icon
+    const iconSize = btnSize * 0.7; // Make icon 70% of button size
+    const iconStrokeWidth = btnSize * 0.05; // Make stroke 5% of button size
+    
+    // Select the SVG and apply styles
+    const groupIconSVG = groupBtn.querySelector('svg');
+    if (groupIconSVG) {
+        groupIconSVG.style.width = iconSize + 'px';
+        groupIconSVG.style.height = iconSize + 'px';
+        groupIconSVG.style.strokeWidth = iconStrokeWidth + 'px';
+    }
+
+    deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
+    copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
+    lockBtn.style.bottom = lockBtn.style.left = `${btnSize * 0.25}px`;
+    groupBtn.style.bottom = groupBtn.style.right = `${btnSize * 0.25}px`;
+};
+
+updateButtonSizes();
+const observer = new ResizeObserver(updateButtonSizes);
+observer.observe(sticker);
+canvas.appendChild(sticker);
+
+if (window.lucide) {
+    lucide.createIcons();
+}
+
+if (!suppressSave && !isRestoring) {
+    saveState();
+}
+
+return sticker;
+}
+
+    
+          function hexToRgb(colorStr) {
+        if (!colorStr) return null;
+        if (colorStr.startsWith('rgb')) {
+            const parts = colorStr.match(/\d+/g);
+            return [parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2])];
+        }
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(colorStr);
+        return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
+    }
+
+
+function recolorSticker(stickerImg, fillColor, e) {
+    // --- Step 0: Compute accurate click coordinates accounting for letterboxing ---
+    const rect = stickerImg.getBoundingClientRect();
+    const imgRatio = stickerImg.naturalWidth / stickerImg.naturalHeight;
+    const rectRatio = rect.width / rect.height;
+
+    let contentX = 0, contentY = 0, contentWidth = rect.width, contentHeight = rect.height;
+
+    if (rectRatio > imgRatio) {
+        contentHeight = rect.height;
+        contentWidth = rect.height * imgRatio;
+        contentX = (rect.width - contentWidth) / 2;
+    } else {
+        contentWidth = rect.width;
+        contentHeight = rect.width / imgRatio;
+        contentY = (rect.height - contentHeight) / 2;
+    }
+
+    let clickX = Math.floor(((e.clientX - rect.left - contentX) / contentWidth) * stickerImg.naturalWidth);
+    let clickY = Math.floor(((e.clientY - rect.top - contentY) / contentHeight) * stickerImg.naturalHeight);
+
+    clickX = Math.max(0, Math.min(clickX, stickerImg.naturalWidth - 1));
+    clickY = Math.max(0, Math.min(clickY, stickerImg.naturalHeight - 1));
+
+    // --- Step 1: Prepare canvas ---
+    const canvasEl = document.createElement("canvas");
+    canvasEl.width = stickerImg.naturalWidth;
+    canvasEl.height = stickerImg.naturalHeight;
+    const ctx = canvasEl.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(stickerImg, 0, 0);
+
+    const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+    const data = imgData.data;
+    const { width, height } = canvasEl;
+
+    const isEraser = fillColor && fillColor.type === 'erase';
+    const [r, g, b] = isEraser ? [0, 0, 0] : hexToRgb(fillColor);
+
+    // --- Step 2: Define the target color and other constants ---
+    const blackThreshold = 30;
+    const tolerance = 30;
+
+    const startIndex = (clickY * width + clickX) * 4;
+    const targetColor = [
+        data[startIndex],
+        data[startIndex + 1],
+        data[startIndex + 2],
+        data[startIndex + 3]
+    ];
+
+    if (targetColor[3] > 0 && targetColor[0] < blackThreshold && targetColor[1] < blackThreshold && targetColor[2] < blackThreshold) {
+        console.log("❌ Clicked on a border pixel → no fill");
+        return;
+    }
+
+    if (!isEraser && targetColor[0] === r && targetColor[1] === g && targetColor[2] === b && targetColor[3] === 255) {
+        console.log("❌ The clicked area already has the selected color.");
+        return;
+    }
+    
+    // Create a copy of the original pixel data to revert if the fill escapes
+    const originalData = new Uint8ClampedArray(data);
+
+    // --- Step 3: Flood-fill ---
+    const stack = [[clickX, clickY]];
+    const visited = new Uint8Array(width * height);
+    let touchesEdge = false; // New flag to check if the fill reaches the edge
+
+    while (stack.length) {
+        let [x, y] = stack.pop();
+
+        let left = x;
+        while (left >= 0 && !visited[y * width + left] && isFillable(left, y)) left--;
+        left++;
+        let right = x;
+        while (right < width && !visited[y * width + right] && isFillable(right, y)) right++;
+        right--;
+
+        for (let i = left; i <= right; i++) {
+            const idx = y * width + i;
+            visited[idx] = 1;
+            const di = idx * 4;
+
+            if (isEraser) {
+                data[di + 3] = 0;
+            } else {
+                data[di] = r;
+                data[di + 1] = g;
+                data[di + 2] = b;
+                data[di + 3] = 255;
+            }
+
+            // Check if any of the filled pixels are on the image boundary
+            if (i === 0 || i === width - 1 || y === 0 || y === height - 1) {
+                touchesEdge = true;
+            }
+        }
+        scan(y - 1, left, right);
+        scan(y + 1, left, right);
+    }
+
+    function isFillable(px, py) {
+        if (px < 0 || px >= width || py < 0 || py >= height) return false;
+        const idx = py * width + px;
+        if (visited[idx]) return false;
+
+        const di = idx * 4;
+        const R = data[di], G = data[di + 1], B = data[di + 2], A = data[di + 3];
+
+        if (A > 0 && R < blackThreshold && G < blackThreshold && B < blackThreshold) {
+            return false;
+        }
+
+        if (targetColor[3] === 0) {
+            return A === 0;
+        }
+
+        return (
+            Math.abs(R - targetColor[0]) <= tolerance &&
+            Math.abs(G - targetColor[1]) <= tolerance &&
+            Math.abs(B - targetColor[2]) <= tolerance &&
+            Math.abs(A - targetColor[3]) <= tolerance
+        );
+    }
+
+    function scan(y, lx, rx) {
+        if (y < 0 || y >= height) return;
+        for (let x = lx; x <= rx; x++) {
+            if (!visited[y * width + x] && isFillable(x, y)) {
+                stack.push([x, y]);
+                while (x <= rx && isFillable(x, y)) {
+                    x++;
+                }
+            }
+        }
+    }
+
+    // --- Step 4: Apply or revert changes based on the touchesEdge flag ---
+    if (touchesEdge) {
+        console.log("❌ The fill escaped the black lines and touched the edge. Reverting changes.");
+        // Revert to original state by creating a new canvas and drawing the original data
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = width;
+        tempCanvas.height = height;
+        const tempCtx = tempCanvas.getContext("2d");
+        const originalImgData = new ImageData(originalData, width, height);
+        tempCtx.putImageData(originalImgData, 0, 0);
+        stickerImg.src = tempCanvas.toDataURL();
+    } else {
+        console.log("✅ The fill was successful and contained within the shape.");
+        ctx.putImageData(imgData, 0, 0);
+        stickerImg.src = canvasEl.toDataURL();
+        saveState();
+    }
+}
+
+
+
+        function updateUndoRedoButtons() {
+            undoBtn.disabled = history.length <= 1;
+            redoBtn.disabled = redoStack.length === 0;
+        }
+
+       
+
+  undoBtn.addEventListener('click', () => {
+    if (history.length > 1) {
+        const lastState = history.pop();
+        redoStack.push(lastState);
+
+        // Save eyedropper container before loading state
+        const eyedropper = document.getElementById("eyedropper-container");
+
+        loadState(history[history.length - 1]);
+
+        // Reattach eyedropper container to canvas
+        if (eyedropper && !canvas.contains(eyedropper)) {
+            canvas.appendChild(eyedropper);
+        }
+
+        updateUndoRedoButtons();
+    }
+});
+
+redoBtn.addEventListener('click', () => {
+    if (redoStack.length > 0) {
+        const nextState = redoStack.pop();
+        history.push(nextState);
+
+        // Save eyedropper container before loading state
+        const eyedropper = document.getElementById("eyedropper-container");
+
+        loadState(nextState);
+
+        // Reattach eyedropper container to canvas
+        if (eyedropper && !canvas.contains(eyedropper)) {
+            canvas.appendChild(eyedropper);
+        }
+
+        updateUndoRedoButtons();
+    }
+});
+
+
+function addOrReplaceSticker(newUrl, groupName = null) {
+    const stickerSize = 120;
+    const canvasWidth = canvas.offsetWidth;
+    const canvasHeight = canvas.offsetHeight;
+    const centerX = (canvasWidth / 2) - (stickerSize / 2);
+    const centerY = (canvasHeight / 2) - (stickerSize / 2);
+
+    // Always create a new sticker
+    const newGroup = groupName || stickerGroups[0]?.name || 'default';
+    addSticker(newUrl, centerX, centerY, stickerSize, stickerSize, { group: newGroup });
+    console.log('[addOrReplaceSticker] Created new sticker with group:', newGroup);
+
+    saveState();
+}
+
+
+addStickerBtn.addEventListener('click', () => {
+    // Find a random group first
+    const randomGroup = stickerGroups[Math.floor(Math.random() * stickerGroups.length)];
+    // Find a random URL from that group
+    const randomUrl = randomGroup.urls[Math.floor(Math.random() * randomGroup.urls.length)];
+
+    // Pass both the URL AND the group name to the function
+    addOrReplaceSticker(randomUrl, randomGroup.name);
+});
+
+
+
+window.addEventListener('load', () => {
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+    updateCanvasDrop();
+    const allStickers = document.querySelectorAll('.sticker');
+    if (allStickers.length === 0) {
+        const randomStickerData = getRandomStickerUrlFromGroups();
+        if (randomStickerData) {
+            // Pass the URL from the object to the function
+            addOrReplaceSticker(randomStickerData.url, randomStickerData.group);
+        }
+    }
+});
+
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+        let isSwiping = false;
+        let initialTap = {
+            clientX: 0
+        };
+
+        function addSwipeFunctionality() {
+            const paletteContainer = document.querySelector('.color-palette-container');
+            const palette = document.querySelector('.color-palette');
+
+            const handleStart = (e) => {
+                isDragging = true;
+                startX = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+                scrollLeft = paletteContainer.scrollLeft;
+                initialTap.clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            };
+
+            const handleMove = (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.type.includes('mouse') ? e.pageX - paletteContainer.offsetLeft : e.touches[0].clientX;
+                const walk = (x - startX) * 1.5;
+                paletteContainer.scrollLeft = scrollLeft - walk;
+                if (Math.abs(e.clientX - initialTap.clientX) > 10) {
+                    isSwiping = true;
+                }
+            };
+
+            const handleEnd = () => {
+                isDragging = false;
+                setTimeout(() => {
+                    isSwiping = false;
+                }, 100);
+            };
+
+            [paletteContainer, palette].forEach(element => {
+                element.addEventListener('mousedown', handleStart);
+                element.addEventListener('mousemove', handleMove);
+                element.addEventListener('mouseup', handleEnd);
+                element.addEventListener('mouseleave', handleEnd);
+
+                element.addEventListener('touchstart', handleStart);
+                element.addEventListener('touchmove', handleMove, {
+                    passive: false
+                });
+                element.addEventListener('touchend', handleEnd);
+            });
+        }
+
+        function populateColorPalette() {
+            colorPalette.innerHTML = '';
+            colors.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.classList.add('color-swatch');
+                swatch.style.backgroundColor = color;
+                
+                if (selectedColor === color) {
+                    swatch.classList.add('active');
+                }
+
+swatch.addEventListener('click', (e) => {
+    if (isSwiping) return;
+
+    const wasActive = swatch.classList.contains('active');
+    console.log("Swatch clicked:", color, "Was active before click?", wasActive);
+
+    // Deselect all palette swatches
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+
+    if (!wasActive) {
+        // Selecting a new color
+        swatch.classList.add('active');
+        selectedColor = color;
+
+        // Use lastPaintTool if exists, else fallback to bucket
+        if (lastPaintTool) {
+            setActiveTool(lastPaintTool);
+        } else if (!currentTool) {
+            setActiveTool("bucket");
+        }
+
+        // Hide sticker buttons while painting
+        if (activeSticker) activeSticker.classList.remove('selected');
+
+    } else {
+        // Deselect color
+        selectedColor = null;
+        swatch.classList.remove('active');
+
+        // Restore sticker buttons
+        if (activeSticker) activeSticker.classList.add('selected');
+
+        // Switch to move
+        setActiveTool("move");
+    }
+
+    console.log("currentTool after click:", currentTool, "selectedColor:", selectedColor);
+});
+
+
+
+                colorPalette.appendChild(swatch);
+            });
+ }
+
+        function hideOverlays() {
+
+            groupOverlayContainer.style.display = 'none';
+            stickerOverlayContainer.style.display = 'none';
+        }
+
+  // Function to show the initial group selection overlay
+function showGroupOverlay() {
+     hideOverlays();
+    groupOverlayContainer.innerHTML = '';
+
+    // Create the header with the title and close button
+    const header = document.createElement('div');
+    header.classList.add('overlay-header');
+    
+    const title = document.createElement('h2');
+    title.textContent = "Sticker auswählen";
+    title.classList.add('overlay-title');
+    header.appendChild(title);
+    
+    // Create and append the close button to the header
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.classList.add('close-btn');
+    closeBtn.addEventListener('click', hideOverlays);
+    header.appendChild(closeBtn);
+    
+    // Create a separate container for the icons
+    const iconsGrid = document.createElement('div');
+    iconsGrid.classList.add('overlay-icons-grid');
+
+      // Set grid styles directly in JavaScript
+    iconsGrid.style.display = 'grid';
+    iconsGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(40px, 1fr))';
+    iconsGrid.style.gap = '10px';
+    iconsGrid.style.padding = '10px';
+    iconsGrid.style.overflowY = 'auto';
+
+    // Append both the header and the icons grid to the main container
+    groupOverlayContainer.appendChild(header);
+    groupOverlayContainer.appendChild(iconsGrid);
+
+    // Show the main container and give it a vertical layout
+    groupOverlayContainer.style.display = 'flex';
+    groupOverlayContainer.style.flexDirection = 'column';
+
+    // ✅ NEW: Load and add group icons one-by-one
+    stickerGroups.forEach((group, index) => {
+        const groupIcon = document.createElement('img');
+        groupIcon.classList.add('overlay-icon');
+        groupIcon.title = group.name;
+
+        // Add a listener to wait for the image to load, then fade it in
+        groupIcon.onload = () => {
+            groupIcon.style.opacity = '1';
+        };
+        
+        // Initially hide the icon to prevent a blank box
+        groupIcon.style.opacity = '0'; 
+        groupIcon.style.transition = 'opacity 0.5s ease-in-out';
+
+        // Add contextmenu listener
+        groupIcon.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // Call showStickerOverlay directly
+        groupIcon.addEventListener('click', () => {
+            showStickerOverlay(group.urls, group.name);
+        });
+        
+        // Append to the DOM before setting the src to trigger the load
+        iconsGrid.appendChild(groupIcon);
+
+
+
+        // Use a short delay before setting the src for each icon
+        setTimeout(() => {
+            if (group.urls && group.urls.length > 0) {
+                groupIcon.src = group.urls[0];
+            }
+        }, index * 50); // 50ms delay for each icon
+    });
+}
+
+
+        function updateCanvasDrop() {
+            const canvas = document.getElementById('canvas-container');
+            canvas.removeEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+            canvas.removeEventListener('drop', handleCanvasDrop);
+            canvas.addEventListener('drop', handleCanvasDrop);
+        }
+
+        function handleCanvasDrop(e) {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('application/json');
+            if (data) {
+                const {
+                    url,
+                    width
+                } = JSON.parse(data);
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left - (width / 2);
+                const y = e.clientY - rect.top - (width / 2);
+                saveState();
+                addSticker(url, x, y, width);
+            }
+        }
+
+        let activeTouchSticker = null;
+        let touchOffsetX = 0;
+        let touchOffsetY = 0;
+
+function showStickerOverlay(urls, groupName) {
+    hideOverlays();
+    stickerOverlayContainer.innerHTML = '';
+    
+    const header = document.createElement('div');
+    header.classList.add('overlay-header');
+    
+    const title = document.createElement('h2');
+    title.textContent = groupName;
+    title.classList.add('overlay-title');
+    header.appendChild(title);
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.classList.add('close-btn');
+    closeBtn.addEventListener('click', hideOverlays);
+    header.appendChild(closeBtn);
+    
+    const contentWrapper = document.createElement('div');
+    contentWrapper.classList.add('overlay-stickers-grid');
+    stickerOverlayContainer.appendChild(header);
+    stickerOverlayContainer.appendChild(contentWrapper);
+    
+    // ✅ Show the container immediately for instant feedback
+    stickerOverlayContainer.style.display = 'flex';
+    
+    // ✅ Load and add stickers one-by-one
+    urls.forEach((url, index) => {
+        const sticker = document.createElement('img');
+        sticker.classList.add('overlay-sticker');
+        sticker.draggable = true;
+        sticker.dataset.url = url;
+        
+        // Initially hide the sticker to prevent a blank box
+        sticker.style.opacity = '0'; 
+        sticker.style.transition = 'opacity 0.5s ease-in-out';
+
+        sticker.addEventListener('contextmenu', (e) => e.preventDefault());
+        sticker.addEventListener('dragstart', (e) => {
+            const stickerData = { url: url, width: 120 };
+            e.dataTransfer.setData('application/json', JSON.stringify(stickerData));
+        });
+        
+           sticker.addEventListener('click', () => {
+    const group = stickerGroups.find(g => g.urls.includes(url));
+    addOrReplaceSticker(url, group ? group.name : null);
+    hideOverlays();
+});
+
+        sticker.onload = () => {
+            sticker.style.opacity = '1';
+        };
+
+        contentWrapper.appendChild(sticker);
+        
+        // Use a short delay before setting the src for each sticker
+        setTimeout(() => {
+            sticker.src = url;
+        }, index * 50); // 50ms delay for each sticker
+    });
+}
+
+        stickerPickerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (groupOverlayContainer.style.display === 'grid') {
+                hideOverlays();
+            } else {
+                showGroupOverlay();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!groupOverlayContainer.contains(e.target) && !stickerOverlayContainer.contains(e.target) && !stickerPickerBtn.contains(e.target)) {
+                hideOverlays();
+            }
+        });
+
+        canvas.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('application/json');
+            if (data) {
+                const {
+                    url,
+                    width
+                } = JSON.parse(data);
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                saveState();
+                addSticker(url, x, y, width);
+            }
+        });
+
+        addSwipeFunctionality();
+        populateColorPalette();
+        saveState();
+      
+document.addEventListener("contextmenu", function(e) {
+  if (e.target.tagName === "IMG" && e.target.classList.contains("protected")) {
+    e.preventDefault();
+  }
+}, false);
+
+        
+    </script>
+</body>
+</html>
