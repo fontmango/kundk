@@ -1,568 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Drawing App</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Drawing Pad</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body { font-family: 'Inter', sans-serif; margin:0; background:#f8f8f8; }
+  #stage { position: relative; width: 100%; height: 100%; border-radius: 1rem; overflow: hidden; }
+  #bg-canvas, #draw-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; border-radius:1rem;
+  }
+  .icon-stroke { stroke: black; transition: stroke 0.3s ease; }
+  .icon-stroke svg { stroke: currentColor; }
+.color-palette {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 2px;
+  white-space: nowrap;
+    scrollbar-width: none; /* Firefox */
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400..700&family=Inter:wght@400;500;600;700&display=swap" 
-    rel="stylesheet"
-  />
+}
+.color-palette::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+.color-swatch {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.color-swatch.active { border: 2px solid; border-color: #000; }
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      background-color: transparent;
-    }
-
-    .logo-font {
-      font-family: 'Permanent Marker', cursive;
-    }
-
-    .headline-font {
-      font-family: 'Caveat', cursive;
-    }
-
-    #stage {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      border-radius: 1rem;
-      overflow: hidden;
-    }
-
-    #bg-canvas,
-    #draw-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      touch-action: none;
-      border-radius: 1rem;
-    }
-
-    /* Animations */
-    @keyframes pulse-3x {
-      0% { transform: scale(1); box-shadow: 0 0 0 rgba(59,130,246,0.7); }
-      50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(59,130,246,0.9); }
-      100% { transform: scale(1); box-shadow: 0 0 0 rgba(59,130,246,0); }
-    }
-
-    .pulse-3x {
-      animation: pulse-3x 1s ease;
-      animation-iteration-count: 3;
-    }
-
-    .icon-stroke { stroke: black; transition: stroke 0.3s ease; }
-    .icon-stroke svg { stroke: currentColor; }
-    .dark-mode .icon-stroke { stroke: white; }
-
-    /* Popup */
-    .popup {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -40%) scale(0.95);
-      background-color: #fff;
-      color: #1f2937;
-      padding: 1rem 2rem;
-      border-radius: 9999px;
-      font-size: 1rem;
-      font-weight: 500;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 1000;
-      border: 1px solid #e5e7eb;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    .popup.show {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    /* Video Popup */
-    .video-popup-container {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .video-popup-container.hidden { display: none; }
-
-    .video-popup {
-      background: white;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    }
-
-    #upload-video, #download-video {
-      width: 400px;
-      height: auto;
-      border-radius: 0.25rem;
-    }
-
-    #controls-bar.disabled {
-      pointer-events: none;
-      opacity: 0.5;
-    }
-  </style>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  #save-prompt { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(5px); z-index:50; justify-content:center; align-items:center; flex-direction: column; text-align:center; }
+  #save-prompt-content { background:white; padding:2.5rem; border-radius:1.5rem; box-shadow:0 4px 15px rgba(0,0,0,0.2); }
+  .button-group { display:flex; gap:0.5rem; justify-content:center; margin-top:1.5rem; }
+  .prompt-btn { padding:0.75rem; font-weight:600; border-radius:0.75rem; transition:all 0.2s ease-in-out; border:2px solid; }
+  .prompt-btn-primary { color:#3B82F6; border-color:#3B82F6; }
+  .prompt-btn-secondary { color:#6B7280; border-color:#6B7280; }
+  .prompt-btn-primary:hover { background:#3B82F6; color:white; }
+  .prompt-btn-secondary:hover { background:#6B7280; color:white; }
+  #toast { visibility:hidden; min-width:200px; background-color:#333; color:#fff; text-align:center; border-radius:5px; padding:10px; position:fixed; z-index:1000; bottom:30px; left:50%; transform:translateX(-50%); font-size:14px; }
+</style>
 </head>
+<body class="flex flex-col h-screen items-center justify-center p-4">
 
-<body>
-
-<div class="flex flex-col items-center justify-between h-screen p-4">
-  <div id="drawing-app-container" class="w-full mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
-    <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-400">
-      <div id="message-popup" class="popup"></div>
-
-      <!-- Upload progress video -->
-      <div id="video-popup-container" class="video-popup-container hidden">
-        <div class="video-popup">
-          <video id="upload-video" src="https://video.wixstatic.com/video/990059_627d0fb1d7324ea4aafee0e5e0b889bc/720p/mp4/file.mp4" playsinline muted loop></video>
-        </div>
-      </div>
-
-      <!-- Download progress video -->
-      <div id="download-video-container" class="video-popup-container hidden">
-        <div class="video-popup">
-          <video id="download-video" src="https://video.wixstatic.com/video/990059_7f44f4a052a947ccad90086ac702a9b3/720p/mp4/file.mp4" playsinline muted></video>
-        </div>
-      </div>
-
-      <div id="stage" style="height: 100%;">
-        <canvas id="bg-canvas"></canvas>
-        <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
-      </div>
+<div id="drawing-app-container" class="w-full mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
+  <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
+    <div id="stage" style="height:100%;">
+      <canvas id="bg-canvas"></canvas>
+      <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
     </div>
+  </div>
 
-    <!-- Controls -->
-    <div class="flex-shrink-0 w-full flex justify-center pt-4" id="controls-bar">
-      <div class="flex flex-nowrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
-        
-        <div class="flex items-center gap-1">
-          <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
-            <i data-lucide="pen-line" class="w-4 h-4"></i>  
-          </button>
-          
-          <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser">
-            <i data-lucide="eraser" class="w-4 h-4"></i>
-          </button>
-        </div>
-        
-        <button id="undo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Undo">
-          <i data-lucide="undo-2" class="w-4 h-4"></i>
-        </button>
+  <div class="flex justify-center gap-2 mt-2">
+    <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen"><i data-lucide="pen-line" class="w-4 h-4"></i></button>
+    <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser"><i data-lucide="eraser" class="w-4 h-4"></i></button>
+    <button id="undo-btn" class="p-2 disabled:opacity-50 rounded-lg icon-stroke" title="Undo"><i data-lucide="undo-2" class="w-4 h-4"></i></button>
+    <button id="redo-btn" class="p-2 disabled:opacity-50 rounded-lg icon-stroke" title="Redo"><i data-lucide="redo-2" class="w-4 h-4"></i></button>
+    <button id="clear-canvas" class="p-2 disabled:opacity-50 rounded-lg icon-stroke" title="Clear"><i data-lucide="file-plus" class="w-4 h-4"></i></button>
+    <button id="save-btn" class="p-2 disabled:opacity-50 rounded-lg icon-stroke" title="Save"><i data-lucide="download" class="w-4 h-4"></i></button>
+  </div>
 
-        <button id="redo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Redo">
-  <i data-lucide="redo-2" class="w-4 h-4"></i>
-</button>
-        
-        <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">
-          <span id="icon-sun"><i data-lucide="sun" class="w-4 h-4"></i></span>
-          <span id="icon-moon" class="hidden"><i data-lucide="moon" class="w-4 h-4"></i></span>
-        </button>
-        <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
-          <i data-lucide="file-plus" class="w-4 h-4"></i>
-        </button>
-        <button id="save-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Save PNG">
-          <i data-lucide="download" class="w-4 h-4"></i>
-        </button>
-        <button id="upload-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Upload">
-          <i data-lucide="upload-cloud" class="w-4 h-4"></i>
-        </button>
-        <button id="copy-link-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Copy Link">
-          <i data-lucide="link-2" class="w-4 h-4"></i>
-        </button>
-      </div>
+  <div class="color-palette overflow-x-auto whitespace-nowrap px-2 py-1" id="color-palette"></div>
+
+
+</div>
+
+<div id="save-prompt">
+  <div id="save-prompt-content">
+    <h2 class="text-2xl font-bold mb-4">Save your masterpiece!</h2>
+    <p class="text-gray-600 mb-4">Choose an option:</p>
+    <div class="button-group">
+      <button id="copy-url-btn" class="prompt-btn prompt-btn-primary"><i data-lucide="upload" class="w-6 h-6"></i></button>
+      <button id="download-btn" class="prompt-btn prompt-btn-primary"><i data-lucide="download" class="w-6 h-6"></i></button>
+      <button id="abort-btn" class="prompt-btn prompt-btn-secondary"><i data-lucide="x" class="w-6 h-6"></i></button>
     </div>
   </div>
 </div>
 
-<script>
-const videoPopupContainer = document.getElementById('video-popup-container');
-const uploadVideo = document.getElementById('upload-video');
-const downloadVideoContainer = document.getElementById('download-video-container');
-const downloadVideo = document.getElementById('download-video');
-const redoBtn = document.getElementById('redo-btn');
+<div id="toast">Copied to clipboard!</div>
 
+<script>
 const bgCanvas = document.getElementById('bg-canvas');
 const drawCanvas = document.getElementById('draw-canvas');
 const bgCtx = bgCanvas.getContext('2d');
 const drawCtx = drawCanvas.getContext('2d');
-const controlsBar = document.getElementById('controls-bar');
+
 const penToolBtn = document.getElementById('tool-pen');
 const eraserToolBtn = document.getElementById('tool-eraser');
 const undoBtn = document.getElementById('undo-btn');
+const redoBtn = document.getElementById('redo-btn');
 const clearBtn = document.getElementById('clear-canvas');
 const saveBtn = document.getElementById('save-btn');
-const uploadBtn = document.getElementById('upload-btn');
-const copyLinkBtn = document.getElementById('copy-link-btn');
-const toggleBgBtn = document.getElementById('toggle-background');
-const iconSun = document.getElementById('icon-sun');
-const iconMoon = document.getElementById('icon-moon');
-const appContainer = document.getElementById('drawing-app-container');
-const messagePopup = document.getElementById('message-popup');
+const colorPalette = document.getElementById('color-palette');
+const savePrompt = document.getElementById('save-prompt');
+const toast = document.getElementById('toast');
 
-let isDrawing = false, lastX = 0, lastY = 0;
-let isWhiteBackground = true;
-let currentTool = 'pen';
-let penWidth = 5, eraserWidth = 20;
-let penColor = 'black';
-let history = [], historyIndex = -1;
-let currentUrl = null;
+let isDrawing=false,lastX=0,lastY=0;
+let currentTool='pen',penWidth=5,eraserWidth=20;
+let penColor='black',selectedColor=null;
+let history=[],historyIndex=-1,saveCounter=1;
 
-// Upload popup
-function showVideoPopup() {
-  videoPopupContainer.classList.remove('hidden');
-  uploadVideo.play();
+// ==========================
+// Colors
+// ==========================
+ const colors = [
+            '#800020','#A52A2A','#ff4040','#FF0000','#FF6347','#FF7F50','#f08080','#FA8072','#ff7373',
+            '#ff1493','#FF69B4','#ff00ff','#ff80ed','#ff71ce','#FFC0CB','#ffb3ba','#ffe4e1',
+            '#a67c00','#D2691E','#CD5C5C','#FFA500','#FF8C00','#FFC04C','#FFD700','#FFFF00','#ffff66','#fffb96',
+            '#065535','#013220','#008000','#808000','#3CB371','#9ACD32','#ADFF2F','#05ffa1','#b4eeb4',
+            '#000080','#0e2f44','#0000FF','#4169E1','#1E90FF','#0a75ad','#6897bb','#b0e0e6','#87CEFA','#01cdfe','#40E0D0','#008080','#00ffff','#ddfffc',
+            '#4B0082','#660066','#800080','#8a2be2','#b967ff','#BA55D3','#DA70D6','#e6e6fa','#ccccff',
+            '#333333','#666666','#808080','#A9A9A9','#C0C0C0','#cccccc','#dddddd','#CBBEB5','#c39797','#ffdab9','#faebd7'
+        ];
+        let activeSwatch=null;
+
+function populateColorPalette() {
+  colorPalette.innerHTML = '';
+  colors.forEach(color => {
+    const swatch = document.createElement('div');
+    swatch.className = 'color-swatch';
+    swatch.style.backgroundColor = color;
+    swatch.addEventListener('click', () => {
+      if(activeSwatch) activeSwatch.classList.remove('active');
+      if(activeSwatch === swatch) { activeSwatch = null; selectedColor = null; return; }
+      activeSwatch = swatch;
+      activeSwatch.classList.add('active');
+      selectedColor = color;
+    });
+    colorPalette.appendChild(swatch);
+  });
 }
-function hideUploadVideo() {
-  setTimeout(() => {
-    videoPopupContainer.classList.add('hidden');
-    uploadVideo.pause();
-    uploadVideo.currentTime = 0;
-  }, 5000);
-}
-
-// Download popup
-function showDownloadVideo() {
-  controlsBar.classList.add('disabled');
-  downloadVideoContainer.classList.remove('hidden');
-  downloadVideo.play();
-
-  // Hide and download after 5s
-  setTimeout(() => {
-    downloadVideoContainer.classList.add('hidden');
-    downloadVideo.pause();
-    downloadVideo.currentTime = 0;
-    startDownload();
-    controlsBar.classList.remove('disabled');
-  }, 3000);
-}
-
-function startDownload() {
-  const out = document.createElement('canvas');
-  out.width = drawCanvas.width;
-  out.height = drawCanvas.height;
-  const octx = out.getContext('2d');
-  octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-  octx.fillRect(0,0,out.width,out.height);
-  octx.drawImage(drawCanvas,0,0);
-  const imageURL = out.toDataURL('image/png');
-  const link = document.createElement('a');
-  link.href = imageURL;
-  link.download = `my-drawing-${Date.now()}.png`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+colorPalette.addEventListener('wheel', e => {
+  e.preventDefault();
+  colorPalette.scrollLeft += e.deltaY;
+});
+function selectColor(swatch,color){
+  if(activeSwatch) activeSwatch.classList.remove('active');
+  if(activeSwatch===swatch){ activeSwatch=null; selectedColor=null; return; }
+  activeSwatch=swatch; swatch.classList.add('active'); selectedColor=color;
 }
 
-function showPopup(message) {
-  messagePopup.textContent = message;
-  messagePopup.classList.add('show');
-  setTimeout(() => {
-    messagePopup.classList.remove('show');
-    controlsBar.classList.remove('disabled');
-  }, 2000);
+// ==========================
+// Canvas Resize & Background
+// ==========================
+function sizeCanvases(){
+  const rect=document.getElementById('stage').getBoundingClientRect();
+  const dpr=window.devicePixelRatio||1;
+  drawCanvas.width=bgCanvas.width=Math.floor(rect.width*dpr);
+  drawCanvas.height=bgCanvas.height=Math.floor(rect.height*dpr);
+  drawCanvas.style.width=bgCanvas.style.width=rect.width+'px';
+  drawCanvas.style.height=bgCanvas.style.height=rect.height+'px';
+  drawCtx.setTransform(dpr,0,0,dpr,0,0);
+  bgCtx.setTransform(dpr,0,0,dpr,0,0);
+  paintBackground();
+}
+function paintBackground(){
+  bgCtx.fillStyle='#fff';
+  bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
 }
 
-function showUploadCompleteVideo() {
-    // The controls are already disabled by the upload function, so no need to disable again
-    videoUploadCompleteContainer.classList.remove('hidden');
-    uploadCompleteVideo.play();
-
-    setTimeout(() => {
-        videoUploadCompleteContainer.classList.add('hidden');
-        uploadCompleteVideo.pause();
-        uploadCompleteVideo.currentTime = 0;
-        // Re-enable the controls bar after the success video finishes
-        controlsBar.classList.remove('disabled');
-    }, 2000); // 2 seconds duration
+// ==========================
+// Drawing
+// ==========================
+function startDraw(x,y){isDrawing=true;lastX=x;lastY=y;drawCtx.lineCap='round';drawCtx.lineJoin='round';}
+function drawTo(x,y){
+  if(!isDrawing) return;
+  drawCtx.globalCompositeOperation=currentTool==='pen'?'source-over':'destination-out';
+  drawCtx.strokeStyle=currentTool==='pen'?(selectedColor||penColor):'rgba(0,0,0,1)';
+  drawCtx.lineWidth=currentTool==='pen'?penWidth:eraserWidth;
+  drawCtx.beginPath();
+  drawCtx.moveTo(lastX,lastY);
+  drawCtx.lineTo(x,y);
+  drawCtx.stroke();
+  lastX=x; lastY=y;
 }
+function endDraw(){ if(!isDrawing) return; isDrawing=false; drawCtx.globalCompositeOperation='source-over'; pushHistory();}
 
-function showDownloadCompleteVideo() {
-    // Controls are already disabled
-    videoDownloadCompleteContainer.classList.remove('hidden');
-    downloadCompleteVideo.play();
-    
-    setTimeout(() => {
-        videoDownloadCompleteContainer.classList.add('hidden');
-        downloadCompleteVideo.pause();
-        downloadCompleteVideo.currentTime = 0;
-        
-        // After the completion video finishes, start the download and re-enable controls
-        startDownload();
-        controlsBar.classList.remove('disabled');
-    }, 2000); // Assuming this video is 2 seconds long
-}
-
-function updateButtonStates() {
-    const isCanvasEmpty = historyIndex <= 0;
-    saveBtn.disabled = isCanvasEmpty;
-    uploadBtn.disabled = isCanvasEmpty;
-    copyLinkBtn.disabled = currentUrl === null;
-
-    undoBtn.disabled = historyIndex <= 0;
-    redoBtn.disabled = historyIndex >= history.length - 1;
-}
-
-function sizeCanvases() {
-    const stage = document.getElementById('stage');
-    const rect = stage.getBoundingClientRect();
-    const tmp = document.createElement('canvas');
-    tmp.width = drawCanvas.width;
-    tmp.height = drawCanvas.height;
-    tmp.getContext('2d').drawImage(drawCanvas, 0, 0);
-
-    const dpr = window.devicePixelRatio || 1;
-    bgCanvas.width = drawCanvas.width = Math.floor(rect.width * dpr);
-    bgCanvas.height = drawCanvas.height = Math.floor(rect.height * dpr);
-    bgCanvas.style.width = drawCanvas.style.width = rect.width + 'px';
-    bgCanvas.style.height = drawCanvas.style.height = rect.height + 'px';
-
-    bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    drawCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    paintBackground();
-    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    drawCtx.drawImage(tmp, 0, 0, tmp.width, tmp.height, 0, 0, drawCanvas.width, drawCanvas.height);
-}
-
-function paintBackground() {
-    bgCtx.save();
-    bgCtx.setTransform(1, 0, 0, 1, 0, 0);
-    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-    bgCtx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-    bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-    bgCtx.restore();
-}
-
-function setActiveTool(tool) {
-    currentTool = tool;
-    if (tool === 'pen') {
-        penToolBtn.classList.add('ring-2', 'ring-blue-500');
-        eraserToolBtn.classList.remove('ring-2', 'ring-blue-500');
-    } else {
-        eraserToolBtn.classList.add('ring-2', 'ring-blue-500');
-        penToolBtn.classList.remove('ring-2', 'ring-blue-500');
-    }
-}
-
-function updatePenColorForBackground() {
-    penColor = isWhiteBackground ? 'black' : 'white';
-}
+// ==========================
+// History
+// ==========================
 
 function pushHistory() {
-    const url = drawCanvas.toDataURL('image/png');
-    if (historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
-    history.push(url);
-    historyIndex = history.length - 1;
-    undoBtn.disabled = historyIndex <= 0;
-    updateButtonStates();
+  // keep history linear
+  if (historyIndex < history.length - 1) {
+    history = history.slice(0, historyIndex + 1);
+  }
+
+  // save canvas at device-pixel-corrected size
+  const dpr = window.devicePixelRatio || 1;
+  const tempCanvas = document.createElement('canvas');
+  tempCanvas.width = drawCanvas.width * dpr;
+  tempCanvas.height = drawCanvas.height * dpr;
+  const tctx = tempCanvas.getContext('2d');
+  tctx.drawImage(drawCanvas, 0, 0, tempCanvas.width, tempCanvas.height);
+
+  history.push(tempCanvas.toDataURL('image/png'));
+  historyIndex = history.length - 1;
+
+  updateHistoryButtons();
+  updateActionButtons();
 }
+
+function updateActionButtons() {
+  // Check if the canvas is empty
+  const empty = isCanvasEmpty();
+
+  clearBtn.disabled = empty;
+  saveBtn.disabled = empty;
+}
+
+function isCanvasEmpty() {
+  const pixels = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height).data;
+  // if every pixel is transparent, canvas is empty
+  return !pixels.some((value, index) => index % 4 === 3 && value !== 0);
+}
+
 
 function loadHistory(index) {
+  if(index < 0 || index >= history.length) return;
+  
+  const img = new Image();
+  img.onload = () => {
+    const dpr = window.devicePixelRatio || 1;
+    drawCtx.setTransform(1, 0, 0, 1, 0, 0);  // reset transform
     drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    if (index >= 0) {
-        const img = new Image();
-        img.onload = () => drawCtx.drawImage(img, 0, 0);
-        img.src = history[index];
-    }
-    undoBtn.disabled = index <= 0;
-    updateButtonStates();
+    drawCtx.drawImage(img, 0, 0, drawCanvas.width, drawCanvas.height);
+    drawCtx.setTransform(dpr, 0, 0, dpr, 0, 0); // reapply DPR scaling
+    updateHistoryButtons();
+  };
+  img.src = history[index];
+  historyIndex = index;
 }
 
-function startDraw(x, y) {
-    isDrawing = true;
-    lastX = x;
-    lastY = y;
-    drawCtx.lineCap = 'round';
-    drawCtx.lineJoin = 'round';
+
+
+function updateHistoryButtons(){ undoBtn.disabled=historyIndex<=0; redoBtn.disabled=historyIndex>=history.length-1;}
+
+// ==========================
+// Tool selection
+// ==========================
+function setActiveTool(tool){
+  currentTool=tool;
+  penToolBtn.classList.toggle('ring-2',tool==='pen');
+  penToolBtn.classList.toggle('ring-blue-500',tool==='pen');
+  eraserToolBtn.classList.toggle('ring-2',tool==='eraser');
+  eraserToolBtn.classList.toggle('ring-blue-500',tool==='eraser');
 }
 
-function drawTo(x, y) {
-    if (!isDrawing) return;
-    if (currentTool === 'pen') {
-        drawCtx.globalCompositeOperation = 'source-over';
-        drawCtx.strokeStyle = penColor;
-        drawCtx.lineWidth = penWidth;
-    } else {
-        drawCtx.globalCompositeOperation = 'destination-out';
-        drawCtx.strokeStyle = 'rgba(0,0,0,1)';
-        drawCtx.lineWidth = eraserWidth;
-    }
-    drawCtx.beginPath();
-    drawCtx.moveTo(lastX, lastY);
-    drawCtx.lineTo(x, y);
-    drawCtx.stroke();
-    lastX = x;
-    lastY = y;
-}
+// ==========================
+// Pointer events
+// ==========================
+function pointerStart(e){const rect=drawCanvas.getBoundingClientRect();const x=e.clientX??e.touches[0].clientX;const y=e.clientY??e.touches[0].clientY;startDraw(x-rect.left,y-rect.top);e.preventDefault?.();}
+function pointerMove(e){if(!isDrawing) return;const rect=drawCanvas.getBoundingClientRect();const x=e.clientX??e.touches[0].clientX;const y=e.clientY??e.touches[0].clientY;drawTo(x-rect.left,y-rect.top);e.preventDefault?.();}
+drawCanvas.addEventListener('mousedown',pointerStart);
+drawCanvas.addEventListener('mousemove',pointerMove);
+window.addEventListener('mouseup',endDraw);
+drawCanvas.addEventListener('touchstart',pointerStart,{passive:false});
+drawCanvas.addEventListener('touchmove',pointerMove,{passive:false});
+drawCanvas.addEventListener('touchend',()=>endDraw(),{passive:false});
 
-function endDraw() {
-    if (!isDrawing) return;
-    isDrawing = false;
-    drawCtx.globalCompositeOperation = 'source-over';
-    pushHistory();
-}
-
-// Mouse & touch events
-drawCanvas.addEventListener('mousedown', e => {
-    const rect = drawCanvas.getBoundingClientRect();
-    startDraw(e.clientX - rect.left, e.clientY - rect.top);
-});
-drawCanvas.addEventListener('mousemove', e => {
-    const rect = drawCanvas.getBoundingClientRect();
-    drawTo(e.clientX - rect.left, e.clientY - rect.top);
-});
-window.addEventListener('mouseup', endDraw);
-
-drawCanvas.addEventListener('touchstart', e => {
-    const rect = drawCanvas.getBoundingClientRect();
-    const t = e.touches[0];
-    startDraw(t.clientX - rect.left, t.clientY - rect.top);
-    e.preventDefault();
-}, {passive:false});
-drawCanvas.addEventListener('touchmove', e => {
-    if (!isDrawing) return;
-    const rect = drawCanvas.getBoundingClientRect();
-    const t = e.touches[0];
-    drawTo(t.clientX - rect.left, t.clientY - rect.top);
-    e.preventDefault();
-}, {passive:false});
-drawCanvas.addEventListener('touchend', e => { endDraw(); e.preventDefault(); }, {passive:false});
-
-// Tool buttons
-penToolBtn.addEventListener('click', () => setActiveTool('pen'));
-eraserToolBtn.addEventListener('click', () => setActiveTool('eraser'));
-
-undoBtn.addEventListener('click', () => { if(historyIndex>0){historyIndex--;loadHistory(historyIndex);} });
-clearBtn.addEventListener('click', () => { 
-    drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); 
-    history = [];
-    historyIndex = -1;
-    pushHistory();
-    currentUrl = null;
-    updateButtonStates();
-});
-
-redoBtn.addEventListener('click', () => {
-    if (historyIndex < history.length - 1) {
-        historyIndex++;
-        loadHistory(historyIndex);
-    }
-});
-
-toggleBgBtn.addEventListener('click', () => {
-    isWhiteBackground = !isWhiteBackground;
-    iconSun.classList.toggle('hidden', !isWhiteBackground);
-    iconMoon.classList.toggle('hidden', isWhiteBackground);
-    paintBackground();
-    updatePenColorForBackground();
-    if (isWhiteBackground) appContainer.classList.remove('dark-mode');
-    else appContainer.classList.add('dark-mode');
-});
-
-// Save PNG locally
-saveBtn.addEventListener('click', () => {
- showDownloadVideo(); 
-
-});
-
-// Upload to Dropbox / Wix
-uploadBtn.addEventListener('click', () => {
-    const out = document.createElement('canvas');
-    out.width = drawCanvas.width;
-    out.height = drawCanvas.height;
-    const octx = out.getContext('2d');
-    octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-    octx.fillRect(0,0,out.width,out.height);
-    octx.drawImage(drawCanvas,0,0);
-    const base64Data = out.toDataURL('image/png');
-
-    // Send to parent
-    window.parent.postMessage({ type:'UPLOAD_REQUEST', image: base64Data }, '*');
-
-   // Disable the controls bar
-    controlsBar.classList.add('disabled');
-
-    // Show the video popup
-    showVideoPopup();
-
-    
-});
-
-window.addEventListener('message', (event) => {
-  if (event.data.type === 'UPLOAD_SUCCESS') {
-    currentUrl = event.data.url;
-    updateButtonStates();    // enables copy-link
-    hideUploadVideo();       // this will hide video + re-enable controls
-   copyLinkBtn.classList.add('pulse-3x');
-setTimeout(() => copyLinkBtn.classList.remove('pulse-3x'), 3000); // 3s total
-  } else if (event.data.type === 'UPLOAD_ERROR') {
-    currentUrl = null;
-    updateButtonStates();
-    hideUploadVideo();       // re-enable only when video is gone
-    showPopup('Upload failed.');
-  }
-});
-
-// Hide progress video AND re-enable controls
-function hideUploadVideo() {
-  videoPopupContainer.classList.add('hidden');
-  uploadVideo.pause();
-  uploadVideo.currentTime = 0;
-  controlsBar.classList.remove('disabled'); // only re-enable here
-}
-
-// New button to copy the link
-copyLinkBtn.addEventListener('click', () => {
-    if (currentUrl) {
-        // Use a temporary input to copy the URL
-        const tempInput = document.createElement('input');
-        document.body.appendChild(tempInput);
-        tempInput.value = currentUrl;
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-        
-        showPopup('Link in Zwischenablage kopiert.');
-    }
+// ==========================
+// Buttons
+// ==========================
+penToolBtn.addEventListener('click',()=>setActiveTool('pen'));
+eraserToolBtn.addEventListener('click',()=>setActiveTool('eraser'));
+undoBtn.addEventListener('click',()=>loadHistory(historyIndex>0?historyIndex-1:-1));
+redoBtn.addEventListener('click',()=>{ if(historyIndex<history.length-1) loadHistory(historyIndex+1);});
+clearBtn.addEventListener('click',()=>{ drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); history=[]; historyIndex=-1; pushHistory(); });
+saveBtn.addEventListener('click',()=>{
+  const link=document.createElement('a');
+  link.href=drawCanvas.toDataURL('image/png');
+  link.download=`drawing_${saveCounter++}.png`;
+  link.click();
 });
 
 
-// Init
-window.addEventListener('load', () => {
-    sizeCanvases();
-    setActiveTool('pen');
-    updatePenColorForBackground();
-    paintBackground();
-    pushHistory();
-    if(window.lucide) window.lucide.createIcons();
-    updateButtonStates();
+// Save / Download
+document.getElementById('download-btn').addEventListener('click',()=>{
+  const out=document.createElement('a');
+  out.href=drawCanvas.toDataURL('image/png');
+  out.download=`drawing_${saveCounter++}.png`;
+  out.click();
+  savePrompt.style.display='none';
 });
-window.addEventListener('resize', sizeCanvases);
+document.getElementById('abort-btn').addEventListener('click',()=>savePrompt.style.display='none');
+
+window.addEventListener('load',()=>{ sizeCanvases(); setActiveTool('pen'); pushHistory(); populateColorPalette(); });
+window.addEventListener('resize',sizeCanvases);
 </script>
-
+<script>
+window.lucide?.createIcons();
+</script>
 </body>
 </html>
