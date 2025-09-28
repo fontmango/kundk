@@ -44,10 +44,12 @@
     right: 5%;
 }
 
-.copy-btn {
+
+.resize-btn {
     top: 5%;
-    left: 5%;
+    right: 5%;
 }
+
 
 .group-btn:hover {
     background-color: #2be7d8; /* A subtle hover color */
@@ -147,7 +149,7 @@ body {
 }
 
 /* Base styles for buttons, with transitions for smooth fading */
-.copy-btn,
+.resize-btn,
 .group-btn,
 .delete-btn,
 .lock-btn {
@@ -173,15 +175,6 @@ body {
 }
 
 /* Specific button positions */
-.delete-btn {
-    top: 5%;
-    right: 5%;
-}
-
-.copy-btn {
-    top: 5%;
-    left: 5%;
-}
 
 
 .group-btn svg {
@@ -191,27 +184,30 @@ body {
 
 /* Show buttons on hover or when the sticker has the 'selected' class */
 .sticker:hover > .delete-btn,
-.sticker:hover > .copy-btn,
+.sticker:hover > .resize-btn,
 .sticker:hover > .lock-btn,
 .sticker.selected > .delete-btn,
-.sticker.selected > .copy-btn,
+.sticker.selected > .resize-btn,
 .sticker.selected > .lock-btn {
     opacity: 1;
     visibility: visible;
 }
 
 /* Hover effects for buttons */
-.copy-btn:hover {
-    background-color: #6aa84fff;
-    transform: scale(1.1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
+
 
 .delete-btn:hover {
     background-color: #f26262ff;
     transform: scale(1.1);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
+
+.resize-btn:hover {
+    background-color: rgb(157, 201, 37);
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
 
 .lock-btn:hover {
     transform: scale(1.1);
@@ -227,7 +223,8 @@ body {
 }
 
 .bucket-active .sticker .delete-btn,
-.bucket-active .sticker .copy-btn,
+.bucket-active .sticker .resize-btn,
+
 .bucket-active .sticker .lock-btn,
 .bucket-active .sticker .group-btn {
     display: none !important;
@@ -239,7 +236,8 @@ body {
 }
 
  .brush-active .sticker .delete-btn,
- .brush-active .sticker .copy-btn,
+  .brush-active .sticker .resize-btn,
+
  .brush-active .sticker .group-btn ,
  .brush-active .sticker .lock-btn {
             
@@ -253,7 +251,8 @@ body {
 
 
 .eyedropper-active .sticker .delete-btn,
-.eyedropper-active .sticker .copy-btn,
+.eyedropper-active .sticker .resize-btn,
+
 .eyedropper-active .sticker .lock-btn,
 .eyedropper-active .sticker .group-btn {
     display: none !important;
@@ -464,12 +463,7 @@ button.active {
     transform: scale(1.1);
 }
 
-.copy-btn-icon {
-    width: 100%;
-    height: 100%;
-    fill: white;
-    stroke: white;
-}
+
 
 .lock-btn-icon {
     width: 60%;
@@ -485,12 +479,15 @@ button.active {
     stroke: white;
 }
 
-
-.copy-btn:hover {
-    background-color: #6aa84fff;
-    transform: scale(1.1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+.resize-btn-icon {
+    width: 100%;
+    height: 100%;
+    fill: white;
+    stroke: white;
 }
+
+
+
 
 .delete-btn:hover {
     background-color: #f26262ff;
@@ -770,53 +767,275 @@ body.eyedropper-active {
     <div id="group-overlay-container"></div>
     <script>
         const stickerGroups = [
-               
-              
-{
-name: "Zähne",
-urls: [
-"https://static.wixstatic.com/media/990059_0129f9b0bf81436ea35419d29dcddd16~mv2.png",
-"https://static.wixstatic.com/media/990059_4b0f72aa82744a5e847998fe1e850966~mv2.png",
-"https://static.wixstatic.com/media/990059_4e60300b83144faaaae36ad238419d2d~mv2.png",
-"https://static.wixstatic.com/media/990059_88f52044ee3a4523805ad4a93b3a059d~mv2.png",
-"https://static.wixstatic.com/media/990059_8d662ab7d4a4414497c09498ecdce7c3~mv2.png",
-"https://static.wixstatic.com/media/990059_06b4c1aafc994403aa832cca245f1fba~mv2.png",
-
-"https://static.wixstatic.com/media/990059_e6e76b1d59be41afa1995e6cb6c415ca~mv2.png",
-"https://static.wixstatic.com/media/990059_5fc6ff01603d4eb2bdee2b86011db13b~mv2.png",
-"https://static.wixstatic.com/media/990059_a7fe857a10514c68a0a153db8b3b9e33~mv2.png",
-"https://static.wixstatic.com/media/990059_db23a1e694a34e8e9001ad6cbfd6238f~mv2.png",
-"https://static.wixstatic.com/media/990059_e23cbdce643a4ffda20c1c26ea145734~mv2.png",
-"https://static.wixstatic.com/media/990059_db52184dcf5a4561adc382c7ffbcf03f~mv2.png",
-"https://static.wixstatic.com/media/990059_14ad91e9843044d99245a8454096df1a~mv2.png",
-"https://static.wixstatic.com/media/990059_6c22d369368c48899af2d4ba05e13494~mv2.png",
-"https://static.wixstatic.com/media/990059_c930bfd15fc44a22b60d6d59b2f792d8~mv2.png",
-"https://static.wixstatic.com/media/990059_d9f087b0699747e69d2f2cdb1f957843~mv2.png",
-"https://static.wixstatic.com/media/990059_60eb0545add448f7b4158f81ca9fdd91~mv2.png",
-"https://static.wixstatic.com/media/990059_74243e36657e4a26b0ae42b8c7f3cc30~mv2.png",
-"https://static.wixstatic.com/media/990059_0cdb68942364494682203038f1d5aad1~mv2.png",
-"https://static.wixstatic.com/media/990059_155cf18e76bf4995bfe37bf4fff37735~mv2.png",
-"https://static.wixstatic.com/media/990059_15d8dc9d7ee645a0803031a826dfe01a~mv2.png",
-"https://static.wixstatic.com/media/990059_fb0b3de62c824100a0acc686b856cd60~mv2.png",
-"https://static.wixstatic.com/media/990059_f475c53e43be4c1b94c46de4264dcb8a~mv2.png",
-"https://static.wixstatic.com/media/990059_689fb0e1a38f4bdab77d15139c534786~mv2.png",
-"https://static.wixstatic.com/media/990059_e48ef409337d402092b6000f068c6eee~mv2.png",
-"https://static.wixstatic.com/media/990059_9b00c28bc1a54a5092df0314d6b9879f~mv2.png",
-"https://static.wixstatic.com/media/990059_806f935f9c7544668c021840bdb42080~mv2.png",
-"https://static.wixstatic.com/media/990059_552ddfc1e40d4418849e21955edb1c11~mv2.png",
-"https://static.wixstatic.com/media/990059_dc02d2e7e0464aa39e9344f8cb6a9619~mv2.png",
-"https://static.wixstatic.com/media/990059_cfe824d561e1488a9dc8d2ef4ba32b57~mv2.png",
-"https://static.wixstatic.com/media/990059_41ac2bbb4579432e8a96779a9d3b8753~mv2.png",
-"https://static.wixstatic.com/media/990059_2185e328bf364e7ea045e9063be0ebd2~mv2.png",
-"https://static.wixstatic.com/media/990059_a0cf010dd5ff422a93da278ffc80298f~mv2.png",
-"https://static.wixstatic.com/media/990059_b1abcf3e3d524b5dbd05218d93491f49~mv2.png",
-"https://static.wixstatic.com/media/990059_0e939527e750481aae65eab4721bb40f~mv2.png"
-
+    {
+        "name": "Chain",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/Chain/Chain 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/Chain/Chain 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/Chain/Chain 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/Chain/Chain 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/Chain/Chain 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/Chain/Chain 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/Chain/Chain 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/Chain/Chain 8.svg"
+        ]
+    },
+    {
+        "name": "beard",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/beard/Beard 9.svg"
+        ]
+    },
+    {
+        "name": "body",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 21.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 22.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 23.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 24.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 25.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 26.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 27.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 28.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 29.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/body/Body 9.svg"
+        ]
+    },
+    {
+        "name": "earring",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 21.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 22.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 23.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 24.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 25.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 26.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 27.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 28.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 29.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 30.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 31.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/earring/Earring 9.svg"
+        ]
+    },
+    {
+        "name": "eyebrows",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyebrows/Eyebrows 9.svg"
+        ]
+    },
+    {
+        "name": "eyes",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 21.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 22.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/eyes/Eyes 9.svg"
+        ]
+    },
+    {
+        "name": "glasses",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/glasses/Glasses 9.svg"
+        ]
+    },
+    {
+        "name": "hair",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 21.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 22.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 23.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 24.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 25.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 26.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 27.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 28.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 29.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 30.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 31.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 32.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hair/Hair 9.svg"
+        ]
+    },
+    {
+        "name": "hat",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 14.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 15.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 16.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 17.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 18.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 19.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 20.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 21.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/hat/Hat 9.svg"
+        ]
+    },
+    {
+        "name": "mouth",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 10.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 11.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 12.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 13.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 8.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/mouth/Mouth 9.svg"
+        ]
+    },
+    {
+        "name": "nose",
+        "urls": [
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/nose/Nose 1.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/nose/Nose 2.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/nose/Nose 3.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/nose/Nose 4.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/nose/Nose 5.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/nose/Nose 6.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/nose/Nose 7.svg",
+            "https://raw.githubusercontent.com/phoneticgenius/figures/main/nose/Nose 8.svg"
+        ]
+    }
 ]
-},
-
-           
-        ];
 
         const canvasContainer = document.getElementById('canvas-container');
 
@@ -1994,49 +2213,65 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     let initialStickerHeight = 0;
     let initialRect = null;
 
-    // --- Interaction Buttons and Handlers ---
-    const copyBtn = document.createElement('div');
-    copyBtn.classList.add('sticker-btn','copy-btn');
-    copyBtn.innerHTML = `<svg class="copy-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-<line x1="12" y1="8" x2="12" y2="16" />
-<line x1="8" y1="12" x2="16" y2="12" />
+// --- Interaction Buttons and Handlers ---
+// --- Interaction Buttons and Handlers ---
+const resizeBtn = document.createElement('div');
+resizeBtn.classList.add('sticker-btn','resize-btn');
+resizeBtn.innerHTML = `
+<svg class="resize-btn-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <line x1="12" y1="4" x2="12" y2="10" />   <!-- arrow up -->
+  <polyline points="9 7 12 4 15 7" />        <!-- arrowhead up -->
+  <line x1="12" y1="20" x2="12" y2="14" />  <!-- arrow down -->
+  <polyline points="9 17 12 20 15 17" />    <!-- arrowhead down -->
 </svg>`;
-    copyBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const stickerWidth = sticker.offsetWidth;
-        const stickerHeight = sticker.offsetHeight;
-        let newX = parseInt(sticker.style.left) + 10;
-        let newY = parseInt(sticker.style.top) + 10;
+sticker.appendChild(resizeBtn);
 
-        function isOverlapping(x, y) {
-            const stickers = document.querySelectorAll('.sticker');
-            return Array.from(stickers).some(s => {
-                const sx = parseInt(s.style.left);
-                const sy = parseInt(s.style.top);
-                const sw = s.offsetWidth;
-                const sh = s.offsetHeight;
-                return !(x + stickerWidth < sx || x > sx + sw || y + stickerHeight < sy || y > sy + sh);
-            });
-        }
-        const step = 10;
-        let attempts = 0;
-        while (isOverlapping(newX, newY) && attempts < 100) {
-            newX += step;
-            newY += step;
-            if (newX + stickerWidth > canvas.offsetWidth) newX = step;
-            if (newY + stickerHeight > canvas.offsetHeight) newY = step;
-            attempts++;
-        }
-        saveState();
-addSticker(
-    stickerImg.src,
-    newX,
-    newY,
-    sticker.offsetWidth,
-    sticker.offsetHeight,
-    { group: sticker.dataset.group }
-);   
- });
+let isResizing = false;
+let startY, startWidth, startHeight;
+const MIN_SIZE = 30;
+
+// Touch/mouse start
+resizeBtn.addEventListener('mousedown', startResize);
+resizeBtn.addEventListener('touchstart', startResize, { passive: false });
+
+function startResize(e) {
+    e.stopPropagation();
+    isResizing = true;
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    startWidth = sticker.offsetWidth;
+    startHeight = sticker.offsetHeight;
+    e.preventDefault();
+}
+
+// Touch/mouse move
+window.addEventListener('mousemove', doResize);
+window.addEventListener('touchmove', doResize, { passive: false });
+
+function doResize(e) {
+    if (!isResizing) return;
+    const currentY = e.touches ? e.touches[0].clientY : e.clientY;
+    const delta = startY - currentY; // moving up = positive, down = negative
+
+    const newWidth = Math.max(MIN_SIZE, startWidth + delta);
+    const newHeight = Math.max(MIN_SIZE, startHeight + delta);
+
+    sticker.style.width = newWidth + 'px';
+    sticker.style.height = newHeight + 'px';
+}
+
+// End resizing
+window.addEventListener('mouseup', endResize);
+window.addEventListener('touchend', endResize);
+
+function endResize() {
+    if (isResizing) {
+        isResizing = false;
+        saveState(); // save new size
+    }
+}
+
+
+
 
     const deleteBtn = document.createElement('div');
     deleteBtn.classList.add('sticker-btn','delete-btn');
@@ -2076,7 +2311,7 @@ lockBtn.addEventListener('click', (e) => {
 });
 
     sticker.appendChild(deleteBtn);
-    sticker.appendChild(copyBtn);
+    sticker.appendChild(resizeBtn);
     sticker.appendChild(lockBtn);
 
 const groupBtn = document.createElement('div');
@@ -2157,7 +2392,7 @@ stickerImg.addEventListener('click', (e) => {
 
     const updateButtonSizes = () => {
     const btnSize = sticker.offsetWidth * 0.2;
-    [deleteBtn, copyBtn, lockBtn, groupBtn].forEach(btn => {
+    [deleteBtn, resizeBtn, lockBtn, groupBtn].forEach(btn => {
         btn.style.width = btnSize + 'px';
         btn.style.height = btnSize + 'px';
     });
@@ -2175,7 +2410,7 @@ stickerImg.addEventListener('click', (e) => {
     }
 
     deleteBtn.style.top = deleteBtn.style.right = `${btnSize * 0.25}px`;
-    copyBtn.style.top = copyBtn.style.left = `${btnSize * 0.25}px`;
+    resizeBtn.style.top = resizeBtn.style.left = `${btnSize * 0.25}px`;
     lockBtn.style.bottom = lockBtn.style.left = `${btnSize * 0.25}px`;
     groupBtn.style.bottom = groupBtn.style.right = `${btnSize * 0.25}px`;
 };
@@ -2268,7 +2503,6 @@ function recolorSticker(stickerImg, fillColor, e) {
         return;
     }
     
-    // Create a copy of the original pixel data to revert if the fill escapes
     const originalData = new Uint8ClampedArray(data);
 
     // --- Step 3: Flood-fill ---
@@ -2445,15 +2679,9 @@ window.addEventListener('load', () => {
         lucide.createIcons();
     }
     updateCanvasDrop();
-    const allStickers = document.querySelectorAll('.sticker');
-    if (allStickers.length === 0) {
-        const randomStickerData = getRandomStickerUrlFromGroups();
-        if (randomStickerData) {
-            // Pass the URL from the object to the function
-            addOrReplaceSticker(randomStickerData.url, randomStickerData.group);
-        }
-    }
+    // no sticker is added on page load
 });
+
 
         let isDragging = false;
         let startX;
