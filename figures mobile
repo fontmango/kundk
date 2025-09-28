@@ -701,9 +701,7 @@ body.eyedropper-active {
 
   <div class="controls">
    
-   <button id="spin-sticker-btn" title="Spin Random">
-  <i data-lucide="dice-6" class="icon"></i>
-</button>
+
     
   
    <button id="brush-btn" class="">
@@ -764,6 +762,9 @@ body.eyedropper-active {
         <button id="eraser-btn" title="Erase">
             <i data-lucide="eraser" class="icon"></i>
         </button>
+
+            <button id="save-btn" class="p-2 disabled:opacity-50 rounded-lg icon-stroke" title="Save"><i data-lucide="download" class="w-4 h-4"></i></button>
+
 
     </div>
   
@@ -1047,8 +1048,8 @@ body.eyedropper-active {
 ]
 
         const canvasContainer = document.getElementById('canvas-container');
-
-		const eyedropperBtn = document.getElementById("eyedropper-btn");
+        const saveBtn = document.getElementById('save-btn');
+	    	const eyedropperBtn = document.getElementById("eyedropper-btn");
         canvasContainer.appendChild(eyedropperBtn);
            
         //ADDED FOR BRUSH
@@ -1074,7 +1075,6 @@ body.eyedropper-active {
         let lastPaintTool = "";
         //END FOR BRUSH
 
-		const spinBtn = document.getElementById("spin-sticker-btn");
 
         const canvas = document.getElementById('canvas-container');
         const addStickerBtn = document.getElementById('add-sticker-btn');
@@ -1137,7 +1137,37 @@ body.eyedropper-active {
         const transparentColor = {
             type: 'erase'
         };
-        
+
+        saveBtn.addEventListener('click', () => {
+    // Create a temporary canvas same size as your main canvas
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = canvas.offsetWidth;
+    tempCanvas.height = canvas.offsetHeight;
+    const tempCtx = tempCanvas.getContext('2d');
+
+    // Draw all stickers onto the temporary canvas
+    document.querySelectorAll('#canvas-container .sticker img').forEach(stickerImg => {
+        const stickerDiv = stickerImg.parentElement;
+        const x = stickerDiv.offsetLeft;
+        const y = stickerDiv.offsetTop;
+        const w = stickerDiv.offsetWidth;
+        const h = stickerDiv.offsetHeight;
+
+        tempCtx.drawImage(stickerImg, x, y, w, h);
+    });
+
+    // Convert canvas to PNG data URL
+    const dataURL = tempCanvas.toDataURL('image/png');
+
+    // Trigger download
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = 'sticker_canvas.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+
 
         //EYEDROPPER
         
@@ -2150,90 +2180,7 @@ function loadState(state) {
     return chosenSticker;
 }
 
-spinBtn.addEventListener("click", async () => {
-    console.log("🎰 Spin button clicked");
 
-    const allStickers = document.querySelectorAll('.sticker');
-    let targetStickerDiv = null;
-
-    if (allStickers.length === 0) {
-        console.log("ℹ️ Canvas is empty, adding a new sticker.");
-        const randomStickerData = getRandomStickerUrlFromGroups();
-        if (randomStickerData) {
-            addSticker(randomStickerData.url, 120, 120, 120, 120, { 
-                group: randomStickerData.group, 
-                letter: randomStickerData.letter 
-            });
-            targetStickerDiv = document.querySelector('.sticker');
-        }
-    } else {
-        targetStickerDiv = document.querySelector('.sticker:not(.locked)');
-        
-        if (!targetStickerDiv) {
-            console.log("ℹ️ All stickers are locked, adding a new one.");
-            const randomStickerData = getRandomStickerUrlFromGroups();
-            if (randomStickerData) {
-                addSticker(randomStickerData.url, 120, 120, 120, 120, { 
-                    group: randomStickerData.group, 
-                    letter: randomStickerData.letter 
-                });
-                targetStickerDiv = document.querySelector('.sticker:not(.locked)');
-            }
-        }
-    }
-    
-    if (!targetStickerDiv) {
-        console.warn("⚠️ No unlocked sticker found. Aborting spin.");
-        return;
-    }
-    
-    // --- UPDATED LOGIC HERE ---
-    const stickerPool = [];
-    stickerGroups.forEach(group => {
-        // Now, take the first URL from the `urls` array directly
-        if (group.urls && group.urls.length > 0) {
-            stickerPool.push({
-                url: group.urls[0], // Access the first element of the array
-                group: group.name
-            });
-        }
-    });
-
-    console.log(`⏳ Preloading a small subset of stickers (${stickerPool.length})...`);
-    await preloadStickers(stickerPool.map(s => s.url));
-    console.log("✅ Preloading complete. Starting spin.");
-    
-    // --- END UPDATED LOGIC ---
-
-    const stickerImg = targetStickerDiv.querySelector('img');
-    const stickerSize = targetStickerDiv.offsetWidth;
-    const canvasWidth = canvas.offsetWidth;
-    const canvasHeight = canvas.offsetHeight;
-    const centerX = (canvasWidth / 2) - (stickerSize / 2);
-    const centerY = (canvasHeight / 2) - (stickerSize / 2);
-    
-    targetStickerDiv.style.left = `${centerX}px`;
-    targetStickerDiv.style.top = `${centerY}px`;
-    
-    let spinCount = 0;
-    const maxSpins = 15 + Math.floor(Math.random() * 10);
-    const spinInterval = setInterval(() => {
-        const randomIndex = Math.floor(Math.random() * stickerPool.length);
-        const nextStickerData = stickerPool[randomIndex];
-
-        if (nextStickerData) {
-            stickerImg.src = nextStickerData.url;
-            targetStickerDiv.dataset.group = nextStickerData.group;
-        }
-
-        spinCount++;
-        if (spinCount >= maxSpins) {
-            clearInterval(spinInterval);
-            targetStickerDiv.classList.add('pulse-effect');
-            saveState();
-        }
-    }, 100);
-});
 
 function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     const { suppressSave = false, group } = opts;
@@ -2268,7 +2215,6 @@ function addSticker(url, x, y, width = 200, height = 200, opts = {}) {
     let initialRect = null;
 
 // --- Interaction Buttons and Handlers ---
-// --- Interaction Buttons and Handlers ---
 const resizeBtn = document.createElement('div');
 resizeBtn.classList.add('sticker-btn','resize-btn');
 resizeBtn.innerHTML = `
@@ -2290,40 +2236,64 @@ resizeBtn.addEventListener('touchstart', startResize, { passive: false });
 
 function startResize(e) {
     e.stopPropagation();
+    const stickerEl = e.currentTarget.closest('.sticker');
+    if (stickerEl.classList.contains('locked')) return;
+
     isResizing = true;
+    resizingSticker = stickerEl;
     startY = e.touches ? e.touches[0].clientY : e.clientY;
-    startWidth = sticker.offsetWidth;
-    startHeight = sticker.offsetHeight;
+    startWidth = stickerEl.offsetWidth;
+    startHeight = stickerEl.offsetHeight;
+
+    // Store original positions and sizes of connected stickers
+    resizingSticker.connectedStickers = Array.from(document.querySelectorAll('.sticker.connected'))
+        .filter(s => s !== stickerEl)
+        .map(s => ({
+            el: s,
+            offsetX: s.offsetLeft - stickerEl.offsetLeft,
+            offsetY: s.offsetTop - stickerEl.offsetTop,
+            width: s.offsetWidth,
+            height: s.offsetHeight
+        }));
+
     e.preventDefault();
 }
 
-// Touch/mouse move
-window.addEventListener('mousemove', doResize);
-window.addEventListener('touchmove', doResize, { passive: false });
-
 function doResize(e) {
-    if (!isResizing) return;
+    if (!isResizing || !resizingSticker) return;
+    if (resizingSticker.classList.contains('locked')) return;
+
     const currentY = e.touches ? e.touches[0].clientY : e.clientY;
-    const delta = startY - currentY; // moving up = positive, down = negative
+    const delta = startY - currentY;
 
     const newWidth = Math.max(MIN_SIZE, startWidth + delta);
     const newHeight = Math.max(MIN_SIZE, startHeight + delta);
 
-    sticker.style.width = newWidth + 'px';
-    sticker.style.height = newHeight + 'px';
+    resizingSticker.style.width = newWidth + 'px';
+    resizingSticker.style.height = newHeight + 'px';
+
+    const widthScale = newWidth / startWidth;
+    const heightScale = newHeight / startHeight;
+
+    // Use the stored original offsets and sizes from startResize
+    resizingSticker.connectedStickers.forEach(s => {
+        s.el.style.width = s.width * widthScale + 'px';
+        s.el.style.height = s.height * heightScale + 'px';
+        s.el.style.left = resizingSticker.offsetLeft + s.offsetX * widthScale + 'px';
+        s.el.style.top = resizingSticker.offsetTop + s.offsetY * heightScale + 'px';
+    });
 }
 
-// End resizing
-window.addEventListener('mouseup', endResize);
-window.addEventListener('touchend', endResize);
 
+
+// END RESIZE
 function endResize() {
     if (isResizing) {
         isResizing = false;
-        saveState(); // save new size
+        resizingSticker = null;
+        saveState();
     }
 }
-
 
 
 
@@ -2938,6 +2908,8 @@ function showGroupOverlay() {
         }, index * 50); // 50ms delay for each icon
     });
 }
+
+     
 
 
         function updateCanvasDrop() {
