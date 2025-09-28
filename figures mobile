@@ -1191,9 +1191,9 @@ function setActiveTool(tool) {
             break;
 
         case 'eraser':
-            document.body.classList.add('bucket-active'); // eraser uses same cursor
+            document.body.classList.add('brush-active'); // ✅ use brush cursor
             eraserBtn.classList.add('active');
-            selectedColor = transparentColor;
+            selectedColor = null;
             break;
 
         case 'move':
@@ -1224,7 +1224,6 @@ function setActiveTool(tool) {
 function draw(e) {
     // Prevent coloring if resizing (two-finger pinch) or moving
     if (isInteracting) return;
-
     if (!isDrawing || !activeCtx || !activeSticker) return;
 
     const stickerImg = activeSticker.querySelector('img');
@@ -1232,13 +1231,16 @@ function draw(e) {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
+    // Outside image → stop stroke
     if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) {
         lastX = -1;
         return;
     }
 
+    // Convert to canvas coordinates
     const [currentX, currentY] = getCanvasCoordinates(clientX, clientY, rect);
 
+    // Start of a stroke
     if (lastX === -1) {
         const currentIdx = Math.round(currentY) * activeCanvas.width + Math.round(currentX);
         if (currentTool === 'eraser' || (insideMask && insideMask[currentIdx])) {
@@ -1251,32 +1253,49 @@ function draw(e) {
 
     const dist = Math.hypot(currentX - lastX, currentY - lastY);
     const angle = Math.atan2(currentY - lastY, currentX - lastX);
+
     const imageDataToPaint = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
-    const rgbColor = currentTool === 'eraser' ? [0, 0, 0, 0] : hexToRgb(selectedColor);
-    if (!rgbColor) return;
 
-    for (let i = 0; i < dist; i++) {
-        const x = Math.round(lastX + (Math.cos(angle) * i));
-        const y = Math.round(lastY + (Math.sin(angle) * i));
-        const idx = y * activeCanvas.width + x;
-
-        if (currentTool === 'brush' && (!insideMask || !insideMask[idx])) continue;
-
-        paintAt(x, y, imageDataToPaint, rgbColor);
+    // --- Choose paint color ---
+    let rgbaColor;
+    if (currentTool === 'eraser') {
+        // fully transparent (erases pixels, including black lines)
+        rgbaColor = [0, 0, 0, 0];
+    } else {
+        const rgb = hexToRgb(selectedColor);
+        if (!rgb) return;
+        rgbaColor = [rgb[0], rgb[1], rgb[2], 255];
     }
 
+    // --- Stroke interpolation ---
+    for (let i = 0; i < dist; i++) {
+        const x = Math.round(lastX + Math.cos(angle) * i);
+        const y = Math.round(lastY + Math.sin(angle) * i);
+        const idx = y * activeCanvas.width + x;
+
+        // Brush respects mask, eraser ignores mask
+        if (currentTool === 'brush' && (!insideMask || !insideMask[idx])) continue;
+
+        paintAt(x, y, imageDataToPaint, rgbaColor);
+    }
+
+    // --- Ensure last pixel is painted ---
     const cx = Math.round(currentX);
     const cy = Math.round(currentY);
     const currentIdx = cy * activeCanvas.width + cx;
+
     if (currentTool === 'eraser' || (insideMask && insideMask[currentIdx])) {
-        paintAt(cx, cy, imageDataToPaint, rgbColor);
+        paintAt(cx, cy, imageDataToPaint, rgbaColor);
     }
 
+    // --- Apply updated image ---
     activeCtx.putImageData(imageDataToPaint, 0, 0);
     stickerImg.src = activeCanvas.toDataURL();
+
     lastX = currentX;
     lastY = currentY;
 }
+
 
 
 
@@ -1334,8 +1353,7 @@ function draw(e) {
     }
 
 
-
-  function startInteraction(e) {
+function startInteraction(e) {
     const sticker = e.currentTarget;
     if (e.target.closest('.sticker-btn')) return; // ignore buttons
     e.preventDefault();
@@ -1346,21 +1364,19 @@ function draw(e) {
 
     // --- EYEDROPPER MODE: do not move sticker ---
     if (currentTool === "eyedropper") {
-    console.log("[Eyedropper] Tap started, waiting for handleEnd");
-    initialInteractionData = {
-        x: pointer.clientX,
-        y: pointer.clientY,
-        time: Date.now()
-    };
+        console.log("[Eyedropper] Tap started, waiting for handleEnd");
+        initialInteractionData = {
+            x: pointer.clientX,
+            y: pointer.clientY,
+            time: Date.now()
+        };
 
-    // Add handleEnd listeners
-    document.addEventListener('mouseup', handleEnd);
-    document.addEventListener('touchend', handleEnd, { passive: false });
+        // Only listen for release
+        document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('touchend', handleEnd, { passive: false });
 
-    // For single touch, do NOT move sticker
-    // For multi-touch, allow resize:
-    if (touches.length < 2) return;
-}
+        if (touches.length < 2) return; // single touch = tap only
+    }
 
     // --- TWO-FINGER PINCH RESIZE ---
     if (touches.length === 2) {
@@ -1395,11 +1411,11 @@ function draw(e) {
 
     const stickerImg = activeSticker.querySelector('img');
 
-    // --- BRUSH SETUP ONLY IF COLOR SELECTED ---
-    if (currentTool === 'brush' && selectedColor) {
+    // --- BRUSH OR ERASER ---
+    if ((currentTool === 'brush' && selectedColor) || currentTool === 'eraser') {
         isDrawing = false;
 
-        const setupBrush = () => {
+        const setupPainting = () => {
             if (e.touches && e.touches.length > 1) return;
 
             activeCanvas = document.createElement('canvas');
@@ -1410,8 +1426,15 @@ function draw(e) {
 
             const rect = stickerImg.getBoundingClientRect();
             const [startX, startY] = getCanvasCoordinates(pointer.clientX, pointer.clientY, rect);
-            insideMask = computeEnclosedMask(Math.round(startX), Math.round(startY), activeCanvas);
-            if (!insideMask) return;
+
+            if (currentTool === 'brush') {
+                // Only brush uses the mask
+                insideMask = computeEnclosedMask(Math.round(startX), Math.round(startY), activeCanvas);
+                if (!insideMask) return;
+            } else {
+                // Eraser ignores mask → erases anywhere
+                insideMask = null;
+            }
 
             strokeOriginImageData = activeCtx.getImageData(0, 0, activeCanvas.width, activeCanvas.height);
             [lastX, lastY] = [startX, startY];
@@ -1424,16 +1447,18 @@ function draw(e) {
             draw(e);
         };
 
-        if (stickerImg.complete && stickerImg.naturalWidth > 0) setupBrush();
-        else stickerImg.onload = setupBrush;
+        if (stickerImg.complete && stickerImg.naturalWidth > 0) setupPainting();
+        else stickerImg.onload = setupPainting;
     } else {
         // MOVE STICKER IF NO COLOR SELECTED
         isInteracting = true;
     }
 
+    // --- Select sticker ---
     deselectAllStickers();
     activeSticker.classList.add('selected');
 
+    // --- Global listeners ---
     document.addEventListener('mousemove', handleMove);
     document.addEventListener('touchmove', handleMove, { passive: false });
     document.addEventListener('mouseup', handleEnd);
@@ -1596,7 +1621,7 @@ function handleEnd(e) {
 
 
         // --- PAINTING TOOLS ---
-        else if (currentTool === "bucket" || currentTool === "eraser") {
+        else if (currentTool === "bucket") {
             recolorSticker(stickerImg, selectedColor, pointer);
         }
 
