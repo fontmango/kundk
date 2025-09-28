@@ -60,10 +60,10 @@
   <div class="flex justify-center gap-2 mt-2">
     <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen"><i data-lucide="pen-line" class="w-4 h-4"></i></button>
     <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser"><i data-lucide="eraser" class="w-4 h-4"></i></button>
-    <button id="undo-btn" class="p-2 rounded-lg icon-stroke" title="Undo"><i data-lucide="undo-2" class="w-4 h-4"></i></button>
-    <button id="redo-btn" class="p-2 rounded-lg icon-stroke" title="Redo"><i data-lucide="redo-2" class="w-4 h-4"></i></button>
-    <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="Clear"><i data-lucide="file-plus" class="w-4 h-4"></i></button>
-    <button id="save-btn" class="p-2 rounded-lg icon-stroke" title="Save"><i data-lucide="download" class="w-4 h-4"></i></button>
+    <button id="undo-btn" class="p-2 disabled:opacity-50 rounded-lg icon-stroke" title="Undo"><i data-lucide="undo-2" class="w-4 h-4"></i></button>
+    <button id="redo-btn" class="p-2 disabled:opacity-50 rounded-lg icon-stroke" title="Redo"><i data-lucide="redo-2" class="w-4 h-4"></i></button>
+    <button id="clear-canvas" class="p-2 disabled:opacity-50 rounded-lg icon-stroke" title="Clear"><i data-lucide="file-plus" class="w-4 h-4"></i></button>
+    <button id="save-btn" class="p-2 disabled:opacity-50 rounded-lg icon-stroke" title="Save"><i data-lucide="download" class="w-4 h-4"></i></button>
   </div>
 
   <div class="color-palette overflow-x-auto whitespace-nowrap px-2 py-1" id="color-palette"></div>
@@ -188,8 +188,10 @@ function endDraw(){ if(!isDrawing) return; isDrawing=false; drawCtx.globalCompos
 
 function pushHistory() {
   // keep history linear
-  if(historyIndex < history.length-1) history = history.slice(0, historyIndex+1);
-  
+  if (historyIndex < history.length - 1) {
+    history = history.slice(0, historyIndex + 1);
+  }
+
   // save canvas at device-pixel-corrected size
   const dpr = window.devicePixelRatio || 1;
   const tempCanvas = document.createElement('canvas');
@@ -197,10 +199,28 @@ function pushHistory() {
   tempCanvas.height = drawCanvas.height * dpr;
   const tctx = tempCanvas.getContext('2d');
   tctx.drawImage(drawCanvas, 0, 0, tempCanvas.width, tempCanvas.height);
+
   history.push(tempCanvas.toDataURL('image/png'));
   historyIndex = history.length - 1;
+
   updateHistoryButtons();
+  updateActionButtons();
 }
+
+function updateActionButtons() {
+  // Check if the canvas is empty
+  const empty = isCanvasEmpty();
+
+  clearBtn.disabled = empty;
+  saveBtn.disabled = empty;
+}
+
+function isCanvasEmpty() {
+  const pixels = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height).data;
+  // if every pixel is transparent, canvas is empty
+  return !pixels.some((value, index) => index % 4 === 3 && value !== 0);
+}
+
 
 function loadHistory(index) {
   if(index < 0 || index >= history.length) return;
