@@ -1,464 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Drawing Pad</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    #stage { position: relative; width: 100%; height: 100%; border-radius: 1rem; overflow: hidden; }
-    #bg-canvas, #draw-canvas {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      touch-action: none;
-      border-radius: 1rem;
-    }
-    .icon-stroke { stroke: black; transition: stroke 0.3s ease; }
-    .icon-stroke svg { stroke: currentColor; }
-    .dark-mode .icon-stroke { stroke: white; }
-
-    #save-prompt {
-      display: none;
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px);
-      z-index: 50; justify-content: center; align-items: center;
-      flex-direction: column; text-align: center;
-    }
-    #save-prompt-content {
-      background: white; padding: 2.5rem; border-radius: 1.5rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-    
-    .button-group { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; }
-    .prompt-btn {
-      padding: 0.75rem; font-weight: 600; border-radius: 0.75rem;
-      transition: all 0.2s ease-in-out; border: 2px solid;
-    }
-    .prompt-btn-primary { color: #3B82F6; border-color: #3B82F6; }
-    .prompt-btn-secondary { color: #6B7280; border-color: #6B7280; }
-    .prompt-btn-primary:hover { background: #3B82F6; color: white; }
-    .prompt-btn-secondary:hover { background: #6B7280; color: white; }
-
-    .video-popup-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .video-popup {
-      position: relative;
-      width: 150px;
-      height: 150px;
-      border-radius: 2rem;
-      overflow: hidden;
-      background: white;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-    
-    #upload-video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      pointer-events: none;
-    }
-    
-    .hidden {
-      display: none;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Drawing Pad</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body { font-family: 'Inter', sans-serif; margin:0; background:#f8f8f8; }
+  #stage { position: relative; width: 100%; height: 100%; border-radius: 1rem; overflow: hidden; }
+  #bg-canvas, #draw-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; border-radius:1rem;
+  }
+  .icon-stroke { stroke: black; transition: stroke 0.3s ease; }
+  .icon-stroke svg { stroke: currentColor; }
+  .color-palette { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; margin-top:8px; }
+  .color-swatch { width:28px; height:28px; border-radius:50%; cursor:pointer; border:2px solid #fff; box-shadow:0 0 2px rgba(0,0,0,0.5); }
+  .color-swatch.active { border-color:#000; }
+  #save-prompt { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(5px); z-index:50; justify-content:center; align-items:center; flex-direction: column; text-align:center; }
+  #save-prompt-content { background:white; padding:2.5rem; border-radius:1.5rem; box-shadow:0 4px 15px rgba(0,0,0,0.2); }
+  .button-group { display:flex; gap:0.5rem; justify-content:center; margin-top:1.5rem; }
+  .prompt-btn { padding:0.75rem; font-weight:600; border-radius:0.75rem; transition:all 0.2s ease-in-out; border:2px solid; }
+  .prompt-btn-primary { color:#3B82F6; border-color:#3B82F6; }
+  .prompt-btn-secondary { color:#6B7280; border-color:#6B7280; }
+  .prompt-btn-primary:hover { background:#3B82F6; color:white; }
+  .prompt-btn-secondary:hover { background:#6B7280; color:white; }
+  #toast { visibility:hidden; min-width:200px; background-color:#333; color:#fff; text-align:center; border-radius:5px; padding:10px; position:fixed; z-index:1000; bottom:30px; left:50%; transform:translateX(-50%); font-size:14px; }
+</style>
 </head>
-<body class="bg-white">
-  <div class="flex flex-col items-center justify-between h-screen p-4">
-    <div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
-      <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
-        <div id="stage" style="height: 100%;">
-          <canvas id="bg-canvas"></canvas>
-          <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
-        </div>
-      </div>
+<body class="flex flex-col h-screen items-center justify-center p-4">
 
-      <div class="flex-shrink-0 w-full flex justify-center pt-4">
-        <div class="flex flex-wrap overflow-x-auto items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 bg-transparent">
-          <div class="flex items-center gap-1">
-            <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen">
-              <i data-lucide="pen-line" class="w-4 h-4"></i>
-            </button>
-            <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser">
-              <i data-lucide="eraser" class="w-4 h-4"></i>
-            </button>
-          </div>
-          <button id="undo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Undo">
-            <i data-lucide="undo-2" class="w-4 h-4"></i>
-          </button>
-          <button id="redo-btn" class="p-2 rounded-lg disabled:opacity-50 icon-stroke" title="Redo">
-  <i data-lucide="redo-2" class="w-4 h-4"></i>
-</button>
-        
-       <!--      <button id="toggle-background" class="p-2 rounded-lg icon-stroke" title="Toggle background">-->  
-  <!--        <span id="icon-sun"><i data-lucide="sun" class="w-4 h-4"></i></span> -->  
-    <!--           <span id="icon-moon" class="hidden"><i data-lucide="moon" class="w-4 h-4"></i></span> -->  
-       <!--      </button>-->  
-          <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="New / Clear">
-            <i data-lucide="file-plus" class="w-4 h-4"></i>
-          </button>
-          <button id="save-btn" class="p-2 rounded-lg icon-stroke disabled:opacity-50" title="Save">
-            <i data-lucide="save" class="w-4 h-4"></i>
-          </button>
-        </div>
-      </div>
+<div id="drawing-app-container" class="w-full max-w-4xl mx-auto p-4 bg-white rounded-2xl flex flex-col space-y-4 flex-grow">
+  <div id="canvas-container" class="relative w-full rounded-xl overflow-hidden flex-grow border border-gray-200">
+    <div id="stage" style="height:100%;">
+      <canvas id="bg-canvas"></canvas>
+      <canvas id="draw-canvas" class="cursor-crosshair"></canvas>
     </div>
   </div>
 
-  <div id="save-prompt">
-    <div id="save-prompt-content">
-      <h2 class="text-2xl font-bold mb-4">Speichere dein Meisterwerk!</h2>
-      <p class="text-gray-600 mb-4">Wähle eine Option:</p>
-      <div class="button-group">
-        <button id="copy-url-btn" class="prompt-btn prompt-btn-primary" title="Upload & Get Link">
-          <i data-lucide="upload" class="w-6 h-6"></i>
-        </button>
-        <button id="download-btn" class="prompt-btn prompt-btn-primary" title="Download">
-          <i data-lucide="download" class="w-6 h-6"></i>
-        </button>
-        <button id="abort-btn" class="prompt-btn prompt-btn-secondary" title="Abort">
-          <i data-lucide="x" class="w-6 h-6"></i>
-        </button>
-      </div>
-    </div>
+  <div class="flex justify-center gap-2 mt-2">
+    <button id="tool-pen" class="p-2 rounded-lg ring-2 ring-blue-500 icon-stroke" title="Pen"><i data-lucide="pen-line" class="w-4 h-4"></i></button>
+    <button id="tool-eraser" class="p-2 rounded-lg icon-stroke" title="Eraser"><i data-lucide="eraser" class="w-4 h-4"></i></button>
+    <button id="undo-btn" class="p-2 rounded-lg icon-stroke" title="Undo"><i data-lucide="undo-2" class="w-4 h-4"></i></button>
+    <button id="redo-btn" class="p-2 rounded-lg icon-stroke" title="Redo"><i data-lucide="redo-2" class="w-4 h-4"></i></button>
+    <button id="clear-canvas" class="p-2 rounded-lg icon-stroke" title="Clear"><i data-lucide="file-plus" class="w-4 h-4"></i></button>
+    <button id="save-btn" class="p-2 rounded-lg icon-stroke" title="Save"><i data-lucide="save" class="w-4 h-4"></i></button>
   </div>
 
-  <div id="log" style="position: fixed; bottom: 0; left: 0; background: #ffffff; color: rgb(255, 255, 255); padding: 5px;"></div>
-  <input type="hidden" id="hiddenUrlField" value="https://example.com">
+  <div class="color-palette" id="color-palette"></div>
+</div>
 
-  <div id="toast" style="
-    visibility: hidden;
-    min-width: 200px;
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    padding: 10px;
-    position: fixed;
-    z-index: 1000;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 14px;
-  ">In Zwischenspeicher kopiert.</div>
-
-  <div id="link-prompt" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-    <div class="bg-white p-8 rounded-2xl shadow-xl text-center">
-      <h2 class="text-2xl font-bold mb-4">Dein Link ist verfügbar!</h2>
-      <div class="button-group">
-        <button id="open-link-btn" class="prompt-btn prompt-btn-primary" title="Open Link">
-          <i data-lucide="link" class="w-6 h-6"></i>
-        </button>
-      </div>
+<div id="save-prompt">
+  <div id="save-prompt-content">
+    <h2 class="text-2xl font-bold mb-4">Save your masterpiece!</h2>
+    <p class="text-gray-600 mb-4">Choose an option:</p>
+    <div class="button-group">
+      <button id="copy-url-btn" class="prompt-btn prompt-btn-primary"><i data-lucide="upload" class="w-6 h-6"></i></button>
+      <button id="download-btn" class="prompt-btn prompt-btn-primary"><i data-lucide="download" class="w-6 h-6"></i></button>
+      <button id="abort-btn" class="prompt-btn prompt-btn-secondary"><i data-lucide="x" class="w-6 h-6"></i></button>
     </div>
   </div>
+</div>
 
-  <div id="uploading-overlay" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-    <div id="video-popup-container" class="video-popup-container">
-      <div class="video-popup">
-        <video id="upload-video" src="https://video.wixstatic.com/video/990059_627d0fb1d7324ea4aafee0e5e0b889bc/720p/mp4/file.mp4" playsinline muted loop></video>
-      </div>
-    </div>
-  </div>
+<div id="toast">Copied to clipboard!</div>
 
-  <script>
-    const bgCanvas = document.getElementById('bg-canvas');
-    const drawCanvas = document.getElementById('draw-canvas');
-    const bgCtx = bgCanvas.getContext('2d');
-    let drawCtx = drawCanvas.getContext('2d');
+<script>
+const bgCanvas = document.getElementById('bg-canvas');
+const drawCanvas = document.getElementById('draw-canvas');
+const bgCtx = bgCanvas.getContext('2d');
+const drawCtx = drawCanvas.getContext('2d');
 
-    const uploadVideo = document.getElementById('upload-video');
-    const uploadingOverlay = document.getElementById('uploading-overlay');
+const penToolBtn = document.getElementById('tool-pen');
+const eraserToolBtn = document.getElementById('tool-eraser');
+const undoBtn = document.getElementById('undo-btn');
 const redoBtn = document.getElementById('redo-btn');
-    const penToolBtn = document.getElementById('tool-pen');
-    const eraserToolBtn = document.getElementById('tool-eraser');
-    const undoBtn = document.getElementById('undo-btn');
-    const clearBtn = document.getElementById('clear-canvas');
-    const saveBtn = document.getElementById('save-btn');
-    const toggleBgBtn = document.getElementById('toggle-background');
-//    const iconSun = document.getElementById('icon-sun');
-//    const iconMoon = document.getElementById('icon-moon'); 
-    const appContainer = document.getElementById('drawing-app-container');
-    const savePrompt = document.getElementById('save-prompt');
+const clearBtn = document.getElementById('clear-canvas');
+const saveBtn = document.getElementById('save-btn');
+const colorPalette = document.getElementById('color-palette');
+const savePrompt = document.getElementById('save-prompt');
+const toast = document.getElementById('toast');
 
-    const uploadBtn = document.getElementById("copy-url-btn");
-    const downloadBtn = document.getElementById("download-btn");
-    const abortBtn = document.getElementById("abort-btn");
-    
-    const linkPrompt = document.getElementById("link-prompt");
-    const copyUrlBtn = document.getElementById("copy-url-btn");
-    const openLinkBtn = document.getElementById("open-link-btn");
+let isDrawing=false,lastX=0,lastY=0;
+let currentTool='pen',penWidth=5,eraserWidth=20;
+let penColor='black',selectedColor=null;
+let history=[],historyIndex=-1,saveCounter=1;
 
-    const logDiv = document.getElementById("log");
-    const hiddenUrlField = document.getElementById("hiddenUrlField");
+// ==========================
+// Colors
+// ==========================
+ const colors = [
+            '#800020','#A52A2A','#ff4040','#FF0000','#FF6347','#FF7F50','#f08080','#FA8072','#ff7373',
+            '#ff1493','#FF69B4','#ff00ff','#ff80ed','#ff71ce','#FFC0CB','#ffb3ba','#ffe4e1',
+            '#a67c00','#D2691E','#CD5C5C','#FFA500','#FF8C00','#FFC04C','#FFD700','#FFFF00','#ffff66','#fffb96',
+            '#065535','#013220','#008000','#808000','#3CB371','#9ACD32','#ADFF2F','#05ffa1','#b4eeb4',
+            '#000080','#0e2f44','#0000FF','#4169E1','#1E90FF','#0a75ad','#6897bb','#b0e0e6','#87CEFA','#01cdfe','#40E0D0','#008080','#00ffff','#ddfffc',
+            '#4B0082','#660066','#800080','#8a2be2','#b967ff','#BA55D3','#DA70D6','#e6e6fa','#ccccff',
+            '#333333','#666666','#808080','#A9A9A9','#C0C0C0','#cccccc','#dddddd','#CBBEB5','#c39797','#ffdab9','#faebd7'
+        ];
+        let activeSwatch=null;
 
-    let isDrawing = false, lastX = 0, lastY = 0;
-    let isWhiteBackground = true;
-    let currentTool = 'pen';
-    let penWidth = 5, eraserWidth = 20;
-    let penColor = 'black';
-    let history = [], historyIndex = -1;
-    let saveCounter = 1;
+function populateColorPalette() {
+  colorPalette.innerHTML='';
+  colors.forEach(color=>{
+    const swatch=document.createElement('div');
+    swatch.classList.add('color-swatch');
+    swatch.style.backgroundColor=color;
+    if(selectedColor===color) swatch.classList.add('active');
+    swatch.addEventListener('click',()=>selectColor(swatch,color));
+    colorPalette.appendChild(swatch);
+  });
+}
+function selectColor(swatch,color){
+  if(activeSwatch) activeSwatch.classList.remove('active');
+  if(activeSwatch===swatch){ activeSwatch=null; selectedColor=null; return; }
+  activeSwatch=swatch; swatch.classList.add('active'); selectedColor=color;
+}
 
-    function showUploadingVideo() {
-      uploadingOverlay.classList.remove('hidden');
-      uploadVideo.play();
-    }
+// ==========================
+// Canvas Resize & Background
+// ==========================
+function sizeCanvases(){
+  const rect=document.getElementById('stage').getBoundingClientRect();
+  const dpr=window.devicePixelRatio||1;
+  drawCanvas.width=bgCanvas.width=Math.floor(rect.width*dpr);
+  drawCanvas.height=bgCanvas.height=Math.floor(rect.height*dpr);
+  drawCanvas.style.width=bgCanvas.style.width=rect.width+'px';
+  drawCanvas.style.height=bgCanvas.style.height=rect.height+'px';
+  drawCtx.setTransform(dpr,0,0,dpr,0,0);
+  bgCtx.setTransform(dpr,0,0,dpr,0,0);
+  paintBackground();
+}
+function paintBackground(){
+  bgCtx.fillStyle='#fff';
+  bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
+}
 
-    function hideUploadingVideo() {
-      uploadingOverlay.classList.add('hidden');
-      uploadVideo.pause();
-      uploadVideo.currentTime = 0;
-    }
+// ==========================
+// Drawing
+// ==========================
+function startDraw(x,y){isDrawing=true;lastX=x;lastY=y;drawCtx.lineCap='round';drawCtx.lineJoin='round';}
+function drawTo(x,y){
+  if(!isDrawing) return;
+  drawCtx.globalCompositeOperation=currentTool==='pen'?'source-over':'destination-out';
+  drawCtx.strokeStyle=currentTool==='pen'?(selectedColor||penColor):'rgba(0,0,0,1)';
+  drawCtx.lineWidth=currentTool==='pen'?penWidth:eraserWidth;
+  drawCtx.beginPath();
+  drawCtx.moveTo(lastX,lastY);
+  drawCtx.lineTo(x,y);
+  drawCtx.stroke();
+  lastX=x; lastY=y;
+}
+function endDraw(){ if(!isDrawing) return; isDrawing=false; drawCtx.globalCompositeOperation='source-over'; pushHistory();}
 
-    function log(message) {
-      console.log(message);
-      logDiv.textContent = message;
-    }
+// ==========================
+// History
+// ==========================
+function pushHistory(){ if(historyIndex<history.length-1) history=history.slice(0,historyIndex+1); history.push(drawCanvas.toDataURL('image/png')); historyIndex=history.length-1; updateHistoryButtons();}
+function loadHistory(index){ drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); if(index>=0&&history[index]){ const img=new Image(); img.onload=()=>drawCtx.drawImage(img,0,0); img.src=history[index];} historyIndex=index; updateHistoryButtons();}
+function updateHistoryButtons(){ undoBtn.disabled=historyIndex<=0; redoBtn.disabled=historyIndex>=history.length-1;}
 
-    openLinkBtn.addEventListener("click", () => {
-      const url = hiddenUrlField.value;
+// ==========================
+// Tool selection
+// ==========================
+function setActiveTool(tool){
+  currentTool=tool;
+  penToolBtn.classList.toggle('ring-2',tool==='pen');
+  penToolBtn.classList.toggle('ring-blue-500',tool==='pen');
+  eraserToolBtn.classList.toggle('ring-2',tool==='eraser');
+  eraserToolBtn.classList.toggle('ring-blue-500',tool==='eraser');
+}
 
-      const tempInput = document.createElement("input");
-      tempInput.value = url;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      tempInput.setSelectionRange(0, 99999);
+// ==========================
+// Pointer events
+// ==========================
+function pointerStart(e){const rect=drawCanvas.getBoundingClientRect();const x=e.clientX??e.touches[0].clientX;const y=e.clientY??e.touches[0].clientY;startDraw(x-rect.left,y-rect.top);e.preventDefault?.();}
+function pointerMove(e){if(!isDrawing) return;const rect=drawCanvas.getBoundingClientRect();const x=e.clientX??e.touches[0].clientX;const y=e.clientY??e.touches[0].clientY;drawTo(x-rect.left,y-rect.top);e.preventDefault?.();}
+drawCanvas.addEventListener('mousedown',pointerStart);
+drawCanvas.addEventListener('mousemove',pointerMove);
+window.addEventListener('mouseup',endDraw);
+drawCanvas.addEventListener('touchstart',pointerStart,{passive:false});
+drawCanvas.addEventListener('touchmove',pointerMove,{passive:false});
+drawCanvas.addEventListener('touchend',()=>endDraw(),{passive:false});
 
-      try {
-        const successful = document.execCommand("copy");
-        if (successful) {
-          toast.style.visibility = "visible";
-          setTimeout(() => {
-            toast.style.visibility = "hidden";
-          }, 2000);
-        } else {
-          console.error("Copy command failed");
-        }
-      } catch (err) {
-        console.error("Failed to copy URL:", err);
-      }
+// ==========================
+// Buttons
+// ==========================
+penToolBtn.addEventListener('click',()=>setActiveTool('pen'));
+eraserToolBtn.addEventListener('click',()=>setActiveTool('eraser'));
+undoBtn.addEventListener('click',()=>loadHistory(historyIndex>0?historyIndex-1:-1));
+redoBtn.addEventListener('click',()=>{ if(historyIndex<history.length-1) loadHistory(historyIndex+1);});
+clearBtn.addEventListener('click',()=>{ drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); history=[]; historyIndex=-1; pushHistory(); });
+saveBtn.addEventListener('click',()=>{ savePrompt.style.display='flex'; });
 
-      document.body.removeChild(tempInput);
-      linkPrompt.classList.add("hidden"); 
-    });
-
-    function checkCanvasForContent() {
-      const pixels = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height).data;
-      const hasContent = Array.from(pixels).some((v, i) => i % 4 === 3 && v > 0);
-      saveBtn.disabled = !hasContent;
-    }
-
-    function updateHistoryButtons() {
-      undoBtn.disabled = historyIndex <= 0;
-      redoBtn.disabled = historyIndex >= history.length - 1;
-    }
-
-    function drawImageToCanvas(img) {
-      const prevTransform = drawCtx.getTransform();
-      drawCtx.setTransform(1, 0, 0, 1, 0, 0);
-      drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-      drawCtx.drawImage(img, 0, 0, drawCanvas.width, drawCanvas.height);
-      drawCtx.setTransform(prevTransform);
-    }
-
-    function sizeCanvases() {
-      const stage = document.getElementById('stage');
-      const rect = stage.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-
-      const previousDataUrl = historyIndex >= 0 ? history[historyIndex] : null;
-
-      drawCanvas.width = bgCanvas.width = Math.floor(rect.width * dpr);
-      drawCanvas.height = bgCanvas.height = Math.floor(rect.height * dpr);
-      drawCanvas.style.width = bgCanvas.style.width = rect.width + 'px';
-      drawCanvas.style.height = bgCanvas.style.height = rect.height + 'px';
-      drawCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      paintBackground();
-
-      if (previousDataUrl) {
-        const img = new Image();
-        img.onload = () => { drawImageToCanvas(img); checkCanvasForContent(); };
-        img.src = previousDataUrl;
-      } else {
-        drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-        checkCanvasForContent();
-      }
-    }
-
-    function paintBackground() {
-      bgCtx.save();
-      bgCtx.setTransform(1,0,0,1,0,0);
-      bgCtx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-      bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
-      bgCtx.restore();
-    }
-
-    function setActiveTool(tool) {
-      currentTool = tool;
-      penToolBtn.classList.toggle('ring-2', tool === 'pen');
-      penToolBtn.classList.toggle('ring-blue-500', tool === 'pen');
-      eraserToolBtn.classList.toggle('ring-2', tool === 'eraser');
-      eraserToolBtn.classList.toggle('ring-blue-500', tool === 'eraser');
-    }
-
-    function updatePenColorForBackground() {
-      penColor = isWhiteBackground ? 'black' : 'white';
-    }
-
-    function pushHistory() {
-      if(historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
-      history.push(drawCanvas.toDataURL('image/png'));
-      historyIndex = history.length - 1;
-      updateHistoryButtons();
-      checkCanvasForContent();
-    }
-
-    function loadHistory(index) {
-      drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-      if(index >= 0 && history[index]) {
-        const img = new Image();
-        img.onload = () => { drawImageToCanvas(img); updateHistoryButtons(); checkCanvasForContent(); };
-        img.src = history[index];
-      } else updateHistoryButtons(), checkCanvasForContent();
-    }
-
-    function startDraw(x,y){
-      isDrawing=true; lastX=x; lastY=y;
-      drawCtx.lineCap='round'; drawCtx.lineJoin='round';
-    }
-
-    function drawTo(x,y){
-      if(!isDrawing) return;
-      drawCtx.globalCompositeOperation = currentTool === 'pen' ? 'source-over' : 'destination-out';
-      drawCtx.strokeStyle = currentTool === 'pen' ? penColor : 'rgba(0,0,0,1)';
-      drawCtx.lineWidth = currentTool === 'pen' ? penWidth : eraserWidth;
-      drawCtx.beginPath();
-      drawCtx.moveTo(lastX,lastY);
-      drawCtx.lineTo(x,y);
-      drawCtx.stroke();
-      lastX = x; lastY = y;
-    }
-
-    function endDraw(){ 
-      if(!isDrawing) return;
-      isDrawing=false; 
-      drawCtx.globalCompositeOperation='source-over';
-      pushHistory();
-    }
-
-    function saveImage() {
-      const out = document.createElement('canvas');
-      out.width = drawCanvas.width; out.height = drawCanvas.height;
-      const octx = out.getContext('2d');
-      octx.fillStyle = isWhiteBackground ? '#ffffff' : '#000000';
-      octx.fillRect(0,0,out.width,out.height);
-      octx.drawImage(drawCanvas,0,0);
-      const link = document.createElement('a');
-      link.download = `kiwi_${saveCounter++}.png`;
-      link.href = out.toDataURL('image/png');
-      link.click();
-    }
-
-    function getCanvasDataUrl() {
-      const out = document.createElement('canvas');
-      out.width = drawCanvas.width; out.height = drawCanvas.height;
-      const octx = out.getContext('2d');
-      octx.fillStyle = isWhiteBackground ? "#ffffff" : "#000000";
-      octx.fillRect(0, 0, out.width, out.height);
-      octx.drawImage(drawCanvas, 0, 0);
-      return out.toDataURL("image/png");
-    }
-
-    function pointerStart(e) {
-      const rect = drawCanvas.getBoundingClientRect();
-      const x = e.clientX ?? e.touches[0].clientX;
-      const y = e.clientY ?? e.touches[0].clientY;
-      startDraw(x-rect.left, y-rect.top);
-      e.preventDefault?.();
-    }
-
-    function pointerMove(e) {
-      if(!isDrawing) return;
-      const rect = drawCanvas.getBoundingClientRect();
-      const x = e.clientX ?? e.touches[0].clientX;
-      const y = e.clientY ?? e.touches[0].clientY;
-      drawTo(x-rect.left, y-rect.top);
-      e.preventDefault?.();
-    }
-
-    drawCanvas.addEventListener('mousedown', pointerStart);
-    drawCanvas.addEventListener('mousemove', pointerMove);
-    window.addEventListener('mouseup', endDraw);
-    drawCanvas.addEventListener('touchstart', pointerStart, {passive:false});
-    drawCanvas.addEventListener('touchmove', pointerMove, {passive:false});
-    drawCanvas.addEventListener('touchend', e => { endDraw(); e.preventDefault(); }, {passive:false});
-
-    penToolBtn.addEventListener('click', ()=>setActiveTool('pen'));
-    eraserToolBtn.addEventListener('click', ()=>setActiveTool('eraser'));
-    undoBtn.addEventListener('click', ()=>loadHistory(historyIndex>0?--historyIndex:-1));
-    
-redoBtn.addEventListener('click', () => {
-    if (historyIndex < history.length - 1) {
-        historyIndex++;
-        loadHistory(historyIndex);
-    }
+// Save / Download
+document.getElementById('download-btn').addEventListener('click',()=>{
+  const out=document.createElement('a');
+  out.href=drawCanvas.toDataURL('image/png');
+  out.download=`drawing_${saveCounter++}.png`;
+  out.click();
+  savePrompt.style.display='none';
 });
-    
-    
-    clearBtn.addEventListener('click', ()=>{ drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height); history = []; historyIndex = -1; pushHistory(); });
-    
-    
-    
-    
-//    toggleBgBtn.addEventListener('click', ()=>{
-//      isWhiteBackground = !isWhiteBackground;
-//      iconSun.classList.toggle('hidden', !isWhiteBackground);
-//      iconMoon.classList.toggle('hidden', isWhiteBackground);
-//      paintBackground(); updatePenColorForBackground();
-//      appContainer.classList.toggle('dark-mode', !isWhiteBackground);
-//    });
-    saveBtn.addEventListener('click', ()=>{ if(!saveBtn.disabled) savePrompt.style.display='flex'; });
+document.getElementById('abort-btn').addEventListener('click',()=>savePrompt.style.display='none');
 
-    // ✅ This is the key change to handle the upload video
-    copyUrlBtn.addEventListener("click", () => {
-      savePrompt.style.display = "none";
-      showUploadingVideo();
-
-      const base64Image = getCanvasDataUrl();
-      window.parent.postMessage({ type: "UPLOAD_REQUEST", image: base64Image }, "*");
-    });
-
-    downloadBtn.addEventListener("click", () => { saveImage(); savePrompt.style.display = "none"; });
-    abortBtn.addEventListener("click", () => { savePrompt.style.display = "none"; });
-
-    window.addEventListener('load', ()=>{
-      sizeCanvases(); setActiveTool('pen'); updatePenColorForBackground(); paintBackground(); pushHistory();
-      window.lucide?.createIcons();
-    });
-    window.addEventListener('resize', sizeCanvases);
-
-    window.addEventListener("message", (event) => {
-      if (event.data.type === "UPLOAD_SUCCESS") {
-        const uploadedUrl = event.data.url;
-        const hiddenUrlField = document.getElementById("hiddenUrlField");
-        if (hiddenUrlField) hiddenUrlField.value = uploadedUrl;
-
-        const uploadedUrlEl = document.getElementById("uploaded-url");
-        
-        if (uploadedUrlEl) uploadedUrlEl.textContent = uploadedUrl;
-        hideUploadingVideo(); // ⬅️ Hide the video overlay here
-        if (linkPrompt) linkPrompt.classList.remove("hidden");
-      }
-    });
-  </script>
+window.addEventListener('load',()=>{ sizeCanvases(); setActiveTool('pen'); pushHistory(); populateColorPalette(); });
+window.addEventListener('resize',sizeCanvases);
+</script>
+<script>
+window.lucide?.createIcons();
+</script>
 </body>
 </html>
