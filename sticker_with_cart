@@ -1264,7 +1264,7 @@ button.active {
 
 <div id="success-popup" class="hidden">
   <div class="success-box">
-    <p id="success-message">Success! Here is your Checkout Id:</p>
+    <p id="success-message">Super! Hier ist dein Code für die Zuordnung. Bitte beim Checkout angeben:</p>
     <div id="uuid-container" class="hidden">
       <span id="uuid-text"></span>
       <button id="copy-go-btn" class="success-ok-btn">
@@ -1274,7 +1274,7 @@ button.active {
           <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
           <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
         </svg>
-        <span>Copy & Checkout</span>
+        <span>Kopieren & Weiter</span>
       </button>
     </div>
   </div>
@@ -5776,7 +5776,7 @@ window.addEventListener("message", (event) => {
     const messageEl = document.getElementById("success-message");
     const uuidText = document.getElementById("uuid-text");
 
-    messageEl.textContent = `Success! Here is your Checkout Id:`;
+    messageEl.textContent = `Super! Bitte folgenden Code an der Kasse eingeben:`;
     uuidText.textContent = uuid;
 
     // ✅ Ensure container & button are visible
