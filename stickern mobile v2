@@ -587,7 +587,8 @@ button.active {
 
     </style>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.363.0/dist/umd/lucide.js"></script>
+
 </head>
 <body>
   
@@ -640,6 +641,7 @@ button.active {
                     const stickerGroups = [
     {
         "name": "80s Wrestler",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1861258339/80er-wrestler-sticker-35-lustige-sticker",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/80s Wrestler/Wrestler (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/80s Wrestler/Wrestler (10).png",
@@ -679,7 +681,8 @@ button.active {
         ]
     },
     {
-        "name": "Alpaca",
+        "name": "Alpaka",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1772548091/alpaka-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Alpaca/_01f382d5-f1ee-47e7-870a-480afc3005aa.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Alpaca/_0fc88234-2301-411f-a649-dd18d621b72e.png",
@@ -722,6 +725,7 @@ button.active {
    
     {
         "name": "Avocado",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1758358506/avocado-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Avocado/_0258e486-b891-49b0-9e52-ec6f7a6fc6f9.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Avocado/_07bf3f27-9547-4f5a-817c-819574e3df78.png",
@@ -762,6 +766,7 @@ button.active {
     },
     {
         "name": "Axolotl",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1624515040/axolotl-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Axolotl/Axolotl (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Axolotl/Axolotl (10).png",
@@ -802,7 +807,8 @@ button.active {
     },
    
     {
-        "name": "Banana",
+        "name": "Banane",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1844773629/bananen-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Banana/_0149bafd-c993-450e-b166-e7a38bb103dd.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Banana/_0a4078c0-9cf0-4eb5-9919-9c009ca0e748.png",
@@ -842,7 +848,249 @@ button.active {
         ]
     },
     {
-        "name": "Bat",
+        "name": "Bigfoot",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Bigfoot/Bigfoot (9).png"
+        ]
+    },
+    {
+        "name": "Cyberpunk",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/cyberpunk/Cyberpunk Animal (9).png"
+        ]
+    },
+    {
+        "name": "Djinn",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/djinn/Djinn (9).png"
+        ]
+    },
+    {
+        "name": "Emo",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/emo/Emo Animal (9).png"
+        ]
+    },
+    
+    {
+        "name": "Elch",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/moose/Moose (9).png"
+        ]
+    },
+    {
+        "name": "Krokodil",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Crocodile/Crocodile (9).png"
+        ]
+    },
+    {
+        "name": "Fledermaus",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1772549863/fledermaus-sticker-35-lustige-sticker",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bat/_028a32ec-a8f9-4269-b3df-6638c39b0c37.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bat/_02e0a4b9-cf90-4cd4-8b7c-fe992d8a7fb6.png",
@@ -882,7 +1130,8 @@ button.active {
         ]
     },
     {
-        "name": "Bees",
+        "name": "Biene",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1834682929/biene-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bees/_0e8cec6b-a2d1-45b1-8e10-47b62ce9d8fc.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bees/_1a74cf27-1672-48d8-9311-dc219e4dbeee.png",
@@ -922,7 +1171,8 @@ button.active {
         ]
     },
     {
-        "name": "BestFriends",
+        "name": "Beste Freunde",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/BestFriends/_03ca42a4-126d-4c25-a9fe-66cb801c06de.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/BestFriends/_06517008-0e4d-4400-a017-4a54a7bfe919.png",
@@ -952,6 +1202,7 @@ button.active {
     },
     {
         "name": "Blobby",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1772550665/blobb-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Blobby/_0ae86890-345e-4ca5-9d0a-bb8508f33310.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Blobby/_1f0639cf-b5cc-4698-be57-f86f2d962aae.png",
@@ -991,7 +1242,8 @@ button.active {
         ]
     },
     {
-        "name": "Broccoli",
+        "name": "Brokkoli",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1844771863/brokkoli-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Broccoli/_04356bd8-7550-48e5-b89a-041b17cf1d2b.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Broccoli/_0869ccd1-6c02-4914-b20e-c7df229851b2.png",
@@ -1031,7 +1283,8 @@ button.active {
         ]
     },
     {
-        "name": "Bug",
+        "name": "Käfer",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bug/_023b2509-f152-4eb9-b8b2-f21b44ed3d34.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Bug/_1033fe13-b53d-4212-ac02-2ff43da26c7a.png",
@@ -1071,7 +1324,8 @@ button.active {
         ]
     },
     {
-        "name": "Cactus",
+        "name": "Kaktus",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1638507762/kaktus-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cactus/_0b3c0816-67f2-4a01-8a6b-59b2aa8943d5.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cactus/_17eb1b32-c9e4-4a47-968e-fe31d26467f8.png",
@@ -1111,7 +1365,8 @@ button.active {
         ]
     },
     {
-        "name": "Candy Sticker",
+        "name": "Süßigkeiten",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1830579060/sussigkeiten-sticker-35-lustige-sticker",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Candy Sticker/_004e2dd1-9143-43bb-8b80-2fa15fdc4596.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Candy Sticker/_01fab345-41ef-492e-aae6-bc8e0ef9914c.png",
@@ -1151,7 +1406,8 @@ button.active {
         ]
     },
     {
-        "name": "Carrot",
+        "name": "Möhre",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1834683213/mohren-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Carrot/_050568bc-8430-4a8c-83cb-5f46a4652e8c.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Carrot/_0999157c-753d-4438-96d7-a49045a2a549.png",
@@ -1191,7 +1447,8 @@ button.active {
         ]
     },
     {
-        "name": "Chicken",
+        "name": "Hühnchen",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1820484504/kuken-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Chicken/_00f5ac9d-f239-455f-8d92-2d913f894a4d.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Chicken/_2066dbc7-5684-41fd-90cb-4994a9d60d7f.png",
@@ -1231,7 +1488,8 @@ button.active {
         ]
     },
     {
-        "name": "Cloud",
+        "name": "Wolke",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1638505136/wolken-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cloud/_08414e81-bd7d-487a-b4d0-caffa15bf955.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cloud/_125899cc-bbc7-45af-941c-5c53210dfdba.png",
@@ -1271,7 +1529,8 @@ button.active {
         ]
     },
     {
-        "name": "Cucumber",
+        "name": "Gurke",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1844773365/gurken-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cucumber/_03897f6e-e77d-4185-8b0a-3f4c138a14c6.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Cucumber/_0a0a12b7-ccf0-4d43-a89f-14b0e66e1f6f.png",
@@ -1312,7 +1571,8 @@ button.active {
     },
   
     {
-        "name": "Dragon",
+        "name": "Drache",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1664046659/drachen-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Dragon/_1c8061a4-661a-4090-8bff-bede522ea22e.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Dragon/_20e3eec3-512b-41ef-a467-516ff1ec60c5.png",
@@ -1351,7 +1611,8 @@ button.active {
         ]
     },
     {
-        "name": "Dumpling",
+        "name": "Knödel",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Dumpling/_089bbdea-2976-4432-9808-b050c90d68c0.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Dumpling/_0ef726be-dbbb-43ba-8f78-76970dbe33c4.png",
@@ -1391,7 +1652,8 @@ button.active {
         ]
     },
     {
-        "name": "Elephant",
+        "name": "Elefant",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1861255349/elefanten-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Elephant/_00872852-91f8-4635-b852-8f7a5986a6d2.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Elephant/_0a2253ce-9e7a-4954-99cf-12b0fe6fc463.png",
@@ -1433,6 +1695,7 @@ button.active {
     
     {
         "name": "Flamingo",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1847053196/flamingo-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_00ea1390-2d8f-4770-972c-944463c8dc1a.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Flamingo/_14ca6aa8-83ea-4091-bd97-76abf8cc0c2e.png",
@@ -1472,7 +1735,8 @@ button.active {
         ]
     },
     {
-        "name": "Fox",
+        "name": "Fuchs",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1844776043/fuchs-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_0170d101-f010-4ac3-8713-e12926f2fa87.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fox/_072165bf-9582-4fc2-a9df-83fd2cad8e2c.png",
@@ -1512,7 +1776,8 @@ button.active {
         ]
     },
     {
-        "name": "Fries",
+        "name": "Pommes",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1624531702/pommes-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Fries/Fries (10).png",
@@ -1552,7 +1817,8 @@ button.active {
         ]
     },
     {
-        "name": "Galapagos Turtle",
+        "name": "Schildkröte",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_010ac7e9-3a94-408b-adaa-3205f880a4cd.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Galapagos Turtle/_07b02460-5302-4413-ac78-3ff5a741bb37.png",
@@ -1592,7 +1858,8 @@ button.active {
         ]
     },
     {
-        "name": "Ghost",
+        "name": "Geist",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1649868632/geister-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_08dbf8b7-dddd-411b-a4a0-073d5f952ca5.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Ghost/_0e6df3a1-8293-4019-907f-04d2283cc976.png",
@@ -1633,6 +1900,7 @@ button.active {
     },
     {
         "name": "Giraffe",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1772552047/giraffe-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_02899d4a-98fd-43e9-b83f-5a2426c82c72.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Giraffe/_04e8105e-d565-4750-9eb0-4f611858200d.png",
@@ -1673,6 +1941,7 @@ button.active {
     },
     {
         "name": "Gorilla",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1820484648/gorilla-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Gorilla/_0071e5ae-2e38-4990-8a6b-cdd11c69b7b7.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Gorilla/_041c0d6b-0d70-43ae-94b3-78e1fbb6aa31.png",
@@ -1712,7 +1981,8 @@ button.active {
         ]
     },
     {
-        "name": "Grim Reaper",
+        "name": "Tod",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Grim Reaper/Grim Reaper (10).png",
@@ -1752,7 +2022,8 @@ button.active {
         ]
     },
     {
-        "name": "Guinea Pig",
+        "name": "Meerschweinchen",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1758361870/meerschweinchen-sticker-35-lustige",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_05cd163e-d843-4336-8868-f07698fff3ea.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Guinea Pig/_0770f92a-ecd1-4b8e-8871-7c265c38a763.png",
@@ -1794,6 +2065,7 @@ button.active {
   
     {
         "name": "Hamburger",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1624532780/hamburger-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamburger/Hamburger (10).png",
@@ -1834,6 +2106,7 @@ button.active {
     },
     {
         "name": "Hamster",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1638687911/hamster-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hamster/Hamster (10).png",
@@ -1873,7 +2146,8 @@ button.active {
         ]
     },
     {
-        "name": "Hedgehog",
+        "name": "Igel",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1772553321/igel-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_02a76faf-8d3e-40d5-854e-a148b732e7ac.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hedgehog/_0bf073d4-074d-4950-a4b1-98641c7893a6.png",
@@ -1914,7 +2188,8 @@ button.active {
     },
    
     {
-        "name": "Honey Jar",
+        "name": "Honig",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1844777305/honig-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_1460b305-81f2-4cce-8d23-ae874f215872.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Honey Jar/_179a007d-b5e1-454b-92be-98aa2db2111e.png",
@@ -1954,7 +2229,8 @@ button.active {
         ]
     },
     {
-        "name": "Hurt Lemming",
+        "name": "Lemming",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hurt Lemming/_0ffa521c-c519-4745-9796-84ad11b8bbac.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Hurt Lemming/_1c44357d-5456-4336-913b-3ad3f0761ceb.png",
@@ -1994,7 +2270,8 @@ button.active {
         ]
     },
     {
-        "name": "IceCubes",
+        "name": "Eiswürfel",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1758363214/eiswurfel-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/IceCubes/_03b11caf-9939-422f-8eed-9e1d50bee02f.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/IceCubes/_11f5e133-9ee0-44e2-b95f-464cdaf29f59.png",
@@ -2034,7 +2311,8 @@ button.active {
         ]
     },
     {
-        "name": "Inca",
+        "name": "Inka",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1664051413/inka-sticker-35-lustige-sticker-von-inka",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Inca/_07de3789-d00c-49f3-9863-fef3f7b1cc7a.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Inca/_086a5b43-086d-4c35-89f7-2286553d03c7.png",
@@ -2075,6 +2353,7 @@ button.active {
     },
     {
         "name": "Inuit",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1772554317/inuit-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Inuit/_03b9e909-1794-4af9-bd3a-24a00cef5697.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Inuit/_08adffec-5fdf-4705-8091-33fbf9931a25.png",
@@ -2115,7 +2394,8 @@ button.active {
     },
     
     {
-        "name": "Juggaernaut",
+        "name": "Juggernaut",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Juggaernaut/Gemini_Generated_Image_32kcm732kcm732kc.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Juggaernaut/Gemini_Generated_Image_3wzhxk3wzhxk3wzh.png",
@@ -2156,6 +2436,7 @@ button.active {
     },
     {
         "name": "Kabuki",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Kabuki/Kabuki (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Kabuki/Kabuki (10).png",
@@ -2195,7 +2476,8 @@ button.active {
         ]
     },
     {
-        "name": "Kitten",
+        "name": "Kätzchen",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1772672199/katzchen-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Kitten/_070bded2-bded-4d4c-88bd-781d7df65f57.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Kitten/_0d3bcbb7-7962-41db-94d2-0bc97b84e30a.png",
@@ -2235,7 +2517,8 @@ button.active {
         ]
     },
     {
-        "name": "Knight",
+        "name": "Ritter",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1664052275/ritter-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Knight/Knight (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Knight/Knight (10).png",
@@ -2276,6 +2559,7 @@ button.active {
     },
     {
         "name": "Koala",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1861256679/koala-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Koala/_03ab02a1-8f19-4d8b-84a7-c984e3d408c3.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Koala/_17e83269-a0d3-4345-b157-ad18eae64bf0.png",
@@ -2315,7 +2599,8 @@ button.active {
         ]
     },
     {
-        "name": "Leek",
+        "name": "Lauch",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1830579604/lauch-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Leek/_0222f767-7770-4a6d-89b6-fcf4cc6227cd.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Leek/_098a7dfe-c25b-4359-ba00-ed4c9d39a940.png",
@@ -2356,6 +2641,7 @@ button.active {
     },
     {
         "name": "Lemur",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1652677075/lemur-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Lemur/Lemur (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Lemur/Lemur (10).png",
@@ -2396,6 +2682,7 @@ button.active {
     },
     {
         "name": "Lucha Libre",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1664052915/lucha-libre-sticker-35-lustige-sticker",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Lucha Libre/Lucha Libre (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Lucha Libre/Lucha Libre (10).png",
@@ -2435,7 +2722,8 @@ button.active {
         ]
     },
     {
-        "name": "Manatee",
+        "name": "Seekuh",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1772673115/walross-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Manatee/_091fe16c-f3e0-4237-9e56-b0b0b43b3f92.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Manatee/_0c858845-6f85-4033-b04a-a75adc0e69e6.png",
@@ -2474,8 +2762,89 @@ button.active {
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Manatee/_f9b5e40d-ce6d-474e-8c84-2127ffd6af32.png"
         ]
     },
+     {
+        "name": "Mammuth",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mammoth/Mammoth (9).png"
+        ]
+    },
+    {
+        "name": "Meerjungfrau",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Mermaid/Mermaid (9).png"
+        ]
+    },
     {
         "name": "Mandrill",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1649874604/mandrill-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mandrill/Mandrill (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mandrill/Mandrill (10).png",
@@ -2515,7 +2884,8 @@ button.active {
         ]
     },
     {
-        "name": "Maned Wolf",
+        "name": "Wolf",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Maned Wolf/_0495fe89-33dc-470b-a798-d49e80e6f968.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Maned Wolf/_0505a7ff-8f9c-47ca-9e94-5051016647b6.png",
@@ -2556,6 +2926,7 @@ button.active {
     },
     {
         "name": "Maori",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Maori/Maori (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Maori/Maori (10).png",
@@ -2597,6 +2968,7 @@ button.active {
    
     {
         "name": "Marshmallow",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1649875160/marshmallow-sticker-35-lustige-sticker",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Marshmallow/Marshmallow (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Marshmallow/Marshmallow (10).png",
@@ -2636,7 +3008,8 @@ button.active {
         ]
     },
     {
-        "name": "Mayan",
+        "name": "Maya",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1649875934/maya-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mayan/_01bc359f-f45d-49fd-863c-7fdc167eb4f8.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mayan/_0525a572-090e-4573-b8f5-cc833968ba2e.png",
@@ -2675,8 +3048,50 @@ button.active {
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mayan/_feb67aae-e663-4e60-8a8b-be5e1ce87a59.png"
         ]
     },
+     
     {
-        "name": "Meerkat",
+        "name": "Ninja",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/ninja/Ninja (9).png"
+        ]
+    },
+    {
+        "name": "Erdmännchen",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Meerkat/_105691e3-c98e-4b47-ba61-64b196ab98a1.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Meerkat/_19a94345-5c6b-4b51-bbd0-ded5d2d5542a.png",
@@ -2716,7 +3131,8 @@ button.active {
         ]
     },
     {
-        "name": "Mochis",
+        "name": "Mochi",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1758481488/mochi-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mochis/_056e8224-50fd-4be9-bc4d-1c6927ea6d93.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mochis/_08abd6a2-c8ce-4b61-9be0-6517e0987432.png",
@@ -2756,7 +3172,8 @@ button.active {
         ]
     },
     {
-        "name": "Mongolian Warrior",
+        "name": "Mongolen",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mongolian Warrior/Gemini_Generated_Image_1uo1b91uo1b91uo1.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mongolian Warrior/Gemini_Generated_Image_2151822151822151.png",
@@ -2796,7 +3213,8 @@ button.active {
         ]
     },
     {
-        "name": "Mummy",
+        "name": "Mumie",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1649876670/mumien-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mummy/Mummy (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mummy/Mummy (10).png",
@@ -2835,8 +3253,49 @@ button.active {
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mummy/Mummy (9).png"
         ]
     },
+     {
+        "name": "Pharao",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Pharaoh/Pharaoh (9).png"
+        ]
+    },
     {
-        "name": "Mushroom",
+        "name": "Pilz",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1758482254/pilze-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mushroom/_03ac6863-171c-4cb5-92a3-a7c273846704.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Mushroom/_07f24165-408f-4f27-824b-d07c5705bab5.png",
@@ -2877,6 +3336,7 @@ button.active {
     },
     {
         "name": "Nacho",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1649877930/nacho-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Nacho/Nacho (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Nacho/Nacho (10).png",
@@ -2916,7 +3376,8 @@ button.active {
         ]
     },
     {
-        "name": "Narwhale",
+        "name": "Narwal",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1624517708/narwal-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Narwhale/Narwhale (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Narwhale/Narwhale (10).png",
@@ -2957,7 +3418,8 @@ button.active {
     },
    
     {
-        "name": "Octopus",
+        "name": "Oktopus",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1779682559/oktopus-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Octopus/_02914884-9b42-4b74-94a8-f63b9b21a4de.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Octopus/_125df21a-7a84-4a6b-a5e8-1ab84a2d0d4a.png",
@@ -2997,7 +3459,8 @@ button.active {
         ]
     },
     {
-        "name": "Owl",
+        "name": "Eule",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1830580682/eulen-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Owl/_09876fca-558d-415b-9ad2-865dab793c9f.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Owl/_14207495-378d-408c-8b84-f8ab15c42ab7.png",
@@ -3038,6 +3501,7 @@ button.active {
     },
     {
         "name": "Panda",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1861257005/panda-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Panda/_0fabc77d-bbbc-4211-b6da-dea785251fc5.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Panda/_2eaa85b8-06bc-4fbd-932d-b652eaea3774.png",
@@ -3077,7 +3541,8 @@ button.active {
         ]
     },
     {
-        "name": "Pangolin",
+        "name": "Murmeltier",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1649877248/murmeltier-sticker-35-lustige-sticker",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Pangolin/Pangolin (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Pangolin/Pangolin (10).png",
@@ -3117,7 +3582,8 @@ button.active {
         ]
     },
     {
-        "name": "Penguin",
+        "name": "Pinguin",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1847054670/pinguin-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Penguin/_04b10163-e006-4c49-90ea-78858595c313.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Penguin/_0ee8d699-f641-464d-b358-5ec4e4e7fc0a.png",
@@ -3157,7 +3623,8 @@ button.active {
         ]
     },
     {
-        "name": "Platypus",
+        "name": "Ente",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1638507024/platypus-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Platypus/Platypus (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Platypus/Platypus (10).png",
@@ -3199,6 +3666,7 @@ button.active {
    
     {
         "name": "Popcorn",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1779683037/popcorn-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Popcorn/_15b2e483-25d7-42e4-b3a4-7b1ad24b31b8.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Popcorn/_20fa6263-fe77-4990-9a62-175b4c7c9899.png",
@@ -3238,7 +3706,8 @@ button.active {
         ]
     },
     {
-        "name": "Potato",
+        "name": "Kartoffel",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1847053428/kartoffel-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Potato/_066ace4f-cb14-4783-b8c7-6e20a8d07559.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Potato/_0a5f2725-25f4-4b2b-8fcd-833bbb7d7f08.png",
@@ -3279,7 +3748,8 @@ button.active {
     },
    
     {
-        "name": "Predator and Prey",
+        "name": "Raubtier & Beute",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1787010505/raubtiere-im-beutekostum-o-lustige-tier",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Predator and Prey/ArmadilloAndJaguar.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Predator and Prey/BoarAndLion.png",
@@ -3319,7 +3789,8 @@ button.active {
         ]
     },
     {
-        "name": "Prey and Predator",
+        "name": "Beute & Raubtier",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1758360616/beute-im-raubtierkostum-o-lustige-tier",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Prey and Predator/_123f2675-4a92-4b24-83fe-cf0d0f938d83.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Prey and Predator/_126c7097-583f-4368-9f9a-93701e253446.png",
@@ -3360,6 +3831,7 @@ button.active {
     },
     {
         "name": "Quokka",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1652675981/quokka-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Quokka/Quokka (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Quokka/Quokka (10).png",
@@ -3399,7 +3871,8 @@ button.active {
         ]
     },
     {
-        "name": "Rabbit",
+        "name": "Hase",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1664057539/hasen-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Rabbit/Rabbit (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Rabbit/Rabbit (10).png",
@@ -3439,7 +3912,8 @@ button.active {
         ]
     },
     {
-        "name": "Racoon",
+        "name": "Waschbär",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Racoon/_01cc8acd-291a-457f-b900-e288cd72ba3b.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Racoon/_01ccbed4-bb55-465a-a1db-d7e33deaf08e.png",
@@ -3479,7 +3953,8 @@ button.active {
         ]
     },
     {
-        "name": "Red Panda",
+        "name": "Roter Panda",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Red Panda/_0a7175e0-85b8-4e56-bde4-5e631d4df891.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Red Panda/_0b5bec29-1c98-4b8b-b869-d1d3a16d618e.png",
@@ -3519,7 +3994,8 @@ button.active {
         ]
     },
     {
-        "name": "Roman Soldier",
+        "name": "Römer",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Roman Soldier/Gemini_Generated_Image_934npf934npf934n (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Roman Soldier/Gemini_Generated_Image_mt69zbmt69zbmt69 (1).png",
@@ -3560,6 +4036,7 @@ button.active {
     },
     {
         "name": "Salamander",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1649879316/salamander-sticker-35-lustige-sticker",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Salamander/Salamander (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Salamander/Salamander (10).png",
@@ -3600,6 +4077,7 @@ button.active {
     },
     {
         "name": "Samurai",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1664058615/samurai-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Samurai/_02d093bf-5d05-48ed-ba5d-773769d044e4.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Samurai/_07dd4311-2b0c-4bec-9302-504470d39b9f.png",
@@ -3640,7 +4118,8 @@ button.active {
     },
    
     {
-        "name": "Sea Otter",
+        "name": "Otter",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sea Otter/_06623e92-6503-4f42-b5fd-ed45ea6791ad.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sea Otter/_07ff0f46-0a40-4821-adcb-1a7a0eb8ed41.png",
@@ -3680,7 +4159,48 @@ button.active {
         ]
     },
     {
-        "name": "Seal",
+        "name": "Roboter",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Robot/Robot (9).png"
+        ]
+    },
+    {
+        "name": "Robbe",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1765491382/robbe-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Seal/_02e1e7ee-f64e-4c0e-a44b-35fcc4927216.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Seal/_0a9232d5-7de3-45ff-b089-ff465d61f21d.png",
@@ -3720,7 +4240,48 @@ button.active {
         ]
     },
     {
+        "name": "Spinne",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Spider/Spider (9).png"
+        ]
+    },
+    {
         "name": "Serval",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Serval/_065d0a1d-66f1-4748-a0c7-d72d29074b77.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Serval/_0c1b9344-f7ee-4773-b139-fbf988a0d196.png",
@@ -3760,7 +4321,8 @@ button.active {
         ]
     },
     {
-        "name": "Shark",
+        "name": "Hai",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1830578636/haie-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Shark/_06868c3a-8d8f-47fd-bd66-837ea666beb9.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Shark/_0b771e6d-1aab-4103-bd4e-4548514fd7bd.png",
@@ -3801,6 +4363,7 @@ button.active {
     },
     {
         "name": "Sifaka",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1847055018/sifaka-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sifaka/_05de1f2b-6ecb-4e77-b724-9e6149bb2f26.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sifaka/_06b155d5-141b-4641-a3d4-7bf2e16aafab.png",
@@ -3840,7 +4403,8 @@ button.active {
         ]
     },
     {
-        "name": "Sloth",
+        "name": "Faultier",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sloth/_02518e7e-9930-4f6c-93c4-5b13ee0c6a74.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sloth/_0628226e-3bf2-4e58-b04d-53ff3b4f5b3c.png",
@@ -3881,6 +4445,7 @@ button.active {
     },
     {
         "name": "Slow Iris",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Slow Iris/_0496d806-5ea2-4f89-b8f5-2f75fc8740cd.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Slow Iris/_0c3c1191-ee18-4a4c-be6d-cab07411252e.png",
@@ -3921,7 +4486,8 @@ button.active {
     },
    
     {
-        "name": "Snails",
+        "name": "Schnecke",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1765491764/schnecke-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Snails/_02b3c194-7dbb-4455-823d-f2fc78d4d68b.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Snails/_080c31ef-a8d4-4fa4-b766-69f4f5a9ae65.png",
@@ -3961,7 +4527,8 @@ button.active {
         ]
     },
     {
-        "name": "Snake",
+        "name": "Schlange",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1830580386/schlangen-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Snake/_012f129d-fcda-4da5-92e4-655c94778aee.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Snake/_0496801c-619e-4bfc-985a-b69ba90def8b.png",
@@ -4002,6 +4569,7 @@ button.active {
     },
     {
         "name": "Sugar Glider",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sugar Glider/_00094a00-0944-4c0c-a31c-9db9c25b7269.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sugar Glider/_07c05b66-4d98-4522-88b9-184cb13a2a8e.png",
@@ -4041,7 +4609,8 @@ button.active {
         ]
     },
     {
-        "name": "Sumo Wrestler",
+        "name": "Sumo",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1664058923/sumo-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sumo Wrestler/Sumo Wrestler (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sumo Wrestler/Sumo Wrestler (10).png",
@@ -4081,7 +4650,48 @@ button.active {
         ]
     },
     {
+        "name": "Schweinchen",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Piggy/Piggy (9).png"
+        ]
+    },
+    {
         "name": "Sushi",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1779688599/sushi-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sushi/_034541a8-3a03-4bd6-b53c-2794015c32c6.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Sushi/_2184e7d0-0f4c-4f89-bd7d-e52649a55ce4.png",
@@ -4122,6 +4732,7 @@ button.active {
     },
     {
         "name": "T-Rex",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1664059297/t-rex-sticker-35-lustige-sticker-von-t",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/T-Rex/T-Rex (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/T-Rex/T-Rex (10).png",
@@ -4162,6 +4773,7 @@ button.active {
     },
     {
         "name": "Taco",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1638701385/taco-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Taco/Taco (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Taco/Taco (10).png",
@@ -4202,6 +4814,7 @@ button.active {
     },
     {
         "name": "Tamandua",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1847055310/tamandua-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tamandua/_047fdd03-8401-4d02-84f3-aba9efc97725.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tamandua/_053a523b-32b7-4c22-89a9-10208197d283.png",
@@ -4242,6 +4855,7 @@ button.active {
     },
     {
         "name": "Tarsier",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1638505932/tarsier-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tarsier/Tarsier (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tarsier/Tarsier (10).png",
@@ -4281,7 +4895,8 @@ button.active {
         ]
     },
     {
-        "name": "Tasmanian Devil",
+        "name": "Tasmanischer Teuefel",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tasmanian Devil/_00b5b1b9-0373-4474-9680-9b79368b1324.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tasmanian Devil/_052c5b07-0ed9-4267-9a09-41f542affcf3.png",
@@ -4321,7 +4936,8 @@ button.active {
         ]
     },
     {
-        "name": "Tea Bag",
+        "name": "Tee",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tea Bag/_0770f100-11fd-40c4-a03a-27b288dcdc7e.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tea Bag/_0b3495d1-d0cd-4fcb-ac3a-2913eadcd397.png",
@@ -4361,7 +4977,8 @@ button.active {
         ]
     },
     {
-        "name": "Teeth",
+        "name": "Zahn",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Teeth/_0c9c4e19-6424-459b-a4c2-544db73ea5ce.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Teeth/_1a08efc1-e2e1-4bcd-a60f-6e08294ff191.png",
@@ -4402,6 +5019,7 @@ button.active {
     },
     {
         "name": "Toast",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1638700257/toast-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Toast/Toast (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Toast/Toast (10).png",
@@ -4442,6 +5060,7 @@ button.active {
     },
     {
         "name": "Tofu",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1779688969/tofu-sticker-35-lustige-sticker-von-tofu",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tofu/_07d5086e-8585-4456-b842-0e8601a69eae.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Tofu/_0b985233-18ab-427a-9f41-8ce25dcca110.png",
@@ -4481,7 +5100,8 @@ button.active {
         ]
     },
     {
-        "name": "Trash Bag",
+        "name": "Müllsack",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Trash Bag/_0241dbd2-3e0a-4add-bdf1-a742fe009b78.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Trash Bag/_03bc69df-e474-4966-ab52-f3f34b4b4bbf.png",
@@ -4522,7 +5142,8 @@ button.active {
     },
     
     {
-        "name": "Unicorn",
+        "name": "Einhorn",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1649881004/einhorn-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Unicorn/Unicorn (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Unicorn/Unicorn (10).png",
@@ -4562,7 +5183,8 @@ button.active {
         ]
     },
     {
-        "name": "Viking",
+        "name": "Wikinger",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1652675169/vikinger-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Viking/Viking (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Viking/Viking (10).png",
@@ -4602,7 +5224,8 @@ button.active {
         ]
     },
     {
-        "name": "Volcano",
+        "name": "Vulkan",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1844775525/vulkan-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Volcano/_04d9fa5d-c8c5-4e9b-8228-82b477bb4f10.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Volcano/_1ca796ac-fba7-486a-9624-05b892a1ca36.png",
@@ -4643,6 +5266,7 @@ button.active {
     },
     {
         "name": "Voodoo",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Voodoo/_0a1f1535-3a34-40eb-8628-90e4aa180b2f.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Voodoo/_0baa4681-e1f9-4951-a361-a5134c162f61.png",
@@ -4682,7 +5306,8 @@ button.active {
         ]
     },
     {
-        "name": "Wild Hog",
+        "name": "Wildschwein",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Wild Hog/_02f870b9-0fa2-42e7-97c0-6b0cb77a527c.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Wild Hog/_03154dba-4ba6-40fb-99bd-883e9dccb675.png",
@@ -4723,6 +5348,7 @@ button.active {
     },
     {
         "name": "Yeti",
+        "purchaseUrl": "https://kiwiundknoedel.etsy.com/de/listing/1844774433/yeti-sticker-35-lustige-sticker-von",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Yeti/Yeti (1).png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Yeti/Yeti (10).png",
@@ -4761,8 +5387,49 @@ button.active {
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/Yeti/Yeti (9).png"
         ]
     },
+     {
+        "name": "Zombie",
+        "urls": [
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (1).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (10).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (11).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (12).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (13).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (14).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (15).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (16).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (17).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (18).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (19).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (2).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (20).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (21).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (22).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (23).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (24).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (25).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (26).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (27).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (28).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (29).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (3).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (30).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (31).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (32).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (33).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (34).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (35).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (4).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (5).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (6).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (7).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (8).png",
+            "https://raw.githubusercontent.com/fontmango/sticker_v3/main/Zombie/Zombie (9).png"
+        ]
+    },
     {
-        "name": "dia de los muerstos sticker",
+        "name": "Tag des Todes",
+        "purchaseUrl": "",
         "urls": [
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_018f7140-17fb-427f-8d4e-e9d937d35912.png",
             "https://raw.githubusercontent.com/phoneticgenius/wix_assets/main/dia de los muerstos sticker/_043b10f9-ae16-4ffa-a84d-ab4eb4f4c3e6.png",
@@ -5872,6 +6539,36 @@ function showStickerOverlay(urls, groupName) {
     // Create the header and content wrapper
     const header = document.createElement('div');
     header.classList.add('overlay-header');
+	
+	// --- Purchase cart button (top-left) ---
+    const group = stickerGroups.find(g => g.name === groupName);
+    if (group && group.purchaseUrl) {
+        const purchaseBtn = document.createElement('a');
+        purchaseBtn.href = group.purchaseUrl;
+        purchaseBtn.target = '_blank';
+        purchaseBtn.title = 'Buy this sticker set';
+        purchaseBtn.style.display = 'flex';
+        purchaseBtn.style.alignItems = 'center';
+        purchaseBtn.style.justifyContent = 'center';
+        purchaseBtn.style.width = '32px';
+        purchaseBtn.style.height = '32px';
+        purchaseBtn.style.marginRight = '10px';
+        purchaseBtn.style.textDecoration = 'none';
+        purchaseBtn.style.color = 'black';
+
+        // Add SVG cart icon
+        purchaseBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" fill="none" 
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+        `;
+
+        header.appendChild(purchaseBtn);
+    }
+
     
     const title = document.createElement('h2');
     title.textContent = groupName;
