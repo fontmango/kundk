@@ -715,7 +715,7 @@ body.eyedropper-active {
        inset:0;
        width:100%;
        height:100%;
-       object-fit:cover;
+       object-fit:contain;
        pointer-events:none;
        z-index:-1;
      ">
@@ -3919,75 +3919,144 @@ function setBackgroundForGroup(groupName) {
   }
 }
 
+function calculateContainedImageRect(img, containerRect) {
+    const imgAspect = img.naturalWidth / img.naturalHeight;
+    const containerAspect = containerRect.width / containerRect.height;
+
+    let width, height, left, top;
+
+    if (imgAspect > containerAspect) {
+        // Image is wider – height is limited
+        width = containerRect.width;
+        height = containerRect.width / imgAspect;
+        left = 0;
+        top = (containerRect.height - height) / 2;
+    } else {
+        // Image is taller – width is limited
+        height = containerRect.height;
+        width = containerRect.height * imgAspect;
+        top = 0;
+        left = (containerRect.width - width) / 2;
+    }
+
+    return { left, top, width, height };
+}
+
+function getContainedImageDrawRect(imgNaturalWidth, imgNaturalHeight, containerWidth, containerHeight) {
+    const imgAspect = imgNaturalWidth / imgNaturalHeight;
+    const containerAspect = containerWidth / containerHeight;
+
+    let drawWidth, drawHeight, drawX, drawY;
+
+    if (imgAspect > containerAspect) {
+        // Image is wider than container, so width determines scale
+        drawWidth = containerWidth;
+        drawHeight = containerWidth / imgAspect;
+        drawX = 0; // Centered horizontally in the box
+        drawY = (containerHeight - drawHeight) / 2; // Centered vertically
+    } else {
+        // Image is taller than container, so height determines scale
+        drawHeight = containerHeight;
+        drawWidth = containerHeight * imgAspect;
+        drawY = 0; // Centered vertically
+        drawX = (containerWidth - drawWidth) / 2; // Centered horizontally
+    }
+    
+    // These 'x' and 'y' are the *offsets* from the container's top-left corner
+    return { x: drawX, y: drawY, width: drawWidth, height: drawHeight };
+}
 
 document.getElementById('download-btn').addEventListener('click', async () => {
-
     const container = document.getElementById('canvas-container');
-    const exportCanvas = document.getElementById('export-canvas');
+    const exportCanvas = document.getElementById('export-canvas'); // Make sure this <canvas> element exists in your HTML
     const ctx = exportCanvas.getContext('2d');
-
     const bgImg = document.getElementById('bg-img');
 
     // Wait for background to load
     await drawImageCrossOrigin(bgImg);
 
+    // Add a check in case the background image failed to load
+    if (!bgImg.naturalWidth || !bgImg.naturalHeight) {
+        alert("Background image has not loaded correctly. Cannot download.");
+        return;
+    }
+
     // Set export canvas to background's natural size
     exportCanvas.width = bgImg.naturalWidth;
     exportCanvas.height = bgImg.naturalHeight;
 
-    // Draw background
+    // Draw full-resolution background
     ctx.drawImage(bgImg, 0, 0, exportCanvas.width, exportCanvas.height);
 
-    // Stickers
-    const stickers = container.querySelectorAll('.sticker img');
+    // Get the on-screen dimensions of the container
+    const containerRect = container.getBoundingClientRect();
+
+    // Calculate the *actual* on-screen position and size of the *visible* background image
+    const visibleBgRect = calculateContainedImageRect(bgImg, containerRect);
+
+    // Select the sticker DIVs
+    const stickers = container.querySelectorAll('.sticker');
 
     for (const sticker of stickers) {
+        // Get the <img> tag from the sticker div
+        const stickerImg = sticker.querySelector('img');
+        if (!stickerImg) continue; // Skip if there's no image
 
-        // Load sticker at full resolution
+        // Load sticker image in full-res
         const img = new Image();
-        img.crossOrigin = "anonymous";     // must be BEFORE src
-        img.src = sticker.src;
+        img.crossOrigin = "anonymous";
+        img.src = stickerImg.src;
+        // Wait for the sticker image to load before drawing
+        await new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
 
-        await new Promise(resolve => {
-            img.onload = resolve;
-            img.onerror = resolve;
-        });
+        if (!img.naturalWidth) continue; // Skip broken sticker images
 
-        // Screen positions
-        const rect = sticker.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
+        // Get sticker's on-screen position *relative to the container*
+        const stickerLeft = sticker.offsetLeft;
+        const stickerTop = sticker.offsetTop;
+        const stickerWidth = sticker.offsetWidth;
+        const stickerHeight = sticker.offsetHeight;
 
-        const x = ((rect.left - containerRect.left) / containerRect.width) * exportCanvas.width;
-        const y = ((rect.top - containerRect.top) / containerRect.height) * exportCanvas.height;
+        // Calculate the sticker's position *relative to the visible background image*
+        const relX = (stickerLeft - visibleBgRect.left) / visibleBgRect.width;
+        const relY = (stickerTop - visibleBgRect.top) / visibleBgRect.height;
+        const relW = stickerWidth / visibleBgRect.width;
+        const relH = stickerHeight / visibleBgRect.height;
 
-        const w = (rect.width / containerRect.width) * exportCanvas.width;
-        const h = (rect.height / containerRect.height) * exportCanvas.height;
+        // Convert these relative coordinates to the full-resolution export canvas
+        // This gives the (x, y, w, h) for the *sticker div's box*
+        const x = relX * exportCanvas.width;
+        const y = relY * exportCanvas.height;
+        const w = relW * exportCanvas.width;
+        const h = relH * exportCanvas.height;
 
-        // Preserve original sticker aspect ratio
-        const naturalAspect = img.naturalWidth / img.naturalHeight;
-        const visibleAspect = rect.width / rect.height;
+        // --- FIX FOR DEFORMATION ---
+        // 1. Calculate the 'contained' rectangle *inside* the (x, y, w, h) box
+        const drawRect = getContainedImageDrawRect(
+            img.naturalWidth, 
+            img.naturalHeight,
+            w, // The sticker div's target width
+            h  // The sticker div's target height
+        );
 
-        let finalW = w;
-        let finalH = h;
-
-        if (naturalAspect > visibleAspect) {
-            finalH = w / naturalAspect;
-        } else {
-            finalW = h * naturalAspect;
-        }
-
-        ctx.drawImage(img, x, y, finalW, finalH);
+        // 2. Draw the image with the correct aspect ratio,
+        //    centered inside the sticker div's box.
+        ctx.drawImage(
+            img, 
+            x + drawRect.x, // The box's X + the inner rect's X
+            y + drawRect.y, // The box's Y + the inner rect's Y
+            drawRect.width, 
+            drawRect.height
+        );
+        // --- END FIX ---
     }
 
-    // Export PNG
+    // Save PNG
     exportCanvas.toBlob(blob => {
-
         if (!blob) {
-            console.error("Export failed: CORS issue somewhere");
-            alert("Export failed. A sticker or background blocked CORS.");
+            alert("Export failed (CORS or canvas taint problem)");
             return;
         }
-
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -3995,8 +4064,8 @@ document.getElementById('download-btn').addEventListener('click', async () => {
         link.click();
         URL.revokeObjectURL(url);
     }, "image/png");
-
 });
+
 
 // Helper: load image with CORS support
 function drawImageCrossOrigin(img) {
